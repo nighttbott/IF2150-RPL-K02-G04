@@ -51,25 +51,25 @@ Dari segi teknis, pengembangan algoritma penilai kesesuaian gambar dan pattern m
 # BAB 3: Spesifikasi Kebutuhan dan Proses Bisnis
 
 ## 3.1 Identifikasi Aktor
-Buatlah daftar seluruh aktor (pengguna) yang akan berinteraksi langsung dengan sistem solusi yang kalian kembangkan. Berikan penjelasan singkat mengenai peran dan karakteristik dari masing-masing aktor tersebut.
 
 | Aktor | Deskripsi |
 | :--- | :--- |
-| Pelajar | Pengguna ini bertindak sebagai pihak yang memanfaatkan perangkat lunak sebagai sarana untuk belajar, berlatih, dan mengembangkan kemampuan menulis aksara XXX. Karakteristik dari pengguna ini adalah membutuhkan pembelajaran yang interaktif, mudah dipahami, dan memberikan umpan balik seperti dalam bentuk nilai. |
-| Guru | Pengguna ini bertindak sebagai pendamping dan fasilitator dalam proses pembelajaran aksara XXX. Karakteristik pengguna ini adalah membutuhkan media pembelajaran yang praktis dan menarik untuk proses pembelajaran para pelajar. |
+| Pelajar | Pengguna yang login ke aplikasi untuk belajar dan berlatih aksara Jawa dan Sunda. Pengguna ini dapat menggunakan fitur komunikasi untuk bertanya langsung kepada pengajar jika mengalami kesulitan dalam menjalankan aplikasi maupun kebingungan terkait materi.|
+| Pengajar | Pengguna yang login sebagai fasilitator pembelajaran. Pengguna ini memiliki akses untuk melihat rekam jejak latihan pelajar, menganalisis kelemahan yang mereka hadapi berdasarkan data latihan, serta membalas pertanyaan yang diajukan oleh pelajar.|
+| Tim Materi | Pengguna yang bertindak sebagai pengelola konten materi. Tim materi membutuhkan akses untuk mengelola modul. |
+| Programmer | Pengguna yang bertindak sebagai teknisi pemelihara sistem aplikasi. Pengguna ini memantau kelancaran fitur fitur agar aplikasi berjalan lancar. |
 
 
 ## 3.2 Kebutuhan Pengguna Awal
-Definisikan apa yang ingin dicapai oleh pengguna saat menggunakan sistem ini dalam format *User Story* (Sebagai [Aktor], saya ingin [Aktivitas/Kebutuhan], sehingga [Tujuan/Nilai]). Pastikan kalian berfokus pada "apa yang ingin dilakukan pengguna".
-
 | ID | Aktor | Kebutuhan / Aktivitas | Tujuan / Nilai |
 | :--- | :--- | :--- | :--- |
-| US-01 | Pelajar |  Melihat daftar bentuk dasar aksara bahasa beserta panduan cara membacanya | Dapat menghafal dan mengealibentuk dasar setiap huruf dengan benar. |
-| US-02 | Pelajar | Melatih penulisan aksara dengan menebalkan garis panduan di layar perangkat. | Terbiasa dengan alur, urutan, dan arah goresan penulisan aksara yang tepat. |
-| US-03 | Pelajar | Mendapatkan penilaian dan koreksi otomatis setelah menggambar aksara di layar | Mengetahui letak kesalahan goresan dan dapat memperbaiki akurasi tulisan. |
-| US-04 | Pengajar | Sebagai media bagi pengajar untuk mengajar. | Membantu pengajar melatih pelajar dalam memahami aksara bahasa. |
-| US-05 | Tim Materi | Menyusun materi pembelajaran | Agar pembelajaran terstruktur dan menarik. |
-| US-06| Administrator Sistem | Mengelola akun dan database serta memastikan algoritma berjalan | Agar program dapat berjalan dengan baik dan meminimalisir bug |
+| US-01 | Pelajar | Melihat bentuk dasar dan panduan baca aksara Jawa dan Sunda | Dapat mengenali bentuk dasar setiap huruf dari kedua aksara tersebut dengan benar. |
+| US-02 | Pelajar | Melatih penulisan aksara dengan menebalkan garis. | Terbiasa dengan cara penulisan yang tepat |
+| US-03 | Pelajar | Mengirimkan pertanyaan atau pesan kepada pengajar melalui aplikasi | Mendapatkan bantuan langsung dari pengajar saat kesulitan memahami materi |
+| US-04 | Pengajar | Melihat rekam jejak dari riwayat penyelesaian latihan masing masing pelajar | Mengetahui perkembangan belajar pelajar secara berkala |
+| US-05 | Pengajar | Menganalisis kelemahan penulisan pelajar | Dapat memberikan evaluasi dan bimbingan yang tepat sesuai kekurangan pelajar |
+| US-06 | Pengajar | Membaca dan membalas pertanyaan yang dikirimkan oleh pelajar di dalam sistem | Memberikan solusi dan menjaga komunikasi interaktif selama proses pembelajaran |
+| US-07 | Tim Materi | Mengunggah modul kurikulum untuk aksara Jawa dan Sunda | Memastikan materi yang disajikan selalu relevan dan lengkap |
 
 
 
