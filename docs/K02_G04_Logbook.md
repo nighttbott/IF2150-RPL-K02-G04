@@ -7,7 +7,7 @@
 | Kelas | K2 |
 | Nomor Kelompok | 4 |
 | Nama Kelompok | 0sks |
-| Nama Perangkat Lunak | *[Nama P/L]* |
+| Nama Perangkat Lunak | Ngaksara |
 
 **Anggota Kelompok:**
 
@@ -29,13 +29,13 @@
 ---
 
 ### Milestone 1
-**Periode:** [Tanggal Mulai] - [Tanggal Selesai]
+**Periode:** 27-08-2026 - 02-09-2026
 
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- | 
-| *04-05-2026* | *[Nama Mahasiswa]* | *[Jelaskan Pekerjaan secara Singkat]* | *[Durasi Pengerjaan]* | *[On Progress/Done]* | [Kendala yang dialami, jika tidak ada cukup tandai "-"] | 
-| *05-05-2026* | *John Doe* | *Mendesain diagram kelas* | *3* | *Done* | *-* | 
-| | | | | | | |
+| 30-08-2026 | Naufal, Abduh, Marvel, Diandra, Natan | Pembagian tugas dan pembuatan draft | 1 | Done | - | 
+| 31-08-2026 | Naufal, Abduh, Marvel, Diandra, Natan | Asistensi M1 | <1 | Done | - |
+| 02-09-2026 | Naufal, Abduh, Marvel, Diandra, Natan | Finishing M1 | 3 | Done | - |
 
 **Catatan/Evaluasi Milestone 1:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
