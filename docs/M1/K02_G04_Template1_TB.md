@@ -64,10 +64,13 @@ Definisikan apa yang ingin dicapai oleh pengguna saat menggunakan sistem ini dal
 
 | ID | Aktor | Kebutuhan / Aktivitas | Tujuan / Nilai |
 | :--- | :--- | :--- | :--- |
-| US-01 | *Pelajar* |  *Melihat daftar bentuk dasar aksara XX beserta panduan cara membacanya* | *Dapat menghafal dan mengealibentuk dasar setiap huruf dengan benar.* |
-| US-02 | *Pelajar* | *Melatih penulisan aksara dengan menebalkan garis panduan di layar perangkat.* | *Terbiasa dengan alur, urutan, dan arah goresan penulisan aksara yang tepat* |
-| US-03 | *Pelajar* | *Mendapatkan penilaian dan koreksi otomatis setelah menggambar aksara di layar* | *Mengetahui letak kesalahan goresan dan dapat memperbaiki akurasi tulisan.* |
-| US-04 | *Guru* | *Sebagai media bagi guru untuk mengajar.* | *Membantu guru melatih siswa dalam memahami aksara XX.* |
+| US-01 | Pelajar |  Melihat daftar bentuk dasar aksara bahasa beserta panduan cara membacanya | Dapat menghafal dan mengealibentuk dasar setiap huruf dengan benar. |
+| US-02 | Pelajar | Melatih penulisan aksara dengan menebalkan garis panduan di layar perangkat. | Terbiasa dengan alur, urutan, dan arah goresan penulisan aksara yang tepat. |
+| US-03 | Pelajar | Mendapatkan penilaian dan koreksi otomatis setelah menggambar aksara di layar | *Mengetahui letak kesalahan goresan dan dapat memperbaiki akurasi tulisan. |
+| US-04 | Pengajar | Sebagai media bagi pengajar untuk mengajar. | Membantu pengajar melatih pelajar dalam memahami aksara bahasa. |
+| US-05 | Tim Materi | Menyusun materi pembelajaran | Agar pembelajaran terstruktur dan menarik. |
+| US-06| Programmer | Merancang dan mengimplementasikan materi dalam bentuk perangkat lunak yang interaktif. | Agar dapat menciptakan aplikasi yang dapat membantu mempelajari aksara bahasa. |
+
 
 
 ## 3.3 Model Proses Bisnis
