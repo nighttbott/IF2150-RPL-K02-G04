@@ -119,5 +119,31 @@ Batasan-batasan tersebut kami tetapkan agar pengembangan Ngaksara tetap berada d
 | A07 | Mengelola Konten Kurikulum | Tim materi mengunggah modul materi maupun latihan aksara yang telah dibuat ke database. | US-07 |
 | A08 | Memelihara Aplkasi | Programmer memantau server supaya tidak ada kendala. | US-08 |
 
+
+## 3.4 Model Proses Bisnis
+<br>
+
+<p align="center">
+<img alt="autentifikasi" src="./assets/diagram/autentifikasi.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 1. Activity Diagram Autentikasi</i>
+</p>
+
+<p align="center">
+<img alt="menggambar" src="./assets/diagram/menggambar.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 1. Activity Diagram Menggambar Aksara</i>
+</p>
+
+<p align="center">
+<img alt="mencocokkanbunyi" src="./assets/diagram/mencocokkanbunyi" width="70%">
+</p>
+<p align="center">
+<i>Gambar 1. Activity Diagram Mencocokkan Bunyi Aksara</i>
+</p>
+
+<br>
 # Referensi
 - Diagram UML: https://www.drawio.com/, https://staruml.io/
