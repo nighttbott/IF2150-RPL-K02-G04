@@ -35,7 +35,10 @@ Dipersiapkan oleh:
 Indonesia sebagai salah satu negara multikultural terbesar di dunia memiliki kurang lebih 1340 suku bangsa. Keberagaman yang dimiliki bangsa Indonesia ini menghasilkan berbagai kekayaan budaya, termasuk kurang lebih 700 bahasa daerah yang beberapa diantaranya memiliki sistem penulisan aksara yang unik. Bahasa-bahasa ini bukan hanya menjadi alat komunikasi sehari-hari, tetapi juga memuat nilai-nilai adat istiadat dari tiap daerah.
 
 ## 1.2 Analisis Kondisi Saat Ini
-Bahasa lokal yang merupakan kekayaan bangsa ini sekarang tengah mengalami tantangan. Ancaman dari luar seperti globalisasi menjadikan penggunaan bahasa lokal makin ditinggalkan oleh golongan muda. Padahal, bahasa lokal yang merupakan kekayaan bangsa seharusnya dilestarikan. 
+Bahasa daerah yang merupakan kekayaan bangsa ini sekarang tengah mengalami tantangan. Adanya ancaman, baik dari dalam maupun luar bangsa menjadikan penggunaan bahasa daerah semakin ditinggalkan. Padahal, bahasa daerah yang merupakan kekayaan bangsa seharusnya dilestarikan. 
+Menurut data dari Badan Pengembangan dan Pembinaan Bahasa Kementerian Pendidikan dan Kebudayaan, terdapat 11 bahasa daerah yang telah punah, dan puluhan lainnya terancam punah. Terancamnya keberlangsungan bahasa daerah ini disebabkan oleh beberapa faktor, seperti rendahnya kesadaran generasi muda untuk mempelajari dan melestarikan bahasa daerah, pengaruh globalisasi, dan kurangnya pewarisan antargenerasi. 
+Rendahnya keinginan generasi muda untuk mempelajari bahasa daerah disebabkan oleh beberapa faktor. Salah satu penyebabnya adalah adanya anggapan bahwa bahasa daerah sudah ketinggalan zaman. Munculnya stigma tersebut didukung oleh globalisasi yang menjadikan bahasa asing lebih diminati oleh generasi muda. Selain itu, kurangnya niat generasi muda untuk mempelajari bahasa daerah juga disebabkan oleh metode pembelajaran bahasa daerah di sekolah yang terlalu kaku dan monoton. Hal ini menyebabkan minat atau ketertarikan untuk mempelajari dan melestarikan bahasa daerah berkurang.
+
 
 ---
 
