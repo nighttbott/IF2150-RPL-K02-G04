@@ -32,7 +32,10 @@ Dipersiapkan oleh:
 # BAB 1: Analisis Permasalahan
 
 ## 1.1 Latar Belakang Masalah
-Indonesia sebagai salah satu negara multikultural terbesar di dunia memiliki kurang lebih 1340 suku bangsa. Keberagaman yang dimiliki bangsa Indonesia ini menghasilkan berbagai kekayaan budaya, termasuk kurang lebih 700 bahasa daerah yang beberapa diantaranya memiliki sistem penulisan aksara yang unik. Bahasa-bahasa ini bukan hanya menjadi alat komunikasi sehari-hari, tetapi juga memuat nilai-nilai adat istiadat dari tiap daerah.
+Indonesia adalah negara yang beragam. Keberagaman ini disebabkan oleh berbagai faktor, seperti letak Indonesia, kondisi geografis sebagai negara kepulauan, serta kondisi sosial tiap daerah yang berbeda. Sebagai salah satu negara multikultural terbesar di dunia memiliki kurang lebih 1340 suku bangsa. Keberagaman yang dimiliki bangsa Indonesia ini menghasilkan berbagai kekayaan budaya, termasuk kurang lebih 700 bahasa daerah.\
+Bahasa-bahasa daerah yang dimiliki Indonesia ini bukanlah hanya menjadi alat komunikasi sehari-hari. Beberapa dari bahasa daerah yang ada di Indonesia memiliki sistem penulisan aksara yang khas. Dalam bahasa daerah juga memuat nilai-nilai adat istiadat yang dimiliki tiap daerah. Setiap nilai yang terkandung di bahasa daerah serta komponen bahasa itu sendiri, meliputi tata bahasa dan cara penulisannya adalah kekayaan bangsa yang patut untuk dipelajari dan dilestarikan.\
+Bahasa daerah adalah salah satu identitas yang dimiliki suatu daerah. Bahasa daerah ini memuat nilai-nilai luhur, cara hidup, dan pandangan dunia dari masyarakat daerah tersebut. Selain itu, dengan mempelajari bahasa daerah dapat menumbuhkan rasa memiliki dan kebanggaan akan daerah asal. Oleh karena itu, bahasa daerah harus dilestarikan agar tidak tergerus arus globalisasi sehingga keberagaman dan kekayaan bangsa tetap terjaga.
+
 
 ## 1.2 Analisis Kondisi Saat Ini
 Bahasa daerah yang merupakan kekayaan bangsa ini sekarang tengah mengalami tantangan. Adanya ancaman, baik dari dalam maupun luar bangsa menjadikan penggunaan bahasa daerah semakin ditinggalkan. Padahal, bahasa daerah yang merupakan kekayaan bangsa seharusnya dilestarikan.\
