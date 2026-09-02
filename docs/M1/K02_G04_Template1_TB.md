@@ -103,21 +103,21 @@ Batasan-batasan tersebut kami tetapkan agar pengembangan Ngaksara tetap berada d
 | US-05 | Pengajar | Menganalisis kelemahan penulisan pelajar | Dapat memberikan evaluasi dan bimbingan yang tepat sesuai kekurangan pelajar |
 | US-06 | Pengajar | Membaca dan membalas pertanyaan yang dikirimkan oleh pelajar di dalam sistem | Memberikan solusi dan menjaga komunikasi interaktif selama proses pembelajaran |
 | US-07 | Tim Materi | Mengunggah modul kurikulum untuk aksara Jawa dan Sunda | Memastikan materi yang disajikan selalu relevan dan lengkap |
+| US-08 | Programmer | Memantau server dan fitur fiturnya | Memastikan materi yang disajikan lengkap dan mudah dipahami alurnya.|
 
 
 
-## 3.3 Model Proses Bisnis
-Buatlah *Activity Diagram* atau *Swimlane Diagram* yang menunjukkan alur kerja proses bisnis dari sistem solusi. Diagram ini harus memvisualisasikan bagaimana alur operasional di dunia nyata berjalan lebih efisien dengan adanya interaksi antara aktor (yang didefinisikan pada poin 3.1) dan sistem perangkat lunak. Perhatikan notasi yang digunakan dalam pembuatannya.
-<br>
-
-<p align="center">
-<img alt="Contoh Activity Diagram" src="./assets/diagram/diagram-act-1.avif" width="70%">
-</p>
-<p align="center">
-<i>Gambar 1. Contoh Activity Diagram</i>
-</p>
-
-<br>
+## 3.3 Deskripsi Aktivitas
+| ID | Aktivitas | Penjelasan | ID User Story |
+| :--- | :--- | :--- | :--- |
+| A01 | Melakukan login | Pengguna membuat akun untuk mendapatkan akses sesuai perannya (Pelajar, Pengajar, Tim Materi). | US-01, US-04, US-07 |
+| A02 | Mempelajari Bentuk Aksara | Sistem menampilkan daftar materi dan panduan baca aksara Jawa dan Sunda untuk diakses oleh pelajar. | US-01 |
+| A03 | Melakukan Latihan Penulisan | Pelajar menebalkan garis di layar, lalu aplikasi memproses penilaian dan memberikan koreksi.| US-02 |
+| A04 | Mengajukan Pertanyaan | Pelajar mengirimkan pesan kendala materi kepada pengajar melalui fitur komunikasi | US-03 |
+| A05 | Memantau Riwayat Latihan | Aplikasi memberikan rekam jejak latihan pelajar untuk dilihat oleh pengajar.| US-04 |
+| A06 | Menjawab Pertanyaan Pelajar | Pengajar membaca pesan dari pelajar dan mengirimkan solusi atau penjelasan. | US-06 |
+| A07 | Mengelola Konten Kurikulum | Tim materi mengunggah modul materi maupun latihan aksara yang telah dibuat ke database. | US-07 |
+| A08 | Memelihara Aplkasi | Programmer memantau server supaya tidak ada kendala. | US-08 |
 
 # Referensi
 - Diagram UML: https://www.drawio.com/, https://staruml.io/
