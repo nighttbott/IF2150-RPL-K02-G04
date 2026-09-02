@@ -7,7 +7,7 @@
 | Kelas | K2 |
 | Nomor Kelompok | 4 |
 | Nama Kelompok | 0sks |
-| Nama Perangkat Lunak | *[Nama P/L]* |
+| Nama Perangkat Lunak | Ngaksara |
 
 **Anggota Kelompok:**
 
@@ -52,8 +52,8 @@ Kami yang bertanda tangan di bawah ini menyatakan bahwa seluruh log penggunaan A
 
 | Tanda Tangan | Nama Anggota |
 | :---: | :--- |
-| <img src="./assets/ttd-anggota1.png" width="100"> | **[NIM - Nama Anggota 1]** |
-| <img src="./assets/ttd-anggota2.png" width="100"> | **[NIM - Nama Anggota 2]** |
-| <img src="./assets/ttd-anggota3.png" width="100"> | **[NIM - Nama Anggota 3]** |
-| <img src="./assets/ttd-anggota4.png" width="100"> | **[NIM - Nama Anggota 4]** |
-| <img src="./assets/ttd-anggota5.png" width="100"> | **[NIM - Nama Anggota 5]** |
+| <img src="./assets/ttd-anggota1.png" width="100"> | 13525029 - Muhammad Naufal Hilmi |
+| <img src="./assets/ttd-anggota2.png" width="100"> | 13525077 - Muhammad Abduh |
+| <img src="./assets/ttd-anggota3.png" width="100"> | 13525107 - Nathaniel Marvelo |
+| <img src="./assets/ttd-anggota4.png" width="100"> | 13525113 - Diandra Aria Yufana |
+| <img src="./assets/ttd-anggota5.png" width="100"> | 13525143 - Natan Danuarta Ariel Wicaksana |
