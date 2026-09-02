@@ -69,7 +69,7 @@ Definisikan apa yang ingin dicapai oleh pengguna saat menggunakan sistem ini dal
 | US-03 | Pelajar | Mendapatkan penilaian dan koreksi otomatis setelah menggambar aksara di layar | Mengetahui letak kesalahan goresan dan dapat memperbaiki akurasi tulisan. |
 | US-04 | Pengajar | Sebagai media bagi pengajar untuk mengajar. | Membantu pengajar melatih pelajar dalam memahami aksara bahasa. |
 | US-05 | Tim Materi | Menyusun materi pembelajaran | Agar pembelajaran terstruktur dan menarik. |
-| US-06| Programmer | Merancang dan mengimplementasikan materi dalam bentuk perangkat lunak yang interaktif. | Agar dapat menciptakan aplikasi yang dapat membantu mempelajari aksara bahasa. |
+| US-06| Administrator Sistem | Mengelola akun dan database serta memastikan algoritma berjalan | Agar program dapat berjalan dengan baik dan meminimalisir bug |
 
 
 
