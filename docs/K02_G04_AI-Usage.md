@@ -13,6 +13,7 @@
 
 | NIM | Nama |
 |---|---|
+| 13525026 | Ryuza Nadif Aldebaran |
 | 13525029 | Muhammad Naufal Hilmi |
 | 13525077 | Muhammad Abduh |
 | 13525107 | Nathaniel Marvelo |
@@ -40,6 +41,12 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 
 
 ### Milestone 2
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| ChatGPT | Mencari contoh kebutuhan dari sisi sistem dan pengguna berdasarkan activity yang diberikan | "Berdasarkan activity sistem berikut, berikan saya contoh-contoh kebutuhan dari sisi user dan/atau sistem." | Mengganti ide-ide yang kurang realistis untuk diimplementasikan dan mengembangkannya menjadi format EARS |
+
+
+### Milestone X
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
 | | | | | |
