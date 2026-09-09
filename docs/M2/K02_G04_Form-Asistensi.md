@@ -16,11 +16,12 @@
 
 | NIM | Nama |
 | --- | --- |
-| *13525029* | *Muhammad Naufal Hilmi* |
-| *13525077* | *Muhammad Abduh* |
-| *13525107* | *Nathaniel Marvelo* |
-| *13525113* | *Diandra Aria Yufana* |
-| *13525143* | *Natan Danuarta Ariel Wicaksana* |
+| 13525026 | Ryuza Nadif Aldebaran |
+| 13525029 | Muhammad Naufal Hilmi |
+| 13525077 | Muhammad Abduh |
+| 13525107 | Nathaniel Marvelo |
+| 13525113 | Diandra Aria Yufana |
+| 13525143 | Natan Danuarta Ariel Wicaksana |
 
 ### Catatan
 
