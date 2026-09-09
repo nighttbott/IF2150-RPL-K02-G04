@@ -5,7 +5,7 @@
 | Informasi | Keterangan |
 | --- | --- |
 | **Hari** | *\[Senin\]* |
-| **Tanggal** | *\[07/09/2026\]* |
+| **Tanggal** | *\[31/08/2026\]* |
 | **Kelas** | *\[02\]* |
 | **Nomor Kelompok** | *\[04\]*  |
 | **Nama Kelompok** | *\[0sks\]*  |
