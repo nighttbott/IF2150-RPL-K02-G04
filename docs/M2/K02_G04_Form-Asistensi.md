@@ -4,13 +4,13 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | *\[Hari\]* |
-| **Tanggal** | *\[DD/MM/YYYY\]* |
-| **Kelas** | *\[Kelas\]* |
-| **Nomor Kelompok** | *\[Nomor Kelompok\]*  |
-| **Nama Kelompok** | *\[Nama Kelompok\]*  |
-| **Nama Perangkat Lunak** | *\[Nama P/L\]*  |
-| **Dokumen** | *\[Nama Dokumen yang diasistensikan\]*  |
+| **Hari** | *\[Senin\]* |
+| **Tanggal** | *\[07/09/2026\]* |
+| **Kelas** | *\[02\]* |
+| **Nomor Kelompok** | *\[04\]*  |
+| **Nama Kelompok** | *\[0sks\]*  |
+| **Nama Perangkat Lunak** | *\[Ngaksara\]*  |
+| **Dokumen** | *\[RG\]*  |
 
 ### Anggota Kelompok
 
@@ -26,8 +26,8 @@
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
+| 1. Perubahan fitur dapat dilakukan di Milestone selanjutnya, namun tidak diperbolehkan melalukan perubahan mayor (e.g. menghapus sebuah fitur)  |
+| 2. Untuk fitur chat, coba tentukan teknis implementasinya terlebih dahulu. Jika dinilai feasible, boleh saja diimplementasikan |
 | 3. ... |
 | 4. ... |
 
