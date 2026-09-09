@@ -51,7 +51,7 @@
 | 07-09-2026 | Naufal, Abduh, Marvel, Diandra, Natan, Ryuza | Asistensi M2 | <1 | Done | - |
 | 09-09-2026 | Naufal, Abduh, Marvel, Diandra, Natan, Ryuza | Finishing M2 | 2 | Done | - |
 
-**Catatan/Evaluasi Milestone 1:**
+**Catatan/Evaluasi Milestone 2:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
 ---
