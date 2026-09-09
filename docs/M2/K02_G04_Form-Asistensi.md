@@ -4,13 +4,13 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | *\[Senin\]* |
-| **Tanggal** | *\[07/09/2026\]* |
-| **Kelas** | *\[02\]* |
-| **Nomor Kelompok** | *\[04\]*  |
-| **Nama Kelompok** | *\[0sks\]*  |
-| **Nama Perangkat Lunak** | *\[Ngaksara\]*  |
-| **Dokumen** | *\[RG\]*  |
+| **Hari** | Senin |
+| **Tanggal** | 07/09/2026 |
+| **Kelas** | 02 |
+| **Nomor Kelompok** | 04 |
+| **Nama Kelompok** | 0sks |
+| **Nama Perangkat Lunak** | Ngaksara |
+| **Dokumen** | RG |
 
 ### Anggota Kelompok
 
@@ -40,7 +40,7 @@
 
 <!-- ![](./assets/foto-asistensi.jpg) -->
 <p align="center">
-  <img src="./assets/foto-asistensi.jpg" width="100%">
+  <img src="./assets/foto-asistensii.jpg" width="100%">
 </p>
 
 <p align="center">
