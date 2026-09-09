@@ -60,7 +60,7 @@ Kami yang bertanda tangan di bawah ini menyatakan bahwa seluruh log penggunaan A
 
 | Tanda Tangan | Nama Anggota |
 | :---: | :--- |
-| <img src="./assets/ttd-naufal.png" width="100"> | 13525026 - Ryuza Nadif Aldebaran |
+| <img src="./assets/ttd-ryu.png" width="100"> | 13525026 - Ryuza Nadif Aldebaran |
 | <img src="./assets/ttd-naufal.png" width="100"> | 13525029 - Muhammad Naufal Hilmi |
 | <img src="./assets/ttd-abduh.png" width="100"> | 13525077 - Muhammad Abduh |
 | <img src="./assets/ttd-marvel.png" width="100"> | 13525107 - Nathaniel Marvelo |
