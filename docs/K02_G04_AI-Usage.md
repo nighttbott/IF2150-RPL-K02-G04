@@ -13,6 +13,7 @@
 
 | NIM | Nama |
 |---|---|
+| 13525026 | Ryuza Nadif Aldebaran |
 | 13525029 | Muhammad Naufal Hilmi |
 | 13525077 | Muhammad Abduh |
 | 13525107 | Nathaniel Marvelo |
@@ -23,6 +24,7 @@
 
 ### Daftar Isi
 * [Milestone 1](#milestone-1)
+* [Milestone 2](#milestone-2)
 
 ---
 
@@ -42,6 +44,13 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 ### Milestone 2
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
+| ChatGPT | Mencari contoh kebutuhan dari sisi sistem dan pengguna berdasarkan activity yang diberikan | "Berdasarkan activity sistem berikut, berikan saya contoh-contoh kebutuhan dari sisi user dan/atau sistem." | Mengganti ide-ide yang kurang realistis untuk diimplementasikan dan mengembangkannya menjadi format EARS |
+| Gemini | Ide untuk kebutuhan bisnis | Berdasarkan activity/kebutuhan sistem berikut, berikan saya contoh ide untuk kebutuhandari sisi bisnis. | Mencari contoh yang serupa dengan ide awal untuk memastikan |
+
+
+### Milestone X
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
 | | | | | |
 
 ---
@@ -51,6 +60,7 @@ Kami yang bertanda tangan di bawah ini menyatakan bahwa seluruh log penggunaan A
 
 | Tanda Tangan | Nama Anggota |
 | :---: | :--- |
+| <img src="./assets/ttd-ryu.png" width="100"> | 13525026 - Ryuza Nadif Aldebaran |
 | <img src="./assets/ttd-naufal.png" width="100"> | 13525029 - Muhammad Naufal Hilmi |
 | <img src="./assets/ttd-abduh.png" width="100"> | 13525077 - Muhammad Abduh |
 | <img src="./assets/ttd-marvel.png" width="100"> | 13525107 - Nathaniel Marvelo |

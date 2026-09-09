@@ -13,6 +13,7 @@
 
 | NIM | Nama |
 |---|---|
+| 13525026 | Ryuza Nadif Aldebaran |
 | 13525029 | Muhammad Naufal Hilmi |
 | 13525077 | Muhammad Abduh |
 | 13525107 | Nathaniel Marvelo |
@@ -23,6 +24,7 @@
 
 ### Daftar Isi
 * [Milestone 1](#milestone-1)
+* [Milestone 2](#milestone-2)
 * Notes: Copy bagian Daftar Isi seperti Milestone 1 untuk Milestone berikutnya, contoh ``* [Milestone 2](#milestone-2)``. Ketika Daftar isi diklik maka akan langsung diarahkan ke bagian bawah sesuai dengan Milestone tujuan.
 
 
@@ -38,6 +40,18 @@
 | 02-09-2026 | Naufal, Abduh, Marvel, Diandra, Natan | Finishing M1 | 3 | Done | - |
 
 **Catatan/Evaluasi Milestone 1:**
+* *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
+
+### Milestone 2
+**Periode:** 02-09-2026 - 09-09-2026
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- | 
+| 06-09-2026 | Naufal, Marvel, Diandra, Natan | M2 2.3, 2.4, 2.5 | 1 | Progress | - | 
+| 07-09-2026 | Naufal, Abduh, Marvel, Diandra, Natan, Ryuza | Asistensi M2 | <1 | Done | - |
+| 09-09-2026 | Naufal, Abduh, Marvel, Diandra, Natan, Ryuza | Finishing M2 | 2 | Done | - |
+
+**Catatan/Evaluasi Milestone 2:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
 ---
