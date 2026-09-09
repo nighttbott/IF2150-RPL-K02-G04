@@ -29,8 +29,9 @@
 | --- |
 | 1. Perubahan fitur dapat dilakukan di Milestone selanjutnya, namun tidak diperbolehkan melalukan perubahan mayor (e.g. menghapus sebuah fitur)  |
 | 2. Untuk fitur chat, coba tentukan teknis implementasinya terlebih dahulu. Jika dinilai feasible, boleh saja diimplementasikan |
-| 3. ... |
-| 4. ... |
+| 3. Parameter KNF tidak harus semuanya diambil dari contoh yang ada di github, boleh mengambil dari sumber lain juga (contohnya di materi edunex) |
+| 4. Untuk subbab 2.1 dan 2.2 disamakan saja, kecuali jika ada perubahan. |
+| 5. Setiap perubahan harus dicatat ke dalam tabel daftar perubahan. |
 
 **Notes for this section:**  
 *Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
