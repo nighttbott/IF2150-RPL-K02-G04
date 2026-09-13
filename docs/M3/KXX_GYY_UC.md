@@ -40,7 +40,13 @@ Dipersiapkan oleh:
 <br>
 
 # BAB 1: Deskripsi Perangkat Lunak
-Bagian ini boleh disalin dari 1.1 Deskripsi Umum Sistem pada dokumen *Requirement Gathering*. Pastikan isinya memang membahas deskripsi perangkat lunak kalian, seperti fitur, fungsi utama, dan cakupan sistem.
+Ngaksara merupakan solusi perangkat lunak yang kami usulkan sebagai upaya pemenuhan SDGs 4 (Quality Education) berbasis website. Alasan kami memilih media situs web adalah untuk memperluas aksesibilitas perangkat lunak kami serta tidak perlu ada prasyarat untuk mengunduh aplikasi terlebih dahulu. Situs ini dirancang untuk menunjang proses pembelajaran bahasa baru, dengan fokus pada bahasa dengan aksara/karakter yang rumit. Dengan aplikasi ini, kami berharap untuk dapat berkontribusi dalam pembelajaran berbagai bahasa, mulai dari bahasa lokal maupun global.
+
+Salah satu fitur yang terdapat dalam Ngaksara adalah fitur menggambar suatu karakter sesuai dengan outline karakter tersebut, dengan opsi untuk menggambar tanpa outline bagi pengguna yang sudah mahir. Hasil gambar pengguna kemudian akan dinilai keakuratannya dengan karakter asli, sehingga pengguna dapat mengetahui sejauh mana bentuk goresan mereka sudah mendekati bentuk karakter yang benar. Penilaian ini juga dapat digunakan sebagai acuan bagi pengguna untuk mengulang latihan pada karakter tertentu apabila hasil yang didapatkan belum sesuai.
+
+Selain itu, fitur mencocokkan aksara dengan pelafalan serta fitur menulis translasi dari rangkaian karakter merupakan solusi kami untuk meningkatkan familiaritas akan pelafalan karakter dan pemahaman dari bahasa tersebut. Kedua fitur ini kami rancang agar pengguna tidak hanya mampu menulis suatu karakter dengan baik, tetapi juga memahami cara pelafalannya, mengingat pada banyak bahasa dengan aksara rumit, bentuk tulisan dan cara baca suatu karakter tidak selalu berkaitan secara langsung.
+
+Untuk mendukung proses belajar yang berkelanjutan, Ngaksara juga akan menyediakan materi pembelajaran yang disusun secara bertahap, mulai dari pengenalan karakter dasar hingga penggabungan karakter menjadi kata maupun kalimat sederhana. Dengan susunan materi seperti ini, kami berharap pengguna dapat mengikuti proses belajar sesuai dengan kemampuan mereka masing-masing, tanpa perlu merasa tertinggal maupun terlalu terbebani oleh materi yang diberikan.
 
 ---
 
@@ -49,9 +55,26 @@ Salin ulang **seluruh Kebutuhan Fungsional (KF)** yang telah didefinisikan pada 
 
 | ID KF | Kebutuhan | Penjelasan |
 | :--- | :--- | :--- |
-| *KF01* | *Menampilkan pilihan metode pembayaran* | *Perangkat lunak dapat menampilkan pilihan antarmuka metode pembayaran (transfer bank, e-wallet, kartu kredit) setelah pengguna melakukan checkout.* |
-| *KF02* | *Mengirim permintaan otorisasi pembayaran* | *Perangkat lunak dapat mengirimkan permintaan otorisasi transaksi ke API Payment Gateway beserta nominal tagihan dan ID Pesanan.* |
-| *...* | *...* | *...* |
+| KF01 | R01 | Sistem harus menampilkan pilihan antarmuka pendaftaran akun untuk setiap opsi pengguna (pelajar, pengajar, maupun tim materi) |
+| KF02 | R01 | Sistem harus memberikan akses kontrol/privilege berbeda untuk setiap jenis pengguna |
+| KF03 | R02 | Sistem harus menampilkan pilihan antarmuka log-in untuk setiap opsi pengguna (pelajar, pengajar, maupun tim materi) |
+| KF04 | R02 | Ketika pengguna melakukan pendaftaran akun, log in, atau logout, sistem harus memproses permintaan tersebut melalui pengecekan validitas kredensial |
+| KF05 | R03 | Setelah pengguna membuat kata sandi, sistem harus mengenkripsi kata sandi tersebut sebelum disimpan di database |
+| KF06 | R04 | Sistem harus menampilkan dokumen Terms & Conditions kepada pengguna saat membuat akun |
+| KF07 | R04 | Bila pengguna belum mencapai akhir dokumen Terms & Conditions, maka sistem harus menolak melanjutkan pembuatan akun |
+| KF08 | R05 | Sistem harus menampilkan tampilan antarmuka untuk setiap fitur pengajaran yang ditawarkan |
+| KF09 | R06 | Ketika pengguna berada di halaman utama, sistem harus menampilkan daftar materi secara terurut berdasarkan jenis aksara atau tingkat kesulitan |
+| KF10 | R08 | Jika tersedia opsi menampilkan outline, sistem harus menampilkan tampilan antarmuka fitur menggambar aksara sesuai dengan opsi outline yang dipilih pengguna |
+| KF11 | R08 | Ketika pengguna berinteraksi dengan sistem dalam penggambaran aksara, sistem harus memproses interaksi tersebut |
+| KF12 | R09 | Ketika pengguna menggoreskan aksara di layar, sistem harus menilai akurasi goresan tersebut terhadap template dengan algoritma yang sesuai |
+| KF13 | R11 | Sistem harus menampilkan tampilan antarmuka riwayat pengerjaan latihan pelajar bagi pengajar |
+| KF14 | R12 | Setelah pelajar melakukan aktivitas pembelajaran, sistem harus mencatat dan menyimpan riwayat aktivitas tersebut agar dapat diakses pengajar |
+| KF15 | R13 | Ketika diperlukan pembaharuan materi, sistem harus mensinkronisasi data-data konten dari tim materi ke dalam database terpusat |
+| KF16 | R14 | Ketika diperlukan pembaharuan materi, sistem harus memodifikasi konten pembelajaran sesuai dengan pilihan dan tingkat akses tim materi |
+| KF17 | R16 | Dalam interval waktu yang rutin, sistem harus mencatat dan menyimpan log aktivitas dan error yang terjadi |
+| KF18 | R18 | Saat pelajar memiliki keluhan atau feedback, sistem harus menerima keluhan tersebut melalui form yang tersedia |
+| KF19 | R18 | Ketika sistem menerima keluhan atau feedback dari pelajar, sistem harus mengirimkannya ke server |
+| KF20 | R18 | Ketika server menerima keluhan atau feedback dari pelajar, sistem harus menampilkan keluhan tersebut di tampilan antarmuka admin |
 
 <sub> ***Catatan***: *Jika ada KF dari ML2 yang berubah/bertambah/dihapus setelah asistensi, pastikan tabel ini konsisten dengan versi KF terbaru sebelum dikumpulkan.*
 <sub>
