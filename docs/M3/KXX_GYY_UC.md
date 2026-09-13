@@ -7,23 +7,24 @@ USE CASE & SCENARIO USE CASE
 </h1>
 <br>
 
-## *Nama Perangkat Lunak*
+## Ngaksara
 
-### Untuk: *[Nama Asisten]*
+### Untuk: Amanda Aurellia Salsabilla
 
 Dipersiapkan oleh:
 | Informasi | Keterangan |
 | --- | --- |
-| Kelas | *\[Kelas\]* |
-| Kelompok | *\[Nomor Kelompok\]*  |
+| Kelas | K2 |
+| Kelompok | 4  |
 
 | NIM | Nama |
 |---|---|
-| *[NIM 1]* | *[Nama Anggota 1]* |
-| *[NIM 2]* | *[Nama Anggota 2]* |
-| *[NIM 3]* | *[Nama Anggota 3]* |
-| *[NIM 4]* | *[Nama Anggota 4]* |
-| *[NIM 5]* | *[Nama Anggota 5]* |
+| 13525026 | Ryuza Nadif Aldebaran |
+| 13525029 | Muhammad Naufal Hilmi |
+| 13525077 | Muhammad Abduh |
+| 13525107 | Nathaniel Marvelo |
+| 13525113 | Diandra Aria Yufana |
+| 13525143 | Natan Danuarta Ariel Wicaksana |
 ---
 
 ## Daftar Perubahan
