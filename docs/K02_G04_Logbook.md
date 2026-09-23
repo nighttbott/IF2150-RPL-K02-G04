@@ -69,6 +69,25 @@
 **Catatan/Evaluasi Milestone 3:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
+### Milestone 4
+**Periode:** 16-09-2026 - 23-09-2026
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 20-09-2026 | Natan | M4 4.1 | 1 | Done | - |
+| 22-09-2026 | Diandra | Form Asistensi | <1 | Progress | - |
+| 23-09-2026 | Natan | M4 4.2.1 , M4 4.2.8, Merombak Use Case | 2 | Done | - |
+| 23-09-2026 | Diandra | M4 4.2.3 , M4 4.2.4, M4 4.2.5, M4 4.2.6, M4 4.2.7 | 2 | Done | - |
+| 23-09-2026 | Marvel | M4 4.2.4, M4 4.2.5 | 2 | Done | - |
+| 23-09-2026 | Abduh | Merombak Use Case, Merombak KF, Diagram Kelas | 2 | Done | - |
+| 23-09-2026 | Naufal | M4 4.2.2 , M4 4.2.3, Merombak Use Case, Merombak Skenario, Diagram Kelas | 2 | Done | - |
+| 23-09-2026 | Ryu | M4 4.2.7 | 1 | Done | - |
+| 23-09-2026 | Diandra | AI-Usage, Form Asistensi | 1 | Done | - |
+| 23-09-2026 | Natan | Logbook | 1 | Done | - |
+
+**Catatan/Evaluasi Milestone 4:**
+* *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
+
 ---
 
 
