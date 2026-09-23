@@ -26,6 +26,7 @@
 * [Milestone 1](#milestone-1)
 * [Milestone 2](#milestone-2)
 * [Milestone 3](#milestone-3)
+* [Milestone 4](#milestone-4)
 
 ---
 
@@ -52,7 +53,15 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 ### Milestone 3
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
-| ... | ... | ... | ... | ... |
+| ... | ... | ... | ... |
+
+
+### Milestone 4
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| Claude | Melihat contoh-contoh diagram kelas untuk beberapa Use Case | Buatkan contoh diagram kelas dari use case (...) | Mengganti notasi/hubungan kelas yang kurang sesuai dengan yang lebih masuk akal |
+| ChatGPT | Melihat contoh atribut dan operasi beberapa kelas pada suatu diagram kelas | Berikan contoh atribut dan operasi yang dimiliki kelas (...) pada use case (...) | Menggunakan beberapa yang benar dan memvalidasi/mengoreksi beberapa lainnya |
+| Claude | Membantu menentukan kelas-kelas yang diperlukan | Apa saja kelas-kelas yang dibutuhkan untuk use case (...) yang nantinya akan digambarkan pada diagram kelas | Mengambil beberapa serta memvalidasi/mengoreksi/mengubah beberapa kelas lainnya agar lebih relevan |
 
 
 ### Milestone X
