@@ -494,26 +494,287 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 | C26 | `PenyelesaianTugas` | *(Entity)* Menyimpan status dan waktu pengumpulan tugas oleh Pelajar. | UC-05 |
 
 ## 5.2 Diagram Kelas per Use Case
-Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diagram*, lengkap dengan tabel atribut dan metode/operasinya.
+### 4.2.1 Use Case UC-01
 
-### 5.2.1 Use Case UC01
+**Nama Use Case:** Melakukan Pendaftaran Akun
 
-**Nama Use Case:** *Memesan Produk*
+#### Identifikasi Kelas
 
-<p align="center">
-<img alt="Contoh Class Diagram" src="./assets/diagram/contoh-class-diagram.webp" width="70%">
-</p>
-<p align="center">
-<i>Gambar 3. Contoh Diagram Kelas Use Case UC01</i>
-</p>
+| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| :--- | :--- | :--- |
+| C05 | `HalamanPendaftaran` | Form pendaftaran, pemilihan peran, dan persetujuan Terms & Conditions. |
+| C06 | `HalamanLogin` | Form untuk memasukkan kredensial login. Login dipetakan ke UC-01 karena Bab 3 belum mendefinisikan use case login terpisah dan kebutuhan autentikasi dibahas bersama akses akun. |
+| C15 | `OtentikasiController` | Memvalidasi pendaftaran dan login serta memproses autentikasi pengguna. |
+| C01 | `AkunPengguna` | Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi. |
 
-| ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
+#### Diagram Kelas
+
+<p align="center"><img src="./assets/diagram/UC01.png" alt="Diagram Kelas Use Case UC-01" width="70%"></p>
+<p align="center"><i>Gambar 2. Diagram Kelas Use Case UC-01</i></p>
+
+`HalamanPendaftaran` dan `HalamanLogin` mengirim masukan ke `OtentikasiController`. Controller memvalidasi masukan dan berinteraksi dengan `AkunPengguna` untuk membuat akun atau memeriksa kredensial.
+
+| ID Kelas | Nama Kelas | Atribut Utama | Metode Utama |
 | :--- | :--- | :--- | :--- |
-| *C02* | *Pesanan* | *idPesanan, total, status* | *buatPesanan(), hitungTotal()* |
-| *C03* | *Keranjang* | *daftarItem* | *tambahItem(), checkout()* |
-| *...* | *...* | *...* | *...* |
+| C05 | `HalamanPendaftaran` | `formInputData`, `statusPersetujuan` | `tampilkanOpsiPeran()`, `tampilkanTnC()`, `kirimPendaftaran()` |
+| C06 | `HalamanLogin` | `emailInput`, `passwordInput` | `kirimKredensial()`, `tampilkanStatusLogin()` |
+| C15 | `OtentikasiController` | `statusValidasi`, `statusSesi` | `verifikasiFormatData()`, `enkripsiPassword()`, `simpanAkun()`, `validasiLogin()` |
+| C01 | `AkunPengguna` | `idAkun`, `email`, `username`, `passwordHash`, `peran` | `buatAkunBaru()`, `getDetailAkun()` |
 
-> Lanjutkan pola **5.2.x** untuk setiap use case pada 4.2.
+### 4.2.2 Use Case UC-02
+
+**Nama Use Case:** Mempelajari Materi
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| :--- | :--- | :--- |
+| C13 | `HalamanMateri` | Antarmuka Pelajar untuk memilih dan mempelajari materi serta memutar audio. |
+| C17 | `MateriController` | Mengambil, mengurutkan, memuat, dan memperbarui materi. |
+| C02 | `MateriAksara` | Menyimpan metadata materi, jenis aksara, dan tingkat kesulitan. |
+| C21 | `KontenMateri` | Menyimpan isi materi, contoh, aturan, audio, dan versi konten. |
+| C03 | `RiwayatLatihan` | Menyimpan hasil latihan, status, dan waktu pengerjaan Pelajar. |
+| C01 | `AkunPengguna` | Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi. |
+
+#### Diagram Kelas
+
+<p align="center"><img src="./assets/diagram/UC02.png" alt="Diagram Kelas Use Case UC-02" width="70%"></p>
+<p align="center"><i>Gambar 3. Diagram Kelas Use Case UC-02</i></p>
+
+`HalamanMateri` meminta daftar dan isi materi melalui `MateriController`. Controller mengambil metadata dari `MateriAksara`, isi dan audio dari `KontenMateri`, serta status belajar dari `RiwayatLatihan` untuk Pelajar yang sedang masuk.
+
+| ID Kelas | Nama Kelas | Atribut Utama | Metode Utama |
+| :--- | :--- | :--- | :--- |
+| C13 | `HalamanMateri` | `materiTerpilih`, `statusTampilan` | `pilihMateri()`, `tampilkanIsiMateri()`, `putarAudioPengucapan()` |
+| C17 | `MateriController` | `jenisAksaraTerpilih`, `versiAplikasi` | `ambilDaftarMateri()`, `muatPaketMateri()`, `ambilAudioPengucapan()` |
+| C02 | `MateriAksara` | `idMateri`, `namaMateri`, `jenisAksara`, `tingkatKesulitan` | `simpan()`, `ambilMetadata()` |
+| C21 | `KontenMateri` | `bentukAksara`, `aturan`, `contoh`, `urlAudio`, `versiKonten` | `ambilKonten()`, `ambilAudio()` |
+| C03 | `RiwayatLatihan` | `idRiwayat`, `idPelajar`, `statusProgres`, `nilaiAkurasi` | `ambilStatusProgres()` |
+| C01 | `AkunPengguna` | `idAkun`, `peran` | `getDetailAkun()` |
+
+### 4.2.3 Use Case UC-03
+
+**Nama Use Case:** Mengerjakan Latihan Aksara
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| :--- | :--- | :--- |
+| C08 | `HalamanLatihan` | Antarmuka latihan menulis, mencocokkan bunyi, merangkai aksara, dan transliterasi. |
+| C16 | `LatihanController` | Menyiapkan latihan, menilai jawaban, dan memperbarui riwayat serta motivasi. |
+| C17 | `MateriController` | Mengambil, mengurutkan, memuat, dan memperbarui materi. |
+| C02 | `MateriAksara` | Menyimpan metadata materi, jenis aksara, dan tingkat kesulitan. |
+| C21 | `KontenMateri` | Menyimpan isi materi, contoh, aturan, audio, dan versi konten. |
+| C03 | `RiwayatLatihan` | Menyimpan hasil latihan, status, dan waktu pengerjaan Pelajar. |
+| C22 | `MotivasiBelajar` | Menyimpan streak, poin, dan badge Pelajar untuk motivasi dan scoreboard. |
+| C01 | `AkunPengguna` | Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi. |
+
+#### Diagram Kelas
+
+<p align="center"><img src="./assets/diagram/UC03.png" alt="Diagram Kelas Use Case UC-03" width="70%"></p>
+<p align="center"><i>Gambar 4. Diagram Kelas Use Case UC-03</i></p>
+
+`HalamanLatihan` menyampaikan jawaban ke `LatihanController`. Controller meminta materi atau soal yang diperlukan, menilai jawaban, lalu menyimpan hasil ke `RiwayatLatihan` dan memperbarui `MotivasiBelajar`.
+
+| ID Kelas | Nama Kelas | Atribut Utama | Metode Utama |
+| :--- | :--- | :--- | :--- |
+| C08 | `HalamanLatihan` | `modeLatihan`, `jawabanInput`, `hasilTampilan` | `pilihModeLatihan()`, `kirimJawaban()`, `tampilkanHasil()` |
+| C16 | `LatihanController` | `soalAktif`, `jawabanPengguna`, `skor` | `siapkanSoal()`, `nilaiJawaban()`, `simpanHasil()` |
+| C17 | `MateriController` | `idMateri`, `versiKonten` | `ambilKontenLatihan()`, `ambilAudioPengucapan()` |
+| C02 | `MateriAksara` | `idMateri`, `jenisAksara`, `tingkatKesulitan` | `ambilTargetLatihan()` |
+| C21 | `KontenMateri` | `bentukAksara`, `aturan`, `contoh`, `urlAudio` | `ambilKonten()` |
+| C03 | `RiwayatLatihan` | `idRiwayat`, `idPelajar`, `mode`, `skor`, `tanggalPengerjaan` | `simpanHasil()` |
+| C22 | `MotivasiBelajar` | `idPelajar`, `streak`, `poin`, `daftarBadge` | `perbaruiStreak()`, `tambahPoin()`, `berikanBadge()` |
+| C01 | `AkunPengguna` | `idAkun`, `peran` | `getDetailAkun()` |
+
+### 4.2.4 Use Case UC-04
+
+**Nama Use Case:** Meninjau Progres dan Motivasi
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| :--- | :--- | :--- |
+| C14 | `HalamanProgres` | Antarmuka Pelajar untuk melihat riwayat, progres, rekomendasi, dan motivasi. |
+| C19 | `ProgresController` | Mengolah riwayat dan progres, menyiapkan rekomendasi serta scoreboard. |
+| C02 | `MateriAksara` | Menyimpan metadata materi, jenis aksara, dan tingkat kesulitan. |
+| C03 | `RiwayatLatihan` | Menyimpan hasil latihan, status, dan waktu pengerjaan Pelajar. |
+| C22 | `MotivasiBelajar` | Menyimpan streak, poin, dan badge Pelajar untuk motivasi dan scoreboard. |
+| C01 | `AkunPengguna` | Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi. |
+
+#### Diagram Kelas
+
+<p align="center"><img src="./assets/diagram/UC04.png" alt="Diagram Kelas Use Case UC-04" width="70%"></p>
+<p align="center"><i>Gambar 5. Diagram Kelas Use Case UC-04</i></p>
+
+`ProgresController` menyusun riwayat, penguasaan materi, rekomendasi, streak, poin, badge, dan scoreboard untuk ditampilkan pada `HalamanProgres`.
+
+| ID Kelas | Nama Kelas | Atribut Utama | Metode Utama |
+| :--- | :--- | :--- | :--- |
+| C14 | `HalamanProgres` | `filterPeriode`, `dataTampilan` | `tampilkanProgres()`, `pilihPeriode()`, `tampilkanScoreboard()` |
+| C19 | `ProgresController` | `idPelajar`, `periode` | `ambilRiwayat()`, `hitungProgres()`, `siapkanRekomendasi()`, `ambilScoreboard()` |
+| C02 | `MateriAksara` | `idMateri`, `namaMateri`, `tingkatKesulitan` | `ambilMateriRekomendasi()` |
+| C03 | `RiwayatLatihan` | `idRiwayat`, `idPelajar`, `mode`, `skor`, `tanggalPengerjaan` | `ambilRiwayat()`, `hitungPenguasaan()` |
+| C22 | `MotivasiBelajar` | `idPelajar`, `streak`, `poin`, `daftarBadge` | `ambilMotivasi()`, `susunScoreboard()` |
+| C01 | `AkunPengguna` | `idAkun`, `namaTampilan`, `peran` | `getProfil()` |
+
+### 4.2.5 Use Case UC-05
+
+**Nama Use Case:** Mengikuti Pembelajaran Kelas
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| :--- | :--- | :--- |
+| C11 | `HalamanKelasPelajar` | Antarmuka Pelajar untuk bergabung kelas, melihat tugas, dan mengumpulkan tugas. |
+| C20 | `KelasController` | Memproses keanggotaan, kelas, tugas, dan pengambilan data kelas. |
+| C23 | `KelasBelajar` | Menyimpan data kelas, pemilik, kode bergabung, dan pengaturan kelas. |
+| C24 | `KeanggotaanKelas` | Menyimpan hubungan Pelajar dengan kelas dan status keanggotaannya. |
+| C25 | `TugasKelas` | Menyimpan instruksi, komponen, dan tenggat tugas. |
+| C26 | `PenyelesaianTugas` | Menyimpan status dan waktu pengumpulan tugas oleh Pelajar. |
+| C03 | `RiwayatLatihan` | Menyimpan hasil latihan, status, dan waktu pengerjaan Pelajar. |
+| C01 | `AkunPengguna` | Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi. |
+
+#### Diagram Kelas
+
+<p align="center"><img src="./assets/diagram/UC05.png" alt="Diagram Kelas Use Case UC-05" width="70%"></p>
+<p align="center"><i>Gambar 6. Diagram Kelas Use Case UC-05</i></p>
+
+`KelasController` memvalidasi kode melalui `KelasBelajar`, mencatat keanggotaan pada `KeanggotaanKelas`, menampilkan `TugasKelas`, menyimpan pengumpulan pada `PenyelesaianTugas`, serta mencatat aktivitas pembelajaran pada `RiwayatLatihan`.
+
+| ID Kelas | Nama Kelas | Atribut Utama | Metode Utama |
+| :--- | :--- | :--- | :--- |
+| C11 | `HalamanKelasPelajar` | `kodeKelasInput`, `tugasAktif`, `jawabanInput` | `kirimKodeBergabung()`, `tampilkanTugas()`, `kirimTugas()` |
+| C20 | `KelasController` | `idPelajar`, `idKelas` | `validasiKodeBergabung()`, `gabungkanPelajar()`, `ambilTugasAktif()`, `simpanPengumpulan()` |
+| C23 | `KelasBelajar` | `idKelas`, `nama`, `kodeBergabung`, `status` | `validasiKode()` |
+| C24 | `KeanggotaanKelas` | `idKeanggotaan`, `idKelas`, `idPelajar`, `status` | `simpanKeanggotaan()`, `ubahStatus()` |
+| C25 | `TugasKelas` | `idTugas`, `idKelas`, `instruksi`, `tenggat`, `komponenTugas` | `ambilTugasAktif()` |
+| C26 | `PenyelesaianTugas` | `idPenyelesaian`, `idTugas`, `idPelajar`, `waktuKumpul`, `status` | `simpanPengumpulan()`, `tentukanStatusKetepatan()` |
+| C03 | `RiwayatLatihan` | `idRiwayat`, `idPelajar`, `modeAktivitas`, `tanggalPengerjaan`, `status` | `catatAktivitas()` |
+| C01 | `AkunPengguna` | `idAkun`, `namaTampilan`, `peran` | `getProfil()` |
+
+### 4.2.6 Use Case UC-06
+
+**Nama Use Case:** Memperbaharui Materi
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| :--- | :--- | :--- |
+| C09 | `HalamanKelolaMateri` | Antarmuka Tim Materi untuk mengunggah dan menyunting modul. |
+| C17 | `MateriController` | Mengambil, mengurutkan, memuat, dan memperbarui materi. |
+| C02 | `MateriAksara` | Menyimpan metadata materi, jenis aksara, dan tingkat kesulitan. |
+| C21 | `KontenMateri` | Menyimpan isi materi, contoh, aturan, audio, dan versi konten. |
+| C01 | `AkunPengguna` | Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi. |
+
+#### Diagram Kelas
+
+<p align="center"><img src="./assets/diagram/UC06.png" alt="Diagram Kelas Use Case UC-06" width="70%"></p>
+<p align="center"><i>Gambar 7. Diagram Kelas Use Case UC-06</i></p>
+
+`MateriController` memvalidasi perubahan dari `HalamanKelolaMateri`, memeriksa hak akses pengguna, lalu memperbarui metadata `MateriAksara` dan konten pada `KontenMateri`.
+
+| ID Kelas | Nama Kelas | Atribut Utama | Metode Utama |
+| :--- | :--- | :--- | :--- |
+| C09 | `HalamanKelolaMateri` | `daftarMateri`, `fileMateriInput`, `detailInput`, `pesanStatus` | `tampilkanDaftarMateri()`, `unggahFileMateri()`, `suntingMateri()`, `tampilkanStatus()` |
+| C17 | `MateriController` | `materiSedangDiproses`, `statusValidasi` | `ambilDaftarMateri()`, `validasiFormatFile()`, `tambahMateri()`, `perbaruiMateri()` |
+| C02 | `MateriAksara` | `idMateri`, `namaMateri`, `jenisAksara`, `tingkatKesulitan` | `simpan()`, `perbaruiData()` |
+| C21 | `KontenMateri` | `bentukAksara`, `aturan`, `contoh`, `urlAudio`, `versiKonten` | `simpanKonten()`, `perbaruiKonten()`, `arsipkanVersi()` |
+| C01 | `AkunPengguna` | `idAkun`, `peran` | `verifikasiHakAkses()` |
+
+### 4.2.7 Use Case UC-07
+
+**Nama Use Case:** Menyiapkan Pembelajaran Kelas
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| :--- | :--- | :--- |
+| C12 | `HalamanKelolaKelas` | Antarmuka Pengajar untuk mengelola kelas dan memantau anggotanya. |
+| C20 | `KelasController` | Memproses keanggotaan, kelas, tugas, dan pengambilan data kelas. |
+| C22 | `MotivasiBelajar` | Menyimpan streak, poin, dan badge Pelajar untuk motivasi dan scoreboard. |
+| C23 | `KelasBelajar` | Menyimpan data kelas, pemilik, kode bergabung, dan pengaturan kelas. |
+| C24 | `KeanggotaanKelas` | Menyimpan hubungan Pelajar dengan kelas dan status keanggotaannya. |
+| C25 | `TugasKelas` | Menyimpan instruksi, komponen, dan tenggat tugas. |
+| C01 | `AkunPengguna` | Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi. |
+
+#### Diagram Kelas
+
+<p align="center"><img src="./assets/diagram/UC07.png" alt="Diagram Kelas Use Case UC-07" width="70%"></p>
+<p align="center"><i>Gambar 8. Diagram Kelas Use Case UC-07</i></p>
+
+`KelasController` membuat kelas dan kode bergabung, mengelola anggota, serta menerbitkan tugas. `MotivasiBelajar` mendukung scoreboard kelas ketika fitur tersebut diaktifkan Pengajar.
+
+| ID Kelas | Nama Kelas | Atribut Utama | Metode Utama |
+| :--- | :--- | :--- | :--- |
+| C12 | `HalamanKelolaKelas` | `dataKelasInput`, `instruksiTugas`, `tenggat`, `statusScoreboard` | `buatKelas()`, `kelolaAnggota()`, `buatTugas()`, `aturScoreboard()` |
+| C20 | `KelasController` | `idPengajar`, `idKelas` | `buatKelas()`, `hasilkanKodeUnik()`, `kelolaAnggota()`, `terbitkanTugas()` |
+| C22 | `MotivasiBelajar` | `idPelajar`, `streak`, `poin`, `daftarBadge` | `ambilPoinKelas()`, `susunScoreboard()` |
+| C23 | `KelasBelajar` | `idKelas`, `nama`, `pemilikId`, `kodeBergabung`, `statusScoreboard` | `simpan()`, `buatKodeBergabung()` |
+| C24 | `KeanggotaanKelas` | `idKeanggotaan`, `idKelas`, `idPelajar`, `status` | `daftarAnggota()`, `ubahStatus()` |
+| C25 | `TugasKelas` | `idTugas`, `idKelas`, `instruksi`, `komponenTugas`, `tenggat` | `simpan()`, `terbitkan()` |
+| C01 | `AkunPengguna` | `idAkun`, `peran` | `verifikasiHakAkses()` |
+
+### 4.2.8 Use Case UC-08
+
+**Nama Use Case:** Memantau dan Menindaklanjuti Progres
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| :--- | :--- | :--- |
+| C12 | `HalamanKelolaKelas` | Antarmuka Pengajar untuk mengelola kelas dan memantau anggotanya. |
+| C20 | `KelasController` | Memproses keanggotaan, kelas, tugas, dan pengambilan data kelas. |
+| C19 | `ProgresController` | Mengolah riwayat dan progres, menyiapkan rekomendasi serta scoreboard. |
+| C23 | `KelasBelajar` | Menyimpan data kelas, pemilik, kode bergabung, dan pengaturan kelas. |
+| C24 | `KeanggotaanKelas` | Menyimpan hubungan Pelajar dengan kelas dan status keanggotaannya. |
+| C03 | `RiwayatLatihan` | Menyimpan hasil latihan, status, dan waktu pengerjaan Pelajar. |
+| C01 | `AkunPengguna` | Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi. |
+
+#### Diagram Kelas
+
+<p align="center"><img src="./assets/diagram/UC08.png" alt="Diagram Kelas Use Case UC-08" width="70%"></p>
+<p align="center"><i>Gambar 9. Diagram Kelas Use Case UC-08</i></p>
+
+`KelasController` mengambil kelas dan anggota yang diampu Pengajar, lalu meminta `ProgresController` mengolah `RiwayatLatihan`. Hasilnya ditampilkan melalui `HalamanKelolaKelas` untuk membantu Pengajar menentukan tindak lanjut.
+
+| ID Kelas | Nama Kelas | Atribut Utama | Metode Utama |
+| :--- | :--- | :--- | :--- |
+| C12 | `HalamanKelolaKelas` | `idKelasTerpilih`, `daftarAnggota`, `ringkasanProgres` | `tampilkanAnggota()`, `tampilkanProgres()`, `pilihAnggota()` |
+| C20 | `KelasController` | `idPengajar`, `idKelas` | `ambilKelasPengajar()`, `ambilDaftarAnggota()` |
+| C19 | `ProgresController` | `idPelajar`, `periode` | `agregasiProgres()`, `hitungPolaKesalahan()` |
+| C23 | `KelasBelajar` | `idKelas`, `nama`, `pemilikId` | `daftarKelasPengajar()` |
+| C24 | `KeanggotaanKelas` | `idKeanggotaan`, `idKelas`, `idPelajar`, `status` | `daftarAnggotaAktif()` |
+| C03 | `RiwayatLatihan` | `idRiwayat`, `idPelajar`, `mode`, `skor`, `tanggalPengerjaan`, `status` | `ambilRiwayatPelajar()`, `hitungPolaKesalahan()` |
+| C01 | `AkunPengguna` | `idAkun`, `namaTampilan`, `peran` | `getProfil()` |
+
+### 4.2.9 Use Case UC-09
+
+**Nama Use Case:** Menyampaikan Feedback
+
+#### Identifikasi Kelas
+
+| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| :--- | :--- | :--- |
+| C10 | `HalamanFeedback` | Form untuk mengirim feedback aplikasi, materi, atau pengalaman penggunaan. |
+| C18 | `FeedbackController` | Memvalidasi dan menyimpan feedback serta menyiapkan konfirmasi. |
+| C04 | `DataFeedback` | Menyimpan feedback, pengirim, waktu kirim, dan status tindak lanjut. |
+| C01 | `AkunPengguna` | Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi. |
+
+#### Diagram Kelas
+
+<p align="center"><img src="./assets/diagram/UC09.png" alt="Diagram Kelas Use Case UC-09" width="70%"></p>
+<p align="center"><i>Gambar 10. Diagram Kelas Use Case UC-09</i></p>
+
+`FeedbackController` memvalidasi masukan, menghubungkannya dengan akun pengirim, menyimpan data feedback, dan menyiapkan konfirmasi. Alur ini sesuai dengan KF18–KF20.
+
+| ID Kelas | Nama Kelas | Atribut Utama | Metode Utama |
+| :--- | :--- | :--- | :--- |
+| C10 | `HalamanFeedback` | `kategoriFeedback`, `pesanFeedback`, `statusKirim` | `tampilkanFormFeedback()`, `kirimFeedback()`, `tampilkanKonfirmasi()` |
+| C18 | `FeedbackController` | `dataMasukan`, `statusValidasi` | `validasiFeedback()`, `simpanFeedback()`, `kirimKonfirmasi()` |
+| C04 | `DataFeedback` | `idFeedback`, `idAkun`, `kategori`, `pesan`, `waktuKirim`, `status` | `simpan()`, `perbaruiStatus()` |
+| C01 | `AkunPengguna` | `idAkun`, `peran` | `getProfil()` |
+
 
 ## 5.3 Diagram Kelas Keseluruhan
 Gabungkan seluruh kelas dan hubungan antarkelas dari BAB 4.3 dokumen *Class Diagram* menjadi satu diagram kelas keseluruhan. Pastikan tidak ada kelas yang terduplikasi atau tertinggal.
