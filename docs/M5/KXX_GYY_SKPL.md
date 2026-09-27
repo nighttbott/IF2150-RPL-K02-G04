@@ -190,17 +190,18 @@ Tabel 3.2. Kebutuhan Non-Fungsional
 | Tim Materi | Pengguna yang bertindak sebagai pengelola konten materi. Tim materi membutuhkan akses untuk mengelola modul. |   
 
 ## 4.2 Identifikasi Use Case
-Salin ulang daftar Use Case versi terbaru dari BAB 3.2 dokumen *Class Diagram*, pastikan seluruh ID KF yang dirujuk sudah sesuai dengan tabel pada 3.1.
 
-| ID UC | Nama Use Case | Deskripsi Singkat | Aktor | ID KF |
-| :--- | :--- | :--- | :--- | :--- |
-| *UC01* | *Memesan Produk* | *Pelanggan memilih produk hingga pesanan tersimpan di sistem.* | *Pelanggan* | *KF01, KF02* |
-| *UC02* | *Melihat Keranjang* | *Pelanggan melihat daftar item yang telah dipilih sebelum checkout.* | *Pelanggan* | *KF02* |
-| *UC03* | *Melakukan Pembayaran* | *Pelanggan menyelesaikan pembayaran atas pesanan yang dibuat.* | *Pelanggan* | *KF03, KF04, KF05* |
-| *UC04* | *Memilih Metode Pembayaran* | *Pelanggan memilih metode pembayaran alternatif (kartu atau e-wallet).* | *Pelanggan* | *KF03* |
-| *UC05* | *Melihat Riwayat Pesanan* | *Pelanggan melihat daftar pesanan yang pernah dibuat beserta statusnya.* | *Pelanggan* | *KF06* |
-| *...* | *...* | *...* | *...* | *...* |
-
+| ID | Nama | Aktor | Tujuan | KF |
+|---|---|---|---|---|
+| UC-01 | Melakukan Pendaftaran Akun | Pelajar; Pengajar | Membuat akun sesuai peran untuk dapat menggunakan perangkat lunak. | KF01–KF07, KF17 |
+| UC-02 | Mempelajari Materi | Pelajar | Memahami materi terbit untuk aksara dan tingkat yang dipilih. | KF02–KF04, KF08–KF09, KF17 |
+| UC-03 | Mengerjakan Latihan Aksara | Pelajar | Menyelesaikan mode latihan dan memperoleh hasil serta umpan balik. | KF02–KF03, KF10–KF12, KF14, KF17, KF21–KF23 |
+| UC-04 | Meninjau Progres dan Motivasi | Pelajar | Mengetahui perkembangan, materi yang perlu diulang, dan status motivasi. | KF02–KF03, KF14, KF17, KF24 |
+| UC-05 | Mengikuti Pembelajaran Kelas | Pelajar | Bergabung ke kelas dan menyelesaikan tugas yang diberikan Pengajar. | KF02–KF03, KF14, KF17, KF26, KF28 |
+| UC-06 | Memperbaharui Materi | Tim Materi | Memperbarui atau memperbaiki materi pembelajaran yang tersedia. | KF02–KF03, KF15–KF17, KF29 |
+| UC-07 | Menyiapkan Pembelajaran Kelas | Pengajar | Membentuk kelas, mengendalikan akses, mengelola anggota, dan menyediakan tugas. | KF02–KF03, KF17, KF25, KF27 |
+| UC-08 | Memantau dan Menindaklanjuti Progres | Pengajar | Memahami perkembangan anggota dan memberikan tindak lanjut. | KF02–KF04, KF13–KF14, KF17 |
+| UC-09 | Menyampaikan Feedback | Pelajar; Pengajar | Menyampaikan feedback aplikasi, materi, atau pengalaman penggunaan melalui form. | KF02–KF03, KF17–KF20 |
 ## 4.3 Use Case Diagram
 Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case* atau *Class Diagram* (gunakan versi paling akhir/terbaru apabila terdapat perubahan).
 
