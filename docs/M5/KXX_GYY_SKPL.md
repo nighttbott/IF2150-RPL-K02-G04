@@ -777,20 +777,38 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 
 
 ## 5.3 Diagram Kelas Keseluruhan
-Gabungkan seluruh kelas dan hubungan antarkelas dari BAB 4.3 dokumen *Class Diagram* menjadi satu diagram kelas keseluruhan. Pastikan tidak ada kelas yang terduplikasi atau tertinggal.
 
-<p align="center">
-<img alt="Contoh Class Diagram Keseluruhan" src="./assets/diagram/contoh-class-diagram.webp" width="70%">
-</p>
-<p align="center">
-<i>Gambar 4. Contoh Diagram Kelas Keseluruhan</i>
-</p>
+<p align="center"><img src="./assets/diagram/keseluruhan.png" alt="Diagram Kelas Keseluruhan" width="95%"></p>
+<p align="center"><i>Gambar 11. Diagram Kelas Keseluruhan</i></p>
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| *C01* | *Pelanggan* | *idPelanggan, nama, email* | *lihatRiwayatPesanan()* |
-| *C02* | *Pesanan* | *idPesanan, total, status* | *hitungTotal(), perbaruiStatus()* |
-| *...* | *...* | *...* | *...* |
+| C01 | `AkunPengguna` | `idAkun`, `email`, `username`, `passwordHash`, `peran`, `namaTampilan` | `buatAkunBaru()`, `getDetailAkun()`, `getProfil()`, `verifikasiHakAkses()` |
+| C02 | `MateriAksara` | `idMateri`, `namaMateri`, `jenisAksara`, `tingkatKesulitan` | `simpan()`, `ambilMetadata()`, `ambilTargetLatihan()`, `ambilMateriRekomendasi()`, `perbaruiData()` |
+| C03 | `RiwayatLatihan` | `idRiwayat`, `idPelajar`, `statusProgres`, `nilaiAkurasi`, `mode`, `skor`, `tanggalPengerjaan`, `modeAktivitas`, `status` | `ambilStatusProgres()`, `simpanHasil()`, `ambilRiwayat()`, `hitungPenguasaan()`, `catatAktivitas()`, `ambilRiwayatPelajar()`, `hitungPolaKesalahan()` |
+| C04 | `DataFeedback` | `idFeedback`, `idAkun`, `kategori`, `pesan`, `waktuKirim`, `status` | `simpan()`, `perbaruiStatus()` |
+| C05 | `HalamanPendaftaran` | `formInputData`, `statusPersetujuan` | `tampilkanOpsiPeran()`, `tampilkanTnC()`, `kirimPendaftaran()` |
+| C06 | `HalamanLogin` | `emailInput`, `passwordInput` | `kirimKredensial()`, `tampilkanStatusLogin()` |
+| C07 | `HalamanUtama` | - | - |
+| C08 | `HalamanLatihan` | `modeLatihan`, `jawabanInput`, `hasilTampilan` | `pilihModeLatihan()`, `kirimJawaban()`, `tampilkanHasil()` |
+| C09 | `HalamanKelolaMateri` | `daftarMateri`, `fileMateriInput`, `detailInput`, `pesanStatus` | `tampilkanDaftarMateri()`, `unggahFileMateri()`, `suntingMateri()`, `tampilkanStatus()` |
+| C10 | `HalamanFeedback` | `kategoriFeedback`, `pesanFeedback`, `statusKirim` | `tampilkanFormFeedback()`, `kirimFeedback()`, `tampilkanKonfirmasi()` |
+| C11 | `HalamanKelasPelajar` | `kodeKelasInput`, `tugasAktif`, `jawabanInput` | `kirimKodeBergabung()`, `tampilkanTugas()`, `kirimTugas()` |
+| C12 | `HalamanKelolaKelas` | `dataKelasInput`, `instruksiTugas`, `tenggat`, `statusScoreboard`, `idKelasTerpilih`, `daftarAnggota`, `ringkasanProgres` | `buatKelas()`, `kelolaAnggota()`, `buatTugas()`, `aturScoreboard()`, `tampilkanAnggota()`, `tampilkanProgres()`, `pilihAnggota()` |
+| C13 | `HalamanMateri` | `materiTerpilih`, `statusTampilan` | `pilihMateri()`, `tampilkanIsiMateri()`, `putarAudioPengucapan()` |
+| C14 | `HalamanProgres` | `filterPeriode`, `dataTampilan` | `tampilkanProgres()`, `pilihPeriode()`, `tampilkanScoreboard()` |
+| C15 | `OtentikasiController` | `statusValidasi`, `statusSesi` | `verifikasiFormatData()`, `enkripsiPassword()`, `simpanAkun()`, `validasiLogin()` |
+| C16 | `LatihanController` | `soalAktif`, `jawabanPengguna`, `skor` | `siapkanSoal()`, `nilaiJawaban()`, `simpanHasil()` |
+| C17 | `MateriController` | `jenisAksaraTerpilih`, `versiAplikasi`, `idMateri`, `versiKonten`, `materiSedangDiproses`, `statusValidasi` | `ambilDaftarMateri()`, `muatPaketMateri()`, `ambilAudioPengucapan()`, `ambilKontenLatihan()`, `validasiFormatFile()`, `tambahMateri()`, `perbaruiMateri()` |
+| C18 | `FeedbackController` | `dataMasukan`, `statusValidasi` | `validasiFeedback()`, `simpanFeedback()`, `kirimKonfirmasi()` |
+| C19 | `ProgresController` | `idPelajar`, `periode` | `ambilRiwayat()`, `hitungProgres()`, `siapkanRekomendasi()`, `ambilScoreboard()`, `agregasiProgres()`, `hitungPolaKesalahan()` |
+| C20 | `KelasController` | `idPelajar`, `idKelas`, `idPengajar` | `validasiKodeBergabung()`, `gabungkanPelajar()`, `ambilTugasAktif()`, `simpanPengumpulan()`, `buatKelas()`, `hasilkanKodeUnik()`, `kelolaAnggota()`, `terbitkanTugas()`, `ambilKelasPengajar()`, `ambilDaftarAnggota()` |
+| C21 | `KontenMateri` | `bentukAksara`, `aturan`, `contoh`, `urlAudio`, `versiKonten` | `ambilKonten()`, `ambilAudio()`, `simpanKonten()`, `perbaruiKonten()`, `arsipkanVersi()` |
+| C22 | `MotivasiBelajar` | `idPelajar`, `streak`, `poin`, `daftarBadge` | `perbaruiStreak()`, `tambahPoin()`, `berikanBadge()`, `ambilMotivasi()`, `susunScoreboard()`, `ambilPoinKelas()` |
+| C23 | `KelasBelajar` | `idKelas`, `nama`, `kodeBergabung`, `status`, `pemilikId`, `statusScoreboard` | `validasiKode()`, `simpan()`, `buatKodeBergabung()`, `daftarKelasPengajar()` |
+| C24 | `KeanggotaanKelas` | `idKeanggotaan`, `idKelas`, `idPelajar`, `status` | `simpanKeanggotaan()`, `ubahStatus()`, `daftarAnggota()`, `daftarAnggotaAktif()` |
+| C25 | `TugasKelas` | `idTugas`, `idKelas`, `instruksi`, `tenggat`, `komponenTugas` | `ambilTugasAktif()`, `simpan()`, `terbitkan()` |
+| C26 | `PenyelesaianTugas` | `idPenyelesaian`, `idTugas`, `idPelajar`, `waktuKumpul`, `status` | `simpanPengumpulan()`, `tentukanStatusKetepatan()` |
 
 ---
 
