@@ -166,17 +166,16 @@ Tabel 3.1. Kebutuhan Fungsional
 
 
 ## 3.2 Kebutuhan Non-Fungsional (KNF)
-Salin ulang Kebutuhan Non-Fungsional dari BAB 2.5 dokumen *Requirement Gathering*, sesuaikan ID Kebutuhan (kolom "ID Kebutuhan") apabila terjadi perubahan penomoran pada BAB 3.1 di atas.
 
 Tabel 3.2. Kebutuhan Non-Fungsional
 
 | ID KNF | ID Kebutuhan | Parameter | Deskripsi Kebutuhan |
 | :--- | :--- | :--- | :--- |
-| *KNF01* | *R03* | *Reliability* | *Proses transaksi pembayaran harus memenuhi prinsip ACID untuk mencegah terjadinya data tersangkut (lost update) apabila terjadi kegagalan jaringan di tengah proses.* |
-| *KNF02* | *R04* | *Security* | *Sistem harus mengenkripsi PIN atau password pengguna menggunakan algoritma SHA-256 sebelum data dikirimkan ke server, serta tidak menyimpannya dalam bentuk plain-text di database.* |
-| *...* | *...* | *...* | *...* |
-
-<sub>*Silakan pilih parameter yang relevan dengan P/L kalian (Availability, Reliability, Ergonomy, Portability, Memory, Response time, Safety, Security, dsb), tidak perlu semua parameter diisi. Lihat kembali dokumen Requirement Gathering untuk penjelasan tiap parameter.*<sub>
+| KNF01 | R16 | Maintainabiliy | Aplikasi harus otomatis mencatat seluruh masalah ke dalam log agar administrator mudah mencari letak masalahnya. |
+| KNF02 | R03 | Security | Sistem harus mengamankan kata sandi pengguna dengan cara dienkripsi sebelum disimpan ke database. |
+| KNF03 | R07 | Response time | Sistem harus bisa memuat dan menampilkan halaman daftar materi beserta gambarnya degan waktu kurang dari 3 detik saat koneksi internet stabil. |
+| KNF04 | R10 | Response time | Saat pelajar berlatih menggambar aksara di layar, coretan tidak boleh delay lebih dari 50 milidetik agar terasa lancar dan nyaman. |
+| KNF05 | R18 | Reliability | Fitur penerimaan feedback kendala harus berhasil terkirim dan tersimpan. Jika tidak, harus memberikan pesan error (jika internet terputus). |
 
 ---
 
