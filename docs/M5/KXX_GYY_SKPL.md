@@ -202,6 +202,7 @@ Tabel 3.2. Kebutuhan Non-Fungsional
 | UC-07 | Menyiapkan Pembelajaran Kelas | Pengajar | Membentuk kelas, mengendalikan akses, mengelola anggota, dan menyediakan tugas. | KF02–KF03, KF17, KF25, KF27 |
 | UC-08 | Memantau dan Menindaklanjuti Progres | Pengajar | Memahami perkembangan anggota dan memberikan tindak lanjut. | KF02–KF04, KF13–KF14, KF17 |
 | UC-09 | Menyampaikan Feedback | Pelajar; Pengajar | Menyampaikan feedback aplikasi, materi, atau pengalaman penggunaan melalui form. | KF02–KF03, KF17–KF20 |
+
 ## 4.3 Use Case Diagram
 Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case* atau *Class Diagram* (gunakan versi paling akhir/terbaru apabila terdapat perubahan).
 
@@ -213,29 +214,250 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 </p>
 
 ## 4.4 Skenario Use Case
-Salin ulang skenario **setiap** use case (skenario normal dan alternatif) dari BAB 3.4 dokumen *Use Case & Scenario Use Case*, sesuaikan dengan daftar UC final pada 4.2. Jika use case melibatkan lebih dari satu aktor manusia yang benar-benar berinteraksi langsung (misalnya *Kasir* yang memverifikasi transaksi setelah *Pelanggan* membayar), tambahkan kolom aksi tersendiri untuk aktor tersebut di samping kolom "Reaksi Perangkat Lunak". Sistem eksternal otomatis seperti *payment gateway* **bukan aktor**, sehingga interaksinya cukup dituliskan sebagai bagian dari "Reaksi Perangkat Lunak", bukan kolom aktor terpisah.
 
-### 4.4.1 Skenario UC01
+### 3.4.1 Skenario UC01
 
-**Nama Use Case:** *Memesan Produk*
+**Nama Use Case:** Melakukan Pendaftaran Akun
 
 **Skenario Normal**
 
-| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| No. | Aksi Aktor | Reaksi Perangkat Lunak |
 | :--- | :--- | :--- |
-| 1 | *Pelanggan memilih produk dari katalog* | *Sistem menampilkan detail produk dan menambahkannya ke keranjang* |
-| 2 | *Pelanggan menekan tombol checkout* | *Sistem membuat pesanan baru dari isi keranjang dan menampilkan ringkasan pesanan* |
-| ... | *...* | *...* |
+| 1 | Pengguna memilih opsi pendaftaran akun (pelajar, pengajar) | Sistem menampilkan antarmuka opsi pemilihan jenis akun yang didaftarkan |
+| 2 | Pengguna memasukkan kredensial akun (email, password, username) | Sistem menampilkan antarmuka pendaftaran akun dan memverifikasi kredensial yang digunakan |
+| 3 | Pengguna membaca Terms & Conditions aplikasi | Sistem menerima afirmasi bahwa pengguna sudah membaca Terms & Conditions yang berlaku |
 
-**Skenario Alternatif 1: Produk Tidak Tersedia**
+**Skenario Alternatif 1: Otorisasi Pembayaran Gagal**
 
-| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| No. | Aksi Aktor | Reaksi Perangkat Lunak |
 | :--- | :--- | :--- |
-| 1 | *Pelanggan memilih produk dari katalog* | *Sistem menampilkan pesan "Produk tidak tersedia" karena stok habis* |
-| 2 | *Pelanggan memilih produk lain* | *Sistem kembali ke langkah 1 skenario normal* |
-| ... | *...* | *...* |
+| 1 | Pengguna memilih opsi pendaftaran akun (pelajar, pengajar) | Sistem menampilkan antarmuka opsi pemilihan jenis akun yang didaftarkan |
+| 2 | Pengguna memasukkan kredensial akun (email, password, username) | Sistem menampilkan antarmuka pendaftaran akun dan memverifikasi kredensial yang digunakan |
+| 3 | Pengguna memastikan kredensial yang digunakan sesuai | Kembali ke langkah 2 Skenario Normal |
 
-<sub>*Lanjutkan pola 4.4.x ini untuk setiap ID UC pada 4.2, sampai seluruh use case memiliki skenarionya masing-masing.*<sub>
+### 3.4.2 Skenario UC02
+
+**Nama Use Case:** Mempelajari Materi
+
+**Skenario Normal**
+
+| No. | Aksi Pelajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Memilih jenis aksara dan tingkat kesulitan | Sistem menampilkan daftar materi yang sesuai beserta status progres |
+| 2 | Memilih satu materi | Sistem memuat paket materi yang sesuai dengan versi perangkat lunak |
+| 3 | Membaca bentuk, aturan, dan contoh | Sistem menampilkan isi materi secara utuh |
+| 4 | Meminta contoh bunyi pengucapan | Sistem memutar audio yang terkait serta sesuai dengan versi perangkat lunak |
+
+**Skenario Alternatif 1: Materi belum tersedia untuk kombinasi yang dipilih**
+
+| No. | Aksi Pelajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Memilih jenis aksara dan tingkat kesulitan | Sistem tidak menemukan materi yang sesuai dan menampilkan pesan "materi belum tersedia untuk kombinasi ini" |
+| 2 | Memilih kombinasi jenis aksara dan tingkat kesulitan lain | Sistem kembali ke langkah 1 Skenario Normal |
+
+**Skenario Alternatif 2: Audio pengucapan gagal diputar**
+
+| No. | Aksi Pelajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Membaca bentuk, aturan, dan contoh | Sistem menampilkan isi materi secara utuh |
+| 2 | Meminta contoh bunyi pengucapan | Sistem gagal memuat berkas audio (misal karena koneksi terputus) dan menampilkan pesan "audio tidak dapat diputar" |
+| 3 | Meminta ulang contoh bunyi pengucapan | Sistem kembali ke langkah 4 Skenario Normal |
+
+### 3.4.3 Skenario UC03
+
+**Nama Use Case:** Mengerjakan Latihan Aksara
+
+**Skenario Normal**
+
+| No. | Aksi Pelajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Memilih materi, lalu memilih salah satu mode latihan (menulis, mencocokkan bunyi, atau merangkai) | Sistem menyiapkan soal latihan sesuai mode dan target aksara yang dipilih |
+| 2 | Mengerjakan latihan sesuai mode yang dipilih | Sistem menangkap dan menampilkan interaksi pelajar secara langsung |
+| 3 | Mengirimkan jawaban/hasil latihan | Sistem mengevaluasi jawaban sesuai kriteria mode latihan dan menampilkan skor/status beserta feedback |
+| 4 | Menyelesaikan latihan | Sistem menyimpan hasil ke riwayat latihan, serta memperbarui streak dan poin pelajar |
+
+**Skenario Alternatif 1: Latihan mencocokkan bunyi**
+ 
+| No. | Aksi Pelajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Memilih mode mencocokkan bunyi | Sistem memutar audio pengucapan dan menampilkan pilihan aksara |
+| 2 | Memilih aksara yang sesuai dengan bunyi yang diputar | Sistem menampilkan status jawaban (benar/salah) beserta penjelasannya |
+| 3 | Menyelesaikan latihan | Sistem menyimpan hasil ke riwayat latihan serta memperbarui streak dan poin |
+ 
+**Skenario Alternatif 2: Latihan merangkai aksara**
+ 
+| No. | Aksi Pelajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Memilih mode merangkai aksara | Sistem menampilkan komponen aksara dan tanda baca yang dapat disusun |
+| 2 | Menyusun komponen menjadi suku kata/kata dan mengirimkannya | Sistem memvalidasi rangkaian berdasarkan aturan aksara yang berlaku dan menampilkan hasil |
+| 3 | Menyelesaikan latihan | Sistem menyimpan hasil ke riwayat latihan serta memperbarui streak dan poin |
+ 
+**Skenario Alternatif 3: Gambar aksara kurang akurat (mode menulis)**
+ 
+| No. | Aksi Pelajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Memilih mode menulis dan target aksara | Sistem menampilkan outline aksara sesuai materi yang dipilih |
+| 2 | Menggambarkan aksara sesuai outline yang tampil | Sistem menampilkan goresan sesuai interaksi pelajar |
+| 3 | Mengirimkan hasil gambar | Sistem menilai keakuratan penulisan berada di bawah ambang batas |
+| 4 | Mengulang latihan pada aksara yang sama | Sistem menampilkan kembali outline aksara yang sama untuk diulang, tanpa menambah streak/poin baru |
+
+### 3.4.4 Skenario UC04
+
+**Nama Use Case:** Meninjau Progres dan Motivasi
+ 
+**Skenario Normal**
+ 
+| No. | Aksi Pelajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Membuka halaman progres | Sistem menampilkan riwayat aktivitas dan tingkat penguasaan per materi |
+| 2 | Memilih salah satu materi pada riwayat | Sistem menampilkan detail hasil latihan dan umpan balik untuk materi tersebut |
+| 3 | Meminta rekomendasi materi lanjutan | Sistem menampilkan materi dengan tingkat penguasaan terendah yang masih relevan untuk dipelajari |
+| 4 | Meninjau indikator motivasi (streak, poin, badge) | Sistem menampilkan streak harian, total poin, dan badge yang telah diperoleh pelajar |
+ 
+**Skenario Alternatif 1: Belum ada riwayat pembelajaran**
+ 
+| No. | Aksi Pelajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Membuka halaman progres | Sistem menampilkan keadaan kosong dan merekomendasikan materi awal untuk mulai dipelajari |
+| 2 | Membuka rekomendasi materi awal | Sistem mengarahkan pelajar ke halaman mempelajari materi yang direkomendasikan |
+ 
+**Skenario Alternatif 2: Melihat papan peringkat kelas**
+ 
+| No. | Aksi Pelajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Membuka papan peringkat pada salah satu kelas yang diikuti | Sistem menampilkan urutan poin anggota kelas menggunakan nama tampilan masing-masing |
+
+### 3.4.5 Skenario UC05
+
+**Nama Use Case:** Mengikuti Pembelajaran Kelas
+ 
+**Skenario Normal**
+ 
+| No. | Aksi Pelajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Memasukkan kode kelas yang diberikan pengajar | Sistem memvalidasi kode dan mendaftarkan pelajar sebagai anggota kelas |
+| 2 | Membuka kelas yang diikuti | Sistem menampilkan daftar tugas beserta tenggat waktu dan status pengerjaannya |
+| 3 | Membuka salah satu tugas sebelum tenggat | Sistem menampilkan komponen materi atau latihan yang harus diselesaikan |
+| 4 | Menyelesaikan seluruh komponen wajib pada tugas | Sistem mencatat waktu penyelesaian dan menetapkan status "tepat waktu" |
+ 
+**Skenario Alternatif 1: Pelajar sudah menjadi anggota kelas**
+ 
+| No. | Aksi Pelajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Membuka kelas tanpa memasukkan kode ulang | Sistem menampilkan daftar tugas kelas tanpa membuat keanggotaan baru |
+ 
+**Skenario Alternatif 2: Tugas diselesaikan terlambat**
+ 
+| No. | Aksi Pelajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Membuka tugas yang telah melewati tenggat | Sistem menampilkan status "terlambat" pada tugas tersebut |
+| 2 | Menyelesaikan seluruh komponen wajib | Sistem mencatat waktu penyelesaian dan menetapkan status "terlambat" |
+ 
+**Skenario Alternatif 3: Kode kelas tidak valid**
+ 
+| No. | Aksi Pelajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Memasukkan kode kelas | Sistem tidak menemukan kode aktif yang cocok dan menampilkan pesan "kode tidak valid atau tidak aktif" |
+| 2 | Memasukkan kode kelas yang benar | Sistem kembali ke langkah 1 Skenario Normal |
+
+### 3.4.6 Skenario UC06
+
+**Nama Use Case:** Memperbaharui Materi
+
+**Skenario Normal**
+
+| No. | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Tim materi memilih menu pengelolaan materi | Sistem menampilkan daftar materi yang dapat diedit |
+| 2 | Tim materi memilih opsi menambahkan materi baru | Sistem mengarahkan pelanggan ke halaman menambahkan materi |
+| 3 | Tim materi mengunggah file materi dan mengisi detail (nama, kategori, tingkat kesulitan) | Sistem memvalidasi dan menyimpan materi baru ke database terpusat |
+| 4 | Tim materi menyimpan hasil perbaruan materi | Sistem menampilkan pesan "materi berhasil ditambahkan" |
+
+**Skenario Alternatif 1: Penambahan materi gagal**
+
+| No. | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Tim materi memilih menu memperbarui materi | Sistem menampilkan ringkasan pesanan dan pilihan metode pembayaran |
+| 2 | Tim materi menambahkan materi baru | Sistem menerima respons penambahan materi gagal (misal: jenis file tidak didukung website). Materi tidak berubah, sistem menampilkan pesan error dan meminta tim materi memilih ulang file materi baru |
+| 3 | Tim materi menambahkan materi ulang | Sistem kembali ke langkah 2 Skenario Normal |
+
+### 3.4.7 Skenario UC07
+ 
+**Nama Use Case:** Menyiapkan Pembelajaran Kelas
+ 
+**Skenario Normal**
+ 
+| No. | Aksi Pengajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Membuat kelas baru dengan mengisi nama kelas | Sistem membuat kelas milik pengajar tersebut beserta satu kode kelas aktif yang unik |
+| 2 | Membagikan kode kelas kepada pelajar | Sistem menampilkan daftar anggota yang bergabung |
+| 3 | Memilih materi atau latihan dan menetapkan tenggat waktu | Sistem menyusun paket tugas sesuai materi/latihan dan tenggat yang dipilih |
+| 4 | Menerbitkan tugas | Sistem menyediakan tugas tersebut hanya bagi anggota kelas yang bersangkutan |
+ 
+**Skenario Alternatif 1: Mengganti kode kelas**
+ 
+| No. | Aksi Pengajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Meminta pergantian kode kelas | Sistem menonaktifkan kode lama dan membuatkan satu kode aktif baru yang unik |
+ 
+**Skenario Alternatif 2: Mengeluarkan anggota kelas**
+ 
+| No. | Aksi Pengajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Memilih salah satu anggota untuk dikeluarkan | Sistem meminta konfirmasi pengeluaran anggota |
+| 2 | Mengonfirmasi pengeluaran anggota | Sistem mengakhiri akses anggota tersebut ke kelas tanpa menghapus riwayat belajar pribadinya |
+ 
+**Skenario Alternatif 3: Mengaktifkan papan peringkat kelas**
+ 
+| No. | Aksi Pengajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Mengaktifkan papan peringkat pada pengaturan kelas | Sistem menyimpan status aktif dan menampilkan papan peringkat bagi anggota |
+
+### 3.4.8 Skenario UC08
+
+**Nama Use Case:** Memantau dan Menindaklanjuti Progres
+
+**Skenario Normal**
+
+| No. | Aksi Pengajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Membuka halaman pemantauan salah satu kelas yang diampu | Sistem menampilkan agregat tingkat penguasaan dan pola kesalahan umum anggota kelas |
+| 2 | Memilih salah satu anggota kelas | Sistem menampilkan detail progres dan riwayat pengerjaan tugas anggota tersebut |
+| 3 | Menuliskan umpan balik atau rekomendasi materi lanjutan | Sistem memeriksa isi pesan dan penerima yang dituju |
+| 4 | Mengirimkan umpan balik | Sistem menyimpan pesan tersebut dan menyediakannya hanya bagi anggota yang dituju |
+
+**Skenario Alternatif 1: Belum ada hasil belajar anggota**
+
+| No. | Aksi Pengajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Membuka halaman pemantauan | Sistem menampilkan keadaan kosong beserta daftar anggota yang belum memiliki riwayat latihan |
+| 2 | Mengirimkan rekomendasi materi awal kepada anggota tersebut | Sistem menyimpan rekomendasi dan menyediakannya bagi anggota yang dituju |
+
+**Skenario Alternatif 2: Anggota yang dipilih bukan anggota aktif kelas**
+
+| No. | Aksi Pengajar | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Mencoba membuka progres pengguna yang bukan anggota kelas | Sistem menolak permintaan dan tidak menampilkan data progres pengguna tersebut |
+
+### 3.4.9 Skenario UC09
+
+**Nama Use Case:** Menyampaikan Feedback
+
+**Skenario Normal**
+
+| No. | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | User (pelajar dan pengajar) memilih menu feedback di bagian samping pada menu utama | Sistem menampilkan form feedback dengan beberapa pertanyaan terbuka dan tertutup |
+| 2 | User memilih pilihan feedback (performa/tampilan/fitur/materi) | Sistem menampilkan pilihan-pilihan feedback yang dapat diisi oleh user |
+| 3 | User mengirim/submit feedback setelah mengisi | Sistem menampilkan pesan bahwa feedback berhasil terkirim |
+
+**Skenario Alternatif 1: Feedback gagal terkirim (karena server down/kendala jaringan)**
+
+| No. | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | User (pelajar dan pengajar) memilih menu feedback di bagian samping pada menu utama | Sistem menampilkan form feedback dengan beberapa pertanyaan terbuka dan tertutup |
+| 2 | User memilih pilihan feedback (performa/tampilan/fitur/materi) | Sistem menampilkan pilihan-pilihan feedback yang dapat diisi oleh user |
+| 3 | User mengirim/submit feedback setelah mengisi | Sistem menampilkan pesan bahwa feedback gagal terkirim |
 
 ---
 
