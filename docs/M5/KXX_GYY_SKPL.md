@@ -464,14 +464,34 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 # BAB 5: Pemodelan Kelas
 
 ## 5.1 Identifikasi Kelas
-Salin ulang seluruh kelas yang telah diidentifikasi dari BAB 4.1 dokumen *Class Diagram*.
-
-| ID Kelas | Nama Kelas | Deskripsi Kelas | ID Use Case |
+| ID Kelas | Nama Kelas | Jenis dan Deskripsi | ID Use Case |
 | :--- | :--- | :--- | :--- |
-| *C01* | *Pelanggan* | *Menyimpan data akun pelanggan yang membuat pesanan.* | *UC01, UC05* |
-| *C02* | *Pesanan* | *Menyimpan data pesanan beserta status pembayarannya.* | *UC01, UC03, UC05* |
-| *C03* | *Keranjang* | *Menyimpan sementara item yang dipilih sebelum checkout.* | *UC01, UC02* |
-| *...* | *...* | *...* | *...* |
+| C01 | `AkunPengguna` | *(Entity)* Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi. | UC-01–UC-09 |
+| C02 | `MateriAksara` | *(Entity)* Menyimpan metadata materi, jenis aksara, dan tingkat kesulitan. | UC-02, UC-03, UC-04, UC-06 |
+| C03 | `RiwayatLatihan` | *(Entity)* Menyimpan hasil latihan, status, dan waktu pengerjaan Pelajar. | UC-02, UC-03, UC-04, UC-05, UC-08 |
+| C04 | `DataFeedback` | *(Entity)* Menyimpan feedback, pengirim, waktu kirim, dan status tindak lanjut. | UC-09 |
+| C05 | `HalamanPendaftaran` | *(Boundary)* Form pendaftaran, pemilihan peran, dan persetujuan Terms & Conditions. | UC-01 |
+| C06 | `HalamanLogin` | *(Boundary)* Form untuk memasukkan kredensial login. Login dipetakan ke UC-01 karena Bab 3 belum mendefinisikan use case login terpisah dan kebutuhan autentikasi dibahas bersama akses akun. | UC-01 |
+| C07 | `HalamanUtama` | *(Boundary)* Navigasi utama setelah pengguna masuk ke sistem. | UC-02–UC-09 |
+| C08 | `HalamanLatihan` | *(Boundary)* Antarmuka latihan menulis, mencocokkan bunyi, merangkai aksara, dan transliterasi. | UC-03 |
+| C09 | `HalamanKelolaMateri` | *(Boundary)* Antarmuka Tim Materi untuk mengunggah dan menyunting modul. | UC-06 |
+| C10 | `HalamanFeedback` | *(Boundary)* Form untuk mengirim feedback aplikasi, materi, atau pengalaman penggunaan. | UC-09 |
+| C11 | `HalamanKelasPelajar` | *(Boundary)* Antarmuka Pelajar untuk bergabung kelas, melihat tugas, dan mengumpulkan tugas. | UC-05 |
+| C12 | `HalamanKelolaKelas` | *(Boundary)* Antarmuka Pengajar untuk mengelola kelas dan memantau anggotanya. | UC-07, UC-08 |
+| C13 | `HalamanMateri` | *(Boundary)* Antarmuka Pelajar untuk memilih dan mempelajari materi serta memutar audio. | UC-02 |
+| C14 | `HalamanProgres` | *(Boundary)* Antarmuka Pelajar untuk melihat riwayat, progres, rekomendasi, dan motivasi. | UC-04 |
+| C15 | `OtentikasiController` | *(Controller)* Memvalidasi pendaftaran dan login serta memproses autentikasi pengguna. | UC-01 |
+| C16 | `LatihanController` | *(Controller)* Menyiapkan latihan, menilai jawaban, dan memperbarui riwayat serta motivasi. | UC-03 |
+| C17 | `MateriController` | *(Controller)* Mengambil, mengurutkan, memuat, dan memperbarui materi. | UC-02, UC-03, UC-06 |
+| C18 | `FeedbackController` | *(Controller)* Memvalidasi dan menyimpan feedback serta menyiapkan konfirmasi. | UC-09 |
+| C19 | `ProgresController` | *(Controller)* Mengolah riwayat dan progres, menyiapkan rekomendasi serta scoreboard. | UC-04, UC-08 |
+| C20 | `KelasController` | *(Controller)* Memproses keanggotaan, kelas, tugas, dan pengambilan data kelas. | UC-05, UC-07, UC-08 |
+| C21 | `KontenMateri` | *(Entity)* Menyimpan isi materi, contoh, aturan, audio, dan versi konten. | UC-02, UC-03, UC-06 |
+| C22 | `MotivasiBelajar` | *(Entity)* Menyimpan streak, poin, dan badge Pelajar untuk motivasi dan scoreboard. | UC-03, UC-04, UC-07 |
+| C23 | `KelasBelajar` | *(Entity)* Menyimpan data kelas, pemilik, kode bergabung, dan pengaturan kelas. | UC-05, UC-07, UC-08 |
+| C24 | `KeanggotaanKelas` | *(Entity)* Menyimpan hubungan Pelajar dengan kelas dan status keanggotaannya. | UC-05, UC-07, UC-08 |
+| C25 | `TugasKelas` | *(Entity)* Menyimpan instruksi, komponen, dan tenggat tugas. | UC-05, UC-07 |
+| C26 | `PenyelesaianTugas` | *(Entity)* Menyimpan status dan waktu pengumpulan tugas oleh Pelajar. | UC-05 |
 
 ## 5.2 Diagram Kelas per Use Case
 Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diagram*, lengkap dengan tabel atribut dan metode/operasinya.
