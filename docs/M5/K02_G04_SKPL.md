@@ -46,6 +46,8 @@ Tuliskan dengan ringkas tujuan dokumen SKPL ini dibuat dan siapa saja yang akan 
 ## 1.2 Lingkup Masalah
 Tuliskan dengan ringkas nama aplikasi dan deskripsi singkatnya. Bagian ini maksimal berisi satu paragraf, dapat diringkas dari BAB 1 *Analisis Permasalahan* pada dokumen *Topic Brainstorming*.
 
+Indonesia merupakan negara dengan keberagaman tinggi yang disebabkan oleh berbagai faktor, salah satunya yaitu adalah keberagaman bahasa. Beberapa bahasa daerah di Indonesia memiliki aksara sebagai sarana komunikasi tertulis untuk melestarikan budaya. Di era sekarang, aksara dari bahasa daerah di Indonesia sudah sangat jauh tertinggal dan mulai ditinggalkan. Ngaksara merupakan sebuah perangkat lunak yang dapat membantu mengenalkan kembali aksara daerah dengan menyediakan fitur-fitur untuk mempelajari aksara daerah, seperti cara tulis, cara baca, sampai menyusun aksara menjadi kata maupun kalimat sederhana.
+
 ## 1.3 Definisi, Istilah, dan Singkatan
 Semua definisi dan singkatan yang digunakan dalam dokumen ini beserta penjelasannya.
 
