@@ -65,15 +65,17 @@ Tabel 1.3. Definisi Istilah dan Singkatan
 Tuliskan aturan penomoran (ID) yang digunakan dalam dokumen ini. Gunakan pola ID yang **sama** dengan yang sudah dipakai pada dokumen-dokumen sebelumnya, jangan membuat pola baru di dokumen ini.
 
 Tabel 1.4. Aturan Penomoran
-
+ 
 | Hal/Bagian | Penomoran | Keterangan |
 | :--- | :--- | :--- |
-| *Kebutuhan Fungsional* | *KFXX* | |
-| *Kebutuhan Non-Fungsional* | *KNFXX* | |
-| *Aktor* | *AXX* | |
-| *Use Case* | *UCXX* | |
-| *Kelas* | *CXX* | |
-| *...* | *...* |
+| Kebutuhan (hasil *Requirement Gathering*) | RXX | Contoh: R01. Menjadi sumber penelusuran KF dan KNF. |
+| Kebutuhan Fungsional | KFXX | Contoh: KF01. Menggunakan nomor dua digit yang berurutan mulai dari 01. |
+| Kebutuhan Non-Fungsional | KNFXX | Contoh: KNF01. Menggunakan nomor dua digit yang berurutan mulai dari 01. |
+| Aktor | Nama aktor | Dirujuk dengan nama (Pelajar, Pengajar, Tim Materi), mengikuti dokumen *Use Case* sebelumnya. |
+| Use Case | UC-XX | Contoh: UC-01. Menggunakan tanda hubung, mengikuti dokumen *Use Case & Skenario Use Case*. |
+| Kelas | CXX | Contoh: C01. Menggunakan nomor dua digit, sesuai dokumen *Class Diagram*. |
+| Tabel | Tabel X.Y | X adalah nomor bab dan Y adalah nomor urut tabel dalam bab tersebut. |
+| Gambar | Gambar N | Nomor urut gambar di seluruh dokumen. |
 
 ## 1.5 Referensi
 Dokumentasi P/L yang dirujuk oleh dokumen ini. Referensi dapat berupa buku, panduan, ataupun dokumentasi lain yang dipakai dalam pengembangan P/L ini.
