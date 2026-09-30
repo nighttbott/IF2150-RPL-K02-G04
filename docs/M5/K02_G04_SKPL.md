@@ -108,8 +108,14 @@ Tabel 1.4. Aturan Penomoran
 Dokumentasi P/L yang dirujuk oleh dokumen ini. Referensi dapat berupa buku, panduan, ataupun dokumentasi lain yang dipakai dalam pengembangan P/L ini.
 
 ## 1.6 Deskripsi Umum Dokumen (Ikhtisar)
-Tuliskan sistematika pembahasan dokumen SKPL ini secara runut (misalnya: BAB 2 membahas deskripsi umum P/L, BAB 3 membahas kebutuhan fungsional dan non-fungsional, dst).
-
+| Bagian | Pembahasan | Keterangan |
+| :--- | :--- | :--- |
+| Bab 1 | Pendahuluan | Tujuan, Lingkup Masalah, Definisi, istilah, dan singkatan, Aturan penomoran, Referensi, Ikhtisar |
+| Bab 2 | Deskripsi Umum P/L | Deskripsi umum sistem, Deskripsi umum P/L, Pengguna dan kebutuhan pengguna P/L, Batasan P/L, Lingkup operasi P/L |
+| Bab 3 | Deskripsi Kebutuhan P/L | KF, KNF |
+| Bab 4 | Pemodelan UC | Identifikasi aktor, Identifikasi UC, UC diagram, Skenario UC |
+| Bab 5 | Pemodelan Kelas | Identifikasi kelas, Diagram kelas per UC, Diagram kelas keseluruhan |
+| Bab 5 | Traceability | Traceability antara kelas, UC, dan KF |
 ---
 
 # BAB 2: Deskripsi Perangkat Lunak
