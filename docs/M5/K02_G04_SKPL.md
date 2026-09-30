@@ -295,7 +295,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 <img alt="Contoh Use Case Diagram" src="./assets/diagram/contoh-uc-diagram.webp" width="70%">
 </p>
 <p align="center">
-<i>Gambar 2. Contoh Use Case Diagram</i>
+<i>Gambar 4. Contoh Use Case Diagram</i>
 </p>
 
 ## 4.4 Skenario Use Case
@@ -595,7 +595,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 #### Diagram Kelas
 
 <p align="center"><img src="./assets/diagram/UC01.png" alt="Diagram Kelas Use Case UC-01" width="70%"></p>
-<p align="center"><i>Gambar 2. Diagram Kelas Use Case UC-01</i></p>
+<p align="center"><i>Gambar 5. Diagram Kelas Use Case UC-01</i></p>
 
 `HalamanPendaftaran` dan `HalamanLogin` mengirim masukan ke `OtentikasiController`. Controller memvalidasi masukan dan berinteraksi dengan `AkunPengguna` untuk membuat akun atau memeriksa kredensial.
 
@@ -624,7 +624,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 #### Diagram Kelas
 
 <p align="center"><img src="./assets/diagram/UC02.png" alt="Diagram Kelas Use Case UC-02" width="70%"></p>
-<p align="center"><i>Gambar 3. Diagram Kelas Use Case UC-02</i></p>
+<p align="center"><i>Gambar 6. Diagram Kelas Use Case UC-02</i></p>
 
 `HalamanMateri` meminta daftar dan isi materi melalui `MateriController`. Controller mengambil metadata dari `MateriAksara`, isi dan audio dari `KontenMateri`, serta status belajar dari `RiwayatLatihan` untuk Pelajar yang sedang masuk.
 
@@ -657,7 +657,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 #### Diagram Kelas
 
 <p align="center"><img src="./assets/diagram/UC03.png" alt="Diagram Kelas Use Case UC-03" width="70%"></p>
-<p align="center"><i>Gambar 4. Diagram Kelas Use Case UC-03</i></p>
+<p align="center"><i>Gambar 7. Diagram Kelas Use Case UC-03</i></p>
 
 `HalamanLatihan` menyampaikan jawaban ke `LatihanController`. Controller meminta materi atau soal yang diperlukan, menilai jawaban, lalu menyimpan hasil ke `RiwayatLatihan` dan memperbarui `MotivasiBelajar`.
 
@@ -690,7 +690,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 #### Diagram Kelas
 
 <p align="center"><img src="./assets/diagram/UC04.png" alt="Diagram Kelas Use Case UC-04" width="70%"></p>
-<p align="center"><i>Gambar 5. Diagram Kelas Use Case UC-04</i></p>
+<p align="center"><i>Gambar 8. Diagram Kelas Use Case UC-04</i></p>
 
 `ProgresController` menyusun riwayat, penguasaan materi, rekomendasi, streak, poin, badge, dan scoreboard untuk ditampilkan pada `HalamanProgres`.
 
@@ -723,7 +723,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 #### Diagram Kelas
 
 <p align="center"><img src="./assets/diagram/UC05.png" alt="Diagram Kelas Use Case UC-05" width="70%"></p>
-<p align="center"><i>Gambar 6. Diagram Kelas Use Case UC-05</i></p>
+<p align="center"><i>Gambar 9. Diagram Kelas Use Case UC-05</i></p>
 
 `KelasController` memvalidasi kode melalui `KelasBelajar`, mencatat keanggotaan pada `KeanggotaanKelas`, menampilkan `TugasKelas`, menyimpan pengumpulan pada `PenyelesaianTugas`, serta mencatat aktivitas pembelajaran pada `RiwayatLatihan`.
 
@@ -755,7 +755,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 #### Diagram Kelas
 
 <p align="center"><img src="./assets/diagram/UC06.png" alt="Diagram Kelas Use Case UC-06" width="70%"></p>
-<p align="center"><i>Gambar 7. Diagram Kelas Use Case UC-06</i></p>
+<p align="center"><i>Gambar 10. Diagram Kelas Use Case UC-06</i></p>
 
 `MateriController` memvalidasi perubahan dari `HalamanKelolaMateri`, memeriksa hak akses pengguna, lalu memperbarui metadata `MateriAksara` dan konten pada `KontenMateri`.
 
@@ -786,7 +786,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 #### Diagram Kelas
 
 <p align="center"><img src="./assets/diagram/UC07.png" alt="Diagram Kelas Use Case UC-07" width="70%"></p>
-<p align="center"><i>Gambar 8. Diagram Kelas Use Case UC-07</i></p>
+<p align="center"><i>Gambar 11. Diagram Kelas Use Case UC-07</i></p>
 
 `KelasController` membuat kelas dan kode bergabung, mengelola anggota, serta menerbitkan tugas. `MotivasiBelajar` mendukung scoreboard kelas ketika fitur tersebut diaktifkan Pengajar.
 
@@ -819,7 +819,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 #### Diagram Kelas
 
 <p align="center"><img src="./assets/diagram/UC08.png" alt="Diagram Kelas Use Case UC-08" width="70%"></p>
-<p align="center"><i>Gambar 9. Diagram Kelas Use Case UC-08</i></p>
+<p align="center"><i>Gambar 12. Diagram Kelas Use Case UC-08</i></p>
 
 `KelasController` mengambil kelas dan anggota yang diampu Pengajar, lalu meminta `ProgresController` mengolah `RiwayatLatihan`. Hasilnya ditampilkan melalui `HalamanKelolaKelas` untuk membantu Pengajar menentukan tindak lanjut.
 
@@ -849,7 +849,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 #### Diagram Kelas
 
 <p align="center"><img src="./assets/diagram/UC09.png" alt="Diagram Kelas Use Case UC-09" width="70%"></p>
-<p align="center"><i>Gambar 10. Diagram Kelas Use Case UC-09</i></p>
+<p align="center"><i>Gambar 13. Diagram Kelas Use Case UC-09</i></p>
 
 `FeedbackController` memvalidasi masukan, menghubungkannya dengan akun pengirim, menyimpan data feedback, dan menyiapkan konfirmasi. Alur ini sesuai dengan KF18–KF20.
 
@@ -864,7 +864,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 ## 5.3 Diagram Kelas Keseluruhan
 
 <p align="center"><img src="./assets/diagram/keseluruhan.png" alt="Diagram Kelas Keseluruhan" width="95%"></p>
-<p align="center"><i>Gambar 11. Diagram Kelas Keseluruhan</i></p>
+<p align="center"><i>Gambar 14. Diagram Kelas Keseluruhan</i></p>
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
