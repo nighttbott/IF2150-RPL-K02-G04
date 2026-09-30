@@ -105,7 +105,12 @@ Tabel 1.4. Aturan Penomoran
 | Gambar | Gambar N | Nomor urut gambar di seluruh dokumen. |
 
 ## 1.5 Referensi
-Dokumentasi P/L yang dirujuk oleh dokumen ini. Referensi dapat berupa buku, panduan, ataupun dokumentasi lain yang dipakai dalam pengembangan P/L ini.
+1. Kelompok 4 K2, *Topic Brainstorming – Ngaksara*, Tugas 1 IF2150 Rekayasa Perangkat Lunak.
+2. Kelompok 4 K2, *Requirement Gathering – Ngaksara*, Tugas 2 IF2150 Rekayasa Perangkat Lunak.
+3. Kelompok 4 K2, *Use Case & Skenario Use Case – Ngaksara*, Tugas 3 IF2150 Rekayasa Perangkat Lunak.
+4. Kelompok 4 K2, *Class Diagram – Ngaksara*, Tugas 4 IF2150 Rekayasa Perangkat Lunak.
+5. Slide Kuliah IF2150 Rekayasa Perangkat Lunak, Sesi 4 – Perumusan Kebutuhan.
+6. A. Mavin, P. Wilkinson, A. Harwood, M. Novak, "EARS (Easy Approach to Requirements Syntax)," *Proceedings of the 17th IEEE International Requirements Engineering Conference (RE'09)*, IEEE, 2009.
 
 ## 1.6 Deskripsi Umum Dokumen (Ikhtisar)
 | Bagian | Pembahasan | Keterangan |
