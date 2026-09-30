@@ -41,7 +41,12 @@ Dipersiapkan oleh:
 # BAB 1: Pendahuluan
 
 ## 1.1 Tujuan Penulisan Dokumen
-Tuliskan dengan ringkas tujuan dokumen SKPL ini dibuat dan siapa saja yang akan menggunakan dokumen ini.
+Dokumen Spesifikasi Kebutuhan Perangkat Lunak (SKPL) ini disusun sebagai kesepakatan antara tim pengembang dan pemangku kepentingan mengenai apa yang akan dilakukan oleh perangkat lunak Ngaksara. Dokumen ini berfokus untuk mendefinisikan dan merinci seluruh spesifikasi kebutuhan (fungsional dan non-fungsional), batasan, serta aturan domain perangkat lunak.
+
+Pengguna utama dari dokumen ini meliputi:
+1. Kelompok Pengembang (Kelompok 4 Kelas K2): Sebagai landasan dalam menentukan keputusan struktur desain, implementasi kode, dan pengujian, guna memastikan sistem dibangun sesuai dengan spesifikasi.
+2. Pemelihara Sistem di Masa Depan: Sebagai sarana komunikasi untuk menangkap maksud awal dari sistem, sehingga pemelihara yang tidak ikut menulis dokumen ini tetap dapat memahami aturan sistem saat melakukan perbaikan.
+3. Asisten Penilai (Amanda Aurellia Salsabilla) selaku Pemangku Kepentingan: Sebagai dokumen evaluasi dan validasi kelayakan aplikasi.
 
 ## 1.2 Lingkup Masalah
 Tuliskan dengan ringkas nama aplikasi dan deskripsi singkatnya. Bagian ini maksimal berisi satu paragraf, dapat diringkas dari BAB 1 *Analisis Permasalahan* pada dokumen *Topic Brainstorming*.
