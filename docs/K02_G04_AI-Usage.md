@@ -67,14 +67,13 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 ### Milestone 5
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
-| | | | | |
+| Gemini | Menentukan pihak pembaca dokumen yang dicantumkan pada bagian 1.1 Tujuan Penulisan Dokumen | "Apakah asisten perlu dicantumkan sebagai pengguna dokumen pada bagian Tujuan Penulisan SKPL?" | Menyepakati bersama kelompok untuk mencantumkan asisten, lalu menyesuaikan paragraf 1.1 |
+| Gemini | Mencari rekomendasi tech stack yang sesuai untuk bagian 2.5 Lingkungan Operasi Perangkat Lunak | "Berdasarkan deskripsi perangkat lunak berikut, tech stack apa yang paling sesuai untuk digunakan?" | Memverifikasi kesesuaian tech stack yang direkomendasikan dengan sumber di internet sebelum dicantumkan pada bagian 2.5 |
 
 ### Milestone X
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
-| Gemini | Menentukan pihak pembaca dokumen yang dicantumkan pada bagian 1.1 Tujuan Penulisan Dokumen | "Apakah asisten perlu dicantumkan sebagai pengguna dokumen pada bagian Tujuan Penulisan SKPL?" | Menyepakati bersama kelompok untuk mencantumkan asisten, lalu menyesuaikan paragraf 1.1 |
-| Gemini | Mencari rekomendasi tech stack yang sesuai untuk bagian 2.5 Lingkungan Operasi Perangkat Lunak | "Berdasarkan deskripsi perangkat lunak berikut, tech stack apa yang paling sesuai untuk digunakan?" | Memverifikasi kesesuaian tech stack yang direkomendasikan dengan sumber di internet sebelum dicantumkan pada bagian 2.5 |
-
+| | | | | |
 
 ---
 ### Pernyataan Integritas dan Persetujuan
