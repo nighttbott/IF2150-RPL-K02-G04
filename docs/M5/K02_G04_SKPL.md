@@ -115,7 +115,7 @@ Dokumentasi P/L yang dirujuk oleh dokumen ini. Referensi dapat berupa buku, pand
 | Bab 3 | Deskripsi Kebutuhan P/L | KF, KNF |
 | Bab 4 | Pemodelan UC | Identifikasi aktor, Identifikasi UC, UC diagram, Skenario UC |
 | Bab 5 | Pemodelan Kelas | Identifikasi kelas, Diagram kelas per UC, Diagram kelas keseluruhan |
-| Bab 5 | Traceability | Traceability antara kelas, UC, dan KF |
+| Bab 6 | Traceability | Traceability antara kelas, UC, dan KF |
 ---
 
 # BAB 2: Deskripsi Perangkat Lunak
@@ -261,7 +261,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 
 ## 4.4 Skenario Use Case
 
-### 3.4.1 Skenario UC01
+### 4.4.1 Skenario UC01
 
 **Nama Use Case:** Melakukan Pendaftaran Akun
 
@@ -281,7 +281,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 | 2 | Pengguna memasukkan kredensial akun (email, password, username) | Sistem menampilkan antarmuka pendaftaran akun dan memverifikasi kredensial yang digunakan |
 | 3 | Pengguna memastikan kredensial yang digunakan sesuai | Kembali ke langkah 2 Skenario Normal |
 
-### 3.4.2 Skenario UC02
+### 4.4.2 Skenario UC02
 
 **Nama Use Case:** Mempelajari Materi
 
@@ -309,7 +309,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 | 2 | Meminta contoh bunyi pengucapan | Sistem gagal memuat berkas audio (misal karena koneksi terputus) dan menampilkan pesan "audio tidak dapat diputar" |
 | 3 | Meminta ulang contoh bunyi pengucapan | Sistem kembali ke langkah 4 Skenario Normal |
 
-### 3.4.3 Skenario UC03
+### 4.4.3 Skenario UC03
 
 **Nama Use Case:** Mengerjakan Latihan Aksara
 
@@ -347,7 +347,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 | 3 | Mengirimkan hasil gambar | Sistem menilai keakuratan penulisan berada di bawah ambang batas |
 | 4 | Mengulang latihan pada aksara yang sama | Sistem menampilkan kembali outline aksara yang sama untuk diulang, tanpa menambah streak/poin baru |
 
-### 3.4.4 Skenario UC04
+### 4.4.4 Skenario UC04
 
 **Nama Use Case:** Meninjau Progres dan Motivasi
  
@@ -373,7 +373,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 | :--- | :--- | :--- |
 | 1 | Membuka papan peringkat pada salah satu kelas yang diikuti | Sistem menampilkan urutan poin anggota kelas menggunakan nama tampilan masing-masing |
 
-### 3.4.5 Skenario UC05
+### 4.4.5 Skenario UC05
 
 **Nama Use Case:** Mengikuti Pembelajaran Kelas
  
@@ -406,7 +406,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 | 1 | Memasukkan kode kelas | Sistem tidak menemukan kode aktif yang cocok dan menampilkan pesan "kode tidak valid atau tidak aktif" |
 | 2 | Memasukkan kode kelas yang benar | Sistem kembali ke langkah 1 Skenario Normal |
 
-### 3.4.6 Skenario UC06
+### 4.4.6 Skenario UC06
 
 **Nama Use Case:** Memperbaharui Materi
 
@@ -427,7 +427,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 | 2 | Tim materi menambahkan materi baru | Sistem menerima respons penambahan materi gagal (misal: jenis file tidak didukung website). Materi tidak berubah, sistem menampilkan pesan error dan meminta tim materi memilih ulang file materi baru |
 | 3 | Tim materi menambahkan materi ulang | Sistem kembali ke langkah 2 Skenario Normal |
 
-### 3.4.7 Skenario UC07
+### 4.4.7 Skenario UC07
  
 **Nama Use Case:** Menyiapkan Pembelajaran Kelas
  
@@ -459,7 +459,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 | :--- | :--- | :--- |
 | 1 | Mengaktifkan papan peringkat pada pengaturan kelas | Sistem menyimpan status aktif dan menampilkan papan peringkat bagi anggota |
 
-### 3.4.8 Skenario UC08
+### 4.4.8 Skenario UC08
 
 **Nama Use Case:** Memantau dan Menindaklanjuti Progres
 
@@ -485,7 +485,7 @@ Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case*
 | :--- | :--- | :--- |
 | 1 | Mencoba membuka progres pengguna yang bukan anggota kelas | Sistem menolak permintaan dan tidak menampilkan data progres pengguna tersebut |
 
-### 3.4.9 Skenario UC09
+### 4.4.9 Skenario UC09
 
 **Nama Use Case:** Menyampaikan Feedback
 
