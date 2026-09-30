@@ -7,9 +7,9 @@ SPESIFIKASI KEBUTUHAN PERANGKAT LUNAK (SKPL)
 </h1>
 <br>
 
-## *Nama Perangkat Lunak*
+## Ngaksara
 
-### Untuk: *[Nama Asisten]*
+### Untuk: Amanda Aurellia Salsabilla
 
 Dipersiapkan oleh:
 | Informasi | Keterangan |
