@@ -52,16 +52,41 @@ Indonesia merupakan negara dengan keberagaman tinggi yang disebabkan oleh berbag
 Semua definisi dan singkatan yang digunakan dalam dokumen ini beserta penjelasannya.
 
 Tabel 1.3. Definisi Istilah dan Singkatan
-
+ 
 | Singkatan, Akronim, atau Istilah | Penjelasan |
 | :--- | :--- |
-| *P/L* | *Singkatan dari Perangkat Lunak, yaitu aplikasi yang memberikan perintah kepada komputer untuk menjalankan tugas tertentu.* |
-| *SKPL* | *Singkatan dari Spesifikasi Kebutuhan Perangkat Lunak, yaitu dokumen yang merangkum kriteria-kriteria yang diperlukan untuk membangun aplikasi menjalankan tugasnya.* |
-| *KF* | *Singkatan dari Kebutuhan Fungsional.* |
-| *KNF* | *Singkatan dari Kebutuhan Non-Fungsional.* |
-| *UC* | *Singkatan dari Use Case.* |
-| *EARS* | *Easy Approach to Requirements Syntax, yaitu pola penulisan kebutuhan agar konsisten dan mudah diuji.* |
-| *...* | *...* |
+| P/L | Perangkat Lunak, yaitu aplikasi yang memberikan perintah kepada komputer untuk menjalankan tugas tertentu. |
+| SKPL | Spesifikasi Kebutuhan Perangkat Lunak, yaitu dokumen yang merangkum kebutuhan yang harus dipenuhi P/L. Padanan dari SRS (Software Requirements Specification). |
+| KF | Kebutuhan Fungsional, yaitu perilaku sistem yang dapat diamati oleh pengguna. |
+| KNF | Kebutuhan Non-Fungsional, yaitu batasan terhadap perilaku sistem atau cara sistem memberikannya, seperti waktu tanggap dan keamanan. |
+| R | Kebutuhan hasil tahap Requirement Gathering yang menjadi sumber KF dan KNF. |
+| UC | Use Case, yaitu rangkaian interaksi antara aktor dan sistem untuk mencapai suatu tujuan. |
+| EARS | Easy Approach to Requirements Syntax, yaitu pola penulisan kebutuhan agar konsisten dan mudah diuji. |
+| SDGs | Sustainable Development Goals, yaitu tujuan pembangunan berkelanjutan PBB. Ngaksara menyasar Tujuan 4, *Quality Education*. |
+| Aksara | Sistem tulisan dengan bentuk karakter tersendiri. Dalam dokumen ini, istilah ini merujuk pada aksara Jawa dan aksara Sunda. |
+| Pelajar | Aktor yang menggunakan Ngaksara untuk mempelajari materi dan mengerjakan latihan aksara. |
+| Pengajar | Aktor yang berperan sebagai fasilitator, yaitu membuat kelas, memberikan tugas, dan memantau progres Pelajar. |
+| Tim Materi | Aktor yang mengelola konten materi dan latihan. |
+| Materi | Satuan konten pembelajaran yang berisi bentuk aksara, aturan, contoh, dan audio pengucapan untuk jenis aksara dan tingkat kesulitan tertentu. |
+| Outline | Garis bantu bentuk aksara yang ditampilkan pada area menggambar sebagai panduan menggambar. |
+| Goresan | Jejak yang dibuat Pelajar saat menggambar aksara di layar, beserta urutannya. |
+| Template aksara | Bentuk acuan aksara yang benar untuk membandingkan dan menilai akurasi goresan. |
+| Ambang batas akurasi | Nilai minimum akurasi goresan agar latihan meanggambar dinyatakan berhasil. |
+| Mencocokkan bunyi | Mode latihan ketika Pelajar memilih aksara yang sesuai dengan audio pengucapan. |
+| Merangkai aksara | Mode latihan ketika Pelajar menyusun komponen aksara dan tanda baca menjadi suku kata atau kata. |
+| Transliterasi | Pengalihan tulisan dari aksara ke huruf Latin atau sebaliknya. |
+| Streak | Jumlah hari berturut-turut Pelajar menyelesaikan aktivitas belajar. |
+| Poin | Nilai yang diperoleh Pelajar setelah menyelesaikan latihan atau tugas. |
+| Badge | Penanda pencapaian yang diberikan kepada Pelajar ketika memenuhi syarat tertentu. |
+| Papan peringkat | Urutan poin anggota dalam satu kelas yang ditampilkan per kelas. |
+| Kelas | Kelompok belajar milik seorang Pengajar yang beranggotakan sejumlah Pelajar. |
+| Kode bergabung | Kode unik dan aktif yang digunakan Pelajar untuk bergabung ke suatu kelas. |
+| Tugas | Paket materi atau latihan yang ditentukan Pengajar bagi anggota kelas, lengkap dengan instruksi dan tenggat. |
+| Tenggat | Batas waktu penyelesaian tugas. Tugas yang diselesaikan setelah tenggat berstatus "terlambat". |
+| Feedback | Masukan dari Pelajar atau Pengajar mengenai performa, tampilan, fitur, atau materi aplikasi. |
+| T&C | Terms & Conditions, yaitu syarat dan ketentuan yang harus disetujui pengguna saat membuat akun. |
+| Hash| Hasil fungsi satu arah yang digunakan untuk menyimpan kata sandi tanpa menyimpan teks aslinya. |
+| Boundary, Controller, Entity | Tiga jenis kelas analisis, yaitu kelas antarmuka dengan aktor, kelas pengatur alur logika, dan kelas penyimpan data. |
 
 ## 1.4 Aturan Penomoran
 Tuliskan aturan penomoran (ID) yang digunakan dalam dokumen ini. Gunakan pola ID yang **sama** dengan yang sudah dipakai pada dokumen-dokumen sebelumnya, jangan membuat pola baru di dokumen ini.
