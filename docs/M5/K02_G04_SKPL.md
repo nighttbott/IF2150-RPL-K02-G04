@@ -156,12 +156,12 @@ Diisi dengan deskripsi umum perangkat lunak untuk mendukung proses bisnis yang t
 *Contoh narasi:* "*[Nama P/L]* merupakan aplikasi *[deskripsi singkat]* yang berinteraksi dengan *Payment Gateway (dummy)* untuk memproses otorisasi pembayaran. Sistem menerima input dari *Pelanggan* melalui antarmuka aplikasi dan mengirimkan permintaan transaksi ke *Payment Gateway* setiap kali pelanggan melakukan checkout."
 
 ## 2.3 Pengguna dan Kebutuhan Pengguna Perangkat Lunak
-Tuliskan seluruh jenis pengguna (*role*/aktor) yang terlibat dalam perangkat lunak (P/L), beserta kebutuhannya secara umum. Bagian ini dapat disalin dari 1.2 *Deskripsi Pengguna Perangkat Lunak* (dokumen Requirement Gathering) atau 3.1 *Identifikasi Aktor* (dokumen Use Case), pastikan sudah konsisten dengan aktor final yang dipakai di BAB 4.
 
 | Pengguna | Kebutuhan |
 | :--- | :--- |
-| *Pelanggan* | *Pelanggan harus dapat memesan produk, mengelola keranjang, dan menyelesaikan pembayaran melalui sistem.* |
-| *...* | *...* |
+| Pelajar | Pengguna yang login ke aplikasi untuk belajar dan berlatih aksara Jawa dan Sunda. Pengguna ini dapat menggunakan fitur komunikasi untuk bertanya langsung kepada pengajar jika mengalami kesulitan dalam menjalankan aplikasi maupun kebingungan terkait materi.|
+| Pengajar | Pengguna yang login sebagai fasilitator pembelajaran. Pengguna ini memiliki akses untuk melihat rekam jejak latihan pelajar, menganalisis kelemahan yang mereka hadapi berdasarkan data latihan, serta membalas pertanyaan yang diajukan oleh pelajar.|
+| Tim Materi | Pengguna yang bertindak sebagai pengelola konten materi. Tim materi membutuhkan akses untuk mengelola modul. |
 
 ## 2.4 Batasan Perangkat Lunak
 Batasan yang harus dituliskan, di antaranya:
