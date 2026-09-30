@@ -4,41 +4,42 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | *\[Hari\]* |
-| **Tanggal** | *\[DD/MM/YYYY\]* |
-| **Kelas** | *\[Kelas\]* |
-| **Nomor Kelompok** | *\[Nomor Kelompok\]*  |
-| **Nama Kelompok** | *\[Nama Kelompok\]*  |
-| **Nama Perangkat Lunak** | *\[Nama P/L\]*  |
-| **Dokumen** | *\[Nama Dokumen yang diasistensikan\]*  |
+| **Hari** | Selasa |
+| **Tanggal** | 29/09/2026 |
+| **Kelas** | K2 |
+| **Nomor Kelompok** | 4  |
+| **Nama Kelompok** | 0sks  |
+| **Nama Perangkat Lunak** | Ngaksara  |
+| **Dokumen** | CD  |
 
 ### Anggota Kelompok
 
 | NIM | Nama |
 | --- | --- |
-| *\[NIM 1\]* | *\[Nama Anggota 1\]* |
-| *\[NIM 2\]* | *\[Nama Anggota 2\]* |
-| *\[NIM 3\]* | *\[Nama Anggota 3\]* |
-| *\[NIM 4\]* | *\[Nama Anggota 4\]* |
-| *\[NIM 5\]* | *\[Nama Anggota 5\]* |
+| 13525026 | Ryuza Nadif Aldebaran |
+| 13525029 | Muhammad Naufal Hilmi |
+| 13525077 | Muhammad Abduh |
+| 13525107 | Nathaniel Marvelo |
+| 13525113 | Diandra Aria Yufana |
+| 13525143 | Natan Danuarta Ariel Wicaksana |
+
 
 ### Catatan
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
+| 1. Banyak faktor yang dapat memengaruhi kecepatan menulis aksara. Belum pasti apakah website/device yang digunakan akan berpengaruh |
+| 2. Masih diperbolehkan untuk melakukan perubahan pada bab 2, terutama akan operasi perangkat lunak dikarenakan belum pasti akan menggunakan bahasa apa saja |
+| 3. Tidak perlu menambahkan KNF untuk setiap fitur, kelima KNF yang dibuat sudah cukup |
 
 **Notes for this section:**  
 *Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
 
 ## Dokumentasi
 
-<!-- ![](./assets/foto-asistensi.jpg) -->
+<!-- ![](./assets/foto-asistensi5.jpeg) -->
 <p align="center">
-  <img src="./assets/foto-asistensi.jpg" width="100%">
+  <img src="./assets/foto-asistensi5.jpeg" width="100%">
 </p>
 
 <p align="center">
