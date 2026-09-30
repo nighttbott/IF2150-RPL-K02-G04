@@ -5,7 +5,7 @@
 | Informasi | Keterangan |
 | --- | --- |
 | **Hari** | Selasa |
-| **Tanggal** | 30/09/2026 |
+| **Tanggal** | 29/09/2026 |
 | **Kelas** | K2 |
 | **Nomor Kelompok** | 4  |
 | **Nama Kelompok** | 0sks  |
