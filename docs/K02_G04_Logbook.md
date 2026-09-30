@@ -26,6 +26,8 @@
 * [Milestone 1](#milestone-1)
 * [Milestone 2](#milestone-2)
 * [Milestone 3](#milestone-3)
+* [Milestone 4](#milestone-4)
+* [Milestone 5](#milestone-5)
 * Notes: Copy bagian Daftar Isi seperti Milestone 1 untuk Milestone berikutnya, contoh ``* [Milestone 2](#milestone-2)``. Ketika Daftar isi diklik maka akan langsung diarahkan ke bagian bawah sesuai dengan Milestone tujuan.
 
 
@@ -86,6 +88,26 @@
 | 23-09-2026 | Natan | Logbook | 1 | Done | - |
 
 **Catatan/Evaluasi Milestone 4:**
+* *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
+
+### Milestone 5
+**Periode:** 23-09-2026 - 30-09-2026
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 27-09-2026 | Natan | M5 3.1, 3.2, 4.1, 4.2, 4.4, 5.1, 5.2, 5.3, Bab 6 (Traceability ) | <1 | Done | - |
+| 28-09-2026 | Marvel | Menambahkan foto diagram | <1 | Done | - |
+| 29-09-2026 | Diandra | M5 1.2, nama perangkat lunak dan nama sistem | <1 | Progress | - |
+| 29-09-2026 | Naufal | M5 1.4 | 2 | Done | - |
+| 30-09-2026 | Natan | Logbook, M5 1.1 | <1 | Done | - |
+| 30-09-2026 | Diandra | Nama perangkat lunak dan nama sistem | <1 | Progress | - |
+| 30-09-2026 | Naufal | M5 1.3, Form Asistensi | 2 | Done | - |
+| 30-09-2026 | Marvel | M5 1.6, fix penomoran,  | 1 | Done | - |
+| 30-09-2026 | Abduh | M5 2.4, 2.5, 2.2, 2.3 | 1 | Done | - |
+| 30-09-2026 | Ryu | M5 1.5, AI-Usage | <1 | Done | - |
+
+
+**Catatan/Evaluasi Milestone 5:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
 ---
