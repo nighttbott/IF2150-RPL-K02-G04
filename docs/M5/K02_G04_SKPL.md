@@ -151,9 +151,7 @@ Untuk mendukung proses belajar yang berkelanjutan, Ngaksara juga akan menyediaka
  Lengkapi dengan gambaran proses bisnis dalam bentuk *Activity Diagram* (boleh disalin dan diperbarui dari 3.3 *Model Proses Bisnis* pada dokumen *Topic Brainstorming*).
 
 ## 2.2 Deskripsi Umum Perangkat Lunak
-Diisi dengan deskripsi umum perangkat lunak untuk mendukung proses bisnis yang telah diuraikan pada sub-bab sebelumnya. Uraian harus menunjukkan lingkup perangkat lunak, mencakup keterkaitan perangkat lunak dengan sistem lain di luar (misalnya *Payment Gateway* atau layanan pihak ketiga lain yang dipakai).
-
-*Contoh narasi:* "*[Nama P/L]* merupakan aplikasi *[deskripsi singkat]* yang berinteraksi dengan *Payment Gateway (dummy)* untuk memproses otorisasi pembayaran. Sistem menerima input dari *Pelanggan* melalui antarmuka aplikasi dan mengirimkan permintaan transaksi ke *Payment Gateway* setiap kali pelanggan melakukan checkout."
+Ngaksara merupakan aplikasi pembelajaran aksara berbasis website yang dapat diakses melalui peramban web untuk mendukung proses pembelajaran bahasa daerah. Perangkat lunak ini menerima interaksi dari pelajar melalui antarmuka web, seperti memilih materi, membaca materi pembelajaran, menggambar aksara, mencocokkan aksara dengan bunyi pelafalan, merangkai aksara, dan mengerjakan transliterasi. Pada latihan menulis, sistem menangkap dan memproses urutan goresan pelajar secara berkelanjutan untuk menilai tingkat keakuratan tulisan terhadap template aksara, sedangkan pada mode latihan lainnya sistem mengevaluasi jawaban berdasarkan aturan latihan yang bersangkutan. Selain menyediakan aktivitas belajar dan latihan, Ngaksara juga mengelola data akun, riwayat pembelajaran, progres, dan motivasi pelajar, serta menyediakan fitur pembelajaran kelas yang memungkinkan pengajar membuat kelas, memberikan tugas, serta memantau perkembangan pelajar. Sistem juga menyediakan pengelolaan materi bagi tim materi serta penyimpanan data pembelajaran dan umpan balik pada sistem secara terpusat.
 
 ## 2.3 Pengguna dan Kebutuhan Pengguna Perangkat Lunak
 
