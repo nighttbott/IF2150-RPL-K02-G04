@@ -131,53 +131,84 @@ Tabel 1.4. Aturan Penomoran
 # BAB 2: Deskripsi Perangkat Lunak
 
 ## 2.1 Deskripsi Umum Sistem
-Ngaksara merupakan solusi perangkat lunak yang kami usulkan sebagai upaya pemenuhan SDGs 4 (Quality Education) berbasis website. Alasan kami memilih media situs web adalah untuk memperluas aksesibilitas perangkat lunak kami serta tidak perlu ada prasyarat untuk mengunduh aplikasi terlebih dahulu. Situs ini dirancang untuk menunjang proses pembelajaran bahasa baru, dengan fokus pada bahasa dengan aksara/karakter yang rumit. Dengan aplikasi ini, kami berharap untuk dapat berkontribusi dalam pembelajaran berbagai bahasa, mulai dari bahasa lokal maupun global.
+Ngaksara merupakan perangkat lunak berbasis web untuk mendukung pembelajaran aksara Jawa dan Sunda sebagai kontribusi terhadap SDGs 4, yaitu pendidikan berkualitas. Sistem melibatkan Pelajar, Pengajar, dan Tim Materi. Pelajar dapat belajar secara mandiri atau mengikuti pembelajaran kelas. Pengajar mengelola kelas, menerbitkan tugas, dan memantau perkembangan belajar anggota. Tim Materi mengelola konten pembelajaran sesuai hak aksesnya.
 
-Salah satu fitur yang terdapat dalam Ngaksara adalah fitur menggambar suatu karakter sesuai dengan outline karakter tersebut, dengan opsi untuk menggambar tanpa outline bagi pengguna yang sudah mahir. Hasil gambar pengguna kemudian akan dinilai keakuratannya dengan karakter asli, sehingga pengguna dapat mengetahui sejauh mana bentuk goresan mereka sudah mendekati bentuk karakter yang benar. Penilaian ini juga dapat digunakan sebagai acuan bagi pengguna untuk mengulang latihan pada karakter tertentu apabila hasil yang didapatkan belum sesuai.
+Pembelajaran dimulai ketika Pelajar memilih materi berdasarkan jenis aksara dan tingkat kesulitan. Materi mencakup bentuk aksara, aturan penulisan, contoh, dan audio pengucapan. Pelajar kemudian dapat mengerjakan latihan menggambar aksara, mencocokkan bunyi, merangkai aksara, atau transliterasi. Sistem mengevaluasi hasil latihan dan menyajikan umpan balik sebagai dasar untuk meninjau penguasaan materi.
 
-Selain itu, fitur mencocokkan aksara dengan pelafalan serta fitur menulis translasi dari rangkaian karakter merupakan solusi kami untuk meningkatkan familiaritas akan pelafalan karakter dan pemahaman dari bahasa tersebut. Kedua fitur ini kami rancang agar pengguna tidak hanya mampu menulis suatu karakter dengan baik, tetapi juga memahami cara pelafalannya, mengingat pada banyak bahasa dengan aksara rumit, bentuk tulisan dan cara baca suatu karakter tidak selalu berkaitan secara langsung.
+### 2.1.1 Pembelajaran Mandiri
 
-Untuk mendukung proses belajar yang berkelanjutan, Ngaksara juga akan menyediakan materi pembelajaran yang disusun secara bertahap, mulai dari pengenalan karakter dasar hingga penggabungan karakter menjadi kata maupun kalimat sederhana. Dengan susunan materi seperti ini, kami berharap pengguna dapat mengikuti proses belajar sesuai dengan kemampuan mereka masing-masing, tanpa perlu merasa tertinggal maupun terlalu terbebani oleh materi yang diberikan.
-<br>
+Pelajar memilih aksara dan tingkat kesulitan, mempelajari materi, menyelesaikan latihan, serta meninjau progres dan motivasi belajar. Proses ini mencakup UC-02, UC-03, dan UC-04.
 
-<p align="center">
-<img alt="Contoh Activity Diagram" src="./assets/diagram/Diagramusecase.png" width="70%">
-</p>
-<p align="center">
-<i>Gambar 1. Diagram Use Case Ngaksara</i>
-</p>
-<br>
+<p align="center"><img src="./assets/diagram/Activity_Pembelajaran_Mandiri_Ngaksara.png" alt="Activity Diagram Pembelajaran Mandiri" width="85%"></p>
+<p align="center"><i>Gambar 1. Activity Diagram Pembelajaran Mandiri</i></p>
 
- Lengkapi dengan gambaran proses bisnis dalam bentuk *Activity Diagram* (boleh disalin dan diperbarui dari 3.3 *Model Proses Bisnis* pada dokumen *Topic Brainstorming*).
+### 2.1.2 Latihan Menggambar Aksara
+
+Pelajar menggambar aksara dengan outline, mengirim hasil, dan menerima penilaian. Setelah latihan diselesaikan, sistem menyimpan hasil dan memperbarui motivasi. Aktivitas yang belum selesai tidak menambah streak atau poin, sedangkan pengulangan soal yang sama tidak memberikan poin baru. Diagram merinci UC-03.
+
+<p align="center"><img src="./assets/diagram/Activity_Latihan_Menggambar_Ngaksara.png" alt="Activity Diagram Latihan Menggambar Aksara" width="85%"></p>
+<p align="center"><i>Gambar 2. Activity Diagram Latihan Menggambar Aksara</i></p>
+
+### 2.1.3 Pembelajaran Kelas
+
+Pengajar membuat kelas dan menerbitkan tugas. Pelajar bergabung melalui kode kelas dan menyelesaikan tugas. Sistem mencatat status tepat waktu atau terlambat, kemudian Pengajar memantau progres anggota. Proses ini mencakup UC-07, UC-05, dan bagian pemantauan UC-08.
+
+<p align="center"><img src="./assets/diagram/Activity_Pembelajaran_Kelas_Ngaksara.png" alt="Activity Diagram Pembelajaran Kelas" width="95%"></p>
+<p align="center"><i>Gambar 3. Activity Diagram Pembelajaran Kelas</i></p>
 
 ## 2.2 Deskripsi Umum Perangkat Lunak
-Ngaksara merupakan aplikasi pembelajaran aksara berbasis website yang dapat diakses melalui peramban web untuk mendukung proses pembelajaran bahasa daerah. Perangkat lunak ini menerima interaksi dari pelajar melalui antarmuka web, seperti memilih materi, membaca materi pembelajaran, menggambar aksara, mencocokkan aksara dengan bunyi pelafalan, merangkai aksara, dan mengerjakan transliterasi. Pada latihan menulis, sistem menangkap dan memproses urutan goresan pelajar secara berkelanjutan untuk menilai tingkat keakuratan tulisan terhadap template aksara, sedangkan pada mode latihan lainnya sistem mengevaluasi jawaban berdasarkan aturan latihan yang bersangkutan. Selain menyediakan aktivitas belajar dan latihan, Ngaksara juga mengelola data akun, riwayat pembelajaran, progres, dan motivasi pelajar, serta menyediakan fitur pembelajaran kelas yang memungkinkan pengajar membuat kelas, memberikan tugas, serta memantau perkembangan pelajar. Sistem juga menyediakan pengelolaan materi bagi tim materi serta penyimpanan data pembelajaran dan umpan balik pada sistem secara terpusat.
+Ngaksara menyediakan pengelolaan akun, materi, latihan, progres, motivasi belajar, pembelajaran kelas, dan penerimaan feedback. Pengguna mengakses layanan melalui browser dengan hak akses sesuai peran. Data yang dikelola mencakup profil pengguna, materi, hasil latihan, indikator motivasi, kelas, keanggotaan, tugas, penyelesaian tugas, dan feedback sistem.
+
+Latihan mencakup menggambar dengan atau tanpa outline, mencocokkan bunyi, merangkai aksara, dan transliterasi Latin ke aksara Jawa/Sunda atau sebaliknya. Transliterasi tidak menerjemahkan makna. Sistem mengevaluasi latihan dan menyediakan hasil untuk peninjauan progres serta rekomendasi materi. Papan peringkat hanya berlaku per kelas, menggunakan nama tampilan, dan dapat diaktifkan atau dinonaktifkan Pengajar.
+
+Pelajar dan Pengajar menyampaikan feedback aplikasi melalui UC-09. Ngaksara tidak menyediakan pengiriman pesan antar pengguna. Pengajar memantau progres anggota kelas melalui UC-08 tanpa mengirim pesan melalui sistem.
+
+Untuk implementasi awal, Ngaksara tidak menggunakan API atau layanan eksternal. Materi, audio, gambar, font, dan komponen antarmuka disediakan sebagai aset aplikasi pada server. Basis data dan penyimpanan berkas merupakan komponen internal. Distribusi audio dan gambar dari server kepada browser merupakan bagian operasi Ngaksara.
+
 
 ## 2.3 Pengguna dan Kebutuhan Pengguna Perangkat Lunak
 
+Tabel 2.1. Pengguna dan Kebutuhan Pengguna
+
 | Pengguna | Kebutuhan |
 | :--- | :--- |
-| Pelajar | Pengguna yang login ke aplikasi untuk belajar dan berlatih aksara Jawa dan Sunda. Pengguna ini dapat menggunakan fitur komunikasi untuk bertanya langsung kepada pengajar jika mengalami kesulitan dalam menjalankan aplikasi maupun kebingungan terkait materi.|
-| Pengajar | Pengguna yang login sebagai fasilitator pembelajaran. Pengguna ini memiliki akses untuk melihat rekam jejak latihan pelajar, menganalisis kelemahan yang mereka hadapi berdasarkan data latihan, serta membalas pertanyaan yang diajukan oleh pelajar.|
-| Tim Materi | Pengguna yang bertindak sebagai pengelola konten materi. Tim materi membutuhkan akses untuk mengelola modul. |
+| Pelajar | Membuat akun dan mengakses aplikasi. Mempelajari materi, mengerjakan latihan, memperoleh hasil, serta meninjau progres dan motivasi. Bergabung ke kelas dan menyelesaikan tugas. Melihat papan peringkat apabila diaktifkan. Menyampaikan feedback sistem. |
+| Pengajar | Membuat akun dan mengakses aplikasi. Membuat kelas, mengelola kode dan anggota, serta menerbitkan tugas dengan instruksi dan tenggat. Memantau progres dan pola kesalahan anggota aktif. Mengatur papan peringkat kelas dan menyampaikan feedback sistem. |
+| Tim Materi | Mengakses pengelolaan konten sesuai hak aksesnya. Mengunggah, memperbarui, atau menghapus konten sesuai tindakan yang diizinkan. Menjaga kesesuaian materi serta template penulisan dengan aksara dan tingkat kesulitan. |
 
 ## 2.4 Batasan Perangkat Lunak
 Batasan yang harus dituliskan, di antaranya:
-1. *P/L harus memakai file data/API dari sistem lain (sebutkan, misal Payment Gateway dummy).*
-2. *P/L harus memakai format data yang sama dengan sistem lain.*
-3. *P/L harus berfungsi pada platform tertentu (misal: web browser modern, atau desktop Windows dan Linux).*
-4. *...*
+1. Ngaksara berbasis web dan berfokus pada aksara Jawa serta Sunda.
+2. Hak akses mengikuti peran Pelajar, Pengajar, dan Tim Materi.
+3. Pengajar hanya dapat melihat progres anggota aktif kelas yang diampunya.
+4. Keanggotaan baru menggunakan kode valid dan aktif. Pengeluaran anggota mengakhiri akses kelas tanpa menghapus riwayat pribadi.
+5. Papan peringkat hanya per kelas, bersifat opsional, dan menggunakan nama tampilan.
+6. Aktivitas yang belum diselesaikan tidak menambah streak atau poin. Pengulangan soal yang sama tidak memberikan poin baru.
+7. Status pengumpulan ditetapkan berdasarkan waktu penyelesaian seluruh komponen wajib. Penyelesaian pada atau sebelum tenggat berstatus tepat waktu, sedangkan penyelesaian setelah tenggat berstatus terlambat.
+8. Feedback ditujukan kepada sistem. Tidak ada fitur pesan antar pengguna.
+9. KNF03 menargetkan pemuatan daftar materi beserta gambar kurang dari tiga detik pada koneksi stabil. KNF04 menargetkan keterlambatan tampilan goresan tidak lebih dari 50 milidetik.
+10. Implementasi awal didemonstrasikan melalui localhost atau jaringan lokal. Hosting publik belum menjadi bagian dari lingkungan demonstrasi.
 
 ## 2.5 Lingkungan Operasi Perangkat Lunak
-Spesifikasi *operating system* atau lingkungan yang dibutuhkan P/L untuk beroperasi. Bagian ini digunakan untuk memastikan pengguna memiliki spesifikasi yang cukup untuk menjalankan P/L. Misalnya mencakup komponen server, client, OS, DBMS, tetapi tidak menutupi kemungkinan komponen lain.
+
+Tabel 2.2. Lingkungan Operasi yang Direncanakan
 
 | Komponen | Spesifikasi |
 | :--- | :--- |
-| *Server* | *[contoh: Node.js v20, dijalankan pada layanan cloud]* |
-| *Client* | *[contoh: Web Browser modern (Chrome, Firefox terbaru)]* |
-| *DBMS* | *[contoh: PostgreSQL 15]* |
-| *OS* | *[contoh: Cross-platform (Windows/Linux/MacOS) melalui browser]* |
-| *...* | *...* |
+| Server aplikasi | Laravel 13 dengan PHP 8.4. |
+| OS lingkungan demonstrasi | Windows 11 64-bit dan Linux|
+| Cara menjalankan demonstrasi | Server pengembangan Laravel pada localhost atau jaringan lokal. |
+| Rencana OS jika dipublikasikan | Ubuntu Server 24.04 LTS dengan Nginx dan PHP-FPM 8.4.|
+| Basis data | MySQL 8.4 dengan `utf8mb4`. |
+| Antarmuka | Blade, HTML, CSS, Bootstrap 5.3, dan JavaScript. Aset disimpan bersama aplikasi. |
+| Interaksi menggambar | Canvas API dan Pointer Events. |
+| Penyimpanan | Laravel Filesystem pada disk lokal untuk materi, audio, gambar, dan data template. |
+| Alokasi awal server | Dua inti CPU, RAM 4 GB untuk proses server dan ruang kosong 10 GB untuk aplikasi serta data awal.|
+| Client | Chrome, Edge, atau Firefox versi stabil yang tersedia.|
+| Perangkat pengguna | Mouse atau layar sentuh, browser dengan JavaScript aktif, serta speaker/headphone untuk latihan audio. |
+| Jaringan demonstrasi | Localhost atau LAN. Koneksi internet tidak menjadi ketergantungan runtime apabila seluruh aset dan server tersedia secara lokal. |
+| Integrasi eksternal | Tidak digunakan pada implementasi awal. |
+| Pemeliharaan | Pengembang memeriksa log aplikasi dan kondisi server menggunakan sarana operasional. Tidak ditambahkan aktor Administrator maupun antarmuka pemeliharaan baru. |
 
 ---
 
