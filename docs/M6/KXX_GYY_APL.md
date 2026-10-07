@@ -33,7 +33,26 @@ Dipersiapkan oleh:
 
 # BAB 1: Style/Pattern Arsitektur Acuan
 
-Pada bagian ini, tentukan *architectural style* atau *pattern* yang menjadi acuan untuk aplikasi yang Anda kembangkan. Misalnya *layered architecture*, *client-server*, *repository*, *pipe and filter architecture*, atau MVC (*Model-View-Controller*).
+## 1.1 Sytle/Pattern yang Dipilih
+
+Ngaksara menggunakan arsitektur client-server dengan pola Model-View-Controller (MVC). Pengguna mengakses aplikasi melalui browser sebagai client, sedangkang sever mengolah permintaan dan menyimpan data. Bagian server dibangun sebagai satu aplikasi Laravel dengan pembagian tugas sebagai berikut :
+
+- Model mengelola data dan aturan aplikasi, seperti akun pengguna, materi, hasil latihan, dan kelas.
+- View menampilkan halaman yang digunakan Pelajar, Pengajar, dan Tim Materi.
+- Controller menerima permintaan dari pengguna, memprosesnya dengan bantuan Model, lalu menyiapkan hasil untuk ditampilkan melalui View.
+
+Data aplikasi disimpan dalam MySQL, sedangkan berkas materi, gambar, audio, dan template aksara disimpan pada server.
+
+## 1.2 Alasan Pemilihan
+
+Kami memilih client-server karena Ngaksra digunakan oleh tiga jenis pengguna yang mengakses data yang saling berkaitan. Misalnya, hasil latihan Pelajar perlu disimpan agar dapat ditampilkan pada halaman progres dan dipantau oleh Pengajar sesuai hak aksesnya. Pengelolaan data di server mendukung kebutuhan tersebut, termasuk pembatasan akses pengguna pada KF02 dan pencatatan riwayat pada KF14.
+
+Pola MVC dipilih agar tampilan, pengolahan permintaan, dan pengelolaan data memiliki tanggung jawab yang jelas. Pembagian ini memudahkan anggota kelompok mengerjakan bagian aplikasi dan melakukan perbaikan. Contohnya, perubahan tampilan latihan tidak perlu mengubah cara penyimpanan riwayat belajar.
+
+Untuk memenuhi kebutuhan respons menggambar pada KNF04, goresan langsung ditampilkan melalui Canvas di browser tanpa menunggu server. Server tetap menangani penilaian akhir dan penyimpanan hasil. Pemeriksaan hak ases serta penyimpanan kata sandi dalam bentuk hash juga dilakukan di server untuk mendukung KF05 dan KNF02. Rancangan ini cukup sederhana untuk demonstrasi melalui localhost atau LAN, meskipun pengguna tetap membutuhkan koneksi ke server untuk menyimpan data.
+
+## 1.3 Diagram Penerapan Arsitektur
+Diagram berikut menunjukkan pembagian komponen Ngaksara berdasarkan pola MVC serta hubungannya dengan penyimpanan dan pencatatan log.
 
 <p align="center">
 <img alt="Contoh Arsitektur MVC" src="./assets/diagram/contoh-arsitektur-mvc.webp" width="70%">
@@ -42,12 +61,9 @@ Pada bagian ini, tentukan *architectural style* atau *pattern* yang menjadi acua
 <i>Gambar 1. Contoh Arsitektur MVC</i>
 </p>
 
-Isi bab ini dengan hal-hal berikut:
-1. **Style/pattern yang dipilih** beserta penjelasan singkat peran setiap bagiannya. Untuk MVC, jelaskan peran *Model*, *View*, dan *Controller*.
-2. **Alasan pemilihan** berdasarkan karakteristik P/L Anda, misalnya jenis pengguna, alur proses bisnis, serta KF dan KNF pada dokumen SKPL.
-3. **Gambar style/pattern yang diterapkan pada P/L Anda.** Jangan hanya menyalin Gambar 1. Isi setiap bagian pattern dengan komponen milik P/L Anda. Misalnya, kotak *Controller* berisi daftar *controller* yang ada di aplikasi dan kotak *Model* berisi daftar *model* yang ada di aplikasi.
+Template View dibuat menggunakan Blade di server, lalu hasilnya ditampilkan di browser. Permintaan pengguna dikirim ke Controller, sedangkan Model digunakan untuk mengelola data yang dibutuhkan.
 
-Selain *style/pattern*, tuliskan juga lingkungan operasi P/L. Tabel berikut **disalin dari subbab 2.5 *Lingkungan Operasi Perangkat Lunak* pada dokumen SKPL** tanpa perubahan. Setelah tabel, jelaskan kaitan teknologi yang dipakai dengan *style/pattern* yang dipilih. Contohnya, Django (Python) secara bawaan mengikuti pola MVT (*Model-View-Template*), yaitu varian dari MVC.
+## 1.4 Lingkungan Operasi Perangkat Lunak
 
 Tabel 1.1. Lingkungan Operasi Perangkat Lunak
 
@@ -67,8 +83,6 @@ Tabel 1.1. Lingkungan Operasi Perangkat Lunak
 | Jaringan demonstrasi | Localhost atau LAN. Koneksi internet tidak menjadi ketergantungan runtime apabila seluruh aset dan server tersedia secara lokal. |
 | Integrasi eksternal | Tidak digunakan pada implementasi awal. |
 | Pemeliharaan | Pengembang memeriksa log aplikasi dan kondisi server menggunakan sarana operasional. Tidak ditambahkan aktor Administrator maupun antarmuka pemeliharaan baru. |
-
-<sub><b><i>Catatan</i></b>: <i>Style/pattern yang dipilih di bab ini menjadi acuan untuk BAB 2 (pengelompokan komponen) dan BAB 3 (model arsitektur). Contoh pada dokumen ini memakai MVC secara konsisten dari BAB 1 sampai BAB 3. Kelompok boleh memakai pattern lain selama alasannya dijelaskan dan BAB 2 serta BAB 3 disesuaikan. Tabel 1.1 harus sama persis dengan subbab 2.5 dokumen SKPL; jangan menambah atau mengubah isinya karena SKPL sudah final.</i></sub>
 
 ---
 
