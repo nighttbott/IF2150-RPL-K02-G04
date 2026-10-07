@@ -33,23 +33,23 @@ Dipersiapkan oleh:
 
 # BAB 1: Style/Pattern Arsitektur Acuan
 
-## 1.1 Sytle/Pattern yang Dipilih
+## 1.1 Style/Pattern yang Dipilih
 
-Ngaksara menggunakan arsitektur client-server dengan pola Model-View-Controller (MVC). Pengguna mengakses aplikasi melalui browser sebagai client, sedangkang sever mengolah permintaan dan menyimpan data. Bagian server dibangun sebagai satu aplikasi Laravel dengan pembagian tugas sebagai berikut :
+Ngaksara menggunakan arsitektur client-server dengan pola Model-View-Controller (MVC). Pengguna mengakses aplikasi melalui browser sebagai client, sedangkan server mengolah permintaan dan menyimpan data. Bagian server dibangun sebagai satu aplikasi Laravel dengan pembagian tugas sebagai berikut:
 
 - Model mengelola data dan aturan aplikasi, seperti akun pengguna, materi, hasil latihan, dan kelas.
 - View menampilkan halaman yang digunakan Pelajar, Pengajar, dan Tim Materi.
 - Controller menerima permintaan dari pengguna, memprosesnya dengan bantuan Model, lalu menyiapkan hasil untuk ditampilkan melalui View.
 
-Data aplikasi disimpan dalam MySQL, sedangkan berkas materi, gambar, audio, dan template aksara disimpan pada server.
+Data aplikasi disimpan pada `Database` (MySQL 8.4), berkas materi, gambar, audio, dan template aksara disimpan pada `PenyimpananBerkas`, sedangkan log aktivitas dan error dicatat pada `LogAplikasi`.
 
 ## 1.2 Alasan Pemilihan
 
-Kami memilih client-server karena Ngaksra digunakan oleh tiga jenis pengguna yang mengakses data yang saling berkaitan. Misalnya, hasil latihan Pelajar perlu disimpan agar dapat ditampilkan pada halaman progres dan dipantau oleh Pengajar sesuai hak aksesnya. Pengelolaan data di server mendukung kebutuhan tersebut, termasuk pembatasan akses pengguna pada KF02 dan pencatatan riwayat pada KF14.
+Kami memilih client-server karena Ngaksara digunakan oleh tiga jenis pengguna yang mengakses data yang saling berkaitan. Misalnya, hasil latihan Pelajar perlu disimpan agar dapat ditampilkan pada halaman progres dan dipantau oleh Pengajar sesuai hak aksesnya. Pengelolaan data di server mendukung kebutuhan tersebut, termasuk pembatasan akses pengguna pada KF02 dan pencatatan riwayat pada KF14.
 
 Pola MVC dipilih agar tampilan, pengolahan permintaan, dan pengelolaan data memiliki tanggung jawab yang jelas. Pembagian ini memudahkan anggota kelompok mengerjakan bagian aplikasi dan melakukan perbaikan. Contohnya, perubahan tampilan latihan tidak perlu mengubah cara penyimpanan riwayat belajar.
 
-Untuk memenuhi kebutuhan respons menggambar pada KNF04, goresan langsung ditampilkan melalui Canvas di browser tanpa menunggu server. Server tetap menangani penilaian akhir dan penyimpanan hasil. Pemeriksaan hak ases serta penyimpanan kata sandi dalam bentuk hash juga dilakukan di server untuk mendukung KF05 dan KNF02. Rancangan ini cukup sederhana untuk demonstrasi melalui localhost atau LAN, meskipun pengguna tetap membutuhkan koneksi ke server untuk menyimpan data.
+Untuk memenuhi kebutuhan respons menggambar pada KNF04, goresan langsung ditampilkan melalui Canvas di browser tanpa menunggu server. Server tetap menangani penilaian akhir dan penyimpanan hasil. Pemeriksaan hak akses serta penyimpanan kata sandi dalam bentuk hash juga dilakukan di server untuk mendukung KF05 dan KNF02. Server juga mencatat log aktivitas dan error untuk mendukung KF17 dan KNF01. Rancangan ini cukup sederhana untuk demonstrasi melalui localhost atau LAN, meskipun pengguna tetap membutuhkan koneksi ke server untuk menyimpan data.
 
 ## 1.3 Diagram Penerapan Arsitektur
 Diagram berikut menunjukkan pembagian komponen Ngaksara berdasarkan pola MVC serta hubungannya dengan penyimpanan dan pencatatan log.
@@ -61,7 +61,7 @@ Diagram berikut menunjukkan pembagian komponen Ngaksara berdasarkan pola MVC ser
 <i>Gambar 1. Contoh Arsitektur MVC</i>
 </p>
 
-Template View dibuat menggunakan Blade di server, lalu hasilnya ditampilkan di browser. Permintaan pengguna dikirim ke Controller, sedangkan Model digunakan untuk mengelola data yang dibutuhkan.
+Halaman View dirender menggunakan Blade di server, lalu hasilnya ditampilkan di browser. Permintaan pengguna dikirim ke Controller, sedangkan Model digunakan untuk mengelola data yang dibutuhkan.
 
 ## 1.4 Lingkungan Operasi Perangkat Lunak
 
@@ -110,7 +110,7 @@ Tabel 2.1. Identifikasi Komponen/Modul/Subsistem
 | `FeedbackController` | Controller | Memvalidasi dan menyimpan feedback, serta menyiapkan konfirmasi pengiriman. |
 | `AkunPengguna` | Model | Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi. |
 | `MateriAksara` | Model | Menyimpan metadata materi, jenis aksara, dan tingkat kesulitan. |
-| `KontenMateri` | Model | Menyimpan isi materi, contoh, aturan, audio, dan versi konten. |
+| `KontenMateri` | Model | Menyimpan isi materi, contoh, aturan, template aksara, referensi audio, dan versi konten. |
 | `RiwayatLatihan` | Model | Menyimpan hasil latihan, status, dan waktu pengerjaan Pelajar. |
 | `MotivasiBelajar` | Model | Menyimpan streak, poin, dan badge Pelajar untuk motivasi dan papan peringkat. |
 | `KelasBelajar` | Model | Menyimpan data kelas, pemilik kelas, kode bergabung, dan pengaturan kelas. |
