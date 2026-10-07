@@ -55,7 +55,7 @@ Untuk memenuhi kebutuhan respons menggambar pada KNF04, goresan langsung ditampi
 Diagram berikut menunjukkan pembagian komponen Ngaksara berdasarkan pola MVC serta hubungannya dengan penyimpanan dan pencatatan log.
 
 <p align="center">
-<img alt="Contoh Arsitektur MVC" src="./assets/diagram/contoh-arsitektur-mvc.webp" width="70%">
+<img alt="Contoh Arsitektur MVC" src="./assets/diagram/DiagramArsitektur.png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 1. Contoh Arsitektur MVC</i>
