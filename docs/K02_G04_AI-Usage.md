@@ -76,7 +76,8 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 ### Milestone 6
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
-| ... | ... | ... | ... |
+| Claude | Memastikan/check apakah hubungan antardiagram sudah sesuai | Apakah hubungan pada diagram berikut sudah sesuai dengan (yang di bab 2)? | Memvalidasi koreksi dari AI |
+| Claude | Memahami hubungan Logical View dan pola MVC (yang digunakan di PL ini) | Bagaimana hubungan antara Logical View dan MVC? | - |
 
 
 ### Milestone X
