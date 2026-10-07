@@ -27,6 +27,8 @@
 * [Milestone 2](#milestone-2)
 * [Milestone 3](#milestone-3)
 * [Milestone 4](#milestone-4)
+* [Milestone 5](#milestone-5)
+* [Milestone 6](#milestone-6)
 
 ---
 
@@ -69,6 +71,13 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | :--- | :--- | :--- | :--- |
 | Gemini | Menentukan pihak pembaca dokumen yang dicantumkan pada bagian 1.1 Tujuan Penulisan Dokumen | "Apakah asisten perlu dicantumkan sebagai pengguna dokumen pada bagian Tujuan Penulisan SKPL?" | Menyepakati bersama kelompok untuk mencantumkan asisten, lalu menyesuaikan paragraf 1.1 |
 | Gemini | Mencari rekomendasi tech stack yang sesuai untuk bagian 2.5 Lingkungan Operasi Perangkat Lunak | "Berdasarkan deskripsi perangkat lunak berikut, tech stack apa yang paling sesuai untuk digunakan?" | Memverifikasi kesesuaian tech stack yang direkomendasikan dengan sumber di internet sebelum dicantumkan pada bagian 2.5 |
+
+
+### Milestone 6
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| ... | ... | ... | ... |
+
 
 ### Milestone X
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |

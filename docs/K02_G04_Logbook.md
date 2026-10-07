@@ -28,6 +28,7 @@
 * [Milestone 3](#milestone-3)
 * [Milestone 4](#milestone-4)
 * [Milestone 5](#milestone-5)
+* [Milestone 6](#milestone-6)
 * Notes: Copy bagian Daftar Isi seperti Milestone 1 untuk Milestone berikutnya, contoh ``* [Milestone 2](#milestone-2)``. Ketika Daftar isi diklik maka akan langsung diarahkan ke bagian bawah sesuai dengan Milestone tujuan.
 
 
@@ -108,6 +109,26 @@
 
 
 **Catatan/Evaluasi Milestone 5:**
+* *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
+
+### Milestone 6
+**Periode:** 30-09-2026 - 07-10-2026
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 04-10-2026 | Natan | M6 Tabel 2.1 Identifikasi Komponen/Modul/Subsistem.  | 1 | Done | - |
+| 04-10-2026 | Diandra | Mengisi data kelompok| <1 | Done | - |
+| 07-10-2026 | Abduh | Narasi Bab 1, menulis penjelasan pola MVC dan peran model. | 1 | Done | - |
+| 07-10-2026 | Naufal | Diagram Pattern dan diagram MCV. | 1 | Done | - |
+| 07-10-2026 | Natan | Mengisi tabel 1.1 Lingkungan Operasi Perangkat Lunak.  | 1 | Done | - |
+| 07-10-2026 | Marvel | Diagram logical view Bab 3 | <1 | Done | - |
+| 07-10-2026 | Diandra | Narasi dan verifikasi Bab 3 | 1 | Done | - |
+| 07-10-2026 | Ryu | Finalisasi Bab 2 dan penggabungan dokumen. | 1 | Done | - |
+| 07-10-2026 | Natan | Mengisi Logbook | 1 | Done | - |
+| 07-10-2026 | Diandra | AI-usage | 1 | Done | - |
+
+
+**Catatan/Evaluasi Milestone 6:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
 ---
