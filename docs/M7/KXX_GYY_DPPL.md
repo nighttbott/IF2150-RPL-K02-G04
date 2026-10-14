@@ -100,8 +100,18 @@ Tuliskan sistematika pembahasan dokumen ini secara ringkas dan runut, dengan mak
 # BAB 2: Perancangan Arsitektur
 
 ## 2.1 Rancangan Lingkungan Implementasi
+Tabel 2.1. Rancangan Lingkungan Implementasi
 
-Sebutkan *operating system*, DBMS, *development tools*, *filing system*, dan bahasa pemrograman yang digunakan.
+| Aspek | Rancangan |
+| :--- | :--- |
+| *Operating system* | Windows 11 64-bit dan Linux untuk pengembangan dan demonstrasi. Rencana jika dipublikasikan: Ubuntu Server 24.04 LTS dengan Nginx dan PHP-FPM 8.4. |
+| DBMS | MySQL 8.4 dengan `utf8mb4`. Model mengakses basis data melalui Eloquent ORM bawaan Laravel. |
+| Bahasa pemrograman | PHP 8.4 pada sisi server, JavaScript pada sisi browser (Canvas API dan Pointer Events), HTML dan CSS, serta SQL. |
+| *Framework* dan pustaka | Laravel 13 untuk Model, Controller, dan routing. Blade dan Bootstrap 5.3 untuk View. |
+| *Filing system* | Laravel Filesystem pada disk lokal server untuk materi, audio, gambar, dan template aksara. Dikelola oleh kelas `PenyimpananBerkas`. |
+| Pencatatan log | Fasilitas log Laravel yang menulis log aktivitas dan error ke berkas log di server. Dikelola oleh kelas `LogAplikasi`. |
+| *Development tools* | Composer untuk pustaka PHP, Git dan GitHub untuk pengelolaan kode, draw.io atau StarUML serta Mermaid untuk diagram, dan editor kode sesuai pilihan anggota kelompok. |
+| *Client* | Chrome, Edge, atau Firefox versi stabil dengan JavaScript aktif. |
 
 ## 2.2 Style/Pattern Arsitektur Acuan
 
