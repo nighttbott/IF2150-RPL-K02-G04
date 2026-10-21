@@ -435,6 +435,63 @@ Tabel 3.5.1 Identifikasi Kelas Use Case UC05
 
 <br>
 
+
+## 3.8 Use Case UC-08: Memantau dan Menindaklanjuti Progres
+
+**ID Use Case:** UC-08  
+**Nama Use Case:** Memantau dan Menindaklanjuti Progres
+
+### 3.8.1 Identifikasi Kelas
+
+Tabel 3.8. Identifikasi Kelas Use Case UC-08
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| 1 | `HalamanKelolaKelas` (C12) | HalamanKelolaKelas (C12) |
+| 2 | `KelasController` (C20) | KelasController (C20) |
+| 3 | `ProgresController` (C19) | ProgresController (C19) |
+| 4 | `AkunPengguna` (C01) | AkunPengguna (C01) |
+| 5 | `KeanggotaanKelas` (C24) | KeanggotaanKelas (C24) |
+| 6 | `KelasBelajar` (C23) | KelasBelajar (C23) |
+| 7 | `RiwayatLatihan` (C03) | RiwayatLatihan (C03) |
+
+### 3.8.2 Sequence Diagram
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Gambar 32. Sequence Diagram UC-08 - Skenario Normal" src="./assets/diagram/UC08 Normal.png" width="100%">
+</p>
+<p align="center"><i>Gambar 32. Sequence Diagram UC-08 - Skenario Normal</i></p>
+
+
+- **Skenario Alternatif 1: Belum ada hasil belajar anggota**
+
+<p align="center">
+<img alt="Gambar 33. Sequence Diagram UC-08 - Skenario Alternatif 1: Belum ada hasil belajar anggota" src="./assets/diagram/UC08 Alternatif 1.png" width="100%">
+</p>
+<p align="center"><i>Gambar 33. Sequence Diagram UC-08 - Skenario Alternatif 1: Belum ada hasil belajar anggota</i></p>
+
+
+- **Skenario Alternatif 2: Anggota yang dipilih bukan anggota aktif kelas**
+
+<p align="center">
+<img alt="Gambar 34. Sequence Diagram UC-08 - Skenario Alternatif 2: Anggota yang dipilih bukan anggota aktif kelas" src="./assets/diagram/UC08 Alternatif 2.png" width="100%">
+</p>
+<p align="center"><i>Gambar 34. Sequence Diagram UC-08 - Skenario Alternatif 2: Anggota yang dipilih bukan anggota aktif kelas</i></p>
+
+
+### 3.8.3 Diagram Kelas
+
+`KelasController` meminta `ProgresController` mengolah riwayat anggota aktif, lalu menampilkan hasilnya kepada Pengajar melalui `HalamanKelolaKelas`. Pengajar dapat membuka detail setiap anggota aktif. Akses ke data anggota dicek dengan `KelasBelajar` (kelas milik Pengajar) dan `KeanggotaanKelas` (keanggotaan aktif). Pada skenario alternatif 2, anggota yang bukan anggota aktif ditolak dan datanya tidak ditampilkan. Umpan balik dan rekomendasi dari Pengajar tidak dirancang pada tahap ini, karena belum ada kelas untuk menyimpannya dan keputusan kelompok soal pesan antarpengguna belum diambil.
+
+<p align="center">
+<img alt="Gambar 35. Diagram Kelas Memantau dan Menindaklanjuti Progres (UC-08)" src="./assets/diagram/UC08 Diagram Kelas.png" width="100%">
+</p>
+<p align="center"><i>Gambar 35. Diagram Kelas Memantau dan Menindaklanjuti Progres (UC-08)</i></p>
+
+
+
 ## 3.9 Use Case Menyampaikan Feedback
  
 **ID Use Case:** UC-09
