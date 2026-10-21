@@ -33,7 +33,7 @@ Dipersiapkan oleh:
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* | *Deskripsikan perubahan yang dilakukan dari dokumen sebelumnya pada dokumen ini. Jika tidak terdapat perubahan, harap kosongkan tabel.* |
+| *A* | *Menambahkan 2 eksepsi baru di UC5 yang belum ada di SKPL* |
 | *B* |  |
 | *C* |  |
 | ... |  |
@@ -235,14 +235,14 @@ Tabel 3.1.1 Identifikasi Kelas Use Case UC-01
  
 ### 3.1.2 Sequence Diagram
  
-**Skenario Normal**
+- **Skenario Normal**
  
 <p align="center">
 <img src="./assets/diagram/UC01_Skenario_Normal.png" alt="Sequence diagram UC-01 skenario normal" width="100%">
 </p>
 <p align="center"><i>Diagram sekuens UC-01 - Skenario Normal</i></p>
 
-**Skenario Alternatif 1: Validasi Pendaftaran Gagal**
+- **Skenario Alternatif 1: Validasi Pendaftaran Gagal**
  
 <p align="center">
 <img src="./assets/diagram/UC01_Alternatif1.png" alt="Sequence diagram UC-01 alternatif 1 validasi pendaftaran gagal" width="100%">
@@ -288,6 +288,7 @@ Tabel 3.3. Identifikasi Kelas Use Case UC-03
 <p align="center">
 <i>Gambar X. Sequence Diagram UC-03 - Skenario Normal</i>
 </p>
+
 - **Skenario Alternatif 1: Latihan Mencocokkan Bunyi**
  
 <p align="center">
@@ -402,42 +403,42 @@ Tabel 3.5.1 Identifikasi Kelas Use Case UC05
 
 ### 3.5.2 Sequence Diagram
 
-**Skenario Normal**
+- **Skenario Normal**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Skenario_Normal.png" alt="Sequence diagram UC-05 skenario normal" width="100%">
 </p>
 <p align="center"><i>Diagram sekuens UC-05 — Skenario Normal</i></p>
 
-**Skenario Alternatif 1: Pelajar Sudah Menjadi Anggota Kelas**
+- **Skenario Alternatif 1: Pelajar Sudah Menjadi Anggota Kelas**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Alternatif1.png" alt="Sequence diagram UC-05 alternatif 1 anggota aktif" width="100%">
 </p>
 <p align="center"><i>Diagram sekuens UC-05 — Alternatif 1: Pelajar Sudah Menjadi Anggota Kelas</i></p>
 
-**Skenario Alternatif 2: Tugas Diselesaikan Terlambat**
+- **Skenario Alternatif 2: Tugas Diselesaikan Terlambat**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Alternatif2.png" alt="Sequence diagram UC-05 alternatif 2 penyelesaian terlambat" width="100%">
 </p>
 <p align="center"><i>Diagram sekuens UC-05 — Alternatif 2: Tugas Diselesaikan Terlambat</i></p>
 
-**Skenario Alternatif 3: Kode Kelas Tidak Valid**
+- **Skenario Alternatif 3: Kode Kelas Tidak Valid**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Alternatif3.png" alt="Sequence diagram UC-05 alternatif 3 kode tidak valid" width="100%">
 </p>
 <p align="center"><i>Diagram sekuens UC-05 — Alternatif 3: Kode Kelas Tidak Valid</i></p>
 
-**Eksepsi: Penyimpanan Hasil Gagal**
+- **Eksepsi: Penyimpanan Hasil Gagal**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Eksepsi1.png" alt="Sequence diagram UC-05 usulan eksepsi transaksi penyimpanan" width="100%">
 </p>
 <p align="center"><i>Diagram sekuens UC-05 — Eksepsi Penyimpanan Hasil Gagal</i></p>
 
-**Eksepsi: Akses atau Bukti Penyelesaian Tidak Memenuhi Syarat**
+- **Eksepsi: Akses atau Bukti Penyelesaian Tidak Memenuhi Syarat**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Eksepsi2.png" alt="Sequence diagram UC-05 usulan eksepsi akses dan bukti" width="100%">
@@ -532,14 +533,14 @@ Tabel 3.9.1 Identifikasi Kelas Use Case UC-09
  
 ### 3.9.2 Sequence Diagram
 
-**Skenario Normal**
+- **Skenario Normal**
  
 <p align="center">
 <img src="./assets/diagram/UC09_Skenario_Normal.png" alt="Sequence diagram UC-09 skenario normal" width="100%">
 </p>
 <p align="center"><i>Diagram sekuens UC-09 — Skenario Normal</i></p>
 
-**Skenario Alternatif 1: Feedback Gagal Terkirim**
+- **Skenario Alternatif 1: Feedback Gagal Terkirim**
  
 <p align="center">
 <img src="./assets/diagram/UC09_Alternatif1.png" alt="Sequence diagram UC-09 alternatif 1 feedback gagal terkirim" width="100%">
