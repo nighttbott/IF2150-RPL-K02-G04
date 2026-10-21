@@ -9,7 +9,7 @@ DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 
 ## Ngaksara
 <p align="center">
-<img alt="Penerapan Arsitektur MVC pada Ngaksara" src="./assets/diagram/LOGO.png" width="70%">
+<img alt="Penerapan Arsitektur MVC pada Ngaksara" src="./assets/diagram/LOGO.png" width="40%">
 </p>
 
 ### Untuk: Amanda Aurellia Salsabilla
@@ -233,7 +233,7 @@ Logical View dipilih untuk menggambarkan Ngaksara karena view ini menunjukkan pe
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/DiagramFinal.jpg" width="50%">
 </p>
 <p align="center">
-<i>Gambar x. Contoh Logical View pada P/L E-Commerce</i>
+<i>Gambar 2. Contoh Logical View pada P/L E-Commerce</i>
 </p>
 
 Hubungan Antarkomponen pada diagram tersebut adalah sebagai berikut.
@@ -292,14 +292,14 @@ Tabel 3.1.1 Identifikasi Kelas Use Case UC-01
 <p align="center">
 <img src="./assets/diagram/UC01_Skenario_Normal.png" alt="Sequence diagram UC-01 skenario normal" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-01 - Skenario Normal</i></p>
+<p align="center"><i>Gambar 3. Diagram sekuens UC-01 - Skenario Normal</i></p>
 
 - **Skenario Alternatif 1: Validasi Pendaftaran Gagal**
  
 <p align="center">
 <img src="./assets/diagram/UC01_Alternatif1.png" alt="Sequence diagram UC-01 alternatif 1 validasi pendaftaran gagal" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-01 - Alternatif 1: Validasi Pendaftaran Gagal</i></p>
+<p align="center"><i>Gambar 4. Diagram sekuens UC-01 - Alternatif 1: Validasi Pendaftaran Gagal</i></p>
 
 ### 3.1.3 Diagram Kelas
  
@@ -307,7 +307,7 @@ Tabel 3.1.1 Identifikasi Kelas Use Case UC-01
 <img alt="Class Diagram UC01" src="./assets/diagram/ClassDiagram_UC01.png" width="100%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas Melakukan Pendaftaran Akun</i>
+<i>Gambar 5. Diagram Kelas Melakukan Pendaftaran Akun</i>
 </p>
 
 ## 3.2 Use Case Mempelajari Materi
