@@ -28,9 +28,7 @@
 | Catatan |
 | --- |
 | 1. Pembuatan logo perangkat lunak  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
+| 2. Pembuatan diagram sekuens |
 
 **Notes for this section:**  
 *Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
