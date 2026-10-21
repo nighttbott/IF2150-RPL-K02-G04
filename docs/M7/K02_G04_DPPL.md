@@ -544,7 +544,7 @@ Tabel 3.7. Identifikasi Kelas Use Case UC-7
 ### 3.7.3 Diagram Kelas
 
 <p align="center">
-<img alt="Gambar xx. Diagram Kelas Menyiapkan Pembelajaran Kelas (UC-07)" src="./assets/diagram/DiagramKelas UC_07.png" width="100%">
+<img alt="Gambar xx. Diagram Kelas Menyiapkan Pembelajaran Kelas (UC-07)" src="./assets/diagram/DiagramKelas UC_07.drawio.png" width="100%">
 </p>
 <p align="center"><i>Gambar xx. Diagram Kelas Menyiapkan Pembelajaran Kelas (UC-07)</i></p>
 
