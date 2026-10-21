@@ -143,6 +143,7 @@
 | 21-10-2026 | Ryu | M7 3.1, 3.9 | 2 | Done | - |
 | 21-10-2026 | Ryu | M7 Bab 1, Bab 5 | 2 | Done | - |
 | 21-10-2026 | Marvel | M7 Bab 3.7, Bab 2.4 | 5 | Done | - |
+| 21-10-2026 | Diandra | M7 Bab 2.3, Bab 3.2, Bab 3.6 | 6 | Done | - |
 **Catatan/Evaluasi Milestone 7:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
