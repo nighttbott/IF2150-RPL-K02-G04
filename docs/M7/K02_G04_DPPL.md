@@ -99,7 +99,12 @@ Tuliskan sistematika pembahasan dokumen ini secara ringkas dan runut, dengan mak
 
 # BAB 2: Perancangan Arsitektur
 
+# BAB 2: Perancangan Arsitektur
+
 ## 2.1 Rancangan Lingkungan Implementasi
+
+Lingkungan implementasi pada Tabel 2.1 kami turunkan dari lingkungan operasi yang sudah ditetapkan pada dokumen APL. Bedanya, tabel ini tidak hanya menyebut tempat web Ngaksara akan berjalan, tetapi juga perangkat, bahasa, dan pustaka yang kami gunakan untuk membangunnya.
+
 Tabel 2.1. Rancangan Lingkungan Implementasi
 
 | Aspek | Rancangan |
@@ -108,24 +113,27 @@ Tabel 2.1. Rancangan Lingkungan Implementasi
 | DBMS | MySQL 8.4 dengan `utf8mb4`. Model mengakses basis data melalui Eloquent ORM bawaan Laravel. |
 | Bahasa pemrograman | PHP 8.4 pada sisi server, JavaScript pada sisi browser (Canvas API dan Pointer Events), HTML dan CSS, serta SQL. |
 | *Framework* dan pustaka | Laravel 13 untuk Model, Controller, dan routing. Blade dan Bootstrap 5.3 untuk View. |
-| *Filing system* | Laravel Filesystem pada disk lokal server untuk materi, audio, gambar, dan template aksara. Dikelola oleh kelas `PenyimpananBerkas`. |
-| Pencatatan log | Fasilitas log Laravel yang menulis log aktivitas dan error ke berkas log di server. Dikelola oleh kelas `LogAplikasi`. |
+| *Filing system* | Laravel Filesystem pada disk lokal server untuk materi, audio, gambar, dan template aksara. Dikelola oleh komponen `PenyimpananBerkas`. |
+| Pencatatan log | Fasilitas log Laravel yang menulis log aktivitas dan error ke berkas log di server. Dikelola oleh komponen `LogAplikasi`. |
 | *Development tools* | Composer untuk pustaka PHP, Git dan GitHub untuk pengelolaan kode, draw.io atau StarUML serta Mermaid untuk diagram, dan editor kode sesuai pilihan anggota kelompok. |
 | *Client* | Chrome, Edge, atau Firefox versi stabil dengan JavaScript aktif. |
 
 ## 2.2 Style/Pattern Arsitektur Acuan
 
-Tentukan *architectural style* atau *pattern* yang menjadi acuan aplikasi, misalnya *layered architecture*, *client-server*, *repository*, *pipe and filter*, atau MVC (*Model-View-Controller*).
+Ngaksara dibangun dengan arsitektur *client-server* yang dipadukan dengan pola *Model-View-Controller* (MVC). Pengguna mengakses Ngaksara sebagai web melalui browser, sementara pengolahan data berlangsung di server yang menjalankan satu proyek web berbasis Laravel. Di dalam proyek tersebut, pekerjaan dibagi ke tiga bagian. Model mengurus data dan aturan bisnis, misalnya akun, materi, hasil latihan, dan kelas. View adalah halaman yang dilihat Pelajar, Pengajar, dan Tim Materi. Controller berada di antara keduanya: komponen ini menerima permintaan pengguna, mengambil data yang diperlukan dari Model, lalu menyerahkan hasilnya ke View. Di luar ketiga lapisan tersebut, data Ngaksara tersimpan di `Database` (MySQL 8.4), berkas materi dan audio di `PenyimpananBerkas`, sedangkan log aktivitas dan error dicatat oleh `LogAplikasi`.
 
+Pertimbangan utama kami memilih *client-server* adalah keterkaitan data antarperan. Hasil latihan seorang Pelajar tidak hanya ditampilkan kepada dirinya di halaman progres, tetapi juga perlu dapat dipantau oleh Pengajar kelasnya. Kebutuhan seperti ini lebih mudah dipenuhi jika data disimpan dan dikendalikan di satu tempat, termasuk pembatasan akses pada KF02 dan pencatatan riwayat pada KF14. MVC kami pilih karena alasan yang lebih praktis. Setiap lapisan memiliki tugas yang jelas sehingga pekerjaan mudah dibagi di antara anggota kelompok. Tampilan halaman latihan, misalnya, dapat diubah tanpa menyentuh cara riwayat belajar disimpan.
 
-Gunakan hasil **BAB 1 Style/Pattern Arsitektur Acuan pada dokumen APL**, termasuk alasan pemilihan dan gambar penerapannya pada P/L kelompok. Gunakan komponen aplikasi sendiri pada gambar, bukan hanya contoh pola umum.
+Ada satu bagian yang sengaja tidak menunggu server, yaitu goresan saat Pelajar menggambar aksara. Goresan langsung digambar oleh Canvas di browser agar tidak terasa tertunda, sesuai batas 50 milidetik pada KNF04. Server baru terlibat ketika jawaban dikirim, yaitu untuk menilai hasil akhir, menyimpannya ke riwayat, dan memperbarui streak serta poin. Hal yang menyangkut keamanan dan pemeliharaan, seperti pemeriksaan hak akses, *hashing* kata sandi (KF05 dan KNF02), serta pencatatan log (KF17 dan KNF01), juga tetap ditangani server.
 
 <p align="center">
-<img alt="Contoh Arsitektur MVC" src="./assets/diagram/contoh-arsitektur-mvc.webp" width="40%">
+<img alt="Penerapan Arsitektur MVC pada Ngaksara" src="./assets/diagram/DiagramArsitektur.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 1. Contoh Arsitektur MVC</i>
+<i>Gambar 1. Penerapan Arsitektur Client-Server dan MVC pada Ngaksara</i>
 </p>
+
+Pada Gambar 1, komponen dikelompokkan ke sisi *Client* dan sisi *Server*. View memang dirender oleh Blade di server, tetapi hasilnya dikirim ke browser sebagai *HTTP response*, sehingga pada diagram View ditempatkan di sisi *Client*. Setiap kali pengguna menekan tombol atau mengirim form, browser mengirim *HTTP request* ke Controller yang bersangkutan. Controller lalu meminta Model membaca atau mengubah data dan mencatat aktivitasnya ke `LogAplikasi`. Model sendiri yang berhubungan dengan `Database` dan `PenyimpananBerkas`. Arah hubungan ini tidak pernah dibalik: View tidak langsung mengakses Model, dan Model tidak memanggil Controller.
 
 ## 2.3 Identifikasi Komponen / Modul / Subsistem
 
@@ -224,6 +232,93 @@ Pada diagram, pastikan:
 - Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
 - Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
 - Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
+
+## 3.3 Use Case Mengerjakan Latihan Aksara
+ 
+**ID Use Case:** UC-03  
+**Nama Use Case:** Mengerjakan Latihan Aksara
+ 
+### 3.3.1 Identifikasi Kelas
+ 
+Realisasi UC-03 melibatkan delapan kelas. Seluruhnya berasal dari kelas analisis pada SKPL, sehingga tidak ada kelas baru yang kami tambahkan untuk use case ini.
+ 
+Tabel 3.3. Identifikasi Kelas Use Case UC-03
+ 
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| 1 | `HalamanLatihan` | C08 - `HalamanLatihan` |
+| 2 | `LatihanController` | C16 - `LatihanController` |
+| 3 | `MateriController` | C17 - `MateriController` |
+| 4 | `AkunPengguna` | C01 - `AkunPengguna` |
+| 5 | `MateriAksara` | C02 - `MateriAksara` |
+| 6 | `KontenMateri` | C21 - `KontenMateri` |
+| 7 | `RiwayatLatihan` | C03 - `RiwayatLatihan` |
+| 8 | `MotivasiBelajar` | C22 - `MotivasiBelajar` |
+ 
+Perubahan dari tahap analisis terletak pada atribut dan operasinya. Beberapa operasi kami tambahkan karena dibutuhkan oleh alur pada sequence diagram, di antaranya `cekPernahSelesai()` pada `RiwayatLatihan` untuk mencegah pemberian poin ulang, `ambilTemplateAksara()` pada `KontenMateri` untuk menampilkan outline, serta beberapa operasi penilaian privat pada `LatihanController`.
+ 
+### 3.3.2 Sequence Diagram
+ 
+Seluruh skenario UC-03 diawali dengan alur penyiapan soal yang sama. `LatihanController` terlebih dahulu memastikan bahwa pengguna yang masuk berperan sebagai Pelajar melalui `AkunPengguna` (KF02). Setelah itu, `LatihanController` meminta `MateriController` mengambil target latihan dari `MateriAksara` dan isi materi dari `KontenMateri`. Perbedaan antarskenario baru muncul pada jenis konten yang diambil, cara Pelajar menjawab, dan cara jawaban dinilai.
+ 
+- **Skenario Normal**
+Skenario normal kami realisasikan dengan mode menulis karena mode ini melibatkan seluruh kelas UC-03 dan menjadi dasar Skenario Alternatif 3. Selain konten materi, `MateriController` juga mengambil template aksara dari `KontenMateri` sehingga `HalamanLatihan` dapat menampilkan outline sesuai opsi yang dipilih Pelajar (KF10). Selama Pelajar menggores, `HalamanLatihan` merekam goresan langsung di browser melalui Canvas tanpa menghubungi server (KF11, KNF04). Setelah jawaban dikirim, `LatihanController` menghitung akurasi goresan terhadap template (KF12). Karena akurasinya memenuhi ambang, latihan berstatus lulus. Ketika Pelajar menyelesaikan latihan, `LatihanController` memeriksa apakah soal yang sama pernah diselesaikan, menyimpan hasil ke `RiwayatLatihan` (KF14), dan memperbarui streak pada `MotivasiBelajar`. Poin hanya ditambahkan jika soal tersebut belum pernah diselesaikan sebelumnya, sesuai fragmen `opt` pada diagram. Ringkasan streak, poin, dan badge kemudian ditampilkan kepada Pelajar.
+ 
+<p align="center">
+<img alt="Sequence Diagram UC-03 - Skenario Normal" src="./assets/diagram/UC03SeqNormal.png" width="90%">
+</p>
+<p align="center">
+<i>Gambar X. Sequence Diagram UC-03 - Skenario Normal</i>
+</p>
+- **Skenario Alternatif 1: Latihan Mencocokkan Bunyi**
+Pada mode ini, `MateriController` juga mengambil audio pengucapan dari `KontenMateri`. `HalamanLatihan` kemudian memutar audio tersebut dan menampilkan beberapa pilihan aksara. Pilihan Pelajar langsung dikirim ke `LatihanController` dan dinilai melalui operasi privat `cocokkanBunyi()` (KF21). Hasilnya ditampilkan sebagai status benar atau salah beserta penjelasan. Penyimpanan hasil dan pembaruan motivasi mengikuti aturan yang sama dengan skenario normal.
+ 
+<p align="center">
+<img alt="Sequence Diagram UC-03 - Latihan Mencocokkan Bunyi" src="./assets/diagram/UC03SeqAlt-1.png" width="90%">
+</p>
+<p align="center">
+<i>Gambar X. Sequence Diagram UC-03 - Latihan Mencocokkan Bunyi</i>
+</p>
+- **Skenario Alternatif 2: Latihan Merangkai Aksara**
+`HalamanLatihan` menampilkan komponen aksara dan tanda baca yang dapat disusun. Pelajar menyusun komponen tersebut menjadi suku kata atau kata, lalu mengirimkannya. `LatihanController` memvalidasi urutan susunan terhadap kunci jawaban melalui `validasiRangkaian()` berdasarkan aturan penulisan aksara (KF22). Setelah hasil ditampilkan, alur penyelesaian latihan sama dengan skenario normal.
+ 
+<p align="center">
+<img alt="Sequence Diagram UC-03 - Latihan Merangkai Aksara" src="./assets/diagram/UC03SeqAlt-2.png" width="90%">
+</p>
+<p align="center">
+<i>Gambar X. Sequence Diagram UC-03 - Latihan Merangkai Aksara</i>
+</p>
+- **Skenario Alternatif 3: Gambar Aksara Kurang Akurat (Mode Menulis)**
+Alur hingga penilaian sama dengan skenario normal. Perbedaannya, akurasi goresan berada di bawah ambang sehingga latihan berstatus belum tuntas. Percobaan ini tetap kami simpan ke `RiwayatLatihan` agar riwayat aktivitas Pelajar lengkap (KF14) dan pola kesalahannya dapat dipantau Pengajar. Namun, `LatihanController` tidak memanggil `MotivasiBelajar` sama sekali, sehingga streak dan poin tidak bertambah. Ketika Pelajar memilih mengulang, `HalamanLatihan` membersihkan kanvas dan menampilkan kembali outline aksara yang sama tanpa meminta soal baru ke server.
+ 
+<p align="center">
+<img alt="Sequence Diagram UC-03 - Gambar Aksara Kurang Akurat" src="./assets/diagram/UC03SeqAlt-3.png" width="90%">
+</p>
+<p align="center">
+<i>Gambar X. Sequence Diagram UC-03 - Gambar Aksara Kurang Akurat</i>
+</p>
+
+### 3.3.3 Diagram Kelas
+ 
+Diagram kelas UC-03 terdiri atas satu kelas boundary, dua kelas control, dan lima kelas entity. Setiap kelas hanya memuat atribut dan operasi yang digunakan dalam realisasi use case ini.
+ 
+<p align="center">
+<img alt="Diagram Kelas Use Case UC-03" src="./assets/diagram/UC03ClassDiagram.png" width="60%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas Use Case UC-03</i>
+</p>
+`HalamanLatihan` bergantung pada `LatihanController` untuk semua proses yang memerlukan server, seperti menyiapkan soal, menilai jawaban, dan menyelesaikan latihan. Operasi tampilan dan perekaman goresan tetap berada di `HalamanLatihan` karena dijalankan di browser. `LatihanController` bergantung pada `MateriController` untuk memperoleh konten latihan, serta berasosiasi dengan `AkunPengguna`, `RiwayatLatihan`, dan `MotivasiBelajar`. `MateriController` berasosiasi dengan `MateriAksara` dan `KontenMateri`.
+ 
+Relasi antarkelas entity mengikuti model arsitektur pada dokumen APL. `KontenMateri` merupakan komposisi dari `MateriAksara` karena isi materi tidak dapat berdiri tanpa metadatanya. `RiwayatLatihan` dan `MotivasiBelajar` merupakan komposisi dari `AkunPengguna` karena keduanya selalu dimiliki oleh satu akun Pelajar. Hubungan `RiwayatLatihan` dengan `MateriAksara` berupa agregasi karena satu materi dapat dirujuk oleh banyak riwayat, tetapi keduanya tetap dapat berdiri sendiri.
+ 
+Ada beberapa keputusan perancangan yang perlu dicatat:
+ 
+1. Penilaian jawaban ditangani oleh operasi privat pada `LatihanController`, yaitu `hitungAkurasiGoresan()`, `cocokkanBunyi()`, `validasiRangkaian()`, dan `validasiTransliterasi()`. Dengan cara ini, use case ini tidak memerlukan kelas baru.
+2. Batas akurasi disimpan sebagai atribut `ambangAkurasi` pada `LatihanController`. Nilainya menjadi dasar pembeda antara skenario normal dan Skenario Alternatif 3.
+3. Aturan poin ulang dijaga oleh `RiwayatLatihan.cekPernahSelesai()`, yang dipanggil sebelum `MotivasiBelajar.tambahPoin()`. Aturan ini sejalan dengan batasan SKPL bahwa pengulangan soal yang sama tidak memberikan poin baru.
+4. Opsi outline (KF10) dan arah transliterasi dikirim melalui satu parameter `opsi` pada `pilihModeLatihan()` dan `siapkanSoal()`, sehingga signature kedua operasi tersebut sama untuk semua mode latihan.
+
 
 ## 3.5 Use Case Mengikuti Pembelajaran Kelas
 
