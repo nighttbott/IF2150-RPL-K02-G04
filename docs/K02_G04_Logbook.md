@@ -122,7 +122,7 @@
 | 07-10-2026 | Abduh | Narasi Bab 1, menulis penjelasan pola MVC dan peran model. | 1 | Done | - |
 | 07-10-2026 | Naufal | Diagram Pattern dan diagram MCV. | 1 | Done | - |
 | 07-10-2026 | Natan | Mengisi tabel 1.1 Lingkungan Operasi Perangkat Lunak.  | 1 | Done | - |
-| 07-10-2026 | Marvel | Diagram logical view Bab 3 | <1 | Done | - |
+| 07-10-2026 | Marvel | Diagram logical view Bab 3 | 1 | Done | - |
 | 07-10-2026 | Diandra | Narasi dan verifikasi Bab 3 | 1 | Done | - |
 | 07-10-2026 | Ryu | Finalisasi Bab 2 dan penggabungan dokumen. | 1 | Done | - |
 | 07-10-2026 | Natan | Mengisi Logbook | 1 | Done | - |

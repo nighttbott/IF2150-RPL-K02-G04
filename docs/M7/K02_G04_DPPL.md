@@ -8,7 +8,9 @@ DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 <br>
 
 ## Ngaksara
-### *[Logo Perangkat Lunak]*
+<p align="center">
+<img alt="Penerapan Arsitektur MVC pada Ngaksara" src="./assets/diagram/LOGO.png" width="70%">
+</p>
 
 ### Untuk: Amanda Aurellia Salsabilla
 
