@@ -300,6 +300,63 @@ Ada beberapa keputusan perancangan yang perlu dicatat:
 2. Batas akurasi disimpan sebagai atribut `ambangAkurasi` pada `LatihanController`. Nilainya menjadi dasar pembeda antara skenario normal dan Skenario Alternatif 3.
 3. Aturan poin ulang dijaga oleh `RiwayatLatihan.cekPernahSelesai()`, yang dipanggil sebelum `MotivasiBelajar.tambahPoin()`. Aturan ini sejalan dengan batasan SKPL bahwa pengulangan soal yang sama tidak memberikan poin baru.
 4. Opsi outline (KF10) dan arah transliterasi dikirim melalui satu parameter `opsi` pada `pilihModeLatihan()` dan `siapkanSoal()`, sehingga signature kedua operasi tersebut sama untuk semua mode latihan.
+   
+
+## 3.4 Use Case UC-04: Meninjau Progres dan Motivasi
+
+**ID Use Case:** UC-04  
+**Nama Use Case:** Meninjau Progres dan Motivasi
+
+### 3.4.1 Identifikasi Kelas
+
+Tabel 3.4. Identifikasi Kelas Use Case UC-04
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| 1 | `HalamanMateri` (C13) | HalamanMateri (C13) |
+| 2 | `HalamanProgres` (C14) | HalamanProgres (C14) |
+| 3 | `ProgresController` (C19) | ProgresController (C19) |
+| 4 | `AkunPengguna` (C01) | AkunPengguna (C01) |
+| 5 | `KeanggotaanKelas` (C24) | KeanggotaanKelas (C24) |
+| 6 | `KelasBelajar` (C23) | KelasBelajar (C23) |
+| 7 | `MateriAksara` (C02) | MateriAksara (C02) |
+| 8 | `MotivasiBelajar` (C22) | MotivasiBelajar (C22) |
+| 9 | `RiwayatLatihan` (C03) | RiwayatLatihan (C03) |
+
+### 3.4.2 Sequence Diagram
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Gambar 15. Sequence Diagram UC-04 - Skenario Normal" src="./assets/diagram/UC04 Sequence Normal.png" width="100%">
+</p>
+<p align="center"><i>Gambar 15. Sequence Diagram UC-04 - Skenario Normal</i></p>
+
+
+- **Skenario Alternatif 1: Belum ada riwayat pembelajaran**
+
+<p align="center">
+<img alt="Gambar 16. Sequence Diagram UC-04 - Skenario Alternatif 1: Belum ada riwayat pembelajaran" src="./assets/diagram/UC04 Alternatif 1.png" width="100%">
+</p>
+<p align="center"><i>Gambar 16. Sequence Diagram UC-04 - Skenario Alternatif 1: Belum ada riwayat pembelajaran</i></p>
+
+
+- **Skenario Alternatif 2: Melihat papan peringkat kelas**
+
+<p align="center">
+<img alt="Gambar 17. Sequence Diagram UC-04 - Skenario Alternatif 2: Melihat papan peringkat kelas" src="./assets/diagram/UC04 Alternatif 2.png" width="100%">
+</p>
+<p align="center"><i>Gambar 17. Sequence Diagram UC-04 - Skenario Alternatif 2: Melihat papan peringkat kelas</i></p>
+
+
+### 3.4.3 Diagram Kelas
+
+`ProgresController` mengolah data dari `RiwayatLatihan`, `MateriAksara`, dan `MotivasiBelajar`. Untuk papan peringkat, `ProgresController` memeriksa pengaturan kelas pada `KelasBelajar` dan mengambil anggota aktif dari `KeanggotaanKelas`.
+
+<p align="center">
+<img alt="Gambar 18. Diagram Kelas Meninjau Progres dan Motivasi (UC-04)" src="./assets/diagram/UC04 Diagram Kelas.png" width="100%">
+</p>
+<p align="center"><i>Gambar 18. Diagram Kelas Meninjau Progres dan Motivasi (UC-04)</i></p>
 
 ## 3.5 Use Case Mengikuti Pembelajaran Kelas
 
