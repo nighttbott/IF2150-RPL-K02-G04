@@ -310,6 +310,54 @@ Tabel 3.1.1 Identifikasi Kelas Use Case UC-01
 <i>Gambar X. Diagram Kelas Melakukan Pendaftaran Akun</i>
 </p>
 
+## 3.2 Use Case Mempelajari Materi
+
+**ID Use Case:** UC-02
+**Nama Use Case:** Mempelajari Materi
+
+### 3.2.1 Identifikasi Kelas
+
+Tabel 3.2.1 Identifikasi Kelas Use Case UC-02
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| 1 | C13 — HalamanMateri | C13 — HalamanMateri |
+| 2 | C17 — MateriController | C17 — MateriController |
+| 3 | C02 — MateriAksara | C02 — MateriAksara |
+| 4 | C21 — KontenMateri | C21 — KontenMateri |
+| 5 | C03 — RiwayatLatihan | C03 — RiwayatLatihan |
+| 6 | C01 — AkunPengguna | C01 — AkunPengguna |
+
+### 3.2.2 Sequence Diagram
+
+**Skenario Normal**
+
+<p align="center">
+<img src="./assets/diagram/UC-02-seq.png" alt="Sequence diagram UC-02 skenario normal" width="100%">
+</p>
+<p align="center"><i>Diagram sekuens UC-02 — Skenario Normal</i></p>
+
+**Skenario Alternatif 1: Materi Belum Tersedia untuk Kombinasi yang Dipilih**
+
+<p align="center">
+<img src="./assets/diagram/UC-02-seq-alt1.png" alt="Sequence diagram UC-02 alternatif 1 materi belum tersedia" width="100%">
+</p>
+<p align="center"><i>Diagram sekuens UC-02 — Alternatif 1: Materi Belum Tersedia</i></p>
+
+**Skenario Alternatif 2: Audio Pengucapan Gagal Diputar**
+
+<p align="center">
+<img src="./assets/diagram/UC-02-seq-alt2.png" alt="Sequence diagram UC-02 alternatif 2 audio gagal diputar" width="100%">
+</p>
+<p align="center"><i>Diagram sekuens UC-02 — Alternatif 2: Audio Pengucapan Gagal Diputar</i></p>
+
+### 3.2.3 Diagram Kelas
+
+<p align="center">
+<img src="./assets/diagram/UC-02-class.png" alt="Diagram kelas UC-02 Mempelajari Materi" width="100%">
+</p>
+<p align="center"><i>Diagram kelas UC-02 — Mempelajari Materi</i></p>
+
 ## 3.3 Use Case Mengerjakan Latihan Aksara
  
 **ID Use Case:** UC-03  
