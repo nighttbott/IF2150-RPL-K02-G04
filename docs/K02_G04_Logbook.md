@@ -139,7 +139,7 @@
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | 14-10-2026 | Natan | M7 bagian 1.2, 1.4, dan 2.1 | 1 | Done | - |
 | 21-10-2026 | Natan | M7 bagian 3.4 dan 3.8 | 4 | Done | - |
-
+| 21-10-2026 | Naufal | M7 3.3 | 3 | Done | - |
 
 
 **Catatan/Evaluasi Milestone 7:**
