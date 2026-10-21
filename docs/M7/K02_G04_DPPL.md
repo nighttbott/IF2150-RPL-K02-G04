@@ -330,33 +330,33 @@ Tabel 3.2.1 Identifikasi Kelas Use Case UC-02
 
 ### 3.2.2 Sequence Diagram
 
-**Skenario Normal**
+- **Skenario Normal**
 
 <p align="center">
 <img src="./assets/diagram/UC-02-seq.png" alt="Sequence diagram UC-02 skenario normal" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-02 — Skenario Normal</i></p>
+<p align="center"><i>Gambar 6. Diagram sekuens UC-02 — Skenario Normal</i></p>
 
-**Skenario Alternatif 1: Materi Belum Tersedia untuk Kombinasi yang Dipilih**
+- **Skenario Alternatif 1: Materi Belum Tersedia untuk Kombinasi yang Dipilih**
 
 <p align="center">
 <img src="./assets/diagram/UC-02-seq-alt1.png" alt="Sequence diagram UC-02 alternatif 1 materi belum tersedia" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-02 — Alternatif 1: Materi Belum Tersedia</i></p>
+<p align="center"><i>Gambar 7. Diagram sekuens UC-02 — Alternatif 1: Materi Belum Tersedia</i></p>
 
-**Skenario Alternatif 2: Audio Pengucapan Gagal Diputar**
+- **Skenario Alternatif 2: Audio Pengucapan Gagal Diputar**
 
 <p align="center">
 <img src="./assets/diagram/UC-02-seq-alt2.png" alt="Sequence diagram UC-02 alternatif 2 audio gagal diputar" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-02 — Alternatif 2: Audio Pengucapan Gagal Diputar</i></p>
+<p align="center"><i>Gambar 8. Diagram sekuens UC-02 — Alternatif 2: Audio Pengucapan Gagal Diputar</i></p>
 
 ### 3.2.3 Diagram Kelas
 
 <p align="center">
 <img src="./assets/diagram/UC-02-class.png" alt="Diagram kelas UC-02 Mempelajari Materi" width="100%">
 </p>
-<p align="center"><i>Diagram kelas UC-02 — Mempelajari Materi</i></p>
+<p align="center"><i>Gambar 9. Diagram kelas UC-02 — Mempelajari Materi</i></p>
 
 ## 3.3 Use Case Mengerjakan Latihan Aksara
  
@@ -386,7 +386,7 @@ Tabel 3.3. Identifikasi Kelas Use Case UC-03
 <img alt="Sequence Diagram UC-03 - Skenario Normal" src="./assets/diagram/UC03SeqNormal.png" width="90%">
 </p>
 <p align="center">
-<i>Gambar X. Sequence Diagram UC-03 - Skenario Normal</i>
+<i>Gambar 10. Diagram sekuens UC-03 - Skenario Normal</i>
 </p>
 
 - **Skenario Alternatif 1: Latihan Mencocokkan Bunyi**
@@ -395,7 +395,7 @@ Tabel 3.3. Identifikasi Kelas Use Case UC-03
 <img alt="Sequence Diagram UC-03 - Latihan Mencocokkan Bunyi" src="./assets/diagram/UC03SeqAlt-1.png" width="90%">
 </p>
 <p align="center">
-<i>Gambar X. Sequence Diagram UC-03 - Latihan Mencocokkan Bunyi</i>
+<i>Gambar 11. Diagram sekuens UC-03 - Latihan Mencocokkan Bunyi</i>
 </p>
 
 - **Skenario Alternatif 2: Latihan Merangkai Aksara**
@@ -404,7 +404,7 @@ Tabel 3.3. Identifikasi Kelas Use Case UC-03
 <img alt="Sequence Diagram UC-03 - Latihan Merangkai Aksara" src="./assets/diagram/UC03SeqAlt-2.png" width="90%">
 </p>
 <p align="center">
-<i>Gambar X. Sequence Diagram UC-03 - Latihan Merangkai Aksara</i>
+<i>Gambar 12. Diagram sekuens UC-03 - Latihan Merangkai Aksara</i>
 </p>
 
 - **Skenario Alternatif 3: Gambar Aksara Kurang Akurat (Mode Menulis)**
@@ -413,7 +413,7 @@ Tabel 3.3. Identifikasi Kelas Use Case UC-03
 <img alt="Sequence Diagram UC-03 - Gambar Aksara Kurang Akurat" src="./assets/diagram/UC03SeqAlt-3.png" width="90%">
 </p>
 <p align="center">
-<i>Gambar X. Sequence Diagram UC-03 - Gambar Aksara Kurang Akurat</i>
+<i>Gambar 13. Diagram sekuens UC-03 - Gambar Aksara Kurang Akurat</i>
 </p>
 
 ### 3.3.3 Diagram Kelas
@@ -422,7 +422,7 @@ Tabel 3.3. Identifikasi Kelas Use Case UC-03
 <img alt="Diagram Kelas Use Case UC-03" src="./assets/diagram/UC03ClassDiagram.png" width="60%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas Use Case UC-03</i>
+<i>Gambar 14. Diagram Kelas Use Case UC-03</i>
 </p>
 
 ## 3.4 Use Case UC-04: Meninjau Progres dan Motivasi
@@ -453,7 +453,7 @@ Tabel 3.4. Identifikasi Kelas Use Case UC-04
 <p align="center">
 <img alt="Gambar 15. Sequence Diagram UC-04 - Skenario Normal" src="./assets/diagram/UC04 Sequence Normal.png" width="100%">
 </p>
-<p align="center"><i>Gambar 15. Sequence Diagram UC-04 - Skenario Normal</i></p>
+<p align="center"><i>Gambar 15. Diagram sekuens UC-04 - Skenario Normal</i></p>
 
 
 - **Skenario Alternatif 1: Belum ada riwayat pembelajaran**
@@ -461,7 +461,7 @@ Tabel 3.4. Identifikasi Kelas Use Case UC-04
 <p align="center">
 <img alt="Gambar 16. Sequence Diagram UC-04 - Skenario Alternatif 1: Belum ada riwayat pembelajaran" src="./assets/diagram/UC04 Alternatif 1.png" width="100%">
 </p>
-<p align="center"><i>Gambar 16. Sequence Diagram UC-04 - Skenario Alternatif 1: Belum ada riwayat pembelajaran</i></p>
+<p align="center"><i>Gambar 16. Diagram sekuens UC-04 - Skenario Alternatif 1: Belum ada riwayat pembelajaran</i></p>
 
 
 - **Skenario Alternatif 2: Melihat papan peringkat kelas**
@@ -469,12 +469,10 @@ Tabel 3.4. Identifikasi Kelas Use Case UC-04
 <p align="center">
 <img alt="Gambar 17. Sequence Diagram UC-04 - Skenario Alternatif 2: Melihat papan peringkat kelas" src="./assets/diagram/UC04 Alternatif 2.png" width="100%">
 </p>
-<p align="center"><i>Gambar 17. Sequence Diagram UC-04 - Skenario Alternatif 2: Melihat papan peringkat kelas</i></p>
+<p align="center"><i>Gambar 17. Diagram sekuens UC-04 - Skenario Alternatif 2: Melihat papan peringkat kelas</i></p>
 
 
 ### 3.4.3 Diagram Kelas
-
-`ProgresController` mengolah data dari `RiwayatLatihan`, `MateriAksara`, dan `MotivasiBelajar`. Untuk papan peringkat, `ProgresController` memeriksa pengaturan kelas pada `KelasBelajar` dan mengambil anggota aktif dari `KeanggotaanKelas`.
 
 <p align="center">
 <img alt="Gambar 18. Diagram Kelas Meninjau Progres dan Motivasi (UC-04)" src="./assets/diagram/UC04 Diagram Kelas.png" width="100%">
@@ -508,44 +506,42 @@ Tabel 3.5.1 Identifikasi Kelas Use Case UC05
 <p align="center">
 <img src="./assets/diagram/UC05_Skenario_Normal.png" alt="Sequence diagram UC-05 skenario normal" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-05 — Skenario Normal</i></p>
+<p align="center"><i>Gambar 19. Diagram sekuens UC-05 — Skenario Normal</i></p>
 
 - **Skenario Alternatif 1: Pelajar Sudah Menjadi Anggota Kelas**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Alternatif1.png" alt="Sequence diagram UC-05 alternatif 1 anggota aktif" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-05 — Alternatif 1: Pelajar Sudah Menjadi Anggota Kelas</i></p>
+<p align="center"><i>Gambar 20. Diagram sekuens UC-05 — Alternatif 1: Pelajar Sudah Menjadi Anggota Kelas</i></p>
 
 - **Skenario Alternatif 2: Tugas Diselesaikan Terlambat**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Alternatif2.png" alt="Sequence diagram UC-05 alternatif 2 penyelesaian terlambat" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-05 — Alternatif 2: Tugas Diselesaikan Terlambat</i></p>
+<p align="center"><i>Gambar 21. Diagram sekuens UC-05 — Alternatif 2: Tugas Diselesaikan Terlambat</i></p>
 
 - **Skenario Alternatif 3: Kode Kelas Tidak Valid**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Alternatif3.png" alt="Sequence diagram UC-05 alternatif 3 kode tidak valid" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-05 — Alternatif 3: Kode Kelas Tidak Valid</i></p>
+<p align="center"><i>Gambar 22. Diagram sekuens UC-05 — Alternatif 3: Kode Kelas Tidak Valid</i></p>
 
 - **Eksepsi: Penyimpanan Hasil Gagal**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Eksepsi1.png" alt="Sequence diagram UC-05 usulan eksepsi transaksi penyimpanan" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-05 — Eksepsi Penyimpanan Hasil Gagal</i></p>
+<p align="center"><i>Gambar 23. Diagram sekuens UC-05 — Eksepsi Penyimpanan Hasil Gagal</i></p>
 
 - **Eksepsi: Akses atau Bukti Penyelesaian Tidak Memenuhi Syarat**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Eksepsi2.png" alt="Sequence diagram UC-05 usulan eksepsi akses dan bukti" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-05 — Eksepsi Akses dan Bukti Penyelesaian</i></p>
-
-`ref UC-02/UC-03` merujuk realisasi pengerjaan materi/latihan. Finalisasi menggunakan bukti penyelesaian di server; kriteria selesai materi masih perlu ditetapkan pada UC-02.
+<p align="center"><i>Gambar 24. Diagram sekuens UC-05 — Eksepsi Akses dan Bukti Penyelesaian</i></p>
 
 ### 3.5.3 Diagram Kelas
 
@@ -553,7 +549,7 @@ Tabel 3.5.1 Identifikasi Kelas Use Case UC05
 <img alt="Class Diagram UC5" src="./assets/diagram/ClassDiagram_UC5.png" width="100%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas Mengikuti Pembelajaran Kelas </i>
+<i>Gambar 25. Diagram Kelas Mengikuti Pembelajaran Kelas </i>
 </p>
 
 <br>
@@ -578,19 +574,19 @@ Tabel 3.6.1 Identifikasi Kelas Use Case UC-06
 
 ### 3.6.2 Sequence Diagram
 
-**Skenario Normal**
+- **Skenario Normal**
 
 <p align="center">
 <img src="./assets/diagram/UC-06-seq.png" alt="Sequence diagram UC-06 skenario normal" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-06 — Skenario Normal</i></p>
+<p align="center"><i>Gambar 26. Diagram sekuens UC-06 — Skenario Normal</i></p>
 
-**Skenario Alternatif 1: Penambahan Materi Gagal**
+- **Skenario Alternatif 1: Penambahan Materi Gagal**
 
 <p align="center">
 <img src="./assets/diagram/UC-06-seq-alt1.png" alt="Sequence diagram UC-06 alternatif 1 penambahan materi gagal" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-06 — Alternatif 1: Penambahan Materi Gagal</i></p>
+<p align="center"><i>Gambar 27. Diagram sekuens UC-06 — Alternatif 1: Penambahan Materi Gagal</i></p>
 
 
 ### 3.6.3 Diagram Kelas
@@ -598,7 +594,7 @@ Tabel 3.6.1 Identifikasi Kelas Use Case UC-06
 <p align="center">
 <img src="./assets/diagram/UC-06-class.png" alt="Diagram kelas UC-06 Memperbaharui Materi" width="100%">
 </p>
-<p align="center"><i>Diagram kelas UC-06 — Memperbaharui Materi</i></p>
+<p align="center"><i>Gambar 28. Diagram kelas UC-06 — Memperbaharui Materi</i></p>
 
 
 ## 3.7 Use Case UC-07: Menyiapkan Pembelajaran Kelas
@@ -627,7 +623,7 @@ Tabel 3.7. Identifikasi Kelas Use Case UC-7
 <p align="center">
 <img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Normal" src="./assets/diagram/SkenarioNormal UC_07-Page-1.drawio.png" width="100%">
 </p>
-<p align="center"><i>Gambar xx. Sequence Diagram UC-07 - Skenario Normal</i></p>
+<p align="center"><i>Gambar 29. Diagram sekuens UC-07 - Skenario Normal</i></p>
 
 
 - **Skenario Alternatif 1: Mengganti Kode Kelas**
@@ -635,7 +631,7 @@ Tabel 3.7. Identifikasi Kelas Use Case UC-7
 <p align="center">
 <img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 1: Mengganti Kode Kelas" src="./assets/diagram/SkenarioAlt01 UC_07.drawio.png" width="100%">
 </p>
-<p align="center"><i>Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 1: Mengganti Kode Kelas</i></p>
+<p align="center"><i>Gambar 30. Diagram sekuens UC-07 - Skenario Alternatif 1: Mengganti Kode Kelas</i></p>
 
 
 - **Skenario Alternatif 2: Mengeluarkan Anggota Kelas**
@@ -643,21 +639,21 @@ Tabel 3.7. Identifikasi Kelas Use Case UC-7
 <p align="center">
 <img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 2: Mengeluarkan Anggota Kelas" src="./assets/diagram/SkenarioAlt2 UC_07.drawio.png" width="100%">
 </p>
-<p align="center"><i>Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 2: Mengeluarkan Anggota Kelas</i></p>
+<p align="center"><i>Gambar 31. Diagram sekuens UC-07 - Skenario Alternatif 2: Mengeluarkan Anggota Kelas</i></p>
 
 - **Skenario Alternatif 3: Mengaktifkan Papan Peringkat Kelas**
 
 <p align="center">
 <img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 3: Mengaktifkan Papan Peringkat Kelas" src="./assets/diagram/SkenarioAlt03 UC_07.drawio.png" width="100%">
 </p>
-<p align="center"><i>Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 2: Mengaktifkan Papan Peringkat Kelas</i></p>
+<p align="center"><i>Gambar 32. Diagram sekuens UC-07 - Skenario Alternatif 3: Mengaktifkan Papan Peringkat Kelas</i></p>
 
 ### 3.7.3 Diagram Kelas
 
 <p align="center">
 <img alt="Gambar xx. Diagram Kelas Menyiapkan Pembelajaran Kelas (UC-07)" src="./assets/diagram/DiagramKelas UC_07.drawio.png" width="100%">
 </p>
-<p align="center"><i>Gambar xx. Diagram Kelas Menyiapkan Pembelajaran Kelas (UC-07)</i></p>
+<p align="center"><i>Gambar 33. Diagram Kelas Menyiapkan Pembelajaran Kelas (UC-07)</i></p>
 
 ## 3.8 Use Case UC-08: Memantau dan Menindaklanjuti Progres
 
@@ -685,7 +681,7 @@ Tabel 3.8. Identifikasi Kelas Use Case UC-08
 <p align="center">
 <img alt="Gambar 32. Sequence Diagram UC-08 - Skenario Normal" src="./assets/diagram/UC08 Normal.png" width="100%">
 </p>
-<p align="center"><i>Gambar 32. Sequence Diagram UC-08 - Skenario Normal</i></p>
+<p align="center"><i>Gambar 34. Diagram sekuens UC-08 - Skenario Normal</i></p>
 
 
 - **Skenario Alternatif 1: Belum ada hasil belajar anggota**
@@ -693,7 +689,7 @@ Tabel 3.8. Identifikasi Kelas Use Case UC-08
 <p align="center">
 <img alt="Gambar 33. Sequence Diagram UC-08 - Skenario Alternatif 1: Belum ada hasil belajar anggota" src="./assets/diagram/UC08 Alternatif 1.png" width="100%">
 </p>
-<p align="center"><i>Gambar 33. Sequence Diagram UC-08 - Skenario Alternatif 1: Belum ada hasil belajar anggota</i></p>
+<p align="center"><i>Gambar 35. Diagram sekuens UC-08 - Skenario Alternatif 1: Belum ada hasil belajar anggota</i></p>
 
 
 - **Skenario Alternatif 2: Anggota yang dipilih bukan anggota aktif kelas**
@@ -701,17 +697,15 @@ Tabel 3.8. Identifikasi Kelas Use Case UC-08
 <p align="center">
 <img alt="Gambar 34. Sequence Diagram UC-08 - Skenario Alternatif 2: Anggota yang dipilih bukan anggota aktif kelas" src="./assets/diagram/UC08 Alternatif 2.png" width="100%">
 </p>
-<p align="center"><i>Gambar 34. Sequence Diagram UC-08 - Skenario Alternatif 2: Anggota yang dipilih bukan anggota aktif kelas</i></p>
+<p align="center"><i>Gambar 36.Diagram sekuens UC-08 - Skenario Alternatif 2: Anggota yang dipilih bukan anggota aktif kelas</i></p>
 
 
 ### 3.8.3 Diagram Kelas
 
-`KelasController` meminta `ProgresController` mengolah riwayat anggota aktif, lalu menampilkan hasilnya kepada Pengajar melalui `HalamanKelolaKelas`. Pengajar dapat membuka detail setiap anggota aktif. Akses ke data anggota dicek dengan `KelasBelajar` (kelas milik Pengajar) dan `KeanggotaanKelas` (keanggotaan aktif). Pada skenario alternatif 2, anggota yang bukan anggota aktif ditolak dan datanya tidak ditampilkan. Umpan balik dan rekomendasi dari Pengajar tidak dirancang pada tahap ini, karena belum ada kelas untuk menyimpannya dan keputusan kelompok soal pesan antarpengguna belum diambil.
-
 <p align="center">
 <img alt="Gambar 35. Diagram Kelas Memantau dan Menindaklanjuti Progres (UC-08)" src="./assets/diagram/UC08 Diagram Kelas.png" width="100%">
 </p>
-<p align="center"><i>Gambar 35. Diagram Kelas Memantau dan Menindaklanjuti Progres (UC-08)</i></p>
+<p align="center"><i>Gambar 37. Diagram Kelas Memantau dan Menindaklanjuti Progres (UC-08)</i></p>
 
 
 
@@ -738,14 +732,14 @@ Tabel 3.9.1 Identifikasi Kelas Use Case UC-09
 <p align="center">
 <img src="./assets/diagram/UC09_Skenario_Normal.png" alt="Sequence diagram UC-09 skenario normal" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-09 — Skenario Normal</i></p>
+<p align="center"><i>Gambar 38. Diagram sekuens UC-09 — Skenario Normal</i></p>
 
 - **Skenario Alternatif 1: Feedback Gagal Terkirim**
  
 <p align="center">
 <img src="./assets/diagram/UC09_Alternatif1.png" alt="Sequence diagram UC-09 alternatif 1 feedback gagal terkirim" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-09 — Alternatif 1: Feedback Gagal Terkirim</i></p>
+<p align="center"><i>Gambar 39. Diagram sekuens UC-09 — Alternatif 1: Feedback Gagal Terkirim</i></p>
 
 ### 3.9.3 Diagram Kelas
  
@@ -753,7 +747,7 @@ Tabel 3.9.1 Identifikasi Kelas Use Case UC-09
 <img alt="Class Diagram UC09" src="./assets/diagram/ClassDiagram_UC09.png" width="100%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas Menyampaikan Feedback</i>
+<i>Gambar 40. Diagram Kelas Menyampaikan Feedback</i>
 </p>
 
 ---
@@ -766,7 +760,7 @@ Tabel 3.9.1 Identifikasi Kelas Use Case UC-09
 <img alt="Diagram Kelas Keseluruhan" src="./assets/diagram/ClassDiagram_Keseluruhan.png" width="100%">
 </p>
 <p align="center">
-<i>Gambar 4.1. Diagram Kelas Perancangan Keseluruhan Ngaksara</i>
+<i>Gambar 41. Diagram Kelas Perancangan Keseluruhan Ngaksara</i>
 </p>
 
 Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
