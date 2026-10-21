@@ -558,6 +558,49 @@ Tabel 3.5.1 Identifikasi Kelas Use Case UC05
 
 <br>
 
+## 3.6 Use Case Memperbaharui Materi
+
+**ID Use Case:** UC-06
+**Nama Use Case:** Memperbaharui Materi
+
+### 3.6.1 Identifikasi Kelas
+
+Tabel 3.6.1 Identifikasi Kelas Use Case UC-06
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| 1 | C09 — HalamanKelolaMateri | C09 — HalamanKelolaMateri |
+| 2 | C17 — MateriController | C17 — MateriController |
+| 3 | C02 — MateriAksara | C02 — MateriAksara |
+| 4 | C21 — KontenMateri | C21 — KontenMateri |
+| 5 | C01 — AkunPengguna | C01 — AkunPengguna |
+
+
+### 3.6.2 Sequence Diagram
+
+**Skenario Normal**
+
+<p align="center">
+<img src="./assets/diagram/UC-06-seq.png" alt="Sequence diagram UC-06 skenario normal" width="100%">
+</p>
+<p align="center"><i>Diagram sekuens UC-06 — Skenario Normal</i></p>
+
+**Skenario Alternatif 1: Penambahan Materi Gagal**
+
+<p align="center">
+<img src="./assets/diagram/UC-06-seq-alt1.png" alt="Sequence diagram UC-06 alternatif 1 penambahan materi gagal" width="100%">
+</p>
+<p align="center"><i>Diagram sekuens UC-06 — Alternatif 1: Penambahan Materi Gagal</i></p>
+
+
+### 3.6.3 Diagram Kelas
+
+<p align="center">
+<img src="./assets/diagram/UC-06-class.png" alt="Diagram kelas UC-06 Memperbaharui Materi" width="100%">
+</p>
+<p align="center"><i>Diagram kelas UC-06 — Memperbaharui Materi</i></p>
+
+
 ## 3.7 Use Case UC-07: Menyiapkan Pembelajaran Kelas
 
 **ID Use Case:** UC-07
