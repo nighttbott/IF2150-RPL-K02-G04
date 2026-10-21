@@ -497,7 +497,7 @@ Tabel 3.5.1 Identifikasi Kelas Use Case UC05
 
 ### 3.7.1 Identifikasi Kelas
 
-Tabel 3.7. Identifikasi Kelas Use Case UC-08
+Tabel 3.7. Identifikasi Kelas Use Case UC-7
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 | :--- | :--- | :--- |
@@ -544,7 +544,7 @@ Tabel 3.7. Identifikasi Kelas Use Case UC-08
 ### 3.7.3 Diagram Kelas
 
 <p align="center">
-<img alt="Gambar xx. Diagram Kelas Menyiapkan Pembelajaran Kelas (UC-07)" src="./assets/diagram/DiagramKelas UC_08.png" width="100%">
+<img alt="Gambar xx. Diagram Kelas Menyiapkan Pembelajaran Kelas (UC-07)" src="./assets/diagram/DiagramKelas UC_07.png" width="100%">
 </p>
 <p align="center"><i>Gambar xx. Diagram Kelas Menyiapkan Pembelajaran Kelas (UC-07)</i></p>
 
