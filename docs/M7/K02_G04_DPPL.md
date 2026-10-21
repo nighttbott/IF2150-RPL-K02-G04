@@ -8,7 +8,9 @@ DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 <br>
 
 ## Ngaksara
-### *[Logo Perangkat Lunak]*
+<p align="center">
+<img alt="Penerapan Arsitektur MVC pada Ngaksara" src="./assets/diagram/LOGO.png" width="70%">
+</p>
 
 ### Untuk: Amanda Aurellia Salsabilla
 
@@ -223,26 +225,44 @@ Tabel 2.3. Identifikasi Komponen/Modul/Subsistem
 | `LogAplikasi` | Komponen Pendukung | Mencatat log aktivitas dan error aplikasi untuk keperluan pemeliharaan oleh pengembang. |
 
 ## 2.4 Model Arsitektur Perangkat Lunak
+### 2.4.1 Logical View
 
-Buat model arsitektur dalam bentuk satu atau lebih *view* yang memperlihatkan interaksi dan kolaborasi komponen, modul, serta subsistem dalam menjalankan fungsi sistem. Pilih notasi yang sesuai. Contoh *view*: *Logical View*, *Process View*, *Development View*, dan *Physical View*.
-
-Gunakan hasil **BAB 3 Model Arsitektur Perangkat Lunak pada dokumen APL**. 
-
-### 2.4.1 View [Nama View]
-
-Tuliskan secara singkat model arsitektur yang dipilih dan alasan model tersebut cocok untuk aplikasi.
+Logical View dipilih untuk menggambarkan Ngaksara karena view ini menunjukkan pembagian tanggung jawab antarkomponen secara langsung yang merupakan inti dari pola MVC. Selain itu, Logical View juga cocok dengan Ngaksara karena Ngaksara dipakai oleh peran Pelajar, Pengajar, juga Tim Materi dengan halaman dan akses yang berbeda. Logical View dapat memperlihatkan perbedaan halaman yang melayani tiap peran.
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh-logical-view.webp" width="50%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/DiagramFinal.jpg" width="50%">
 </p>
 <p align="center">
-<i>Gambar 2. Contoh Logical View pada P/L E-Commerce</i>
+<i>Gambar x. Contoh Logical View pada P/L E-Commerce</i>
 </p>
 
-### 2.4.X View [Nama View]
-*[Lakukan hal yang sama dengan bagian sebelumnya]*
+Hubungan Antarkomponen pada diagram tersebut adalah sebagai berikut.
 
-<br>
+| Label | Arah | Makna |
+| :--- | :--- | :--- |
+| Memanggil | *View* → *Controller* | Halaman meneruskan permintaan pengguna ke Controller yang menangani fiturnya |
+| Akses | *Controller* → *Model* | Controller membaca atau mengubah data melalui Model |
+| Menyimpan data | *Model* → `Database` | Model menyimpan datanya pada MySQL |
+| Komposisi | antar-*Model* | Satu Model menjadi bagian yang tidak berdiri sendiri dari Model lain |
+| Agregasi | antar-*Model* | Satu Model terhubung ke Model lain, tetapi keduanya tetap dapat berdiri sendiri |
+
+Hubungan mengalir dari lapisan atas ke bawah: *View*, *Controller*, *Model*, lalu `Database`. *View* tidak mengakses *Model* secara langsung, dan *Model* tidak memanggil *Controller*. Dengan begitu, perubahan tampilan tidak memengaruhi cara data disimpan, sesuai alasan pemilihan MVC pada Bab 1.
+
+Hubungan antar-*Model* pada diagram adalah sebagai berikut.
+- **Komposisi:** `AkunPengguna` dengan `RiwayatLatihan` dan `MotivasiBelajar`, karena riwayat dan motivasi selalu milik satu akun. `MateriAksara` dengan `KontenMateri`, karena isi materi tidak berdiri tanpa metadatanya. `KelasBelajar` dengan `KeanggotaanKelas` dan `TugasKelas`, serta `TugasKelas` dengan `PenyelesaianTugas`.
+- **Agregasi:** `RiwayatLatihan` dengan `MateriAksara`, serta `AkunPengguna` dengan `KeanggotaanKelas` dan `DataFeedback`.
+
+Alur Interaksi 
+
+1. `HalamanPendaftaran` dan `HalamanLogin` memanggil `OtentikasiController`. Controller memvalidasi kredensial dan mengakses `AkunPengguna`. Akun yang tersimpan menjadi dasar hak akses ketiga peran pada alur berikutnya.
+2. `HalamanMateri` memanggil `MateriController`, yang mengakses `MateriAksara` untuk daftar dan metadata materi serta `KontenMateri` untuk isi dan audio pengucapan. `HalamanUtama` berperan sebagai navigasi menuju halaman-halaman tersebut.
+3. `HalamanLatihan` memanggil `LatihanController`. Controller mengakses `MateriAksara` dan `KontenMateri` untuk menyiapkan soal, menilai jawaban, lalu mengakses `RiwayatLatihan` untuk menyimpan hasilnya dan `MotivasiBelajar` untuk memperbarui streak dan poin.
+4. `HalamanProgres` memanggil `ProgressController`, yang mengakses `RiwayatLatihan` untuk menghitung penguasaan, `MateriAksara` untuk rekomendasi materi, dan `MotivasiBelajar` untuk streak, poin, badge, dan papan peringkat.
+5. `HalamanKelolaKelas` (Pengajar) dan `HalamanKelasPelajar` (Pelajar) sama-sama memanggil `KelasController`. Controller ini mengakses `KelasBelajar`, `KeanggotaanKelas`, `TugasKelas`, dan `PenyelesaianTugas` untuk membuat kelas, memproses kode bergabung, menerbitkan tugas, dan mencatat status pengumpulan.
+6. `HalamanKelolaMateri` memanggil `MateriController`, yang mengakses `MateriAksara` dan `KontenMateri` untuk menambah atau memperbarui materi.
+7. `HalamanFeedback` memanggil `FeedbackController`, yang mengakses `DataFeedback` untuk menyimpan masukan.
+
+Pada semua alur tersebut, data pada setiap Model akhirnya disimpan ke `Database` melalui hubungan "Menyimpan data".
 
 ---
 
@@ -289,6 +309,54 @@ Tabel 3.1.1 Identifikasi Kelas Use Case UC-01
 <p align="center">
 <i>Gambar X. Diagram Kelas Melakukan Pendaftaran Akun</i>
 </p>
+
+## 3.2 Use Case Mempelajari Materi
+
+**ID Use Case:** UC-02
+**Nama Use Case:** Mempelajari Materi
+
+### 3.2.1 Identifikasi Kelas
+
+Tabel 3.2.1 Identifikasi Kelas Use Case UC-02
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| 1 | C13 — HalamanMateri | C13 — HalamanMateri |
+| 2 | C17 — MateriController | C17 — MateriController |
+| 3 | C02 — MateriAksara | C02 — MateriAksara |
+| 4 | C21 — KontenMateri | C21 — KontenMateri |
+| 5 | C03 — RiwayatLatihan | C03 — RiwayatLatihan |
+| 6 | C01 — AkunPengguna | C01 — AkunPengguna |
+
+### 3.2.2 Sequence Diagram
+
+**Skenario Normal**
+
+<p align="center">
+<img src="./assets/diagram/UC-02-seq.png" alt="Sequence diagram UC-02 skenario normal" width="100%">
+</p>
+<p align="center"><i>Diagram sekuens UC-02 — Skenario Normal</i></p>
+
+**Skenario Alternatif 1: Materi Belum Tersedia untuk Kombinasi yang Dipilih**
+
+<p align="center">
+<img src="./assets/diagram/UC-02-seq-alt1.png" alt="Sequence diagram UC-02 alternatif 1 materi belum tersedia" width="100%">
+</p>
+<p align="center"><i>Diagram sekuens UC-02 — Alternatif 1: Materi Belum Tersedia</i></p>
+
+**Skenario Alternatif 2: Audio Pengucapan Gagal Diputar**
+
+<p align="center">
+<img src="./assets/diagram/UC-02-seq-alt2.png" alt="Sequence diagram UC-02 alternatif 2 audio gagal diputar" width="100%">
+</p>
+<p align="center"><i>Diagram sekuens UC-02 — Alternatif 2: Audio Pengucapan Gagal Diputar</i></p>
+
+### 3.2.3 Diagram Kelas
+
+<p align="center">
+<img src="./assets/diagram/UC-02-class.png" alt="Diagram kelas UC-02 Mempelajari Materi" width="100%">
+</p>
+<p align="center"><i>Diagram kelas UC-02 — Mempelajari Materi</i></p>
 
 ## 3.3 Use Case Mengerjakan Latihan Aksara
  

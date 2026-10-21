@@ -4,29 +4,30 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | *\[Hari\]* |
-| **Tanggal** | *\[DD/MM/YYYY\]* |
-| **Kelas** | *\[Kelas\]* |
-| **Nomor Kelompok** | *\[Nomor Kelompok\]*  |
-| **Nama Kelompok** | *\[Nama Kelompok\]*  |
-| **Nama Perangkat Lunak** | *\[Nama P/L\]*  |
-| **Dokumen** | *\[Nama Dokumen yang diasistensikan\]*  |
+| **Hari** | Selasa |
+| **Tanggal** | 09/10/2026 |
+| **Kelas** | K2 |
+| **Nomor Kelompok** | 4  |
+| **Nama Kelompok** | 0sks  |
+| **Nama Perangkat Lunak** | Ngaksara  |
+| **Dokumen** | CD  |
 
 ### Anggota Kelompok
 
 | NIM | Nama |
 | --- | --- |
-| *\[NIM 1\]* | *\[Nama Anggota 1\]* |
-| *\[NIM 2\]* | *\[Nama Anggota 2\]* |
-| *\[NIM 3\]* | *\[Nama Anggota 3\]* |
-| *\[NIM 4\]* | *\[Nama Anggota 4\]* |
-| *\[NIM 5\]* | *\[Nama Anggota 5\]* |
+| 13525026 | Ryuza Nadif Aldebaran |
+| 13525029 | Muhammad Naufal Hilmi |
+| 13525077 | Muhammad Abduh |
+| 13525107 | Nathaniel Marvelo |
+| 13525113 | Diandra Aria Yufana |
+| 13525143 | Natan Danuarta Ariel Wicaksana |
 
 ### Catatan
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
+| 1. Pembuatan logo perangkat lunak  |
 | 2. ... |
 | 3. ... |
 | 4. ... |
@@ -38,7 +39,7 @@
 
 <!-- ![](./assets/foto-asistensi.jpg) -->
 <p align="center">
-  <img src="./assets/foto-asistensi.jpg" width="100%">
+  <img src="./assets/foto-asistensi-9okt.png" width="100%">
 </p>
 
 <p align="center">
