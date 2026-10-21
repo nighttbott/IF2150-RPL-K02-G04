@@ -99,8 +99,6 @@ Tuliskan sistematika pembahasan dokumen ini secara ringkas dan runut, dengan mak
 
 # BAB 2: Perancangan Arsitektur
 
-# BAB 2: Perancangan Arsitektur
-
 ## 2.1 Rancangan Lingkungan Implementasi
 
 Lingkungan implementasi pada Tabel 2.1 kami turunkan dari lingkungan operasi yang sudah ditetapkan pada dokumen APL. Bedanya, tabel ini tidak hanya menyebut tempat web Ngaksara akan berjalan, tetapi juga perangkat, bahasa, dan pustaka yang kami gunakan untuk membangunnya.
@@ -216,6 +214,24 @@ Tabel 3.1.1 Identifikasi Kelas Use Case UC-01
 <p align="center">
 <i>Gambar X. Diagram Kelas Melakukan Pendaftaran Akun</i>
 </p>
+
+ 
+<p align="center">
+<img alt="Diagram Kelas Use Case UC-03" src="./assets/diagram/UC03ClassDiagram.png" width="60%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas Use Case UC-03</i>
+</p>
+`HalamanLatihan` bergantung pada `LatihanController` untuk semua proses yang memerlukan server, seperti menyiapkan soal, menilai jawaban, dan menyelesaikan latihan. Operasi tampilan dan perekaman goresan tetap berada di `HalamanLatihan` karena dijalankan di browser. `LatihanController` bergantung pada `MateriController` untuk memperoleh konten latihan, serta berasosiasi dengan `AkunPengguna`, `RiwayatLatihan`, dan `MotivasiBelajar`. `MateriController` berasosiasi dengan `MateriAksara` dan `KontenMateri`.
+ 
+Relasi antarkelas entity mengikuti model arsitektur pada dokumen APL. `KontenMateri` merupakan komposisi dari `MateriAksara` karena isi materi tidak dapat berdiri tanpa metadatanya. `RiwayatLatihan` dan `MotivasiBelajar` merupakan komposisi dari `AkunPengguna` karena keduanya selalu dimiliki oleh satu akun Pelajar. Hubungan `RiwayatLatihan` dengan `MateriAksara` berupa agregasi karena satu materi dapat dirujuk oleh banyak riwayat, tetapi keduanya tetap dapat berdiri sendiri.
+ 
+Ada beberapa keputusan perancangan yang perlu dicatat:
+ 
+1. Penilaian jawaban ditangani oleh operasi privat pada `LatihanController`, yaitu `hitungAkurasiGoresan()`, `cocokkanBunyi()`, `validasiRangkaian()`, dan `validasiTransliterasi()`. Dengan cara ini, use case ini tidak memerlukan kelas baru.
+2. Batas akurasi disimpan sebagai atribut `ambangAkurasi` pada `LatihanController`. Nilainya menjadi dasar pembeda antara skenario normal dan Skenario Alternatif 3.
+3. Aturan poin ulang dijaga oleh `RiwayatLatihan.cekPernahSelesai()`, yang dipanggil sebelum `MotivasiBelajar.tambahPoin()`. Aturan ini sejalan dengan batasan SKPL bahwa pengulangan soal yang sama tidak memberikan poin baru.
+4. Opsi outline (KF10) dan arah transliterasi dikirim melalui satu parameter `opsi` pada `pilihModeLatihan()` dan `siapkanSoal()`, sehingga signature kedua operasi tersebut sama untuk semua mode latihan.
 
 ## 3.5 Use Case Mengikuti Pembelajaran Kelas
 
