@@ -490,6 +490,63 @@ Tabel 3.5.1 Identifikasi Kelas Use Case UC05
 
 <br>
 
+## 3.7 Use Case UC-07: Menyiapkan Pembelajaran Kelas
+
+**ID Use Case:** UC-07
+**Nama Use Case:** Menyiapkan Pembelajaran Kelas
+
+### 3.7.1 Identifikasi Kelas
+
+Tabel 3.7. Identifikasi Kelas Use Case UC-08
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| 1 | `HalamanKelolaKelas` | HalamanKelolaKelas (C12) |
+| 2 | `KelasController` | KelasController (C20) |
+| 3 | `TugasKelas` | ProgresController (C25) |
+| 4 | `AkunPengguna` | AkunPengguna (C01) |
+| 5 | `KeanggotaanKelas` | KeanggotaanKelas (C24) |
+| 6 | `KelasBelajar` | KelasBelajar (C23) |
+| 7 | `MotivasiBelajar` | RiwayatLatihan (C22) |
+
+### 3.7.2 Sequence Diagram
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Normal" src="./assets/diagram/SkenarioNormal UC_07-Page-1.drawio.png" width="100%">
+</p>
+<p align="center"><i>Gambar xx. Sequence Diagram UC-07 - Skenario Normal</i></p>
+
+
+- **Skenario Alternatif 1: Mengganti Kode Kelas**
+
+<p align="center">
+<img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 1: Mengganti Kode Kelas" src="./assets/diagram/SkenarioAlt1 UC_07.drawio.png" width="100%">
+</p>
+<p align="center"><i>Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 1: Mengganti Kode Kelas</i></p>
+
+
+- **Skenario Alternatif 2: Mengeluarkan Anggota Kelas**
+
+<p align="center">
+<img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 2: Mengeluarkan Anggota Kelas" src="./assets/diagram/SkenarioAlt2 UC_07.drawio.png" width="100%">
+</p>
+<p align="center"><i>Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 2: Mengeluarkan Anggota Kelas</i></p>
+
+- **Skenario Alternatif 3: Mengaktifkan Papan Peringkat Kelas**
+
+<p align="center">
+<img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 3: Mengaktifkan Papan Peringkat Kelas" src="./assets/diagram/SkenarioAlt3 UC_07.drawio.png" width="100%">
+</p>
+<p align="center"><i>Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 2: Mengaktifkan Papan Peringkat Kelas</i></p>
+
+### 3.7.3 Diagram Kelas
+
+<p align="center">
+<img alt="Gambar xx. Diagram Kelas Menyiapkan Pembelajaran Kelas (UC-07)" src="./assets/diagram/DiagramKelas UC_08.png" width="100%">
+</p>
+<p align="center"><i>Gambar xx. Diagram Kelas Menyiapkan Pembelajaran Kelas (UC-07)</i></p>
 
 ## 3.8 Use Case UC-08: Memantau dan Menindaklanjuti Progres
 
