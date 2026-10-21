@@ -522,7 +522,7 @@ Tabel 3.7. Identifikasi Kelas Use Case UC-7
 - **Skenario Alternatif 1: Mengganti Kode Kelas**
 
 <p align="center">
-<img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 1: Mengganti Kode Kelas" src="./assets/diagram/SkenarioAlt1 UC_07.drawio.png" width="100%">
+<img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 1: Mengganti Kode Kelas" src="./assets/diagram/SkenarioAlt01 UC_07.drawio.png" width="100%">
 </p>
 <p align="center"><i>Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 1: Mengganti Kode Kelas</i></p>
 
@@ -537,7 +537,7 @@ Tabel 3.7. Identifikasi Kelas Use Case UC-7
 - **Skenario Alternatif 3: Mengaktifkan Papan Peringkat Kelas**
 
 <p align="center">
-<img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 3: Mengaktifkan Papan Peringkat Kelas" src="./assets/diagram/SkenarioAlt3 UC_07.drawio.png" width="100%">
+<img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 3: Mengaktifkan Papan Peringkat Kelas" src="./assets/diagram/SkenarioAlt03 UC_07.drawio.png" width="100%">
 </p>
 <p align="center"><i>Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 2: Mengaktifkan Papan Peringkat Kelas</i></p>
 
