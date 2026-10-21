@@ -67,7 +67,7 @@ Ngaksara adalah perangkat lunak berbasis web untuk membantu pengguna mengenal ke
 
 Tabel 1.3. Definisi Istilah dan Singkatan
 
- Singkatan, Akronim, atau Istilah | Penjelasan |
+| Singkatan, Akronim, atau Istilah | Penjelasan |
 | :--- | :--- |
 | P/L | Perangkat Lunak, yaitu aplikasi yang memberikan perintah kepada komputer untuk menjalankan tugas tertentu. |
 | SKPL | Spesifikasi Kebutuhan Perangkat Lunak, yaitu dokumen yang merangkum kebutuhan yang harus dipenuhi P/L. |
@@ -98,6 +98,14 @@ Tabel 1.3. Definisi Istilah dan Singkatan
 | Pengajar | Aktor yang membuat kelas, memberikan tugas, dan memantau progres Pelajar. |
 | Tim Materi | Aktor yang mengelola konten materi dan latihan. |
 | Kelas belajar | Kelompok belajar milik seorang Pengajar yang beranggotakan sejumlah Pelajar. |
+| Kode bergabung | Kode unik dan aktif yang digunakan Pelajar untuk bergabung ke kelas belajar. |
+| Tenggat | Batas waktu penyelesaian tugas. Tugas yang diselesaikan setelah tenggat berstatus "terlambat". |
+| Streak | Jumlah hari berturut-turut Pelajar menyelesaikan aktivitas belajar. |
+| Poin | Nilai yang diperoleh Pelajar setelah menyelesaikan latihan atau tugas. |
+| Badge | Penanda pencapaian yang diberikan kepada Pelajar ketika memenuhi syarat tertentu. |
+| Papan peringkat | Urutan poin anggota dalam satu kelas belajar. |
+| Transliterasi | Pengalihan tulisan dari aksara ke huruf Latin atau sebaliknya. |
+| Feedback | Masukan dari Pelajar atau Pengajar mengenai performa, tampilan, fitur, atau materi aplikasi. |
 | T&C | *Terms & Conditions*, yaitu syarat dan ketentuan yang harus disetujui pengguna saat membuat akun. |
 | Hash | Hasil fungsi satu arah yang digunakan untuk menyimpan kata sandi tanpa menyimpan teks aslinya. |
 
