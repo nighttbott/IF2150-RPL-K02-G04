@@ -225,9 +225,80 @@ Pada diagram, pastikan:
 - Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
 - Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 
-## 3.2 Use Case XX
+## 3.5 Use Case Mengikuti Pembelajaran Kelas
 
-Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 3.1
+**ID Use Case:** *UC05*  
+**Nama Use Case:** *Mengikuti Pembelajaran Kelas*
+
+### 3.5.1 Identifikasi Kelas
+
+Tabel 3.5.1 Identifikasi Kelas Use Case UC05
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| 1 | C11 — HalamanKelasPelajar | C11 — HalamanKelasPelajar |
+| 2 | C20 — KelasController | C20 — KelasController |
+| 3 | C01 — AkunPengguna | C01 — AkunPengguna |
+| 4 | C23 — KelasBelajar | C23 — KelasBelajar |
+| 5 | C24 — KeanggotaanKelas | C24 — KeanggotaanKelas |
+| 6 | C25 — TugasKelas | C25 — TugasKelas |
+| 7 | C03 — RiwayatLatihan | C03 — RiwayatLatihan |
+| 8 | C26 — PenyelesaianTugas | C26 — PenyelesaianTugas |
+
+### 3.5.2 Sequence Diagram
+
+**Skenario Normal**
+
+<p align="center">
+<img src="./assets/diagram/UC05_Skenario_Normal.png" alt="Sequence diagram UC-05 skenario normal" width="100%">
+</p>
+<p align="center"><i>Diagram sekuens UC-05 — Skenario Normal</i></p>
+
+**Skenario Alternatif 1: Pelajar Sudah Menjadi Anggota Kelas**
+
+<p align="center">
+<img src="./assets/diagram/UC05_Alternatif1.png" alt="Sequence diagram UC-05 alternatif 1 anggota aktif" width="100%">
+</p>
+<p align="center"><i>Diagram sekuens UC-05 — Alternatif 1: Pelajar Sudah Menjadi Anggota Kelas</i></p>
+
+**Skenario Alternatif 2: Tugas Diselesaikan Terlambat**
+
+<p align="center">
+<img src="./assets/diagram/UC05_Alternatif2.png" alt="Sequence diagram UC-05 alternatif 2 penyelesaian terlambat" width="100%">
+</p>
+<p align="center"><i>Diagram sekuens UC-05 — Alternatif 2: Tugas Diselesaikan Terlambat</i></p>
+
+**Skenario Alternatif 3: Kode Kelas Tidak Valid**
+
+<p align="center">
+<img src="./assets/diagram/UC05_Alternatif3.png" alt="Sequence diagram UC-05 alternatif 3 kode tidak valid" width="100%">
+</p>
+<p align="center"><i>Diagram sekuens UC-05 — Alternatif 3: Kode Kelas Tidak Valid</i></p>
+
+**Eksepsi: Penyimpanan Hasil Gagal**
+
+<p align="center">
+<img src="./assets/diagram/UC05_Eksepsi1.png" alt="Sequence diagram UC-05 usulan eksepsi transaksi penyimpanan" width="100%">
+</p>
+<p align="center"><i>Diagram sekuens UC-05 — Eksepsi Penyimpanan Hasil Gagal</i></p>
+
+**Eksepsi: Akses atau Bukti Penyelesaian Tidak Memenuhi Syarat**
+
+<p align="center">
+<img src="./assets/diagram/UC05_Eksepsi2.png" alt="Sequence diagram UC-05 usulan eksepsi akses dan bukti" width="100%">
+</p>
+<p align="center"><i>Diagram sekuens UC-05 — Eksepsi Akses dan Bukti Penyelesaian</i></p>
+
+`ref UC-02/UC-03` merujuk realisasi pengerjaan materi/latihan. Finalisasi menggunakan bukti penyelesaian di server; kriteria selesai materi masih perlu ditetapkan pada UC-02.
+
+### 3.5.3 Diagram Kelas
+
+<p align="center">
+<img alt="Class Diagram UC5" src="./assets/diagram/ClassDiagram_UC5.png" width="100%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas Mengikuti Pembelajaran Kelas </i>
+</p>
 
 <br>
 
