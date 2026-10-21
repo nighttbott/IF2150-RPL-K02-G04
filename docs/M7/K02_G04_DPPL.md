@@ -197,14 +197,14 @@ Tabel 3.1.1 Identifikasi Kelas Use Case UC-01
 <p align="center">
 <img src="./assets/diagram/UC01_Skenario_Normal.png" alt="Sequence diagram UC-01 skenario normal" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-01 — Skenario Normal</i></p>
+<p align="center"><i>Diagram sekuens UC-01 - Skenario Normal</i></p>
 
 **Skenario Alternatif 1: Validasi Pendaftaran Gagal**
  
 <p align="center">
 <img src="./assets/diagram/UC01_Alternatif1.png" alt="Sequence diagram UC-01 alternatif 1 validasi pendaftaran gagal" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-01 — Alternatif 1: Validasi Pendaftaran Gagal</i></p>
+<p align="center"><i>Diagram sekuens UC-01 - Alternatif 1: Validasi Pendaftaran Gagal</i></p>
 
 ### 3.1.3 Diagram Kelas
  
@@ -215,6 +215,74 @@ Tabel 3.1.1 Identifikasi Kelas Use Case UC-01
 <i>Gambar X. Diagram Kelas Melakukan Pendaftaran Akun</i>
 </p>
 
+## 3.3 Use Case Mengerjakan Latihan Aksara
+ 
+**ID Use Case:** UC-03  
+**Nama Use Case:** Mengerjakan Latihan Aksara
+ 
+### 3.3.1 Identifikasi Kelas
+ 
+Realisasi UC-03 melibatkan delapan kelas. Seluruhnya berasal dari kelas analisis pada SKPL, sehingga tidak ada kelas baru yang kami tambahkan untuk use case ini.
+ 
+Tabel 3.3. Identifikasi Kelas Use Case UC-03
+ 
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| 1 | `HalamanLatihan` | C08 - `HalamanLatihan` |
+| 2 | `LatihanController` | C16 - `LatihanController` |
+| 3 | `MateriController` | C17 - `MateriController` |
+| 4 | `AkunPengguna` | C01 - `AkunPengguna` |
+| 5 | `MateriAksara` | C02 - `MateriAksara` |
+| 6 | `KontenMateri` | C21 - `KontenMateri` |
+| 7 | `RiwayatLatihan` | C03 - `RiwayatLatihan` |
+| 8 | `MotivasiBelajar` | C22 - `MotivasiBelajar` |
+ 
+Perubahan dari tahap analisis terletak pada atribut dan operasinya. Beberapa operasi kami tambahkan karena dibutuhkan oleh alur pada sequence diagram, di antaranya `cekPernahSelesai()` pada `RiwayatLatihan` untuk mencegah pemberian poin ulang, `ambilTemplateAksara()` pada `KontenMateri` untuk menampilkan outline, serta beberapa operasi penilaian privat pada `LatihanController`.
+ 
+### 3.3.2 Sequence Diagram
+ 
+Seluruh skenario UC-03 diawali dengan alur penyiapan soal yang sama. `LatihanController` terlebih dahulu memastikan bahwa pengguna yang masuk berperan sebagai Pelajar melalui `AkunPengguna` (KF02). Setelah itu, `LatihanController` meminta `MateriController` mengambil target latihan dari `MateriAksara` dan isi materi dari `KontenMateri`. Perbedaan antarskenario baru muncul pada jenis konten yang diambil, cara Pelajar menjawab, dan cara jawaban dinilai.
+ 
+- **Skenario Normal**
+Skenario normal kami realisasikan dengan mode menulis karena mode ini melibatkan seluruh kelas UC-03 dan menjadi dasar Skenario Alternatif 3. Selain konten materi, `MateriController` juga mengambil template aksara dari `KontenMateri` sehingga `HalamanLatihan` dapat menampilkan outline sesuai opsi yang dipilih Pelajar (KF10). Selama Pelajar menggores, `HalamanLatihan` merekam goresan langsung di browser melalui Canvas tanpa menghubungi server (KF11, KNF04). Setelah jawaban dikirim, `LatihanController` menghitung akurasi goresan terhadap template (KF12). Karena akurasinya memenuhi ambang, latihan berstatus lulus. Ketika Pelajar menyelesaikan latihan, `LatihanController` memeriksa apakah soal yang sama pernah diselesaikan, menyimpan hasil ke `RiwayatLatihan` (KF14), dan memperbarui streak pada `MotivasiBelajar`. Poin hanya ditambahkan jika soal tersebut belum pernah diselesaikan sebelumnya, sesuai fragmen `opt` pada diagram. Ringkasan streak, poin, dan badge kemudian ditampilkan kepada Pelajar.
+ 
+<p align="center">
+<img alt="Sequence Diagram UC-03 - Skenario Normal" src="./assets/diagram/UC03SeqNormal.png" width="90%">
+</p>
+<p align="center">
+<i>Gambar X. Sequence Diagram UC-03 - Skenario Normal</i>
+</p>
+- **Skenario Alternatif 1: Latihan Mencocokkan Bunyi**
+Pada mode ini, `MateriController` juga mengambil audio pengucapan dari `KontenMateri`. `HalamanLatihan` kemudian memutar audio tersebut dan menampilkan beberapa pilihan aksara. Pilihan Pelajar langsung dikirim ke `LatihanController` dan dinilai melalui operasi privat `cocokkanBunyi()` (KF21). Hasilnya ditampilkan sebagai status benar atau salah beserta penjelasan. Penyimpanan hasil dan pembaruan motivasi mengikuti aturan yang sama dengan skenario normal.
+ 
+<p align="center">
+<img alt="Sequence Diagram UC-03 - Latihan Mencocokkan Bunyi" src="./assets/diagram/UC03SeqAlt-1.png" width="90%">
+</p>
+<p align="center">
+<i>Gambar X. Sequence Diagram UC-03 - Latihan Mencocokkan Bunyi</i>
+</p>
+- **Skenario Alternatif 2: Latihan Merangkai Aksara**
+`HalamanLatihan` menampilkan komponen aksara dan tanda baca yang dapat disusun. Pelajar menyusun komponen tersebut menjadi suku kata atau kata, lalu mengirimkannya. `LatihanController` memvalidasi urutan susunan terhadap kunci jawaban melalui `validasiRangkaian()` berdasarkan aturan penulisan aksara (KF22). Setelah hasil ditampilkan, alur penyelesaian latihan sama dengan skenario normal.
+ 
+<p align="center">
+<img alt="Sequence Diagram UC-03 - Latihan Merangkai Aksara" src="./assets/diagram/UC03SeqAlt-2.png" width="90%">
+</p>
+<p align="center">
+<i>Gambar X. Sequence Diagram UC-03 - Latihan Merangkai Aksara</i>
+</p>
+- **Skenario Alternatif 3: Gambar Aksara Kurang Akurat (Mode Menulis)**
+Alur hingga penilaian sama dengan skenario normal. Perbedaannya, akurasi goresan berada di bawah ambang sehingga latihan berstatus belum tuntas. Percobaan ini tetap kami simpan ke `RiwayatLatihan` agar riwayat aktivitas Pelajar lengkap (KF14) dan pola kesalahannya dapat dipantau Pengajar. Namun, `LatihanController` tidak memanggil `MotivasiBelajar` sama sekali, sehingga streak dan poin tidak bertambah. Ketika Pelajar memilih mengulang, `HalamanLatihan` membersihkan kanvas dan menampilkan kembali outline aksara yang sama tanpa meminta soal baru ke server.
+ 
+<p align="center">
+<img alt="Sequence Diagram UC-03 - Gambar Aksara Kurang Akurat" src="./assets/diagram/UC03SeqAlt-3.png" width="90%">
+</p>
+<p align="center">
+<i>Gambar X. Sequence Diagram UC-03 - Gambar Aksara Kurang Akurat</i>
+</p>
+
+### 3.3.3 Diagram Kelas
+ 
+Diagram kelas UC-03 terdiri atas satu kelas boundary, dua kelas control, dan lima kelas entity. Setiap kelas hanya memuat atribut dan operasi yang digunakan dalam realisasi use case ini.
  
 <p align="center">
 <img alt="Diagram Kelas Use Case UC-03" src="./assets/diagram/UC03ClassDiagram.png" width="60%">
