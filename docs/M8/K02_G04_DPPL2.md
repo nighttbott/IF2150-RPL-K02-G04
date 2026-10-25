@@ -806,9 +806,32 @@ Tabel 5.1. Daftar Kelas Perancangan dan Kelas Analisis Terkait
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 | :--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL atau -]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL atau -]* |
-| ... | *...* | *...* |
+| 1 | `AkunPengguna` (C01) | AkunPengguna (C01) |
+| 2 | `MateriAksara` (C02) | MateriAksara (C02) |
+| 3 | `RiwayatLatihan` (C03) | RiwayatLatihan (C03) |
+| 4 | `DataFeedback` (C04) | DataFeedback (C04) |
+| 5 | `HalamanPendaftaran` (C05) | HalamanPendaftaran (C05) |
+| 6 | `HalamanLogin` (C06) | HalamanLogin (C06) |
+| 7 | `HalamanUtama` (C07) | HalamanUtama (C07) |
+| 8 | `HalamanLatihan` (C08) | HalamanLatihan (C08) |
+| 9 | `HalamanKelolaMateri` (C09) | HalamanKelolaMateri (C09) |
+| 10 | `HalamanFeedback` (C10) | HalamanFeedback (C10) |
+| 11 | `HalamanKelasPelajar` (C11) | HalamanKelasPelajar (C11) |
+| 12 | `HalamanKelolaKelas` (C12) | HalamanKelolaKelas (C12) |
+| 13 | `HalamanMateri` (C13) | HalamanMateri (C13) |
+| 14 | `HalamanProgres` (C14) | HalamanProgres (C14) |
+| 15 | `OtentikasiController` (C15) | OtentikasiController (C15) |
+| 16 | `LatihanController` (C16) | LatihanController (C16) |
+| 17 | `MateriController` (C17) | MateriController (C17) |
+| 18 | `FeedbackController` (C18) | FeedbackController (C18) |
+| 19 | `ProgresController` (C19) | ProgresController (C19) |
+| 20 | `KelasController` (C20) | KelasController (C20) |
+| 21 | `KontenMateri` (C21) | KontenMateri (C21) |
+| 22 | `MotivasiBelajar` (C22) | MotivasiBelajar (C22) |
+| 23 | `KelasBelajar` (C23) | KelasBelajar (C23) |
+| 24 | `KeanggotaanKelas` (C24) | KeanggotaanKelas (C24) |
+| 25 | `TugasKelas` (C25) | TugasKelas (C25) |
+| 26 | `PenyelesaianTugas` (C26) | PenyelesaianTugas (C26) |
 
 Untuk **setiap kelas**, identifikasi operasi berdasarkan tanggung jawab kelas beserta *visibility*-nya, serta atribut beserta *visibility* dan tipenya. Buat subbab tersendiri untuk setiap kelas.
 
