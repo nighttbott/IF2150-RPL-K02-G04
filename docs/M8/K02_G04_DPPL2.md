@@ -35,7 +35,7 @@ Dipersiapkan oleh:
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* | *Menambahkan 2 eksepsi baru di UC5 yang belum ada di SKPL* |
+| *A* |  |
 | *B* |  |
 | *C* |  |
 | ... |  |
