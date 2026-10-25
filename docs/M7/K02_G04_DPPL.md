@@ -750,7 +750,7 @@ Tabel 3.9.1 Identifikasi Kelas Use Case UC-09
 <i>Gambar 40. Diagram Kelas Menyampaikan Feedback</i>
 </p>
 
----
+--- 
 
 # BAB 4: Diagram Kelas Keseluruhan
 
