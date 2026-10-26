@@ -9,7 +9,7 @@ DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 
 ## Ngaksara
 <p align="center">
-<img alt="Penerapan Arsitektur MVC pada Ngaksara" src="./assets/diagram/LOGO.png" width="70%">
+<img alt="Penerapan Arsitektur MVC pada Ngaksara" src="./assets/diagram/LOGO.png" width="40%">
 </p>
 
 ### Untuk: Amanda Aurellia Salsabilla
@@ -225,11 +225,6 @@ Tabel 2.3. Identifikasi Komponen/Modul/Subsistem
 | `LogAplikasi` | Komponen Pendukung | Mencatat log aktivitas dan error aplikasi untuk keperluan pemeliharaan oleh pengembang. |
 
 ## 2.4 Model Arsitektur Perangkat Lunak
-
-Buat model arsitektur dalam bentuk satu atau lebih *view* yang memperlihatkan interaksi dan kolaborasi komponen, modul, serta subsistem dalam menjalankan fungsi sistem. Pilih notasi yang sesuai. Contoh *view*: *Logical View*, *Process View*, *Development View*, dan *Physical View*.
-
-Gunakan hasil **BAB 3 Model Arsitektur Perangkat Lunak pada dokumen APL**. 
-
 ### 2.4.1 Logical View
 
 Logical View dipilih untuk menggambarkan Ngaksara karena view ini menunjukkan pembagian tanggung jawab antarkomponen secara langsung yang merupakan inti dari pola MVC. Selain itu, Logical View juga cocok dengan Ngaksara karena Ngaksara dipakai oleh peran Pelajar, Pengajar, juga Tim Materi dengan halaman dan akses yang berbeda. Logical View dapat memperlihatkan perbedaan halaman yang melayani tiap peran.
@@ -238,7 +233,7 @@ Logical View dipilih untuk menggambarkan Ngaksara karena view ini menunjukkan pe
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/DiagramFinal.jpg" width="50%">
 </p>
 <p align="center">
-<i>Gambar x. Contoh Logical View pada P/L E-Commerce</i>
+<i>Gambar 2. Contoh Logical View pada P/L E-Commerce</i>
 </p>
 
 Hubungan Antarkomponen pada diagram tersebut adalah sebagai berikut.
@@ -297,14 +292,14 @@ Tabel 3.1.1 Identifikasi Kelas Use Case UC-01
 <p align="center">
 <img src="./assets/diagram/UC01_Skenario_Normal.png" alt="Sequence diagram UC-01 skenario normal" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-01 - Skenario Normal</i></p>
+<p align="center"><i>Gambar 3. Diagram sekuens UC-01 - Skenario Normal</i></p>
 
 - **Skenario Alternatif 1: Validasi Pendaftaran Gagal**
  
 <p align="center">
 <img src="./assets/diagram/UC01_Alternatif1.png" alt="Sequence diagram UC-01 alternatif 1 validasi pendaftaran gagal" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-01 - Alternatif 1: Validasi Pendaftaran Gagal</i></p>
+<p align="center"><i>Gambar 4. Diagram sekuens UC-01 - Alternatif 1: Validasi Pendaftaran Gagal</i></p>
 
 ### 3.1.3 Diagram Kelas
  
@@ -312,8 +307,56 @@ Tabel 3.1.1 Identifikasi Kelas Use Case UC-01
 <img alt="Class Diagram UC01" src="./assets/diagram/ClassDiagram_UC01.png" width="100%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas Melakukan Pendaftaran Akun</i>
+<i>Gambar 5. Diagram Kelas Melakukan Pendaftaran Akun</i>
 </p>
+
+## 3.2 Use Case Mempelajari Materi
+
+**ID Use Case:** UC-02
+**Nama Use Case:** Mempelajari Materi
+
+### 3.2.1 Identifikasi Kelas
+
+Tabel 3.2.1 Identifikasi Kelas Use Case UC-02
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| 1 | C13 — HalamanMateri | C13 — HalamanMateri |
+| 2 | C17 — MateriController | C17 — MateriController |
+| 3 | C02 — MateriAksara | C02 — MateriAksara |
+| 4 | C21 — KontenMateri | C21 — KontenMateri |
+| 5 | C03 — RiwayatLatihan | C03 — RiwayatLatihan |
+| 6 | C01 — AkunPengguna | C01 — AkunPengguna |
+
+### 3.2.2 Sequence Diagram
+
+- **Skenario Normal**
+
+<p align="center">
+<img src="./assets/diagram/UC-02-seq.png" alt="Sequence diagram UC-02 skenario normal" width="100%">
+</p>
+<p align="center"><i>Gambar 6. Diagram sekuens UC-02 — Skenario Normal</i></p>
+
+- **Skenario Alternatif 1: Materi Belum Tersedia untuk Kombinasi yang Dipilih**
+
+<p align="center">
+<img src="./assets/diagram/UC-02-seq-alt1.png" alt="Sequence diagram UC-02 alternatif 1 materi belum tersedia" width="100%">
+</p>
+<p align="center"><i>Gambar 7. Diagram sekuens UC-02 — Alternatif 1: Materi Belum Tersedia</i></p>
+
+- **Skenario Alternatif 2: Audio Pengucapan Gagal Diputar**
+
+<p align="center">
+<img src="./assets/diagram/UC-02-seq-alt2.png" alt="Sequence diagram UC-02 alternatif 2 audio gagal diputar" width="100%">
+</p>
+<p align="center"><i>Gambar 8. Diagram sekuens UC-02 — Alternatif 2: Audio Pengucapan Gagal Diputar</i></p>
+
+### 3.2.3 Diagram Kelas
+
+<p align="center">
+<img src="./assets/diagram/UC-02-class.png" alt="Diagram kelas UC-02 Mempelajari Materi" width="100%">
+</p>
+<p align="center"><i>Gambar 9. Diagram kelas UC-02 — Mempelajari Materi</i></p>
 
 ## 3.3 Use Case Mengerjakan Latihan Aksara
  
@@ -343,7 +386,7 @@ Tabel 3.3. Identifikasi Kelas Use Case UC-03
 <img alt="Sequence Diagram UC-03 - Skenario Normal" src="./assets/diagram/UC03SeqNormal.png" width="90%">
 </p>
 <p align="center">
-<i>Gambar X. Sequence Diagram UC-03 - Skenario Normal</i>
+<i>Gambar 10. Diagram sekuens UC-03 - Skenario Normal</i>
 </p>
 
 - **Skenario Alternatif 1: Latihan Mencocokkan Bunyi**
@@ -352,7 +395,7 @@ Tabel 3.3. Identifikasi Kelas Use Case UC-03
 <img alt="Sequence Diagram UC-03 - Latihan Mencocokkan Bunyi" src="./assets/diagram/UC03SeqAlt-1.png" width="90%">
 </p>
 <p align="center">
-<i>Gambar X. Sequence Diagram UC-03 - Latihan Mencocokkan Bunyi</i>
+<i>Gambar 11. Diagram sekuens UC-03 - Latihan Mencocokkan Bunyi</i>
 </p>
 
 - **Skenario Alternatif 2: Latihan Merangkai Aksara**
@@ -361,7 +404,7 @@ Tabel 3.3. Identifikasi Kelas Use Case UC-03
 <img alt="Sequence Diagram UC-03 - Latihan Merangkai Aksara" src="./assets/diagram/UC03SeqAlt-2.png" width="90%">
 </p>
 <p align="center">
-<i>Gambar X. Sequence Diagram UC-03 - Latihan Merangkai Aksara</i>
+<i>Gambar 12. Diagram sekuens UC-03 - Latihan Merangkai Aksara</i>
 </p>
 
 - **Skenario Alternatif 3: Gambar Aksara Kurang Akurat (Mode Menulis)**
@@ -370,7 +413,7 @@ Tabel 3.3. Identifikasi Kelas Use Case UC-03
 <img alt="Sequence Diagram UC-03 - Gambar Aksara Kurang Akurat" src="./assets/diagram/UC03SeqAlt-3.png" width="90%">
 </p>
 <p align="center">
-<i>Gambar X. Sequence Diagram UC-03 - Gambar Aksara Kurang Akurat</i>
+<i>Gambar 13. Diagram sekuens UC-03 - Gambar Aksara Kurang Akurat</i>
 </p>
 
 ### 3.3.3 Diagram Kelas
@@ -379,7 +422,7 @@ Tabel 3.3. Identifikasi Kelas Use Case UC-03
 <img alt="Diagram Kelas Use Case UC-03" src="./assets/diagram/UC03ClassDiagram.png" width="60%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas Use Case UC-03</i>
+<i>Gambar 14. Diagram Kelas Use Case UC-03</i>
 </p>
 
 ## 3.4 Use Case UC-04: Meninjau Progres dan Motivasi
@@ -410,7 +453,7 @@ Tabel 3.4. Identifikasi Kelas Use Case UC-04
 <p align="center">
 <img alt="Gambar 15. Sequence Diagram UC-04 - Skenario Normal" src="./assets/diagram/UC04 Sequence Normal.png" width="100%">
 </p>
-<p align="center"><i>Gambar 15. Sequence Diagram UC-04 - Skenario Normal</i></p>
+<p align="center"><i>Gambar 15. Diagram sekuens UC-04 - Skenario Normal</i></p>
 
 
 - **Skenario Alternatif 1: Belum ada riwayat pembelajaran**
@@ -418,7 +461,7 @@ Tabel 3.4. Identifikasi Kelas Use Case UC-04
 <p align="center">
 <img alt="Gambar 16. Sequence Diagram UC-04 - Skenario Alternatif 1: Belum ada riwayat pembelajaran" src="./assets/diagram/UC04 Alternatif 1.png" width="100%">
 </p>
-<p align="center"><i>Gambar 16. Sequence Diagram UC-04 - Skenario Alternatif 1: Belum ada riwayat pembelajaran</i></p>
+<p align="center"><i>Gambar 16. Diagram sekuens UC-04 - Skenario Alternatif 1: Belum ada riwayat pembelajaran</i></p>
 
 
 - **Skenario Alternatif 2: Melihat papan peringkat kelas**
@@ -426,12 +469,10 @@ Tabel 3.4. Identifikasi Kelas Use Case UC-04
 <p align="center">
 <img alt="Gambar 17. Sequence Diagram UC-04 - Skenario Alternatif 2: Melihat papan peringkat kelas" src="./assets/diagram/UC04 Alternatif 2.png" width="100%">
 </p>
-<p align="center"><i>Gambar 17. Sequence Diagram UC-04 - Skenario Alternatif 2: Melihat papan peringkat kelas</i></p>
+<p align="center"><i>Gambar 17. Diagram sekuens UC-04 - Skenario Alternatif 2: Melihat papan peringkat kelas</i></p>
 
 
 ### 3.4.3 Diagram Kelas
-
-`ProgresController` mengolah data dari `RiwayatLatihan`, `MateriAksara`, dan `MotivasiBelajar`. Untuk papan peringkat, `ProgresController` memeriksa pengaturan kelas pada `KelasBelajar` dan mengambil anggota aktif dari `KeanggotaanKelas`.
 
 <p align="center">
 <img alt="Gambar 18. Diagram Kelas Meninjau Progres dan Motivasi (UC-04)" src="./assets/diagram/UC04 Diagram Kelas.png" width="100%">
@@ -465,44 +506,42 @@ Tabel 3.5.1 Identifikasi Kelas Use Case UC05
 <p align="center">
 <img src="./assets/diagram/UC05_Skenario_Normal.png" alt="Sequence diagram UC-05 skenario normal" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-05 — Skenario Normal</i></p>
+<p align="center"><i>Gambar 19. Diagram sekuens UC-05 — Skenario Normal</i></p>
 
 - **Skenario Alternatif 1: Pelajar Sudah Menjadi Anggota Kelas**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Alternatif1.png" alt="Sequence diagram UC-05 alternatif 1 anggota aktif" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-05 — Alternatif 1: Pelajar Sudah Menjadi Anggota Kelas</i></p>
+<p align="center"><i>Gambar 20. Diagram sekuens UC-05 — Alternatif 1: Pelajar Sudah Menjadi Anggota Kelas</i></p>
 
 - **Skenario Alternatif 2: Tugas Diselesaikan Terlambat**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Alternatif2.png" alt="Sequence diagram UC-05 alternatif 2 penyelesaian terlambat" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-05 — Alternatif 2: Tugas Diselesaikan Terlambat</i></p>
+<p align="center"><i>Gambar 21. Diagram sekuens UC-05 — Alternatif 2: Tugas Diselesaikan Terlambat</i></p>
 
 - **Skenario Alternatif 3: Kode Kelas Tidak Valid**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Alternatif3.png" alt="Sequence diagram UC-05 alternatif 3 kode tidak valid" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-05 — Alternatif 3: Kode Kelas Tidak Valid</i></p>
+<p align="center"><i>Gambar 22. Diagram sekuens UC-05 — Alternatif 3: Kode Kelas Tidak Valid</i></p>
 
 - **Eksepsi: Penyimpanan Hasil Gagal**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Eksepsi1.png" alt="Sequence diagram UC-05 usulan eksepsi transaksi penyimpanan" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-05 — Eksepsi Penyimpanan Hasil Gagal</i></p>
+<p align="center"><i>Gambar 23. Diagram sekuens UC-05 — Eksepsi Penyimpanan Hasil Gagal</i></p>
 
 - **Eksepsi: Akses atau Bukti Penyelesaian Tidak Memenuhi Syarat**
 
 <p align="center">
 <img src="./assets/diagram/UC05_Eksepsi2.png" alt="Sequence diagram UC-05 usulan eksepsi akses dan bukti" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-05 — Eksepsi Akses dan Bukti Penyelesaian</i></p>
-
-`ref UC-02/UC-03` merujuk realisasi pengerjaan materi/latihan. Finalisasi menggunakan bukti penyelesaian di server; kriteria selesai materi masih perlu ditetapkan pada UC-02.
+<p align="center"><i>Gambar 24. Diagram sekuens UC-05 — Eksepsi Akses dan Bukti Penyelesaian</i></p>
 
 ### 3.5.3 Diagram Kelas
 
@@ -510,10 +549,53 @@ Tabel 3.5.1 Identifikasi Kelas Use Case UC05
 <img alt="Class Diagram UC5" src="./assets/diagram/ClassDiagram_UC5.png" width="100%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas Mengikuti Pembelajaran Kelas </i>
+<i>Gambar 25. Diagram Kelas Mengikuti Pembelajaran Kelas </i>
 </p>
 
 <br>
+
+## 3.6 Use Case Memperbaharui Materi
+
+**ID Use Case:** UC-06
+**Nama Use Case:** Memperbaharui Materi
+
+### 3.6.1 Identifikasi Kelas
+
+Tabel 3.6.1 Identifikasi Kelas Use Case UC-06
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| 1 | C09 — HalamanKelolaMateri | C09 — HalamanKelolaMateri |
+| 2 | C17 — MateriController | C17 — MateriController |
+| 3 | C02 — MateriAksara | C02 — MateriAksara |
+| 4 | C21 — KontenMateri | C21 — KontenMateri |
+| 5 | C01 — AkunPengguna | C01 — AkunPengguna |
+
+
+### 3.6.2 Sequence Diagram
+
+- **Skenario Normal**
+
+<p align="center">
+<img src="./assets/diagram/UC-06-seq.png" alt="Sequence diagram UC-06 skenario normal" width="100%">
+</p>
+<p align="center"><i>Gambar 26. Diagram sekuens UC-06 — Skenario Normal</i></p>
+
+- **Skenario Alternatif 1: Penambahan Materi Gagal**
+
+<p align="center">
+<img src="./assets/diagram/UC-06-seq-alt1.png" alt="Sequence diagram UC-06 alternatif 1 penambahan materi gagal" width="100%">
+</p>
+<p align="center"><i>Gambar 27. Diagram sekuens UC-06 — Alternatif 1: Penambahan Materi Gagal</i></p>
+
+
+### 3.6.3 Diagram Kelas
+
+<p align="center">
+<img src="./assets/diagram/UC-06-class.png" alt="Diagram kelas UC-06 Memperbaharui Materi" width="100%">
+</p>
+<p align="center"><i>Gambar 28. Diagram kelas UC-06 — Memperbaharui Materi</i></p>
+
 
 ## 3.7 Use Case UC-07: Menyiapkan Pembelajaran Kelas
 
@@ -541,7 +623,7 @@ Tabel 3.7. Identifikasi Kelas Use Case UC-7
 <p align="center">
 <img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Normal" src="./assets/diagram/SkenarioNormal UC_07-Page-1.drawio.png" width="100%">
 </p>
-<p align="center"><i>Gambar xx. Sequence Diagram UC-07 - Skenario Normal</i></p>
+<p align="center"><i>Gambar 29. Diagram sekuens UC-07 - Skenario Normal</i></p>
 
 
 - **Skenario Alternatif 1: Mengganti Kode Kelas**
@@ -549,7 +631,7 @@ Tabel 3.7. Identifikasi Kelas Use Case UC-7
 <p align="center">
 <img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 1: Mengganti Kode Kelas" src="./assets/diagram/SkenarioAlt01 UC_07.drawio.png" width="100%">
 </p>
-<p align="center"><i>Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 1: Mengganti Kode Kelas</i></p>
+<p align="center"><i>Gambar 30. Diagram sekuens UC-07 - Skenario Alternatif 1: Mengganti Kode Kelas</i></p>
 
 
 - **Skenario Alternatif 2: Mengeluarkan Anggota Kelas**
@@ -557,21 +639,21 @@ Tabel 3.7. Identifikasi Kelas Use Case UC-7
 <p align="center">
 <img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 2: Mengeluarkan Anggota Kelas" src="./assets/diagram/SkenarioAlt2 UC_07.drawio.png" width="100%">
 </p>
-<p align="center"><i>Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 2: Mengeluarkan Anggota Kelas</i></p>
+<p align="center"><i>Gambar 31. Diagram sekuens UC-07 - Skenario Alternatif 2: Mengeluarkan Anggota Kelas</i></p>
 
 - **Skenario Alternatif 3: Mengaktifkan Papan Peringkat Kelas**
 
 <p align="center">
 <img alt="Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 3: Mengaktifkan Papan Peringkat Kelas" src="./assets/diagram/SkenarioAlt03 UC_07.drawio.png" width="100%">
 </p>
-<p align="center"><i>Gambar xx. Sequence Diagram UC-07 - Skenario Alternatif 2: Mengaktifkan Papan Peringkat Kelas</i></p>
+<p align="center"><i>Gambar 32. Diagram sekuens UC-07 - Skenario Alternatif 3: Mengaktifkan Papan Peringkat Kelas</i></p>
 
 ### 3.7.3 Diagram Kelas
 
 <p align="center">
 <img alt="Gambar xx. Diagram Kelas Menyiapkan Pembelajaran Kelas (UC-07)" src="./assets/diagram/DiagramKelas UC_07.drawio.png" width="100%">
 </p>
-<p align="center"><i>Gambar xx. Diagram Kelas Menyiapkan Pembelajaran Kelas (UC-07)</i></p>
+<p align="center"><i>Gambar 33. Diagram Kelas Menyiapkan Pembelajaran Kelas (UC-07)</i></p>
 
 ## 3.8 Use Case UC-08: Memantau dan Menindaklanjuti Progres
 
@@ -599,7 +681,7 @@ Tabel 3.8. Identifikasi Kelas Use Case UC-08
 <p align="center">
 <img alt="Gambar 32. Sequence Diagram UC-08 - Skenario Normal" src="./assets/diagram/UC08 Normal.png" width="100%">
 </p>
-<p align="center"><i>Gambar 32. Sequence Diagram UC-08 - Skenario Normal</i></p>
+<p align="center"><i>Gambar 34. Diagram sekuens UC-08 - Skenario Normal</i></p>
 
 
 - **Skenario Alternatif 1: Belum ada hasil belajar anggota**
@@ -607,7 +689,7 @@ Tabel 3.8. Identifikasi Kelas Use Case UC-08
 <p align="center">
 <img alt="Gambar 33. Sequence Diagram UC-08 - Skenario Alternatif 1: Belum ada hasil belajar anggota" src="./assets/diagram/UC08 Alternatif 1.png" width="100%">
 </p>
-<p align="center"><i>Gambar 33. Sequence Diagram UC-08 - Skenario Alternatif 1: Belum ada hasil belajar anggota</i></p>
+<p align="center"><i>Gambar 35. Diagram sekuens UC-08 - Skenario Alternatif 1: Belum ada hasil belajar anggota</i></p>
 
 
 - **Skenario Alternatif 2: Anggota yang dipilih bukan anggota aktif kelas**
@@ -615,17 +697,15 @@ Tabel 3.8. Identifikasi Kelas Use Case UC-08
 <p align="center">
 <img alt="Gambar 34. Sequence Diagram UC-08 - Skenario Alternatif 2: Anggota yang dipilih bukan anggota aktif kelas" src="./assets/diagram/UC08 Alternatif 2.png" width="100%">
 </p>
-<p align="center"><i>Gambar 34. Sequence Diagram UC-08 - Skenario Alternatif 2: Anggota yang dipilih bukan anggota aktif kelas</i></p>
+<p align="center"><i>Gambar 36.Diagram sekuens UC-08 - Skenario Alternatif 2: Anggota yang dipilih bukan anggota aktif kelas</i></p>
 
 
 ### 3.8.3 Diagram Kelas
 
-`KelasController` meminta `ProgresController` mengolah riwayat anggota aktif, lalu menampilkan hasilnya kepada Pengajar melalui `HalamanKelolaKelas`. Pengajar dapat membuka detail setiap anggota aktif. Akses ke data anggota dicek dengan `KelasBelajar` (kelas milik Pengajar) dan `KeanggotaanKelas` (keanggotaan aktif). Pada skenario alternatif 2, anggota yang bukan anggota aktif ditolak dan datanya tidak ditampilkan. Umpan balik dan rekomendasi dari Pengajar tidak dirancang pada tahap ini, karena belum ada kelas untuk menyimpannya dan keputusan kelompok soal pesan antarpengguna belum diambil.
-
 <p align="center">
 <img alt="Gambar 35. Diagram Kelas Memantau dan Menindaklanjuti Progres (UC-08)" src="./assets/diagram/UC08 Diagram Kelas.png" width="100%">
 </p>
-<p align="center"><i>Gambar 35. Diagram Kelas Memantau dan Menindaklanjuti Progres (UC-08)</i></p>
+<p align="center"><i>Gambar 37. Diagram Kelas Memantau dan Menindaklanjuti Progres (UC-08)</i></p>
 
 
 
@@ -652,14 +732,14 @@ Tabel 3.9.1 Identifikasi Kelas Use Case UC-09
 <p align="center">
 <img src="./assets/diagram/UC09_Skenario_Normal.png" alt="Sequence diagram UC-09 skenario normal" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-09 — Skenario Normal</i></p>
+<p align="center"><i>Gambar 38. Diagram sekuens UC-09 — Skenario Normal</i></p>
 
 - **Skenario Alternatif 1: Feedback Gagal Terkirim**
  
 <p align="center">
 <img src="./assets/diagram/UC09_Alternatif1.png" alt="Sequence diagram UC-09 alternatif 1 feedback gagal terkirim" width="100%">
 </p>
-<p align="center"><i>Diagram sekuens UC-09 — Alternatif 1: Feedback Gagal Terkirim</i></p>
+<p align="center"><i>Gambar 39. Diagram sekuens UC-09 — Alternatif 1: Feedback Gagal Terkirim</i></p>
 
 ### 3.9.3 Diagram Kelas
  
@@ -667,32 +747,52 @@ Tabel 3.9.1 Identifikasi Kelas Use Case UC-09
 <img alt="Class Diagram UC09" src="./assets/diagram/ClassDiagram_UC09.png" width="100%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas Menyampaikan Feedback</i>
+<i>Gambar 40. Diagram Kelas Menyampaikan Feedback</i>
 </p>
 
----
+--- 
 
 # BAB 4: Diagram Kelas Keseluruhan
 
 ## 4.1 Diagram Kelas
 
-**Bagian ini diisi dengan diagram kelas keseluruhan.**
-
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh-class_diargam.png" width="35%">
+<img alt="Diagram Kelas Keseluruhan" src="./assets/diagram/ClassDiagram_Keseluruhan.png" width="100%">
 </p>
 <p align="center">
-<i>Gambar 4.1. Diagram Kelas Perancangan Keseluruhan [Nama P/L]</i>
+<i>Gambar 41. Diagram Kelas Perancangan Keseluruhan Ngaksara</i>
 </p>
 
 Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| *[C01]* | *[Nama kelas]* | *[Daftar atribut]* | *[Daftar metode/operasi]* |
-| *[C02]* | *[Nama kelas]* | *[Daftar atribut]* | *[Daftar metode/operasi]* |
-| *[C03]* | *[Nama kelas]* | *[Daftar atribut]* | *[Daftar metode/operasi]* |
-| *...* | *...* | *...* | *...* |
+| C01 | AkunPengguna | `- idAkun: Integer`<br>`- email: String`<br>`- username: String`<br>`- passwordHash: String`<br>`- peran: String`<br>`- namaTampilan: String` | `+ buatAkunBaru(data: DataPendaftaran): HasilOperasi`<br>`+ getProfil(): Data`<br>`+ verifikasiHakAkses(aksi: String): Boolean`<br>`+ getDetailAkun(): Data` |
+| C02 | MateriAksara | `- idMateri: Integer`<br>`- namaMateri: String`<br>`- jenisAksara: JenisAksara`<br>`- tingkatKesulitan: Integer`<br>`- statusPublikasi: StatusPublikasi` | `+ ambilMetadata(): MetadataMateri`<br>`+ ambilTargetLatihan(mode: ModeLatihan): TargetLatihan`<br>`+ perbaruiData(data: MetadataMateri): HasilOperasi`<br>`+ simpan(data: MetadataMateri): HasilOperasi`<br>`+ ambilDaftarMateri(filter: FilterMateri): List<MateriAksara>`<br>`+ ambilMateriRekomendasi(penguasaan: Data): List<MateriAksara>` |
+| C03 | RiwayatLatihan | `- idRiwayat: Integer`<br>`- idPelajar: Integer`<br>`- idMateri: Integer`<br>`- mode: ModeLatihan?`<br>`- skor: Decimal?`<br>`- tanggalPengerjaan: DateTime`<br>`- status: String`<br>`- idTugas: Integer?`<br>`- idKomponen: Integer?`<br>`- modeAktivitas: String`<br>`- waktuSelesai: DateTime?` | `+ simpanHasil(hasil: HasilLatihan): HasilOperasi`<br>`+ catatAktivitas(aktivitas: AktivitasBelajar): HasilOperasi`<br>`+ ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>`<br>`+ ambilBuktiPenyelesaian(idPelajar: Integer, idTugas: Integer): BuktiPenyelesaian`<br>`+ ambilStatusProgres(idPelajar: Integer): Data`<br>`+ hitungPenguasaan(idPelajar: Integer): Data`<br>`+ ambilRiwayatPelajar(idPelajar: Integer): List<RiwayatLatihan>`<br>`+ hitungPolaKesalahan(idPelajar: Integer): Data` |
+| C04 | DataFeedback | `- idFeedback: Integer`<br>`- idAkun: Integer`<br>`- kategori: KategoriFeedback`<br>`- pesan: String`<br>`- waktuKirim: DateTime`<br>`- status: StatusFeedback` | `+ simpan(data: MasukanFeedback): HasilOperasi`<br>`+ perbaruiStatus(status: StatusFeedback): HasilOperasi` |
+| C05 | HalamanPendaftaran | `- formInputData: DataPendaftaran`<br>`- statusPersetujuan: Boolean` | `+ tampilkanTnC(): void`<br>`+ kirimPendaftaran(data: DataPendaftaran): void`<br>`+ tampilkanOpsiPeran(): void` |
+| C06 | HalamanLogin | `- emailInput: String`<br>`- statusTampilan: String` | `+ kirimKredensial(email: String, password: String): void`<br>`+ tampilkanStatusLogin(hasil: HasilOperasi): void` |
+| C07 | HalamanUtama | `- profil: Profil`<br>`- menuTersedia: List<String>` | `+ tampilkanMenu(peran: Peran): void`<br>`+ pilihMenu(kode: String): void` |
+| C08 | HalamanLatihan | `- modeLatihan: ModeLatihan`<br>`- jawabanInput: JawabanLatihan`<br>`- goresan: List<Goresan>`<br>`- hasilTampilan: HasilPenilaian?` | `+ pilihModeLatihan(mode: ModeLatihan): void`<br>`+ rekamGoresan(titik: Titik): void`<br>`+ kirimJawaban(jawaban: JawabanLatihan): void`<br>`+ tampilkanHasil(hasil: HasilPenilaian): void` |
+| C09 | HalamanKelolaMateri | `- daftarMateri: List<MetadataMateri>`<br>`- detailInput: DataKonten`<br>`- fileMateriInput: Berkas?` | `+ unggahFileMateri(berkas: Berkas, detail: DataKonten): void`<br>`+ suntingMateri(idMateri: Integer): void`<br>`+ tampilkanStatus(hasil: HasilOperasi): void`<br>`+ tampilkanDaftarMateri(data: List<MateriAksara>): void` |
+| C10 | HalamanFeedback | `- kategoriFeedback: KategoriFeedback`<br>`- pesanFeedback: String`<br>`- statusKirim: StatusKirim` | `+ kirimFeedback(data: MasukanFeedback): void`<br>`+ tampilkanKonfirmasi(hasil: HasilOperasi): void`<br>`+ tampilkanFormFeedback(): void` |
+| C11 | HalamanKelasPelajar | `- kodeKelasInput: String`<br>`- tugasAktif: Integer?`<br>`- detailTugas: DetailTugas?`<br>`- idKelasAktif: Integer` | `+ kirimKodeBergabung(kode: String): void`<br>`+ bukaTugas(idKelas: Integer, idTugas: Integer): void`<br>`+ kerjakanTugas(idKelas: Integer, idTugas: Integer): void`<br>`- finalisasiTugas(idKelas: Integer, idTugas: Integer): HasilOperasi`<br>`+ bukaKelas(idKelas: Integer): void`<br>`- tampilkanPesan(pesan: String): void`<br>`- tampilkanTugas(data: Data): void`<br>`- tampilkanDetail(data: Data): void`<br>`- tampilkanHasil(data: Data): void`<br>`+ periksaPenyelesaian(idKelas: Integer, idTugas: Integer): void` |
+| C12 | HalamanKelolaKelas | `- idKelasTerpilih: Integer?`<br>`- daftarAnggota: List<Profil>`<br>`- ringkasanProgres: RingkasanProgres?`<br>`- pesanInput: String` | `+ buatKelas(data: DataKelas): void`<br>`+ buatTugas(data: DataTugas): void`<br>`+ pilihAnggota(idPelajar: Integer): void`<br>`+ kirimUmpanBalik(data: DataUmpanBalik): void`<br>`+ kelolaAnggota(idKelas: Integer): void`<br>`+ aturScoreboard(idKelas: Integer, aktif: Boolean): void`<br>`+ tampilkanAnggota(data: List<Profil>): void`<br>`+ tampilkanProgres(data: RingkasanProgres): void` |
+| C13 | HalamanMateri | `- materiTerpilih: Integer?`<br>`- statusTampilan: String`<br>`- statusAudio: String` | `+ pilihMateri(idMateri: Integer): void`<br>`+ tampilkanIsiMateri(paket: PaketMateri): void`<br>`+ putarAudioPengucapan(sumber: ReferensiBerkas): void` |
+| C14 | HalamanProgres | `- filterPeriode: Periode`<br>`- dataTampilan: RingkasanProgres?`<br>`- idKelasTerpilih: Integer?` | `+ tampilkanProgres(data: RingkasanProgres): void`<br>`+ pilihPeriode(periode: Periode): void`<br>`+ tampilkanScoreboard(data: List<Peringkat>): void` |
+| C15 | OtentikasiController | `- konteks: KonteksPermintaan` | `+ verifikasiFormatData(data: DataPendaftaran): HasilValidasi`<br>`- hashPassword(password: String): String`<br>`+ simpanAkun(data: DataPendaftaran): HasilOperasi`<br>`+ validasiLogin(email: String, password: String): HasilOperasi` |
+| C16 | LatihanController | `- konteks: KonteksPermintaan` | `+ siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan`<br>`+ nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian`<br>`+ simpanHasil(hasil: HasilLatihan): HasilOperasi` |
+| C17 | MateriController | `- konteks: KonteksPermintaan` | `+ ambilDaftarMateri(filter: FilterMateri): List<MetadataMateri>`<br>`+ muatPaketMateri(idMateri: Integer, versiAplikasi: String): PaketMateri`<br>`+ ambilAudioPengucapan(idMateri: Integer): HasilBerkas`<br>`+ ambilKontenLatihan(idMateri: Integer, mode: ModeLatihan): TargetLatihan`<br>`+ tambahMateri(data: DataKonten, berkas: Berkas): HasilOperasi`<br>`+ perbaruiMateri(idMateri: Integer, data: DataKonten): HasilOperasi`<br>`+ validasiFormatFile(berkas: Berkas): HasilValidasi`<br>`+ hapusMateri(idMateri: Integer): HasilOperasi` |
+| C18 | FeedbackController | `- konteks: KonteksPermintaan` | `+ validasiFeedback(data: MasukanFeedback): HasilValidasi`<br>`+ simpanFeedback(data: MasukanFeedback): HasilOperasi`<br>`+ kirimKonfirmasi(hasil: HasilOperasi): Konfirmasi` |
+| C19 | ProgresController | `- konteks: KonteksPermintaan` | `+ ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>`<br>`+ hitungProgres(idPelajar: Integer): RingkasanProgres`<br>`+ siapkanRekomendasi(idPelajar: Integer): List<MetadataMateri>`<br>`+ ambilScoreboard(idKelas: Integer): HasilScoreboard`<br>`+ agregasiProgres(anggotaAktif: List<Integer>, periode: Periode): RingkasanProgres`<br>`+ hitungPolaKesalahan(idPelajar: Integer): Data` |
+| C20 | KelasController | `- konteks: KonteksPermintaan`<br>`- idPelajar: Integer`<br>`- idKelas: Integer` | `+ validasiKodeBergabung(kode: String): HasilOperasi`<br>`+ ambilTugasAktif(idKelas: Integer): HasilOperasi`<br>`+ simpanPengumpulan(idKelas: Integer, idTugas: Integer): HasilOperasi`<br>`+ buatKelas(data: DataKelas): HasilOperasi`<br>`+ terbitkanTugas(idKelas: Integer, data: DataTugas): HasilOperasi`<br>`+ ambilDaftarAnggota(idKelas: Integer): List<Profil>`<br>`+ kirimUmpanBalik(idKelas: Integer, data: DataUmpanBalik): HasilOperasi`<br>`+ bukaTugas(idKelas: Integer, idTugas: Integer): HasilOperasi`<br>`+ hasilkanKodeUnik(): String`<br>`+ gabungkanPelajar(idKelas: Integer): HasilOperasi`<br>`+ kelolaAnggota(idKelas: Integer, idPelajar: Integer, status: String): HasilOperasi`<br>`+ ambilKelasPengajar(): List<KelasBelajar>`<br>`+ gantiKodeKelas(idKelas: Integer): HasilOperasi`<br>`+ aturScoreboard(idKelas: Integer, aktif: Boolean): HasilOperasi`<br>`+ ambilProgresAnggota(idKelas: Integer, idPelajar: Integer): Data` |
+| C21 | KontenMateri | `- idKonten: Integer`<br>`- idMateri: Integer`<br>`- bentukAksara: String`<br>`- aturan: String`<br>`- contoh: String`<br>`- pathAudio: String?`<br>`- versiKonten: String`<br>`- versiAplikasiMinimum: String` | `+ ambilKonten(versiAplikasi: String): PaketMateri`<br>`+ ambilAudio(): HasilBerkas`<br>`+ perbaruiKonten(data: DataKonten): HasilOperasi`<br>`+ arsipkanVersi(): HasilOperasi`<br>`+ simpanKonten(data: DataKonten): HasilOperasi` |
+| C22 | MotivasiBelajar | `- idPelajar: Integer`<br>`- streak: Integer`<br>`- poin: Integer`<br>`- tanggalAktifTerakhir: Date?`<br>`- daftarBadge: List<String>` | `+ perbaruiStreak(tanggal: Date): void`<br>`+ tambahPoin(idAktivitas: Integer, nilai: Integer): HasilOperasi`<br>`+ berikanBadge(kode: String): HasilOperasi`<br>`+ susunScoreboard(anggotaAktif: List<Profil>): List<Peringkat>`<br>`+ ambilMotivasi(idPelajar: Integer): Data`<br>`+ ambilPoinKelas(anggotaAktif: List<Integer>): List<Peringkat>` |
+| C23 | KelasBelajar | `- idKelas: Integer`<br>`- nama: String`<br>`- pemilikId: Integer`<br>`- kodeBergabung: String`<br>`- status: String`<br>`- statusScoreboard: Boolean` | `+ validasiKode(kode: String): KelasBelajar?`<br>`+ gabungkanPelajar(idPelajar: Integer): HasilOperasi`<br>`+ gantiKodeBergabung(idPengajar: Integer): HasilOperasi`<br>`+ finalisasiTugas(idPelajar: Integer, idTugas: Integer, bukti: BuktiPenyelesaian): HasilOperasi`<br>`+ periksaPemilik(idPengajar: Integer): Boolean`<br>`+ ambilDaftarTugas(idPelajar: Integer): HasilOperasi`<br>`+ bukaTugas(idPelajar: Integer, idTugas: Integer): HasilOperasi`<br>`+ simpan(data: DataKelas): HasilOperasi`<br>`+ buatKodeBergabung(): String`<br>`+ daftarKelasPengajar(idPengajar: Integer): List<KelasBelajar>`<br>`+ aturScoreboard(aktif: Boolean): HasilOperasi` |
+| C24 | KeanggotaanKelas | `- idKeanggotaan: Integer`<br>`- idKelas: Integer`<br>`- idPelajar: Integer`<br>`- status: String` | `+ simpanKeanggotaan(idPelajar: Integer, idKelas: Integer): HasilOperasi`<br>`+ periksaAkses(idPelajar: Integer, idKelas: Integer): Boolean`<br>`+ daftarAnggotaAktif(idKelas: Integer): List<KeanggotaanKelas>`<br>`+ ubahStatus(status: String): HasilOperasi`<br>`- simpanAtomik(): HasilOperasi`<br>`+ daftarAnggota(idKelas: Integer): List<KeanggotaanKelas>` |
+| C25 | TugasKelas | `- idTugas: Integer`<br>`- idKelas: Integer`<br>`- instruksi: String`<br>`- tenggat: DateTime`<br>`- status: StatusTugas`<br>`- komponenTugas: List<KomponenTugas>` | `+ ambilTugasAktif(idKelas: Integer): List`<br>`+ terbitkan(): HasilOperasi`<br>`+ verifikasiDanSimpan(idKelas: Integer, idTugas: Integer, idPelajar: Integer, bukti: BuktiPenyelesaian): HasilOperasi`<br>`+ ambilStatus(idPelajar: Integer, daftarTugas: List): List`<br>`+ ambilDetail(idKelas: Integer, idTugas: Integer): Data?`<br>`- periksaKomponenWajib(bukti: BuktiPenyelesaian): HasilVerifikasi`<br>`+ simpan(data: DataTugas): HasilOperasi` |
+| C26 | PenyelesaianTugas | `- idPenyelesaian: Integer`<br>`- idTugas: Integer`<br>`- idPelajar: Integer`<br>`- waktuKumpul: DateTime`<br>`- status: String` | `+ simpanPengumpulan(idPelajar: Integer, idTugas: Integer, waktuSelesai: DateTime, tenggat: DateTime): HasilOperasi`<br>`- tentukanStatusKetepatan(waktuSelesai: DateTime, tenggat: DateTime): String`<br>`+ ambilStatus(idPelajar: Integer, daftarTugas: List): List`<br>`- simpanAtomik(): HasilOperasi`<br>`- batalkanTransaksi(): void` |
 
 <br>
 
