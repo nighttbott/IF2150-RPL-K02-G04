@@ -910,7 +910,7 @@ Tabel 5.2.2. Atribut Kelas MateriAksara
 
 **Nama Kelas:** MateriAksara  
 **Nama Operasi:** `ambilDaftarMateri(filter: FilterMateri): List<MateriAksara>`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-040
 
 ```text
 FUNCTION ambilDaftarMateri(filter: FilterMateri): List<MateriAksara>
@@ -933,7 +933,7 @@ Tabel 5.2.3. Query Operasi ambilDaftarMateri
 
 **Nama Kelas:** MateriAksara  
 **Nama Operasi:** `ambilMateriRekomendasi(penguasaan: Data): List<MateriAksara>`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-041
 
 ```text
 FUNCTION ambilMateriRekomendasi(penguasaan: Data): List<MateriAksara>
@@ -963,7 +963,7 @@ Tabel 5.2.4. Query Operasi ambilMateriRekomendasi
 
 **Nama Kelas:** MateriAksara  
 **Nama Operasi:** `ambilTargetLatihan(mode: ModeLatihan): TargetLatihan`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-042
 
 ```text
 FUNCTION ambilTargetLatihan(mode: ModeLatihan): TargetLatihan
@@ -990,7 +990,7 @@ Tabel 5.2.5. Query Operasi ambilTargetLatihan
 
 **Nama Kelas:** MateriAksara  
 **Nama Operasi:** `simpan(data: MetadataMateri): HasilOperasi`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-043
 
 ```text
 FUNCTION simpan(data: MetadataMateri): HasilOperasi
@@ -1019,7 +1019,7 @@ Tabel 5.2.6. Query Operasi simpan
 
 **Nama Kelas:** MateriAksara  
 **Nama Operasi:** `perbaruiData(data: MetadataMateri): HasilOperasi`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-044
 
 ```text
 FUNCTION perbaruiData(data: MetadataMateri): HasilOperasi
@@ -1083,7 +1083,7 @@ Tabel 5.9.2. Atribut Kelas HalamanKelolaMateri
 
 **Nama Kelas:** HalamanKelolaMateri  
 **Nama Operasi:** `unggahFileMateri(berkas: Berkas, detail: DataKonten): void`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-045
 
 ```text
 PROCEDURE unggahFileMateri(berkas: Berkas, detail: DataKonten)
@@ -1111,7 +1111,7 @@ PROCEDURE unggahFileMateri(berkas: Berkas, detail: DataKonten)
 
 **Nama Kelas:** HalamanKelolaMateri  
 **Nama Operasi:** `suntingMateri(idMateri: Integer): void`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-046
 
 ```text
 PROCEDURE suntingMateri(idMateri: Integer)
@@ -1160,7 +1160,7 @@ Tabel 5.13.2. Atribut Kelas HalamanMateri
 
 **Nama Kelas:** HalamanMateri  
 **Nama Operasi:** `tampilkanIsiMateri(paket: PaketMateri): void`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-047
 
 ```text
 PROCEDURE tampilkanIsiMateri(paket: PaketMateri)
@@ -1189,7 +1189,7 @@ PROCEDURE tampilkanIsiMateri(paket: PaketMateri)
 
 **Nama Kelas:** HalamanMateri  
 **Nama Operasi:** `putarAudioPengucapan(sumber: ReferensiBerkas): void`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-048
 
 ```text
 PROCEDURE putarAudioPengucapan(sumber: ReferensiBerkas)
@@ -1245,7 +1245,7 @@ Tabel 5.17.2. Atribut Kelas MateriController
 
 **Nama Kelas:** MateriController  
 **Nama Operasi:** `ambilDaftarMateri(filter: FilterMateri): List<MetadataMateri>`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-049
 
 ```text
 FUNCTION ambilDaftarMateri(filter: FilterMateri): List<MetadataMateri>
@@ -1269,7 +1269,7 @@ FUNCTION ambilDaftarMateri(filter: FilterMateri): List<MetadataMateri>
 
 **Nama Kelas:** MateriController  
 **Nama Operasi:** `muatPaketMateri(idMateri: Integer, versiAplikasi: String): PaketMateri`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-050
 
 ```text
 FUNCTION muatPaketMateri(idMateri: Integer, versiAplikasi: String): PaketMateri
@@ -1291,7 +1291,7 @@ FUNCTION muatPaketMateri(idMateri: Integer, versiAplikasi: String): PaketMateri
 
 **Nama Kelas:** MateriController  
 **Nama Operasi:** `ambilAudioPengucapan(idMateri: Integer): HasilBerkas`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-051
 
 ```text
 FUNCTION ambilAudioPengucapan(idMateri: Integer): HasilBerkas
@@ -1305,7 +1305,7 @@ FUNCTION ambilAudioPengucapan(idMateri: Integer): HasilBerkas
 
 **Nama Kelas:** MateriController  
 **Nama Operasi:** `validasiFormatFile(berkas: Berkas): HasilValidasi`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-052
 
 ```text
 FUNCTION validasiFormatFile(berkas: Berkas): HasilValidasi
@@ -1332,7 +1332,7 @@ FUNCTION validasiFormatFile(berkas: Berkas): HasilValidasi
 
 **Nama Kelas:** MateriController  
 **Nama Operasi:** `tambahMateri(data: DataKonten, berkas: Berkas): HasilOperasi`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-053
 
 ```text
 FUNCTION tambahMateri(data: DataKonten, berkas: Berkas): HasilOperasi
@@ -1370,7 +1370,7 @@ FUNCTION tambahMateri(data: DataKonten, berkas: Berkas): HasilOperasi
 
 **Nama Kelas:** MateriController  
 **Nama Operasi:** `perbaruiMateri(idMateri: Integer, data: DataKonten): HasilOperasi`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-054
 
 ```text
 FUNCTION perbaruiMateri(idMateri: Integer, data: DataKonten): HasilOperasi
@@ -1397,7 +1397,7 @@ FUNCTION perbaruiMateri(idMateri: Integer, data: DataKonten): HasilOperasi
 
 **Nama Kelas:** MateriController  
 **Nama Operasi:** `hapusMateri(idMateri: Integer): HasilOperasi`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-055
 
 ```text
 FUNCTION hapusMateri(idMateri: Integer): HasilOperasi
@@ -1458,7 +1458,7 @@ Tabel 5.21.2. Atribut Kelas KontenMateri
 
 **Nama Kelas:** KontenMateri  
 **Nama Operasi:** `ambilKonten(versiAplikasi: String): PaketMateri`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-056
 
 ```text
 FUNCTION ambilKonten(versiAplikasi: String): PaketMateri
@@ -1484,7 +1484,7 @@ Tabel 5.21.3. Query Operasi ambilKonten
 
 **Nama Kelas:** KontenMateri  
 **Nama Operasi:** `simpanKonten(data: DataKonten): HasilOperasi`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-057
 
 ```text
 FUNCTION simpanKonten(data: DataKonten): HasilOperasi
@@ -1507,7 +1507,7 @@ Tabel 5.21.4. Query Operasi simpanKonten
 
 **Nama Kelas:** KontenMateri  
 **Nama Operasi:** `perbaruiKonten(data: DataKonten): HasilOperasi`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-058
 
 ```text
 FUNCTION perbaruiKonten(data: DataKonten): HasilOperasi
@@ -1539,7 +1539,7 @@ Tabel 5.21.5. Query Operasi perbaruiKonten
 
 **Nama Kelas:** KontenMateri  
 **Nama Operasi:** `arsipkanVersi(): HasilOperasi`  
-**ID Algoritma:** Algo-...
+**ID Algoritma:** Algo-059
 
 ```text
 FUNCTION arsipkanVersi(): HasilOperasi
