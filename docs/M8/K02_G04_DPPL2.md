@@ -1023,7 +1023,6 @@ Tabel 5.2.6. Query Operasi simpan
 
 ```text
 FUNCTION perbaruiData(data: MetadataMateri): HasilOperasi
-  validasi nama, jenisAksara, tingkatKesulitan seperti Algo-043
   jumlah ← jalankan Q-044.1 (kecuali baris milik this.idMateri)
   IF jumlah > 0 THEN
     RETURN HasilOperasi.gagal("DUPLIKAT", "Materi dengan nama, jenis, dan tingkat sama sudah ada")
@@ -1098,7 +1097,7 @@ PROCEDURE unggahFileMateri(berkas: Berkas, detail: DataKonten)
 
   fileMateriInput ← berkas
   detailInput ← detail
-  hasil ← MateriController.tambahMateri(detailInput, fileMateriInput)   // validasi server di dalamnya (Algo-052)
+  hasil ← MateriController.tambahMateri(detailInput, fileMateriInput)   // validasi server di dalamnya
 
   tampilkanStatus(hasil)
   IF hasil.berhasil THEN
@@ -1219,6 +1218,207 @@ PROCEDURE putarAudioPengucapan(sumber: ReferensiBerkas)
 ## 5.16 Kelas LatihanController
 
 ## 5.17 Kelas MateriController
+
+**Nama Kelas:** MateriController  
+**ID Kelas:** C17
+
+Tabel 5.17.1. Operasi Kelas MateriController
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `ambilDaftarMateri(filter: FilterMateri): List<MetadataMateri>` | public | Mengambil daftar materi dari `MateriAksara`, mengubahnya menjadi `MetadataMateri`, dan melampirkan status progres pelajar. |
+| `muatPaketMateri(idMateri: Integer, versiAplikasi: String): PaketMateri` | public | Menyusun `PaketMateri` (isi materi, versi, status progres) untuk layar Detail Materi. |
+| `ambilAudioPengucapan(idMateri: Integer): HasilBerkas` | public | Mengambil berkas audio pengucapan materi dari `KontenMateri`. |
+| `ambilKontenLatihan(idMateri: Integer, mode: ModeLatihan): TargetLatihan` | public | Meneruskan permintaan ke `MateriAksara.ambilTargetLatihan(mode)` untuk UC-03. |
+| `tambahMateri(data: DataKonten, berkas: Berkas): HasilOperasi` | public | Menambah materi baru (metadata + konten) dari berkas yang diunggah. |
+| `perbaruiMateri(idMateri: Integer, data: DataKonten): HasilOperasi` | public | Memperbarui metadata dan/atau konten materi. |
+| `validasiFormatFile(berkas: Berkas): HasilValidasi` | public | Memeriksa ekstensi, tipe, ukuran, dan isi berkas materi. |
+| `hapusMateri(idMateri: Integer): HasilOperasi` | public | Menghapus materi (penghapusan lunak). |
+
+Tabel 5.17.2. Atribut Kelas MateriController
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `konteks` | private | KonteksPermintaan |
+
+### 5.17.1 Algoritma/Query
+
+**Nama Kelas:** MateriController  
+**Nama Operasi:** `ambilDaftarMateri(filter: FilterMateri): List<MetadataMateri>`  
+**ID Algoritma:** Algo-...
+
+```text
+FUNCTION ambilDaftarMateri(filter: FilterMateri): List<MetadataMateri>
+  IF filter.termasukDraf = true AND NOT AkunPengguna.verifikasiHakAkses("kelola_materi") THEN
+    filter.termasukDraf ← false                     // pelajar tidak boleh melihat draf
+
+  daftarEntitas ← MateriAksara.ambilDaftarMateri(filter)              
+  progres ← null
+  IF konteks.peran = "PELAJAR" THEN
+    progres ← RiwayatLatihan.ambilStatusProgres(konteks.idPengguna)     // idMateri → status
+
+  hasil ← list kosong
+  FOR EACH m IN daftarEntitas DO
+    meta ← m.ambilMetadata()
+    meta.statusProgres ← IF progres = null THEN null ELSE progres[m.idMateri] ?? "BELUM"
+    hasil.tambah(meta)
+  RETURN hasil
+```
+
+### 5.17.2 Algoritma/Query
+
+**Nama Kelas:** MateriController  
+**Nama Operasi:** `muatPaketMateri(idMateri: Integer, versiAplikasi: String): PaketMateri`  
+**ID Algoritma:** Algo-...
+
+```text
+FUNCTION muatPaketMateri(idMateri: Integer, versiAplikasi: String): PaketMateri
+  materi ← MateriAksara.find(idMateri)                    
+  IF materi = null OR materi.statusPublikasi <> TERBIT THEN
+    RETURN PaketMateri.galat("MATERI_TIDAK_TERSEDIA")
+
+  paket ← materi.konten.ambilKonten(versiAplikasi)           
+  IF paket.galat <> null THEN
+    RETURN paket
+
+  paket.namaMateri ← materi.ambilMetadata().namaMateri
+  progres ← RiwayatLatihan.ambilStatusProgres(konteks.idPengguna)
+  paket.statusProgres ← progres[idMateri] ?? "BELUM"
+  RETURN paket
+```
+
+### 5.17.3 Algoritma/Query
+
+**Nama Kelas:** MateriController  
+**Nama Operasi:** `ambilAudioPengucapan(idMateri: Integer): HasilBerkas`  
+**ID Algoritma:** Algo-...
+
+```text
+FUNCTION ambilAudioPengucapan(idMateri: Integer): HasilBerkas
+  materi ← MateriAksara.find(idMateri)
+  IF materi = null OR materi.statusPublikasi <> TERBIT THEN
+    RETURN HasilBerkas.gagal("MATERI_TIDAK_TERSEDIA")
+  RETURN materi.konten.ambilAudio()                         
+```
+
+### 5.17.4 Algoritma/Query
+
+**Nama Kelas:** MateriController  
+**Nama Operasi:** `validasiFormatFile(berkas: Berkas): HasilValidasi`  
+**ID Algoritma:** Algo-...
+
+```text
+FUNCTION validasiFormatFile(berkas: Berkas): HasilValidasi
+  BATAS ← 20 * 1024 * 1024                                   // 20 MB
+  IF berkas = null THEN
+    RETURN HasilValidasi.tidakValid("Berkas belum dipilih")
+  IF ekstensi(berkas.nama) <> "zip" OR berkas.mime <> "application/zip" THEN
+    RETURN HasilValidasi.tidakValid("Jenis berkas tidak didukung")
+  IF berkas.ukuran > BATAS THEN
+    RETURN HasilValidasi.tidakValid("Ukuran berkas melebihi 20 MB")
+
+  arsip ← buka berkas sebagai zip
+  IF arsip gagal dibuka THEN
+    RETURN HasilValidasi.tidakValid("Berkas zip rusak")
+  IF "konten.json" TIDAK ADA di arsip THEN
+    RETURN HasilValidasi.tidakValid("konten.json tidak ditemukan dalam paket")
+  isi ← urai JSON konten.json
+  IF isi.bentukAksara, isi.aturan, atau isi.contoh kosong THEN
+    RETURN HasilValidasi.tidakValid("Isi materi belum lengkap")
+  RETURN HasilValidasi.valid()
+```
+
+### 5.17.5 Algoritma/Query
+
+**Nama Kelas:** MateriController  
+**Nama Operasi:** `tambahMateri(data: DataKonten, berkas: Berkas): HasilOperasi`  
+**ID Algoritma:** Algo-...
+
+```text
+FUNCTION tambahMateri(data: DataKonten, berkas: Berkas): HasilOperasi
+  IF NOT AkunPengguna.verifikasiHakAkses("kelola_materi") THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Anda tidak berhak mengelola materi")
+
+  validasi ← validasiFormatFile(berkas)                     
+  IF validasi.valid = false THEN
+    RETURN HasilOperasi.gagal("FORMAT_TIDAK_VALID", validasi.pesan)
+
+  isi ← ekstrak konten.json dan audio/* dari berkas ke direktori sementara
+  pathAudio ← null
+  TRY
+    DB::transaction:
+      hasilMateri ← new MateriAksara().simpan(data.metadata)            
+      IF hasilMateri.berhasil = false THEN
+        ROLLBACK; RETURN hasilMateri
+
+      IF isi.audio ada THEN
+        pathAudio ← Storage.simpan(isi.audio, "materi/" + hasilMateri.idMateri + "/")
+      dataKonten ← data dengan idMateri = hasilMateri.idMateri, bentukAksara/aturan/contoh dari isi,
+                   pathAudio = pathAudio
+      hasilKonten ← new KontenMateri().simpanKonten(dataKonten)        
+      IF hasilKonten.berhasil = false THEN
+        ROLLBACK; RETURN hasilKonten
+    COMMIT
+  CATCH galat
+    hapus pathAudio dari Storage bila sudah tersimpan
+    RETURN HasilOperasi.gagal("SIMPAN_GAGAL", "Materi gagal disimpan, coba lagi")
+
+  RETURN HasilOperasi.sukses(idMateri = hasilMateri.idMateri)
+```
+
+### 5.17.6 Algoritma/Query
+
+**Nama Kelas:** MateriController  
+**Nama Operasi:** `perbaruiMateri(idMateri: Integer, data: DataKonten): HasilOperasi`  
+**ID Algoritma:** Algo-...
+
+```text
+FUNCTION perbaruiMateri(idMateri: Integer, data: DataKonten): HasilOperasi
+  IF NOT AkunPengguna.verifikasiHakAkses("kelola_materi") THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Anda tidak berhak mengelola materi")
+
+  materi ← MateriAksara.find(idMateri)
+  IF materi = null THEN
+    RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Materi tidak ditemukan")
+
+  DB::transaction:
+    hasil ← materi.perbaruiData(data.metadata)                          
+    IF hasil.berhasil = false THEN ROLLBACK; RETURN hasil END IF
+
+    IF data.memuatKonten THEN
+      hasil ← materi.konten.perbaruiKonten(data)                       
+      IF hasil.berhasil = false THEN ROLLBACK; RETURN hasil END IF
+  COMMIT
+
+  RETURN HasilOperasi.sukses(idMateri = idMateri)
+```
+
+### 5.17.7 Algoritma/Query
+
+**Nama Kelas:** MateriController  
+**Nama Operasi:** `hapusMateri(idMateri: Integer): HasilOperasi`  
+**ID Algoritma:** Algo-...
+
+```text
+FUNCTION hapusMateri(idMateri: Integer): HasilOperasi
+  IF NOT AkunPengguna.verifikasiHakAkses("kelola_materi") THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Anda tidak berhak mengelola materi")
+
+  materi ← MateriAksara.find(idMateri)
+  IF materi = null THEN
+    RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Materi tidak ditemukan")
+
+  baris ← jalankan Q-055                                      // penghapusan lunak
+  IF baris = 0 THEN
+    RETURN HasilOperasi.gagal("HAPUS_GAGAL", "Materi gagal dihapus")
+  RETURN HasilOperasi.sukses(idMateri = idMateri)
+```
+
+Tabel 5.17.3. Query Operasi hapusMateri
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-055 | `UPDATE materi_aksara SET deleted_at = NOW(), status_publikasi = 'DRAF' WHERE id_materi = :id AND deleted_at IS NULL;` | Penghapusan lunak: materi hilang dari daftar tetapi `riwayat_latihan` pelajar tetap utuh. |
 
 ## 5.18 Kelas FeedbackController
 
