@@ -1428,6 +1428,133 @@ Tabel 5.17.3. Query Operasi hapusMateri
 
 ## 5.21 Kelas KontenMateri
 
+**Nama Kelas:** KontenMateri  
+**ID Kelas:** C21
+
+Tabel 5.21.1. Operasi Kelas KontenMateri
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `ambilKonten(versiAplikasi: String): PaketMateri` | public | Mengambil konten versi terbaru yang kompatibel dengan versi aplikasi pemanggil. |
+| `ambilAudio(): HasilBerkas` | public | Mengambil berkas audio pengucapan dari penyimpanan. |
+| `perbaruiKonten(data: DataKonten): HasilOperasi` | public | Mengarsipkan versi lama lalu menimpa konten dengan versi baru. |
+| `arsipkanVersi(): HasilOperasi` | public | Menyalin konten saat ini ke tabel arsip. |
+| `simpanKonten(data: DataKonten): HasilOperasi` | public | Menyimpan konten materi baru sebagai versi 1.0. |
+
+Tabel 5.21.2. Atribut Kelas KontenMateri
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idKonten` | private | Integer |
+| `idMateri` | private | Integer |
+| `bentukAksara` | private | String |
+| `aturan` | private | String |
+| `contoh` | private | String |
+| `pathAudio` | private | String? |
+| `versiKonten` | private | String |
+| `versiAplikasiMinimum` | private | String |
+
+### 5.21.1 Algoritma/Query
+
+**Nama Kelas:** KontenMateri  
+**Nama Operasi:** `ambilKonten(versiAplikasi: String): PaketMateri`  
+**ID Algoritma:** Algo-...
+
+```text
+FUNCTION ambilKonten(versiAplikasi: String): PaketMateri
+  // Konten terkini dipakai bila kompatibel; bila tidak, pakai versi arsip terbaru yang kompatibel
+  IF version_compare(this.versiAplikasiMinimum, versiAplikasi, "<=") THEN
+    RETURN PaketMateri(bentukAksara, aturan, contoh, audio = referensi(pathAudio), versiKonten)
+
+  daftarArsip ← jalankan Q-056 dengan idMateri = this.idMateri       // urut terbaru
+  FOR EACH a IN daftarArsip DO
+    IF version_compare(a.versi_aplikasi_minimum, versiAplikasi, "<=") THEN
+      RETURN PaketMateri(a.bentuk_aksara, a.aturan, a.contoh, referensi(a.path_audio), a.versi_konten)
+
+  RETURN PaketMateri.galat("KONTEN_TIDAK_KOMPATIBEL")          // pengguna diminta memperbarui aplikasi
+```
+
+Tabel 5.21.3. Query Operasi ambilKonten
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-056 | `SELECT bentuk_aksara, aturan, contoh, path_audio, versi_konten, versi_aplikasi_minimum FROM konten_materi_arsip WHERE id_materi = :id_materi ORDER BY diarsipkan_pada DESC;` | Mencari versi arsip terbaru yang masih cocok dengan versi aplikasi. |
+
+### 5.21.2 Algoritma/Query
+
+**Nama Kelas:** KontenMateri  
+**Nama Operasi:** `simpanKonten(data: DataKonten): HasilOperasi`  
+**ID Algoritma:** Algo-...
+
+```text
+FUNCTION simpanKonten(data: DataKonten): HasilOperasi
+  IF kosong(data.bentukAksara) OR kosong(data.aturan) OR kosong(data.contoh) THEN
+    RETURN HasilOperasi.gagal("KONTEN_TIDAK_LENGKAP", "Bentuk aksara, aturan, dan contoh wajib diisi")
+
+  versi ← "1.0"
+  idBaru ← jalankan Q-057
+  this.idKonten ← idBaru;  this.versiKonten ← versi
+  RETURN HasilOperasi.sukses(idKonten = idBaru)
+```
+
+Tabel 5.21.4. Query Operasi simpanKonten
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-057 | `INSERT INTO konten_materi (id_materi, bentuk_aksara, aturan, contoh, path_audio, versi_konten, versi_aplikasi_minimum) VALUES (:id_materi, :bentuk, :aturan, :contoh, :path_audio, '1.0', :versi_min);` | Menyimpan konten pertama sebuah materi. |
+
+### 5.21.3 Algoritma/Query
+
+**Nama Kelas:** KontenMateri  
+**Nama Operasi:** `perbaruiKonten(data: DataKonten): HasilOperasi`  
+**ID Algoritma:** Algo-...
+
+```text
+FUNCTION perbaruiKonten(data: DataKonten): HasilOperasi
+  IF kosong(data.bentukAksara) OR kosong(data.aturan) OR kosong(data.contoh) THEN
+    RETURN HasilOperasi.gagal("KONTEN_TIDAK_LENGKAP", "Bentuk aksara, aturan, dan contoh wajib diisi")
+  IF data sama dengan isi saat ini THEN
+    RETURN HasilOperasi.sukses(idKonten = this.idKonten)       // tidak ada perubahan
+
+  hasilArsip ← arsipkanVersi()                                 
+  IF hasilArsip.berhasil = false THEN
+    RETURN hasilArsip                                          // jangan menimpa tanpa arsip
+
+  versiBaru ← naikkanMinor(this.versiKonten)                   // "1.0" → "1.1"
+  baris ← jalankan Q-058
+  IF baris = 0 THEN
+    RETURN HasilOperasi.gagal("PERBARUI_GAGAL", "Konten gagal diperbarui")
+
+  perbarui atribut this.* dari data;  this.versiKonten ← versiBaru
+  RETURN HasilOperasi.sukses(idKonten = this.idKonten)
+```
+
+Tabel 5.21.5. Query Operasi perbaruiKonten
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-058 | `UPDATE konten_materi SET bentuk_aksara = :bentuk, aturan = :aturan, contoh = :contoh, path_audio = :path_audio, versi_konten = :versi_baru, versi_aplikasi_minimum = :versi_min WHERE id_konten = :id_konten;` | Menimpa konten dengan versi baru. |
+
+### 5.21.4 Algoritma/Query
+
+**Nama Kelas:** KontenMateri  
+**Nama Operasi:** `arsipkanVersi(): HasilOperasi`  
+**ID Algoritma:** Algo-...
+
+```text
+FUNCTION arsipkanVersi(): HasilOperasi
+  baris ← jalankan Q-059 dengan idKonten = this.idKonten
+  IF baris = 0 THEN
+    RETURN HasilOperasi.gagal("ARSIP_GAGAL", "Versi konten gagal diarsipkan")
+  RETURN HasilOperasi.sukses(idKonten = this.idKonten)
+```
+
+Tabel 5.21.6. Query Operasi arsipkanVersi
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-059 | `INSERT INTO konten_materi_arsip (id_konten, id_materi, bentuk_aksara, aturan, contoh, path_audio, versi_konten, versi_aplikasi_minimum, diarsipkan_pada) SELECT id_konten, id_materi, bentuk_aksara, aturan, contoh, path_audio, versi_konten, versi_aplikasi_minimum, NOW() FROM konten_materi WHERE id_konten = :id_konten;` | Menyalin versi konten saat ini ke arsip sebelum ditimpa. |
+
 ## 5.22 Kelas MotivasiBelajar
 
 ## 5.23 Kelas KelasBelajar
