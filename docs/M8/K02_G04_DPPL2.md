@@ -835,7 +835,7 @@ Tabel 5.1. Daftar Kelas Perancangan dan Kelas Analisis Terkait
 
 Untuk **setiap kelas**, identifikasi operasi berdasarkan tanggung jawab kelas beserta *visibility*-nya, serta atribut beserta *visibility* dan tipenya. Buat subbab tersendiri untuk setiap kelas.
 
-## 5.1 Kelas [Nama Kelas 1]
+## 5.1 Kelas AkunPengguna
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -1059,6 +1059,76 @@ Tabel 5.2.7. Query Operasi perbaruiData
 ## 5.8 Kelas HalamanLatihan
 
 ## 5.9 Kelas HalamanKelolaMateri
+
+**Nama Kelas:** HalamanKelolaMateri  
+**ID Kelas:** C09
+
+Tabel 5.9.1. Operasi Kelas HalamanKelolaMateri
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `unggahFileMateri(berkas: Berkas, detail: DataKonten): void` | public | Menerima berkas dan detail dari form I-19, memeriksa berkas di sisi tampilan, lalu meneruskannya ke `MateriController.tambahMateri`. |
+| `suntingMateri(idMateri: Integer): void` | public | Memuat data materi terpilih ke form, lalu meneruskan perubahan ke `MateriController.perbaruiMateri`. |
+| `tampilkanStatus(hasil: HasilOperasi): void` | public | Menampilkan notifikasi berhasil/gagal dari hasil operasi. |
+| `tampilkanDaftarMateri(data: List<MateriAksara>): void` | public | Merender tabel daftar materi pada I-18. |
+
+Tabel 5.9.2. Atribut Kelas HalamanKelolaMateri
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `daftarMateri` | private | List<MetadataMateri> |
+| `detailInput` | private | DataKonten |
+| `fileMateriInput` | private | Berkas? |
+
+### 5.9.1 Algoritma/Query
+
+**Nama Kelas:** HalamanKelolaMateri  
+**Nama Operasi:** `unggahFileMateri(berkas: Berkas, detail: DataKonten): void`  
+**ID Algoritma:** Algo-045
+
+```text
+PROCEDURE unggahFileMateri(berkas: Berkas, detail: DataKonten)
+  IF berkas = null THEN
+    tampilkanStatus(HasilOperasi.gagal("BERKAS_KOSONG", "Pilih berkas materi terlebih dahulu"))
+    RETURN
+  IF ekstensi(berkas.nama) <> "zip" THEN                 // pemeriksaan cepat di tampilan (I-19 Alt 1)
+    fileMateriInput ← null
+    tampilkanStatus(HasilOperasi.gagal("FORMAT_TIDAK_DIDUKUNG", "Jenis berkas tidak didukung"))
+    RETURN
+
+  fileMateriInput ← berkas
+  detailInput ← detail
+  hasil ← MateriController.tambahMateri(detailInput, fileMateriInput)   // validasi server di dalamnya (Algo-052)
+
+  tampilkanStatus(hasil)
+  IF hasil.berhasil THEN
+    fileMateriInput ← null
+    detailInput ← kosong
+    // kembali ke I-18 dan memuat ulang daftar
+    tampilkanDaftarMateri( MateriController.ambilDaftarMateri(FilterMateri.semuaTermasukDraf()) )
+```
+
+### 5.9.2 Algoritma/Query
+
+**Nama Kelas:** HalamanKelolaMateri  
+**Nama Operasi:** `suntingMateri(idMateri: Integer): void`  
+**ID Algoritma:** Algo-046
+
+```text
+PROCEDURE suntingMateri(idMateri: Integer)
+  target ← cari elemen pada daftarMateri dengan idMateri = idMateri
+  IF target = null THEN
+    tampilkanStatus(HasilOperasi.gagal("TIDAK_DITEMUKAN", "Materi tidak ditemukan"))
+    RETURN
+
+  detailInput ← isi form dari target                       // nama, jenis, tingkat, status
+  data ← tunggu pengguna menekan "Simpan" (atau batal → RETURN)
+  hasil ← MateriController.perbaruiMateri(idMateri, data)
+
+  tampilkanStatus(hasil)
+  IF hasil.berhasil THEN
+    tampilkanDaftarMateri( MateriController.ambilDaftarMateri(FilterMateri.semuaTermasukDraf()) )
+```
 
 ## 5.10 Kelas HalamanFeedback
 
