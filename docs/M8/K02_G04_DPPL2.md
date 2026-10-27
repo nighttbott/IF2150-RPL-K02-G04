@@ -880,11 +880,187 @@ Tabel 5.1.1. Query Operasi [Nama Operasi]
 
 *[Ulangi pola 5.1.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
-## 5.2 Kelas [Nama Kelas Berikutnya]
+## 5.2 Kelas MateriAksara
 
-*[Ulangi pola 5.1: nama dan ID kelas, tabel operasi, tabel atribut, serta subbab algoritma/query untuk operasi penting jika diperlukan.]*
+**Nama Kelas:** MateriAksara  
+**ID Kelas:** C02
 
-<br>
+Tabel 5.2.1. Operasi Kelas MateriAksara
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `ambilMetadata(): MetadataMateri` | public | Mengemas `idMateri`, `namaMateri`, `jenisAksara`, `tingkatKesulitan`, dan `statusPublikasi` milik objek ini menjadi `MetadataMateri` untuk daftar materi. |
+| `ambilTargetLatihan(mode: ModeLatihan): TargetLatihan` | public | Menyusun daftar aksara/kata target latihan dari konten materi sesuai mode (menulis, bunyi, merangkai). |
+| `perbaruiData(data: MetadataMateri): HasilOperasi` | public | Memperbarui nama, jenis aksara, tingkat kesulitan, dan status publikasi materi. |
+| `simpan(data: MetadataMateri): HasilOperasi` | public | Menyimpan metadata materi baru dan mengembalikan `idMateri` yang terbentuk. |
+| `ambilDaftarMateri(filter: FilterMateri): List<MateriAksara>` | public | Mengambil materi yang belum dihapus sesuai filter jenis aksara, tingkat, dan cakupan status publikasi. |
+| `ambilMateriRekomendasi(penguasaan: Data): List<MateriAksara>` | public | Memilih materi terbit yang belum dikuasai pelajar berdasarkan data penguasaan. |
+
+Tabel 5.2.2. Atribut Kelas MateriAksara
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idMateri` | private | Integer |
+| `namaMateri` | private | String |
+| `jenisAksara` | private | JenisAksara |
+| `tingkatKesulitan` | private | Integer |
+| `statusPublikasi` | private | StatusPublikasi |
+
+### 5.2.1 Algoritma/Query
+
+**Nama Kelas:** MateriAksara  
+**Nama Operasi:** `ambilDaftarMateri(filter: FilterMateri): List<MateriAksara>`  
+**ID Algoritma:** Algo-040
+
+```text
+FUNCTION ambilDaftarMateri(filter: FilterMateri): List<MateriAksara>
+  // filter.jenisAksara (nullable), filter.tingkatKesulitan (nullable),
+  // filter.termasukDraf (Boolean; true hanya untuk Tim Materi)
+  baris ← jalankan Q-040.1 dengan parameter filter
+  daftar ← list kosong
+  FOR EACH b IN baris DO
+    daftar.tambah( bentuk MateriAksara dari b )
+  END FOR
+  RETURN daftar            // daftar kosong BUKAN galat; tampilan menampilkan pesan "belum tersedia"
+END FUNCTION
+```
+
+Tabel 5.2.3. Query Operasi ambilDaftarMateri
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-040.1 | `SELECT id_materi, nama_materi, jenis_aksara, tingkat_kesulitan, status_publikasi FROM materi_aksara WHERE deleted_at IS NULL AND (:jenis IS NULL OR jenis_aksara = :jenis) AND (:tingkat IS NULL OR tingkat_kesulitan = :tingkat) AND (:termasuk_draf = 1 OR status_publikasi = 'TERBIT') ORDER BY jenis_aksara, tingkat_kesulitan, nama_materi;` | Mengambil materi sesuai filter; pelajar hanya melihat `TERBIT`, Tim Materi dapat melihat `DRAF`. |
+
+### 5.2.2 Algoritma/Query
+
+**Nama Kelas:** MateriAksara  
+**Nama Operasi:** `ambilMateriRekomendasi(penguasaan: Data): List<MateriAksara>`  
+**ID Algoritma:** Algo-041
+
+```text
+FUNCTION ambilMateriRekomendasi(penguasaan: Data): List<MateriAksara>
+  // penguasaan: pemetaan idMateri → skor 0..100 (hasil RiwayatLatihan.hitungPenguasaan)
+  AMBANG ← 70
+  semua ← jalankan Q-041        // materi TERBIT, urut jenis, tingkat
+  kandidat ← list kosong
+
+  FOR EACH m IN semua DO
+    skor ← penguasaan[m.idMateri]            // null bila belum pernah dilatih
+    IF skor = null OR skor < AMBANG THEN
+      // tingkat terbuka bila seluruh materi tingkat di bawahnya (jenis sama) sudah ≥ AMBANG
+      IF semuaTingkatDiBawahTuntas(m, semua, penguasaan, AMBANG) THEN
+        kandidat.tambah(m)
+      END IF
+    END IF
+  END FOR
+
+  urutkan kandidat berdasarkan (tingkatKesulitan ASC, skor ASC; skor null dianggap 0)
+  RETURN kandidat.ambil(3 teratas)
+END FUNCTION
+```
+
+Tabel 5.2.4. Query Operasi ambilMateriRekomendasi
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-041 | `SELECT id_materi, nama_materi, jenis_aksara, tingkat_kesulitan, status_publikasi FROM materi_aksara WHERE deleted_at IS NULL AND status_publikasi = 'TERBIT' ORDER BY jenis_aksara, tingkat_kesulitan, id_materi;` | Mengambil seluruh materi terbit sebagai kandidat; penyaringan skor dilakukan pada kode. |
+
+### 5.2.3 Algoritma/Query
+
+**Nama Kelas:** MateriAksara  
+**Nama Operasi:** `ambilTargetLatihan(mode: ModeLatihan): TargetLatihan`  
+**ID Algoritma:** Algo-042
+
+```text
+FUNCTION ambilTargetLatihan(mode: ModeLatihan): TargetLatihan
+  baris ← jalankan Q-042 dengan idMateri = this.idMateri
+  IF baris = null THEN
+    RETURN TargetLatihan.kosong()            // materi belum punya konten
+  END IF
+
+  SWITCH mode
+    CASE MENULIS, BUNYI:
+      butir ← pecah(baris.bentuk_aksara)      // satu aksara per elemen
+    CASE MERANGKAI:
+      butir ← pecah(baris.contoh)             // kata/rangkaian contoh
+  END SWITCH
+
+  RETURN TargetLatihan(idMateri = this.idMateri, mode = mode, butir = butir)
+END FUNCTION
+```
+
+Tabel 5.2.5. Query Operasi ambilTargetLatihan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-042 | `SELECT bentuk_aksara, contoh FROM konten_materi WHERE id_materi = :id_materi;` | Mengambil bahan target latihan dari konten materi (relasi komposisi MateriAksara–KontenMateri). |
+
+### 5.2.4 Algoritma/Query
+
+**Nama Kelas:** MateriAksara  
+**Nama Operasi:** `simpan(data: MetadataMateri): HasilOperasi`  
+**ID Algoritma:** Algo-043
+
+```text
+FUNCTION simpan(data: MetadataMateri): HasilOperasi
+  IF kosong(trim(data.namaMateri)) OR panjang(data.namaMateri) > 100 THEN
+    RETURN HasilOperasi.gagal("NAMA_TIDAK_VALID", "Nama materi wajib diisi (maks. 100 karakter)")
+  END IF
+  IF data.jenisAksara NOT IN {JAWA, SUNDA} OR data.tingkatKesulitan NOT IN {1,2,3} THEN
+    RETURN HasilOperasi.gagal("DATA_TIDAK_VALID", "Jenis aksara atau tingkat tidak valid")
+  END IF
+
+  jumlah ← jalankan Q-043.1
+  IF jumlah > 0 THEN
+    RETURN HasilOperasi.gagal("DUPLIKAT", "Materi dengan nama, jenis, dan tingkat sama sudah ada")
+  END IF
+
+  status ← IF data.terbitkan THEN TERBIT ELSE DRAF
+  idBaru ← jalankan Q-043.2
+  RETURN HasilOperasi.sukses(idMateri = idBaru)
+END FUNCTION
+```
+
+Tabel 5.2.6. Query Operasi simpan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-043.1 | `SELECT COUNT(*) FROM materi_aksara WHERE nama_materi = :nama AND jenis_aksara = :jenis AND tingkat_kesulitan = :tingkat AND deleted_at IS NULL;` | Mencegah materi ganda. |
+| Q-043.2 | `INSERT INTO materi_aksara (nama_materi, jenis_aksara, tingkat_kesulitan, status_publikasi) VALUES (:nama, :jenis, :tingkat, :status);` | Menyimpan metadata materi baru. |
+
+### 5.2.5 Algoritma/Query
+
+**Nama Kelas:** MateriAksara  
+**Nama Operasi:** `perbaruiData(data: MetadataMateri): HasilOperasi`  
+**ID Algoritma:** Algo-044
+
+```text
+FUNCTION perbaruiData(data: MetadataMateri): HasilOperasi
+  validasi nama, jenisAksara, tingkatKesulitan seperti Algo-043
+  jumlah ← jalankan Q-044.1 (kecuali baris milik this.idMateri)
+  IF jumlah > 0 THEN
+    RETURN HasilOperasi.gagal("DUPLIKAT", "Materi dengan nama, jenis, dan tingkat sama sudah ada")
+  END IF
+
+  baris ← jalankan Q-044.2
+  IF baris = 0 THEN
+    RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Materi tidak ditemukan")
+  END IF
+
+  this.namaMateri ← data.namaMateri
+  this.jenisAksara ← data.jenisAksara
+  this.tingkatKesulitan ← data.tingkatKesulitan
+  this.statusPublikasi ← data.statusPublikasi
+  RETURN HasilOperasi.sukses(idMateri = this.idMateri)
+END FUNCTION
+```
+
+Tabel 5.2.7. Query Operasi perbaruiData
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-044.1 | `SELECT COUNT(*) FROM materi_aksara WHERE nama_materi = :nama AND jenis_aksara = :jenis AND tingkat_kesulitan = :tingkat AND id_materi <> :id AND deleted_at IS NULL;` | Cek duplikat selain materi ini. |
+| Q-044.2 | `UPDATE materi_aksara SET nama_materi = :nama, jenis_aksara = :jenis, tingkat_kesulitan = :tingkat, status_publikasi = :status WHERE id_materi = :id AND deleted_at IS NULL;` | Memperbarui metadata. |
 
 ---
 
