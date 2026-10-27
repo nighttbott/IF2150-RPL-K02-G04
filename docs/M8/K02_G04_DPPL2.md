@@ -910,7 +910,7 @@ Tabel 5.2.2. Atribut Kelas MateriAksara
 
 **Nama Kelas:** MateriAksara  
 **Nama Operasi:** `ambilDaftarMateri(filter: FilterMateri): List<MateriAksara>`  
-**ID Algoritma:** Algo-040
+**ID Algoritma:** Algo-...
 
 ```text
 FUNCTION ambilDaftarMateri(filter: FilterMateri): List<MateriAksara>
@@ -933,7 +933,7 @@ Tabel 5.2.3. Query Operasi ambilDaftarMateri
 
 **Nama Kelas:** MateriAksara  
 **Nama Operasi:** `ambilMateriRekomendasi(penguasaan: Data): List<MateriAksara>`  
-**ID Algoritma:** Algo-041
+**ID Algoritma:** Algo-...
 
 ```text
 FUNCTION ambilMateriRekomendasi(penguasaan: Data): List<MateriAksara>
@@ -963,7 +963,7 @@ Tabel 5.2.4. Query Operasi ambilMateriRekomendasi
 
 **Nama Kelas:** MateriAksara  
 **Nama Operasi:** `ambilTargetLatihan(mode: ModeLatihan): TargetLatihan`  
-**ID Algoritma:** Algo-042
+**ID Algoritma:** Algo-...
 
 ```text
 FUNCTION ambilTargetLatihan(mode: ModeLatihan): TargetLatihan
@@ -990,7 +990,7 @@ Tabel 5.2.5. Query Operasi ambilTargetLatihan
 
 **Nama Kelas:** MateriAksara  
 **Nama Operasi:** `simpan(data: MetadataMateri): HasilOperasi`  
-**ID Algoritma:** Algo-043
+**ID Algoritma:** Algo-...
 
 ```text
 FUNCTION simpan(data: MetadataMateri): HasilOperasi
@@ -1019,7 +1019,7 @@ Tabel 5.2.6. Query Operasi simpan
 
 **Nama Kelas:** MateriAksara  
 **Nama Operasi:** `perbaruiData(data: MetadataMateri): HasilOperasi`  
-**ID Algoritma:** Algo-044
+**ID Algoritma:** Algo-...
 
 ```text
 FUNCTION perbaruiData(data: MetadataMateri): HasilOperasi
@@ -1084,7 +1084,7 @@ Tabel 5.9.2. Atribut Kelas HalamanKelolaMateri
 
 **Nama Kelas:** HalamanKelolaMateri  
 **Nama Operasi:** `unggahFileMateri(berkas: Berkas, detail: DataKonten): void`  
-**ID Algoritma:** Algo-045
+**ID Algoritma:** Algo-...
 
 ```text
 PROCEDURE unggahFileMateri(berkas: Berkas, detail: DataKonten)
@@ -1112,7 +1112,7 @@ PROCEDURE unggahFileMateri(berkas: Berkas, detail: DataKonten)
 
 **Nama Kelas:** HalamanKelolaMateri  
 **Nama Operasi:** `suntingMateri(idMateri: Integer): void`  
-**ID Algoritma:** Algo-046
+**ID Algoritma:** Algo-...
 
 ```text
 PROCEDURE suntingMateri(idMateri: Integer)
@@ -1137,6 +1137,80 @@ PROCEDURE suntingMateri(idMateri: Integer)
 ## 5.12 Kelas HalamanKelolaKelas
 
 ## 5.13 Kelas HalamanMateri
+
+**Nama Kelas:** HalamanMateri  
+**ID Kelas:** C13
+
+Tabel 5.13.1. Operasi Kelas HalamanMateri
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `pilihMateri(idMateri: Integer): void` | public | Menangani pemilihan materi pada daftar, lalu meminta paket materi dari `MateriController`. |
+| `tampilkanIsiMateri(paket: PaketMateri): void` | public | Merender bentuk aksara, aturan penulisan, contoh, tombol audio, dan tombol latihan pada I-05. |
+| `putarAudioPengucapan(sumber: ReferensiBerkas): void` | public | Memutar audio pengucapan dan mengelola status audio. |
+
+Tabel 5.13.2. Atribut Kelas HalamanMateri
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `materiTerpilih` | private | Integer? |
+| `statusTampilan` | private | String |
+| `statusAudio` | private | String |
+
+### 5.13.1 Algoritma/Query
+
+**Nama Kelas:** HalamanMateri  
+**Nama Operasi:** `tampilkanIsiMateri(paket: PaketMateri): void`  
+**ID Algoritma:** Algo-...
+
+```text
+PROCEDURE tampilkanIsiMateri(paket: PaketMateri)
+  IF paket = null OR paket.galat <> null THEN
+    statusTampilan ← "GALAT"
+    tampilkan pesan galat paket.galat ("Materi belum dapat dimuat")
+    RETURN
+
+  render judul ← paket.namaMateri, chip status ← paket.statusProgres   // "Belum tuntas" / "Tuntas"
+  render bentuk aksara ← paket.bentukAksara
+  render aturan penulisan ← paket.aturan
+  render contoh ← paket.contoh
+  render info versi ← "Konten materi versi " + paket.versiKonten
+
+  IF paket.audio = null THEN
+    statusAudio ← "TIDAK_TERSEDIA"
+    nonaktifkan tombol "Putar Pengucapan"
+  ELSE
+    statusAudio ← "SIAP"
+    aktifkan tombol "Putar Pengucapan"
+
+  statusTampilan ← "SIAP"
+```
+
+### 5.13.2 Algoritma/Query
+
+**Nama Kelas:** HalamanMateri  
+**Nama Operasi:** `putarAudioPengucapan(sumber: ReferensiBerkas): void`  
+**ID Algoritma:** Algo-...
+
+```text
+PROCEDURE putarAudioPengucapan(sumber: ReferensiBerkas)
+  IF sumber = null THEN
+    statusAudio ← "TIDAK_TERSEDIA"
+    tampilkan alert galat "Audio pengucapan belum tersedia"      // I-05 Alt 2
+    RETURN
+
+  statusAudio ← "MEMUAT"
+  hasil ← MateriController.ambilAudioPengucapan(materiTerpilih)
+
+  IF hasil.berhasil = false THEN
+    statusAudio ← "GALAT"
+    tampilkan alert galat "Audio tidak dapat diputar, coba lagi"
+    RETURN
+
+  putar hasil.berkas pada pemutar audio peramban
+  statusAudio ← "MEMUTAR"
+  SAAT pemutaran selesai: statusAudio ← "SIAP"
+```
 
 ## 5.14 Kelas HalamanProgres
 
