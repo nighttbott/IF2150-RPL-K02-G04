@@ -1569,7 +1569,7 @@ Tabel 5.21.6. Query Operasi arsipkanVersi
 
 # BAB 6: Perancangan Antarmuka
 
-## 6.1 Rancangan Antarmuka [ID Layar 1]
+## 6.1 Rancangan Antarmuka I-01
 
 Masukkan versi awal prototipe antarmuka, dimana untuk setiap antarmuka/layar, tuliskan spesifikasi rinci objek yang ditampilkan dan reaksi sistem terhadap interaksi pengguna.
 
@@ -1591,6 +1591,154 @@ Tabel 6.1. Spesifikasi Objek Antarmuka [ID Layar]
 | *[ID objek]* | *[Jenis objek]* | *[Konten yang ditampilkan]* | *[Reaksi sistem atau nama file terkait beserta deskripsi ringkasnya]* |
 | *...* | *...* | *...* | *...* |
 
+## 6.2 Rancangan Antarmuka I-02
+
+## 6.3 Rancangan Antarmuka I-03
+
+## 6.4 Rancangan Antarmuka I-04
+
+**Antarmuka:** I-04  
+**Nama Layar:** Daftar Materi
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-04 Daftar Materi" src="./assets/diagram/I-04 Daftar Materi.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.4. Rancangan Antarmuka I-04 - Daftar Materi</i>
+</p>
+
+Tabel 6.4. Spesifikasi Objek Antarmuka I-04
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-04-01 | Card (header halaman) | Judul "Daftar Materi" dan deskripsi singkat | Menampilkan judul halaman untuk Pelajar; tidak interaktif. |
+| I-04-02 | Button (pilihan, aktif) | "Aksara Jawa" | Memilih jenis aksara Jawa (terpilih awal), memuat ulang daftar dengan filter jenis = Jawa (Algo-049 → Algo-040). |
+| I-04-03 | Button (pilihan) | "Aksara Sunda" | Memilih jenis aksara Sunda dan memuat ulang daftar (Algo-049 → Algo-040). |
+| I-04-04 | Button (pilihan, aktif) | "Dasar" | Memfilter tingkat kesulitan 1 (Algo-049 → Algo-040). |
+| I-04-05 | Button (pilihan) | "Menengah" | Memfilter tingkat kesulitan 2 (Algo-049 → Algo-040). |
+| I-04-06 | Button (pilihan) | "Lanjut" | Memfilter tingkat kesulitan 3 (Algo-049 → Algo-040). |
+| I-04-07 | Label (heading) | "Materi tersedia" | Judul bagian daftar hasil filter. |
+| I-04-08 | Chip | "3 materi" (jumlah materi hasil filter) | Diperbarui setiap filter berubah. |
+| I-04-09 | Card (item materi) | Nama materi, jenis aksara, dan tingkat | Satu kartu per materi `TERBIT`; data dari `ambilMetadata()` (Algo-049). |
+| I-04-10 | Chip (status) | "Lulus" / "Belum tuntas" / "Belum dimulai" | Status progres pelajar per materi dari `RiwayatLatihan.ambilStatusProgres` (Algo-049). |
+| I-04-11 | Button (utama) | "Pelajari" | Membuka I-05 Detail Materi untuk materi tersebut; menjalankan `pilihMateri` (Algo-050). |
+| I-04-12 | Alert (galat) | "Materi belum tersedia untuk kombinasi ini..." | Tampil hanya bila daftar kosong (alternatif 1 UC-02); bukan galat sistem (Algo-040). |
+
+## 6.5 Rancangan Antarmuka I-05
+
+**Antarmuka:** I-05  
+**Nama Layar:** Detail Materi
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-05 Detail Materi" src="./assets/diagram/I-05 Detail Materi.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.5. Rancangan Antarmuka I-05 - Detail Materi</i>
+</p>
+
+Tabel 6.5. Spesifikasi Objek Antarmuka I-05
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-05-01 | Card (header halaman) | Nama materi, jenis aksara, tingkat, breadcrumb | Data dari `PaketMateri` (Algo-047, Algo-050). |
+| I-05-02 | Chip (status) | "Belum tuntas" / "Lulus" | Status progres pelajar untuk materi ini (Algo-050). |
+| I-05-03 | Card (tile aksara) | Bentuk aksara materi (mis. ꦲ ꦤ ꦕ ꦫ ꦏ) | Diisi dari `bentukAksara` (Algo-047). |
+| I-05-04 | Card (teks) | Aturan penulisan | Diisi dari `aturan` (Algo-047). |
+| I-05-05 | Card (teks) | Contoh penggunaan | Diisi dari `contoh` (Algo-047). |
+| I-05-06 | Card (audio) | "Contoh bunyi pengucapan" | Tampil bersama tombol audio. |
+| I-05-07 | Button (aksen) | "Putar Pengucapan" | Memutar audio pengucapan (Algo-048 → Algo-051); nonaktif bila audio tidak tersedia (Algo-047). |
+| I-05-08 | Alert (galat) | "Audio tidak dapat diputar." | Tampil bila audio gagal dimuat (alternatif 2 UC-02), konten lain tetap terbaca (Algo-048). |
+| I-05-09 | Card | "Siap berlatih?" | Ajakan berlatih. |
+| I-05-10 | Button (utama) | "Mulai Latihan" | Membuka I-06 Pilih Mode untuk materi ini (UC-03). |
+| I-05-11 | Button (sekunder) | "Kembali ke Daftar Materi" | Kembali ke I-04. |
+| I-05-12 | Alert (info) | "Konten materi versi 1.0, sesuai versi aplikasi." | Menunjukkan `versiKonten` yang ditampilkan (Algo-056). |
+
+## 6.6 Rancangan Antarmuka I-06
+
+## 6.7 Rancangan Antarmuka I-07
+
+## 6.8 Rancangan Antarmuka I-08
+
+## 6.9 Rancangan Antarmuka I-09
+
+## 6.10 Rancangan Antarmuka I-10
+
+## 6.11 Rancangan Antarmuka I-11
+
+## 6.12 Rancangan Antarmuka I-12
+
+## 6.13 Rancangan Antarmuka I-13
+
+## 6.14 Rancangan Antarmuka I-14
+
+## 6.15 Rancangan Antarmuka I-15
+
+## 6.16 Rancangan Antarmuka I-16
+
+## 6.17 Rancangan Antarmuka I-17
+
+## 6.18 Rancangan Antarmuka I-18
+
+**Antarmuka:** I-18  
+**Nama Layar:** Kelola Materi
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-18 Kelola Materi" src="./assets/diagram/I-18 Kelola Materi.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.18. Rancangan Antarmuka I-18 - Kelola Materi</i>
+</p>
+
+Tabel 6.18. Spesifikasi Objek Antarmuka I-18
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-18-01 | Card (header halaman) | "Kelola Materi" dan deskripsi | Hanya untuk Tim Materi (`verifikasiHakAkses("kelola_materi")`). |
+| I-18-02 | Button (aksen) | "Tambah Materi" | Membuka I-19 Unggah Materi. |
+| I-18-03 | Alert (sukses) | "Materi berhasil ditambahkan." | Tampil setelah operasi sukses (`tampilkanStatus`, Algo-045/046). |
+| I-18-04 | Button (filter) | "Semua" | Menampilkan semua materi, termasuk draf (Algo-049 → Algo-040). |
+| I-18-05 | Button (filter) | "Aksara Jawa" | Memfilter jenis Jawa (Algo-049 → Algo-040). |
+| I-18-06 | Button (filter) | "Aksara Sunda" | Memfilter jenis Sunda (Algo-049 → Algo-040). |
+| I-18-07 | Table (dalam Card) | Nama materi, jenis aksara, tingkat, status, versi konten, aksi | Diisi oleh `tampilkanDaftarMateri` (Algo-049). |
+| I-18-08 | Chip (status) | "Terbit" / "Draf" | Nilai `statusPublikasi`. |
+| I-18-09 | Button (teks) | "Sunting" | Membuka form sunting dengan data materi terisi (Algo-046 → Algo-054). |
+| I-18-10 | Button (teks, bahaya) | "Hapus" | Meminta konfirmasi, lalu menghapus lunak materi (Algo-055). |
+
+## 6.19 Rancangan Antarmuka I-19
+
+**Antarmuka:** I-19  
+**Nama Layar:** Unggah Materi
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-19 Unggah Materi" src="./assets/diagram/I-19 Unggah Materi.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.19. Rancangan Antarmuka I-19 - Unggah Materi</i>
+</p>
+
+Tabel 6.19. Spesifikasi Objek Antarmuka I-19
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-19-01 | Card (header halaman) | "Unggah Materi" dan breadcrumb | Kembali ke I-18 lewat breadcrumb. |
+| I-19-02 | Text Input | Label "Nama materi" | Wajib, maks. 100 karakter; divalidasi di Algo-043. |
+| I-19-03 | Card (pilihan) | "Aksara Jawa" | Memilih jenis aksara `JAWA`. |
+| I-19-04 | Card (pilihan) | "Aksara Sunda" | Memilih jenis aksara `SUNDA`. |
+| I-19-05 | Button (pilihan) | "Dasar" | Tingkat kesulitan 1. |
+| I-19-06 | Button (pilihan) | "Menengah" | Tingkat kesulitan 2. |
+| I-19-07 | Button (pilihan) | "Lanjut" | Tingkat kesulitan 3. |
+| I-19-08 | Toggle | "Terbitkan setelah disimpan" | Mati = status `DRAF`, hidup = `TERBIT` (Algo-043). |
+| I-19-09 | Button (sekunder) | "Batal" | Membuang isian dan kembali ke I-18. |
+| I-19-10 | Button (utama) | "Simpan Materi" | Menjalankan `unggahFileMateri` (Algo-045 → Algo-053). |
+| I-19-11 | Card | "Berkas materi" | Pembungkus bagian unggah berkas. |
+| I-19-12 | Dropzone | "Seret berkas paket materi ke sini" | Menerima berkas yang dijatuhkan. |
+| I-19-13 | Button (sekunder) | "Pilih Berkas" | Membuka pemilih berkas peramban. |
+| I-19-14 | List item | "aksara-nglegena-dasar.zip", "2,4 MB · berisi konten.json dan folder audio" | Berkas terpilih. |
+| I-19-15 | Chip (lulus) | "Format valid" | Hasil pemeriksaan awal (ekstensi) di tampilan (Algo-045). |
+| I-19-16 | Alert (galat) | "Jenis berkas tidak didukung." | Tampil bila berkas bukan .zip (alternatif 1 UC-06; Algo-045/052). |
+| I-19-17 | Alert (info) | "Berkas diperiksa di server." (format, ukuran maks. 20 MB, isi paket) | Pemeriksaan lengkap oleh server (Algo-052). |
+
+## 6.20 Rancangan Antarmuka I-20
 
 ## 6.X Rancangan Antarmuka [ID Layar X]
 
@@ -1604,9 +1752,26 @@ Tabel 6.Y. Rancangan Antarmuka Keseluruhan
 
 | No | Tampilan Antarmuka |
 | :--- | :--- |
-| *[I-01]* | <img src="./assets/diagram/contoh-design.png" alt="Contoh Desain" width="400"> |
-| *[I-02]* | *[Sisipkan gambar antarmuka I-02]* |
-| *[I-XX]* | *[Sisipkan gambar antarmuka berikutnya]* |
+| I-01 | <img src="./assets/diagram/contoh-design.png" alt="Contoh Desain" width="400"> |
+| I-02 | ... |
+| I-03 | ... |
+| I-04 | <img src="./assets/diagram/I-04 Daftar Materi.png" alt="Contoh Desain" width="400"> |
+| I-05 | <img src="./assets/diagram/I-05 Detail Materi.png" alt="Contoh Desain" width="400"> |
+| I-06 | ... |
+| I-07 | ... |
+| I-08 | ... |
+| I-09 | ... |
+| I-10 | ... |
+| I-11 | ... |
+| I-12 | ... |
+| I-13 | ... |
+| I-14 | ... |
+| I-15 | ... |
+| I-16 | ... |
+| I-17 | ... |
+| I-18 | <img src="./assets/diagram/I-18 Kelola Materi.png" alt="Contoh Desain" width="400"> |
+| I-19 | <img src="./assets/diagram/I-19 Unggah Materi.png" alt="Contoh Desain" width="400"> |
+| I-20 | ... |
 
 <br>
 
