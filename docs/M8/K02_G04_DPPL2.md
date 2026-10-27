@@ -920,9 +920,7 @@ FUNCTION ambilDaftarMateri(filter: FilterMateri): List<MateriAksara>
   daftar ← list kosong
   FOR EACH b IN baris DO
     daftar.tambah( bentuk MateriAksara dari b )
-  END FOR
   RETURN daftar            // daftar kosong BUKAN galat; tampilan menampilkan pesan "belum tersedia"
-END FUNCTION
 ```
 
 Tabel 5.2.3. Query Operasi ambilDaftarMateri
@@ -950,13 +948,9 @@ FUNCTION ambilMateriRekomendasi(penguasaan: Data): List<MateriAksara>
       // tingkat terbuka bila seluruh materi tingkat di bawahnya (jenis sama) sudah ≥ AMBANG
       IF semuaTingkatDiBawahTuntas(m, semua, penguasaan, AMBANG) THEN
         kandidat.tambah(m)
-      END IF
-    END IF
-  END FOR
 
   urutkan kandidat berdasarkan (tingkatKesulitan ASC, skor ASC; skor null dianggap 0)
   RETURN kandidat.ambil(3 teratas)
-END FUNCTION
 ```
 
 Tabel 5.2.4. Query Operasi ambilMateriRekomendasi
@@ -976,17 +970,14 @@ FUNCTION ambilTargetLatihan(mode: ModeLatihan): TargetLatihan
   baris ← jalankan Q-042 dengan idMateri = this.idMateri
   IF baris = null THEN
     RETURN TargetLatihan.kosong()            // materi belum punya konten
-  END IF
 
   SWITCH mode
     CASE MENULIS, BUNYI:
       butir ← pecah(baris.bentuk_aksara)      // satu aksara per elemen
     CASE MERANGKAI:
       butir ← pecah(baris.contoh)             // kata/rangkaian contoh
-  END SWITCH
 
   RETURN TargetLatihan(idMateri = this.idMateri, mode = mode, butir = butir)
-END FUNCTION
 ```
 
 Tabel 5.2.5. Query Operasi ambilTargetLatihan
@@ -1005,20 +996,16 @@ Tabel 5.2.5. Query Operasi ambilTargetLatihan
 FUNCTION simpan(data: MetadataMateri): HasilOperasi
   IF kosong(trim(data.namaMateri)) OR panjang(data.namaMateri) > 100 THEN
     RETURN HasilOperasi.gagal("NAMA_TIDAK_VALID", "Nama materi wajib diisi (maks. 100 karakter)")
-  END IF
   IF data.jenisAksara NOT IN {JAWA, SUNDA} OR data.tingkatKesulitan NOT IN {1,2,3} THEN
     RETURN HasilOperasi.gagal("DATA_TIDAK_VALID", "Jenis aksara atau tingkat tidak valid")
-  END IF
 
   jumlah ← jalankan Q-043.1
   IF jumlah > 0 THEN
     RETURN HasilOperasi.gagal("DUPLIKAT", "Materi dengan nama, jenis, dan tingkat sama sudah ada")
-  END IF
 
   status ← IF data.terbitkan THEN TERBIT ELSE DRAF
   idBaru ← jalankan Q-043.2
   RETURN HasilOperasi.sukses(idMateri = idBaru)
-END FUNCTION
 ```
 
 Tabel 5.2.6. Query Operasi simpan
@@ -1040,19 +1027,16 @@ FUNCTION perbaruiData(data: MetadataMateri): HasilOperasi
   jumlah ← jalankan Q-044.1 (kecuali baris milik this.idMateri)
   IF jumlah > 0 THEN
     RETURN HasilOperasi.gagal("DUPLIKAT", "Materi dengan nama, jenis, dan tingkat sama sudah ada")
-  END IF
 
   baris ← jalankan Q-044.2
   IF baris = 0 THEN
     RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Materi tidak ditemukan")
-  END IF
 
   this.namaMateri ← data.namaMateri
   this.jenisAksara ← data.jenisAksara
   this.tingkatKesulitan ← data.tingkatKesulitan
   this.statusPublikasi ← data.statusPublikasi
   RETURN HasilOperasi.sukses(idMateri = this.idMateri)
-END FUNCTION
 ```
 
 Tabel 5.2.7. Query Operasi perbaruiData
