@@ -1046,6 +1046,54 @@ Tabel 5.2.7. Query Operasi perbaruiData
 | Q-044.1 | `SELECT COUNT(*) FROM materi_aksara WHERE nama_materi = :nama AND jenis_aksara = :jenis AND tingkat_kesulitan = :tingkat AND id_materi <> :id AND deleted_at IS NULL;` | Cek duplikat selain materi ini. |
 | Q-044.2 | `UPDATE materi_aksara SET nama_materi = :nama, jenis_aksara = :jenis, tingkat_kesulitan = :tingkat, status_publikasi = :status WHERE id_materi = :id AND deleted_at IS NULL;` | Memperbarui metadata. |
 
+## 5.3 Kelas RiwayatLatihan
+
+## 5.4 Kelas DataFeedback
+
+## 5.5 Kelas HalamanPendaftaran
+
+## 5.6 Kelas HalamanLogin
+
+## 5.7 Kelas HalamanUtama
+
+## 5.8 Kelas HalamanLatihan
+
+## 5.9 Kelas HalamanKelolaMateri
+
+## 5.10 Kelas HalamanFeedback
+
+## 5.11 Kelas HalamanKelasPelajar
+
+## 5.12 Kelas HalamanKelolaKelas
+
+## 5.13 Kelas HalamanMateri
+
+## 5.14 Kelas HalamanProgres
+
+## 5.15 Kelas OtentikasiController
+
+## 5.16 Kelas LatihanController
+
+## 5.17 Kelas MateriController
+
+## 5.18 Kelas FeedbackController
+
+## 5.19 Kelas ProgresController
+
+## 5.20 Kelas KelasController
+
+## 5.21 Kelas KontenMateri
+
+## 5.22 Kelas MotivasiBelajar
+
+## 5.23 Kelas KelasBelajar
+
+## 5.24 Kelas KeanggotaanKelas
+
+## 5.25 Kelas TugasKelas
+
+## 5.26 Kelas PenyelesaianTugas
+
 ---
 
 # BAB 6: Perancangan Antarmuka
