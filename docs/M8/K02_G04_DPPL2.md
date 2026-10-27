@@ -35,7 +35,7 @@ Dipersiapkan oleh:
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* |  |
+| *A* | Revisi diagram sekuens dan kelas menyesuaikan dengan operasi dan atribut yang tersedia |
 | *B* |  |
 | *C* |  |
 | ... |  |
