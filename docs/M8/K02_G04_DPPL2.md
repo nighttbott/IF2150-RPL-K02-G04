@@ -1228,6 +1228,32 @@ Tabel 5.3.11. Query Operasi cekPernahSelesai
 | :--- | :--- | :--- |
 | Q-009 | `SELECT COUNT(*) FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND target_soal = :target_soal   AND mode = :mode AND status = 'berhasil';` | Hasil lebih dari 0 berarti soal sudah pernah diselesaikan. |
 
+## 5.4 Kelas DataFeedback
+ 
+**Nama Kelas:** DataFeedback  
+**ID Kelas:** C04  
+**Jenis:** Model
+ 
+Menyimpan feedback, akun pengirim, waktu kirim, dan status tindak lanjut (KF19–KF20).
+ 
+Tabel 5.4.1. Operasi Kelas DataFeedback
+ 
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `simpan(data: MasukanFeedback): HasilOperasi` | public | Menyimpan feedback yang sudah divalidasi dengan status awal `BARU` dan waktu kirim dari server. Lihat Algo-003. |
+| `perbaruiStatus(status: StatusFeedback): HasilOperasi` | public | Mengubah status tindak lanjut feedback. Status hanya boleh maju (`BARU` → `DIPROSES` → `SELESAI`). Lihat Algo-004. |
+ 
+Tabel 5.4.2. Atribut Kelas DataFeedback
+ 
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idFeedback` | private | Integer |
+| `idAkun` | private | Integer |
+| `kategori` | private | KategoriFeedback (`PERFORMA`, `TAMPILAN`, `FITUR`, `MATERI`) |
+| `pesan` | private | String |
+| `waktuKirim` | private | DateTime |
+| `status` | private | StatusFeedback (`BARU`, `DIPROSES`, `SELESAI`) |
+ 
 ### 5.4.1 Algoritma/Query
  
 **Nama Kelas:** DataFeedback  
