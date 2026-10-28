@@ -4780,7 +4780,7 @@ Tabel 6.13. Spesifikasi Objek Antarmuka I-13
 **Nama Layar:** Kelola Anggota dan Papan Peringkat
 
 <p align="center">
-<img alt="Rancangan Antarmuka I-16 Kelola Anggota dan Papan Peringkat" src="./assets/ui/I16.png" width="70%">
+<img alt="Rancangan Antarmuka I-16 Kelola Anggota dan Papan Peringkat" src="./assets/ui/I-16.png" width="70%">
 </p>
 
 <p align="center">
@@ -4913,7 +4913,7 @@ Tabel 6.21. Rancangan Antarmuka Keseluruhan
 | I-13 Pengerjaan Tugas | <img src="./assets/ui/I-13-Polos.png" alt="I-13 Pengerjaan Tugas" width="400"> |
 | I-14 Kelola Kelas| <img src="./assets/ui/I14.png" alt="I-11 Progres Pelajar" width="400"> |
 | I-15 Terbitkan Tugas| <img src="./assets/ui/I15.png" alt="I-11 Progres Pelajar" width="400"> |
-| I-16 Kelola Anggota dan Papan Peringkat| <img src="./assets/ui/I16.png" alt="I-11 Progres Pelajar" width="400"> |
+| I-16 Kelola Anggota dan Papan Peringkat| <img src="./assets/ui/I-16.png" alt="I-11 Progres Pelajar" width="400"> |
 |I-17 Pantau Progres Anggota | <img src="./assets/diagram/I-17 Pantau Progres Anggota.png" alt="I-17 Pantau Progres Anggota" width="400">|
 | I-18 Kelola Materi | <img src="./assets/diagram/I-18 Kelola Materi.png" alt="Contoh Desain" width="400"> |
 | I-19 Unggah Materi | <img src="./assets/diagram/I-19 Unggah Materi.png" alt="Contoh Desain" width="400"> |
