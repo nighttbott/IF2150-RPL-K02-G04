@@ -2668,7 +2668,7 @@ Tabel 6.5. Spesifikasi Objek Antarmuka I-05
 **Use Case:** UC-04
 
 <p align="center">
-<img alt="Rancangan Antarmuka I-11 - Progres Pelajar" src="./assets/diagram/I-11-progres-pelajar.png" width="100%">
+<img alt="Rancangan Antarmuka I-11 - Progres Pelajar" src="./assets/diagram/I-11 Progres Pelajar.png" width="100%">
 </p>
 <p align="center"><i>Gambar 53. Rancangan Antarmuka I-11 - Progres Pelajar</i></p>
 
@@ -2702,7 +2702,7 @@ Tabel 6.11. Spesifikasi Objek Antarmuka I-11
 **Use Case:** UC-08
 
 <p align="center">
-<img alt="Rancangan Antarmuka I-17 - Pantau Progres Anggota" src="./assets/diagram/I-17-pantau-progres-anggota.png" width="100%">
+<img alt="Rancangan Antarmuka I-17 - Pantau Progres Anggota" src="./assets/diagram/I-17 Pantau Progres Anggota.png" width="100%">
 </p>
 <p align="center"><i>Gambar 59. Rancangan Antarmuka I-17 - Pantau Progres Anggota</i></p>
 
