@@ -1061,6 +1061,23 @@ Tabel 5.3.1. Operasi Kelas RiwayatLatihan
 | `ambilRiwayatPelajar(daftarIdPelajar: List<Integer>): List<RiwayatLatihan>` | public | Mengambil riwayat sejumlah Pelajar sekaligus untuk pemantauan kelas. |
 | `hitungPolaKesalahan(daftarIdPelajar: List<Integer>): Data` | public | Menghitung aksara yang paling sering salah pada sekelompok Pelajar. |
 
+Tabel 5.3.2. Atribut Kelas RiwayatLatihan
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idRiwayat` | private | `Integer` |
+| `idPelajar` | private | `Integer` |
+| `idMateri` | private | `Integer` |
+| `targetSoal` | private | `String?` |
+| `mode` | private | `ModeLatihan?` |
+| `skor` | private | `Decimal?` |
+| `tanggalPengerjaan` | private | `DateTime` |
+| `status` | private | `String` |
+| `idTugas` | private | `Integer?` |
+| `idKomponen` | private | `Integer?` |
+| `modeAktivitas` | private | `String` |
+| `waktuSelesai` | private | `DateTime?` |
+
 ## 5.4 Kelas DataFeedback
 
 ## 5.5 Kelas HalamanPendaftaran
