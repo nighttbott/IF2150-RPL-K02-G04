@@ -1678,6 +1678,143 @@ PROCEDURE tampilkanKonfirmasi(konfirmasi: Konfirmasi)
 
 ## 5.11 Kelas HalamanKelasPelajar
 
+**Nama Kelas:** `HalamanKelasPelajar`  
+**ID Kelas:** C11
+
+Tabel 5.11.1. Operasi Kelas HalamanKelasPelajar
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `kirimKodeBergabung(kode: String): void` | public | Mengirim kode ke C20 dan menampilkan hasil validasi/keanggotaan. |
+| `bukaTugas(idKelas: Integer, idTugas: Integer): void` | public | Meminta detail tugas melalui C20; memperbarui state hanya bila akses berhasil. |
+| `kerjakanTugas(idKelas: Integer, idTugas: Integer): void` | public | Mengarahkan pengerjaan komponen ke UC-02/UC-03 dengan konteks tugas dan komponen. |
+| `finalisasiTugas(idKelas: Integer, idTugas: Integer): HasilOperasi` | private | Memanggil C20.simpanPengumpulan dan mengembalikan hasil server tanpa menentukan status sendiri. |
+| `bukaKelas(idKelas: Integer): void` | public | Meminta daftar tugas dan status melalui C20, termasuk tampilan daftar kosong. |
+| `tampilkanPesan(pesan: String): void` | private | Menampilkan pesan dengan escaping sesuai konteks HTML. |
+| `tampilkanTugas(data: Data): void` | private | Menampilkan daftar tugas, tenggat, status, atau keadaan kosong. |
+| `tampilkanDetail(data: Data): void` | private | Menampilkan instruksi dan komponen; indikator lewat tenggat memakai waktuServer. |
+| `tampilkanHasil(data: Data): void` | private | Menampilkan status serta waktu penyelesaian yang telah dikonfirmasi server. |
+| `periksaPenyelesaian(idKelas: Integer, idTugas: Integer): void` | public | Meminta finalisasi ulang setelah aktivitas selesai atau pengiriman sebelumnya tidak terkonfirmasi. |
+
+Tabel 5.11.2. Atribut Kelas HalamanKelasPelajar
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `kodeKelasInput` | private | `string` |
+| `tugasAktif` | private | `?int` |
+| `detailTugas` | private | `?DetailTugas` |
+| `idKelasAktif` | private | `int` |
+
+### 5.11.1 Algoritma kirimKodeBergabung
+
+**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Operasi:** `kirimKodeBergabung(kode: String): void`  
+**ID Algoritma:** Algo-C11-01
+
+```text
+procedure kirimKodeBergabung (input kode: string)
+    kodeKelasInput ← trim(kode)
+    if kodeKelasInput = "" then
+        tampilkanPesan("Kode kelas wajib diisi")
+    else
+        hasil ← KelasController.validasiKodeBergabung(kodeKelasInput)
+        if hasil.kode = "belumTerkonfirmasi" then
+            tampilkanPesan("Hasil belum dapat dikonfirmasi. Silakan coba kembali.")
+        else
+            tampilkanPesan(hasil.pesan)
+```
+
+### 5.11.2 Algoritma bukaKelas
+
+**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Operasi:** `bukaKelas(idKelas: Integer): void`  
+**ID Algoritma:** Algo-C11-02
+
+```text
+procedure bukaKelas (input idKelas: integer)
+    hasil ← KelasController.ambilTugasAktif(idKelas)
+    if hasil.berhasil then
+        idKelasAktif ← idKelas
+        tugasAktif ← Nil
+        detailTugas ← Nil
+        tampilkanTugas(hasil.data)
+    else
+        kosongkanTampilanKelas()
+        tampilkanPesan(hasil.pesan)
+```
+
+### 5.11.3 Algoritma bukaTugas
+
+**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Operasi:** `bukaTugas(idKelas: Integer, idTugas: Integer): void`  
+**ID Algoritma:** Algo-C11-03
+
+```text
+procedure bukaTugas (input idKelas: integer, idTugas: integer)
+    tugasAktif ← Nil
+    detailTugas ← Nil
+    hasil ← KelasController.bukaTugas(idKelas, idTugas)
+    if hasil.berhasil then
+        idKelasAktif ← idKelas
+        tugasAktif ← idTugas
+        detailTugas ← hasil.data.detailTugas
+        tampilkanDetail(hasil.data)
+    else
+        kosongkanTampilanDetail()
+        tampilkanPesan(hasil.pesan)
+```
+
+### 5.11.4 Algoritma kerjakanTugas
+
+**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Operasi:** `kerjakanTugas(idKelas: Integer, idTugas: Integer): void`  
+**ID Algoritma:** Algo-C11-04
+
+```text
+procedure kerjakanTugas (input idKelas: integer, idTugas: integer)
+    bukaTugas(idKelas, idTugas)
+    if tugasAktif = idTugas then
+        komponen ← ambilKomponenWajibBelumSelesai(detailTugas)
+        i ← 1
+        lanjut ← true
+        while (i ≤ komponen.Neff) and lanjut do
+            if komponen.Tab[i].jenis = "materi" then
+                hasil ← jalankanUC02(idKelas, idTugas, komponen.Tab[i].idKomponen)
+            else
+                hasil ← jalankanUC03(idKelas, idTugas, komponen.Tab[i].idKomponen)
+            lanjut ← hasil.berhasil
+            i ← i + 1
+        if lanjut then
+            periksaPenyelesaian(idKelas, idTugas)
+```
+
+### 5.11.5 Algoritma finalisasiTugas
+
+**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Operasi:** `finalisasiTugas(idKelas: Integer, idTugas: Integer): HasilOperasi`  
+**ID Algoritma:** Algo-C11-05
+
+```text
+function finalisasiTugas (idKelas: integer, idTugas: integer) → HasilOperasi
+    hasil ← KelasController.simpanPengumpulan(idKelas, idTugas)
+    → hasil
+```
+
+### 5.11.6 Algoritma periksaPenyelesaian
+
+**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Operasi:** `periksaPenyelesaian(idKelas: Integer, idTugas: Integer): void`  
+**ID Algoritma:** Algo-C11-06
+
+```text
+procedure periksaPenyelesaian (input idKelas: integer, idTugas: integer)
+    hasil ← finalisasiTugas(idKelas, idTugas)
+    if hasil.berhasil then
+        tampilkanHasil(hasil.data)
+    else
+        tampilkanPesan(hasil.pesan)
+```
+
 ## 5.12 Kelas HalamanKelolaKelas
 **Nama Kelas:** HalamanKelolaKelas
 
@@ -3789,9 +3926,489 @@ FUNCTION finalisasiTugas(idPelajar: Integer, idTugas: Integer, bukti: BuktiPenye
 ```
 ## 5.24 Kelas KeanggotaanKelas
 
+**Nama Kelas:** `KeanggotaanKelas`  
+**ID Kelas:** C24
+
+Tabel 5.24.1. Operasi Kelas KeanggotaanKelas
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `simpanKeanggotaan(idPelajar: Integer, idKelas: Integer): HasilOperasi` | public | Menyimpan anggota baru secara atomik; anggota aktif yang sudah ada tidak diduplikasi. |
+| `periksaAkses(idPelajar: Integer, idKelas: Integer): Boolean` | public | Mengembalikan true hanya jika pasangan Pelajar–kelas mempunyai status aktif. |
+| `daftarAnggotaAktif(idKelas: Integer): List<KeanggotaanKelas>` | public | Mengambil anggota aktif untuk pemantauan dan papan peringkat. |
+| `ubahStatus(status: String): HasilOperasi` | public | Mengubah status objek keanggotaan yang telah dimuat setelah otorisasi Pengajar. |
+| `simpanAtomik(): HasilOperasi` | private | Menyimpan perubahan keanggotaan dalam transaksi; mengembalikan hasil setelah commit. |
+| `daftarAnggota(idKelas: Integer): List<KeanggotaanKelas>` | public | Mengambil seluruh anggota kelas beserta statusnya untuk pengelolaan Pengajar. |
+
+Tabel 5.24.2. Atribut Kelas KeanggotaanKelas
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idKeanggotaan` | private | `int` |
+| `idKelas` | private | `int` |
+| `idPelajar` | private | `int` |
+| `status` | private | `string` |
+
+### 5.24.1 Algoritma simpanKeanggotaan
+
+**Nama Kelas:** `KeanggotaanKelas`  
+**Nama Operasi:** `simpanKeanggotaan(idPelajar: Integer, idKelas: Integer): HasilOperasi`  
+**ID Algoritma:** Algo-C24-01
+
+```text
+function simpanKeanggotaan (idPelajar: integer, idKelas: integer) → HasilOperasi
+    hasil ← gagal("gagalSimpan")
+    mulaiTransaksi(tx)
+    if not tx.gagal then
+        kelas ← kunciKelas(idKelas, tx)
+        if not tx.gagal then
+            if kelas.aktif then
+                anggota ← cariKeanggotaan(idPelajar, idKelas, tx)
+                if not tx.gagal then
+                    if anggota = Nil then
+                        sisipkanKeanggotaan(idPelajar, idKelas, "aktif", tx)
+                        kodeHasil ← "berhasilBergabung"
+                    else
+                        if anggota.status = "aktif" then
+                            kodeHasil ← "sudahAnggota"
+                        else
+                            kodeHasil ← "anggotaNonaktif"
+                    if not tx.gagal then
+                        if kodeHasil = "anggotaNonaktif" then
+                            batalkanTransaksi(tx)
+                            hasil ← gagal(kodeHasil)
+                        else
+                            commit(tx)
+                            if tx.terkonfirmasi then
+                                hasil ← berhasil(kodeHasil)
+            else
+                batalkanTransaksi(tx)
+                hasil ← gagal("kelasTidakAktif")
+    if tx.konflikUnik then
+        batalkanTransaksi(tx)
+        anggota ← bacaUlangKeanggotaan(idPelajar, idKelas)
+        if anggota = Nil then
+            hasil ← gagal("gagalSimpan")
+        else
+            if anggota.status = "aktif" then
+                hasil ← berhasil("sudahAnggota")
+            else
+                hasil ← gagal("anggotaNonaktif")
+    else
+        if tx.tidakPasti then
+            hasil ← gagal("belumTerkonfirmasi")
+        else
+            if tx.gagal then
+                batalkanTransaksi(tx)
+                catatError(tx)
+    → hasil
+```
+
+### 5.24.2 Algoritma periksaAkses
+
+**Nama Kelas:** `KeanggotaanKelas`  
+**Nama Operasi:** `periksaAkses(idPelajar: Integer, idKelas: Integer): Boolean`  
+**ID Algoritma:** Algo-C24-02
+
+```text
+function periksaAkses (idPelajar: integer, idKelas: integer) → boolean
+    anggota ← bacaKeanggotaan(idPelajar, idKelas)
+    if anggota = Nil then
+        → false
+    else
+        → (anggota.status = "aktif")
+```
+
+### 5.24.3 Algoritma ubahStatus
+
+**Nama Kelas:** `KeanggotaanKelas`  
+**Nama Operasi:** `ubahStatus(status: String): HasilOperasi`  
+**ID Algoritma:** Algo-C24-03
+
+```text
+function ubahStatus (status: string) → HasilOperasi
+    hasil ← gagal("statusTidakValid")
+    if (status = "aktif") or (status = "nonaktif") then
+        hasil ← gagal("gagalSimpan")
+        mulaiTransaksi(tx)
+        if not tx.gagal then
+            anggota ← kunciKeanggotaan(idKeanggotaan, idKelas, tx)
+            if not tx.gagal then
+                if anggota = Nil then
+                    batalkanTransaksi(tx)
+                    hasil ← gagal("tidakDitemukan")
+                else
+                    perbaruiStatusKeanggotaan(idKeanggotaan, status, tx)
+                    if not tx.gagal then
+                        commit(tx)
+                        if tx.terkonfirmasi then
+                            muatUlangObjekKeanggotaan(idKeanggotaan)
+                            hasil ← berhasil("statusDiperbarui")
+        if tx.tidakPasti then
+            hasil ← gagal("belumTerkonfirmasi")
+        else
+            if tx.gagal then
+                batalkanTransaksi(tx)
+                catatError(tx)
+    → hasil
+```
+
+### 5.24.4 Algoritma daftarAnggotaAktif
+
+**Nama Kelas:** `KeanggotaanKelas`  
+**Nama Operasi:** `daftarAnggotaAktif(idKelas: Integer): List<KeanggotaanKelas>`  
+**ID Algoritma:** Algo-C24-04
+
+```text
+function daftarAnggotaAktif (idKelas: integer) → List<KeanggotaanKelas>
+    anggota ← bacaDaftarAnggota(idKelas, "aktif")
+    → anggota
+```
+
+#### Query Pendukung Kelas C24
+
+Tabel 5.24.3. Query Pendukung
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C24-01 | `SELECT EXISTS(SELECT 1 FROM keanggotaan_kelas WHERE id_pelajar = :idPelajar AND id_kelas = :idKelas AND status = 'aktif') AS akses;` | Pemeriksaan anggota aktif. |
+| Q-C24-02 | `SELECT * FROM keanggotaan_kelas WHERE id_kelas = :idKelas AND id_pelajar = :idPelajar FOR UPDATE;` | Pembacaan pasangan dalam transaksi; constraint unik menangani pasangan baru yang bersaing. |
+| Q-C24-03 | `INSERT INTO keanggotaan_kelas (id_kelas, id_pelajar, status) VALUES (:idKelas, :idPelajar, 'aktif');` | Keanggotaan baru; idKeanggotaan dibangkitkan basis data. |
+| Q-C24-04 | `UPDATE keanggotaan_kelas SET status = :status WHERE id_keanggotaan = :idKeanggotaan AND id_kelas = :idKelas;` | Pembaruan setelah objek terkunci dan otorisasi pemilik. |
+| Q-C24-05 | `SELECT * FROM keanggotaan_kelas WHERE id_kelas = :idKelas AND status = 'aktif' ORDER BY id_keanggotaan;` | daftarAnggotaAktif; hapus filter status untuk daftarAnggota. |
+
+
 ## 5.25 Kelas TugasKelas
 
+**Nama Kelas:** `TugasKelas`  
+**ID Kelas:** C25
+
+Tabel 5.25.1. Operasi Kelas TugasKelas
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `ambilTugasAktif(idKelas: Integer): List` | public | Mengambil tugas terbit milik kelas, termasuk yang tenggatnya sudah lewat. |
+| `terbitkan(): HasilOperasi` | public | Memvalidasi draf dan mengubah status menjadi terbit. |
+| `verifikasiDanSimpan(idKelas: Integer, idTugas: Integer, idPelajar: Integer, bukti: BuktiPenyelesaian): HasilOperasi` | public | Memastikan tugas sesuai kelas dan bukti lengkap, lalu mendelegasikan penyimpanan ke C26. |
+| `ambilStatus(idPelajar: Integer, daftarTugas: List): List` | public | Mendelegasikan pembacaan status per Pelajar kepada C26. |
+| `ambilDetail(idKelas: Integer, idTugas: Integer): Data?` | public | Mengambil detail tugas terbit yang cocok dengan idKelas dan idTugas; null jika tidak ditemukan. |
+| `periksaKomponenWajib(bukti: BuktiPenyelesaian): HasilVerifikasi` | private | Memeriksa bukti tiap komponen wajib dan menghitung saat semua komponen pertama kali lengkap. |
+| `simpan(data: DataTugas): HasilOperasi` | public | Menyimpan paket tugas sebagai draf secara atomik; instruksi, tenggat, dan komponen divalidasi. |
+
+Tabel 5.25.2. Atribut Kelas TugasKelas
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idTugas` | private | `int` |
+| `idKelas` | private | `int` |
+| `instruksi` | private | `string` |
+| `tenggat` | private | `DateTimeImmutable` |
+| `status` | private | `StatusTugas` |
+| `komponenTugas` | private | `array (elemen KomponenTugas)` |
+
+### 5.25.1 Algoritma simpan
+
+**Nama Kelas:** `TugasKelas`  
+**Nama Operasi:** `simpan(data: DataTugas): HasilOperasi`  
+**ID Algoritma:** Algo-C25-01
+
+```text
+function simpan (data: DataTugas) → HasilOperasi
+    if not dataTugasValid(data) then
+        hasil ← gagal("dataTidakValid")
+    else
+        hasil ← gagal("gagalSimpan")
+        mulaiTransaksi(tx)
+        if not tx.gagal then
+            bolehSimpan ← periksaDrafUntukDisimpan(data, tx)
+            if not tx.gagal then
+                if bolehSimpan then
+                    idTugasTersimpan ← simpanMetadataDraf(data, tx)
+                    if not tx.gagal then
+                        simpanKomponenTugas(idTugasTersimpan, data.komponenTugas, tx)
+                    if not tx.gagal then
+                        commit(tx)
+                        if tx.terkonfirmasi then
+                            hasil ← berhasil(idTugasTersimpan)
+                else
+                    batalkanTransaksi(tx)
+                    hasil ← gagal("tugasTidakDapatDiubah")
+        if tx.tidakPasti then
+            hasil ← gagal("belumTerkonfirmasi")
+        else
+            if tx.gagal then
+                batalkanTransaksi(tx)
+                catatError(tx)
+    → hasil
+```
+
+### 5.25.2 Algoritma terbitkan
+
+**Nama Kelas:** `TugasKelas`  
+**Nama Operasi:** `terbitkan(): HasilOperasi`  
+**ID Algoritma:** Algo-C25-02
+
+```text
+function terbitkan () → HasilOperasi
+    hasil ← gagal("gagalSimpan")
+    mulaiTransaksi(tx)
+    if not tx.gagal then
+        tugas ← kunciTugasBesertaKomponen(idKelas, idTugas, tx)
+        if not tx.gagal then
+            if tugas = Nil then
+                batalkanTransaksi(tx)
+                hasil ← gagal("tugasTidakDitemukan")
+            else
+                if tugas.status = "terbit" then
+                    commit(tx)
+                    if tx.terkonfirmasi then
+                        hasil ← berhasil("sudahTerbit")
+                else
+                    if dataTugasValid(tugas) then
+                        perbaruiStatusTugas(idTugas, "terbit", tx)
+                        if not tx.gagal then
+                            commit(tx)
+                            if tx.terkonfirmasi then
+                                hasil ← berhasil("tugasDiterbitkan")
+                    else
+                        batalkanTransaksi(tx)
+                        hasil ← gagal("dataTidakValid")
+    if tx.tidakPasti then
+        hasil ← gagal("belumTerkonfirmasi")
+    else
+        if tx.gagal then
+            batalkanTransaksi(tx)
+            catatError(tx)
+    → hasil
+```
+
+### 5.25.3 Algoritma verifikasiDanSimpan
+
+**Nama Kelas:** `TugasKelas`  
+**Nama Operasi:** `verifikasiDanSimpan(idKelas: Integer, idTugas: Integer, idPelajar: Integer, bukti: BuktiPenyelesaian): HasilOperasi`  
+**ID Algoritma:** Algo-C25-03
+
+```text
+function verifikasiDanSimpan (idKelas: integer, idTugas: integer, idPelajar: integer, bukti: BuktiPenyelesaian) → HasilOperasi
+    tugas ← ambilDetail(idKelas, idTugas)
+    if tugas = Nil then
+        hasil ← gagal("tugasTidakDitemukan")
+    else
+        if (bukti.idPelajar ≠ idPelajar) or (bukti.idTugas ≠ idTugas) then
+            hasil ← gagal("buktiTidakValid")
+        else
+            muatAtributTugas(tugas)
+            verifikasi ← periksaKomponenWajib(bukti)
+            if verifikasi.valid then
+                hasil ← PenyelesaianTugas.simpanPengumpulan(idPelajar, idTugas,
+                    verifikasi.waktuSelesai, tugas.tenggat)
+            else
+                hasil ← gagal(verifikasi.alasan)
+                hasil.data ← verifikasi.komponenBelumSelesai
+    → hasil
+```
+
+### 5.25.4 Algoritma periksaKomponenWajib
+
+**Nama Kelas:** `TugasKelas`  
+**Nama Operasi:** `periksaKomponenWajib(bukti: BuktiPenyelesaian): HasilVerifikasi`  
+**ID Algoritma:** Algo-C25-04
+
+```text
+function periksaKomponenWajib (bukti: BuktiPenyelesaian) → HasilVerifikasi
+    jumlahWajib ← 0
+    hasil.komponenBelumSelesai.Neff ← 0
+    akhirSemua ← Nil
+    i ← 1
+    while i ≤ komponenTugas.Neff do
+        komponen ← komponenTugas.Tab[i]
+        if komponen.wajib then
+            jumlahWajib ← jumlahWajib + 1
+            ditemukan ← false
+            awalKomponen ← Nil
+            j ← 1
+            while j ≤ bukti.catatan.Neff do
+                catatan ← bukti.catatan.Tab[j]
+                if buktiCocokDanSelesai(catatan, komponen, bukti) then
+                    if not ditemukan then
+                        awalKomponen ← catatan.waktuSelesai
+                        ditemukan ← true
+                    else
+                        if catatan.waktuSelesai < awalKomponen then
+                            awalKomponen ← catatan.waktuSelesai
+                j ← j + 1
+            if ditemukan then
+                if akhirSemua = Nil then
+                    akhirSemua ← awalKomponen
+                else
+                    if awalKomponen > akhirSemua then
+                        akhirSemua ← awalKomponen
+            else
+                tambahID(hasil.komponenBelumSelesai, komponen.idKomponen)
+        i ← i + 1
+    hasil.valid ← (jumlahWajib > 0) and (hasil.komponenBelumSelesai.Neff = 0)
+    hasil.waktuSelesai ← Nil
+    if hasil.valid then
+        hasil.waktuSelesai ← akhirSemua
+        hasil.alasan ← "Seluruh komponen wajib selesai"
+    else
+        if jumlahWajib = 0 then
+            hasil.alasan ← "komponenWajibKosong"
+        else
+            hasil.alasan ← "komponenBelumLengkap"
+    → hasil
+```
+
+### 5.25.5 Algoritma ambilTugasAktif
+
+**Nama Kelas:** `TugasKelas`  
+**Nama Operasi:** `ambilTugasAktif(idKelas: Integer): List`  
+**ID Algoritma:** Algo-C25-05
+
+```text
+function ambilTugasAktif (idKelas: integer) → List
+    daftarTugas ← bacaTugasTerbit(idKelas)
+    → daftarTugas
+```
+
+#### Query Pendukung Kelas C25
+
+Tabel 5.25.3. Query Pendukung
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C25-01 | `SELECT * FROM tugas_kelas WHERE id_kelas = :idKelas AND status = 'terbit' ORDER BY tenggat, id_tugas;` | Daftar tugas terbit, termasuk yang lewat tenggat. |
+| Q-C25-02 | `SELECT * FROM tugas_kelas WHERE id_kelas = :idKelas AND id_tugas = :idTugas AND status = 'terbit';` | Detail tugas terbatas kelas. |
+| Q-C25-03 | `SELECT * FROM komponen_tugas WHERE id_tugas = :idTugas ORDER BY id_komponen;` | Memuat seluruh komponen tugas. |
+| Q-C25-04 | `INSERT INTO tugas_kelas (id_kelas, instruksi, tenggat, status) VALUES (:idKelas, :instruksi, :tenggat, 'draf');` | Metadata draf; insert komponen pada transaksi yang sama. |
+| Q-C25-05 | `INSERT INTO komponen_tugas (id_tugas, id_komponen, jenis, id_materi, mode, wajib) VALUES (:idTugas, :idKomponen, :jenis, :idMateri, :mode, :wajib);` | Dilakukan untuk tiap komponen tervalidasi. |
+| Q-C25-06 | `UPDATE tugas_kelas SET status = 'terbit' WHERE id_tugas = :idTugas AND id_kelas = :idKelas AND status = 'draf';` | Penerbitan setelah validasi dan penguncian draf. |
+
+
 ## 5.26 Kelas PenyelesaianTugas
+
+**Nama Kelas:** `PenyelesaianTugas`  
+**ID Kelas:** C26
+
+Tabel 5.26.1. Operasi Kelas PenyelesaianTugas
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `simpanPengumpulan(idPelajar: Integer, idTugas: Integer, waktuSelesai: DateTime, tenggat: DateTime): HasilOperasi` | public | Menyiapkan waktu/status dari bukti terverifikasi dan menyimpan pengumpulan satu kali. |
+| `tentukanStatusKetepatan(waktuSelesai: DateTime, tenggat: DateTime): String` | private | Mengembalikan tepatWaktu bila waktuSelesai <= tenggat; selain itu terlambat. |
+| `ambilStatus(idPelajar: Integer, daftarTugas: List): List` | public | Mengembalikan status untuk setiap tugas; tanpa baris pengumpulan berarti belumSelesai. |
+| `simpanAtomik(): HasilOperasi` | private | Menjalankan transaksi penyimpanan yang tahan permintaan ulang dan mencegah duplikasi. |
+| `batalkanTransaksi(): void` | private | Melakukan rollback transaksi penyimpanan milik operasi ini apabila masih aktif. |
+
+Tabel 5.26.2. Atribut Kelas PenyelesaianTugas
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idPenyelesaian` | private | `int` |
+| `idTugas` | private | `int` |
+| `idPelajar` | private | `int` |
+| `waktuKumpul` | private | `DateTimeImmutable` |
+| `status` | private | `string` |
+
+### 5.26.1 Algoritma simpanPengumpulan
+
+**Nama Kelas:** `PenyelesaianTugas`  
+**Nama Operasi:** `simpanPengumpulan(idPelajar: Integer, idTugas: Integer, waktuSelesai: DateTime, tenggat: DateTime): HasilOperasi`  
+**ID Algoritma:** Algo-C26-01
+
+```text
+function simpanPengumpulan (idPelajar: integer, idTugas: integer, waktuSelesai: DateTime, tenggat: DateTime) → HasilOperasi
+    siapkanObjekPenyelesaian(idPelajar, idTugas, waktuSelesai,
+        tentukanStatusKetepatan(waktuSelesai, tenggat))
+    hasil ← simpanAtomik()
+    → hasil
+```
+
+### 5.26.2 Algoritma tentukanStatusKetepatan
+
+**Nama Kelas:** `PenyelesaianTugas`  
+**Nama Operasi:** `tentukanStatusKetepatan(waktuSelesai: DateTime, tenggat: DateTime): String`  
+**ID Algoritma:** Algo-C26-02
+
+```text
+function tentukanStatusKetepatan (waktuSelesai: DateTime, tenggat: DateTime) → string
+    if waktuSelesai ≤ tenggat then
+        → "tepatWaktu"
+    else
+        → "terlambat"
+```
+
+### 5.26.3 Algoritma simpanAtomik
+
+**Nama Kelas:** `PenyelesaianTugas`  
+**Nama Operasi:** `simpanAtomik(): HasilOperasi`  
+**ID Algoritma:** Algo-C26-03
+
+```text
+function simpanAtomik () → HasilOperasi
+    hasil ← gagal("gagalSimpan")
+    mulaiTransaksi(tx)
+    if not tx.gagal then
+        sah ← kunciTugasDanPeriksaKeanggotaan(idTugas, idPelajar, tx)
+        if not tx.gagal then
+            if sah then
+                lama ← cariPengumpulan(idTugas, idPelajar, tx)
+                if not tx.gagal then
+                    if lama = Nil then
+                        sisipkanPenyelesaian(idTugas, idPelajar, waktuKumpul, status, tx)
+                    if not tx.gagal then
+                        commit(tx)
+                        if tx.terkonfirmasi then
+                            if lama = Nil then
+                                hasil ← berhasil(dataObjekPenyelesaian())
+                            else
+                                hasil ← berhasil(lama)
+            else
+                batalkanTransaksi(tx)
+                hasil ← gagal("aksesDitolak")
+    if tx.tidakPasti then
+        hasil ← gagal("belumTerkonfirmasi")
+    else
+        if tx.gagal then
+            batalkanTransaksi(tx)
+            catatError(tx)
+    → hasil
+```
+
+### 5.26.4 Algoritma ambilStatus
+
+**Nama Kelas:** `PenyelesaianTugas`  
+**Nama Operasi:** `ambilStatus(idPelajar: Integer, daftarTugas: List): List`  
+**ID Algoritma:** Algo-C26-04
+
+```text
+function ambilStatus (idPelajar: integer, daftarTugas: List) → List
+    hasil.Neff ← daftarTugas.Neff
+    if daftarTugas.Neff > 0 then
+        tersimpan ← bacaPengumpulan(idPelajar, daftarTugas)
+        i ← 1
+        while i ≤ daftarTugas.Neff do
+            statusLama ← cariStatus(tersimpan, daftarTugas.Tab[i].idTugas)
+            if statusLama = Nil then
+                hasil.Tab[i].idTugas ← daftarTugas.Tab[i].idTugas
+                hasil.Tab[i].status ← "belumSelesai"
+                hasil.Tab[i].waktuKumpul ← Nil
+            else
+                hasil.Tab[i] ← statusLama
+            i ← i + 1
+    → hasil
+```
+
+#### Query Pendukung Kelas C26
+
+Tabel 5.26.3. Query Pendukung
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C26-01 | `SELECT * FROM tugas_kelas WHERE id_tugas = :idTugas FOR UPDATE;` | Mengunci tugas; dilanjutkan penguncian keanggotaan dengan Q-C24-02. |
+| Q-C26-02 | `SELECT * FROM penyelesaian_tugas WHERE id_tugas = :idTugas AND id_pelajar = :idPelajar FOR UPDATE;` | Memeriksa pengumpulan yang sudah tersimpan. |
+| Q-C26-03 | `INSERT INTO penyelesaian_tugas (id_tugas, id_pelajar, waktu_kumpul, status) VALUES (:idTugas, :idPelajar, :waktuSelesai, :status);` | Menyimpan hasil verifikasi; tidak menimpa hasil pertama. |
+| Q-C26-04 | `SELECT id_tugas, status, waktu_kumpul FROM penyelesaian_tugas WHERE id_pelajar = :idPelajar AND id_tugas IN (:idTugas1, ..., :idTugasN);` | Pseudotemplate daftar parameter; daftar kosong ditangani sebelum query. |
 
 ---
 
@@ -4067,7 +4684,46 @@ Tabel 6.11. Spesifikasi Objek Antarmuka I-11
 
 ## 6.12 Rancangan Antarmuka I-12
 
+**Antarmuka:** I-12  
+**Nama Layar:** Kelas Saya & Daftar Tugas  
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-12 - Kelas Saya & Daftar Tugas" src="./assets/ui/I-12-Tags.png" width="100%">
+</p>
+<p align="center"><i>Gambar 54. Rancangan Antarmuka I-12 - Kelas Saya & Daftar Tugas</i></p>
+
+Tabel 6.12. Spesifikasi Objek Antarmuka I-12
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-12.1 | Text box | Kode bergabung | Kode kelas dari Pengajar. |
+| I-12.2 | Button | Gabung | Menjalankan kirimKodeBergabung(kode), lalu KelasController.validasiKodeBergabung() (Algo-081). |
+| I-12.3 | Pesan | Hasil bergabung | Ditampilkan oleh tampilkanPesan(pesan): berhasil, sudah menjadi anggota (UC-05 alternatif 1), atau kode tidak valid (UC-05 alternatif 3). |
+| I-12.4 | Tab | Kelas yang diikuti | Memilih kelas menjalankan bukaKelas(idKelas). |
+| I-12.5 | Daftar | Tugas aktif, tenggat, status | Ditampilkan oleh tampilkanTugas(data) dari KelasController.ambilTugasAktif(). |
+| I-12.6 | Button | Buka | Menjalankan bukaTugas(idKelas, idTugas), lalu membuka I-13. |
+
 ## 6.13 Rancangan Antarmuka I-13
+
+**Antarmuka:** I-13  
+**Nama Layar:** Pengerjaan Tugas  
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-13 - Pengerjaan Tugas" src="./assets/ui/I-13-Tags.png" width="100%">
+</p>
+<p align="center"><i>Gambar 55. Rancangan Antarmuka I-13 - Pengerjaan Tugas</i></p>
+
+Tabel 6.13. Spesifikasi Objek Antarmuka I-13
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-13.1 | Panel | Instruksi, tenggat, penanda terlambat | Ditampilkan oleh tampilkanDetail(data). Penanda muncul bila tenggat sudah lewat (UC-05 alternatif 2). |
+| I-13.2 | Daftar | Komponen tugas dan kemajuan | Status dari RiwayatLatihan.ambilBuktiPenyelesaian(). |
+| I-13.3 | Button | Kerjakan | Menjalankan kerjakanTugas(idKelas, idTugas) lalu membuka I-05 atau I-06. |
+| I-13.4 | Button | Kumpulkan tugas | Menjalankan periksaPenyelesaian(), lalu finalisasiTugas() dan KelasController.simpanPengumpulan() (Algo-082). Aktif bila semua komponen wajib selesai. |
+| I-13.5 | Pesan | Status pengumpulan | Ditampilkan oleh tampilkanHasil(data): tepat waktu atau terlambat (Algo-064). |
+| I-13.6 | Pesan kesalahan | Pengumpulan gagal | Muncul bila penyimpanan gagal. Semua perubahan dibatalkan (UC-05 eksepsi). |
+| I-13.7 | Link | Kembali ke Kelas Saya | Kembali ke I-12. |
 
 ## 6.14 Rancangan Antarmuka I-14
 
@@ -4075,26 +4731,24 @@ Tabel 6.11. Spesifikasi Objek Antarmuka I-11
 **Nama Layar:** Kelola Kelas
 
 <p align="center">
-<img alt="Rancangan Antarmuka I-14 Kelola Kelas" src="./assets/ui/I-14.png" width="70%">
+<img alt="Rancangan Antarmuka I-14 Kelola Kelas" src="./assets/ui/I14.png" width="70%">
 </p>
+
 <p align="center">
 <i>Gambar 6.14. Rancangan Antarmuka I-14 - Kelola Kelas</i>
 </p>
 
-Tabel 6.14. Spesifikasi Objek Antarmuka I-14
+**Tabel 6.14. Spesifikasi Objek Antarmuka I-14**
 
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
-| I-14-01 | Label (judul halaman) | Breadcrumb "Beranda / Kelola Kelas" dan judul "Kelola Kelas" | Menunjukkan halaman untuk mengelola kelas yang diampu oleh Pengajar. |
-| I-14-02 | Card (form pembuatan kelas) | Judul "Buat kelas baru", label "Nama kelas", dan kolom input nama kelas | Digunakan Pengajar untuk memasukkan nama kelas baru sebagai bagian dari `DataKelas`. |
-| I-14-03 | Button (utama) | "Buat Kelas" | Memicu `buatKelas(data: DataKelas)` pada `HalamanKelolaKelas`. Permintaan diteruskan ke `KelasController.buatKelas(data)` untuk memverifikasi hak akses Pengajar dan menyimpan kelas melalui `KelasBelajar.simpan(data)`. |
-| I-14-04 | Label (validasi) | "Nama kelas wajib diisi. (contoh)" | Menampilkan pesan validasi ketika nama kelas belum diisi. Kelas tidak dibuat sebelum data yang diperlukan valid. |
-| I-14-05 | Card (hasil pembuatan kelas) | Judul "KELAS BERHASIL DIBUAT", nama kelas, dan kode bergabung, misalnya "P4TR7K" | Ditampilkan setelah pembuatan kelas berhasil. Kode bergabung dibangkitkan melalui `buatKodeBergabung()` dan dikembalikan bersama `HasilOperasi(idKelas, kodeBergabung)`. |
-| I-14-06 | Button (aksi) | "Salin Kode" | Menyalin kode bergabung yang ditampilkan pada card hasil pembuatan kelas agar dapat dibagikan kepada Pelajar. |
-| I-14-07 | Card (daftar kelas) | Judul "Kelas yang kamu ampu", nama kelas, kode bergabung, jumlah anggota, dan jumlah tugas aktif | Menampilkan daftar kelas yang dikelola Pengajar beserta ringkasan informasi setiap kelas. |
-| I-14-08 | Button (navigasi) | "Anggota & Pengaturan" | Membuka antarmuka I-16 untuk mengelola anggota dan pengaturan papan peringkat pada kelas yang dipilih. |
-| I-14-09 | Button (navigasi) | "Terbitkan Tugas" | Membuka antarmuka I-15 untuk menyusun dan menerbitkan tugas pada kelas yang dipilih. |
-| I-14-10 | Button (navigasi) | "Pantau Progres" | Membuka halaman pemantauan progres belajar anggota pada kelas yang dipilih. |
+| I-14-01 | Text Input | Kolom nama kelas dengan placeholder "contoh: Aksara Sunda Dasar" | Digunakan Pengajar untuk memasukkan nama kelas baru sebagai bagian dari `DataKelas`. |
+| I-14-02 | Button (utama) | "Buat kelas" | Memicu `buatKelas(data: DataKelas)` pada `HalamanKelolaKelas`, yang meneruskan permintaan ke `KelasController.buatKelas(data)` untuk memverifikasi hak akses Pengajar dan menyimpan kelas melalui `KelasBelajar.simpan(data)`. |
+| I-14-03 | Card (kode bergabung) | Label "KODE BERGABUNG" dan kode kelas, misalnya "K7M2QX" | Menampilkan kode bergabung aktif yang dapat dibagikan kepada Pelajar. Kode dihasilkan melalui `buatKodeBergabung()` ketika kelas berhasil dibuat. |
+| I-14-04 | Button (aksi) | "Ganti kode" | Memicu `gantiKodeKelas(idKelas)` pada `HalamanKelolaKelas`. `KelasController` memverifikasi hak akses dan kepemilikan kelas sebelum meminta `KelasBelajar.gantiKodeBergabung(idPengajar)` menghasilkan kode baru dan menonaktifkan kode lama. |
+| I-14-05 | Button (navigasi) | "Terbitkan tugas" | Membuka antarmuka I-15 untuk menyusun dan menerbitkan tugas bagi anggota kelas yang dipilih. |
+| I-14-06 | Button (navigasi) | "Kelola anggota" | Membuka antarmuka I-16 untuk mengelola anggota aktif dan pengaturan papan peringkat kelas. |
+| I-14-07 | Alert (sukses) | "Kelas 'Aksara Jawa Dasar' berhasil dibuat" dan "Bagikan kode bergabung kepada Pelajar." | Ditampilkan setelah pembuatan kelas berhasil. Nama kelas mengikuti data yang dimasukkan Pengajar, sedangkan kode bergabung aktif ditampilkan pada card kelas. |
 
 ## 6.15 Rancangan Antarmuka I-15
 
@@ -4102,31 +4756,23 @@ Tabel 6.14. Spesifikasi Objek Antarmuka I-14
 **Nama Layar:** Terbitkan Tugas
 
 <p align="center">
-<img alt="Rancangan Antarmuka I-15 Terbitkan Tugas" src="./assets/ui/I-15.png" width="70%">
+<img alt="Rancangan Antarmuka I-15 Terbitkan Tugas" src="./assets/ui/I15.png" width="70%">
 </p>
+
 <p align="center">
 <i>Gambar 6.15. Rancangan Antarmuka I-15 - Terbitkan Tugas</i>
 </p>
 
-Tabel 6.15. Spesifikasi Objek Antarmuka I-15
+**Tabel 6.15. Spesifikasi Objek Antarmuka I-15**
 
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
-| I-15-01 | Label (judul halaman) | Breadcrumb "Kelola Kelas / Terbitkan Tugas" dan judul "Terbitkan tugas" | Menunjukkan halaman untuk menyusun dan menerbitkan tugas bagi anggota kelas. |
-| I-15-02 | Dropdown (pemilihan kelas) | Label "Kelas" dan pilihan kelas, misalnya "Aksara Jawa 8A · 28 anggota" | Menentukan kelas penerima tugas dan nilai `idKelas` yang digunakan saat menyimpan atau menerbitkan tugas. |
-| I-15-03 | Text Input | Label "Judul tugas"; contoh isi "Latihan menulis nglegena ha–ka" | Digunakan untuk memasukkan judul tugas sebagai bagian dari `DataTugas`. |
-| I-15-04 | Textarea | Label "Instruksi" dan petunjuk pengerjaan tugas | Digunakan untuk memasukkan instruksi yang akan dibaca Pelajar saat mengerjakan tugas. Instruksi disimpan sebagai bagian dari `DataTugas`. |
-| I-15-05 | Label (komponen tugas) | Judul "Komponen tugas" | Menandai daftar materi dan latihan yang dapat dipilih untuk dimasukkan ke dalam paket tugas. |
-| I-15-06 | Checkbox (materi) | "Aksara Nglegena Dasar" dengan label kategori "Materi" | Menentukan apakah materi Aksara Nglegena Dasar disertakan dalam paket tugas. |
-| I-15-07 | Checkbox (latihan menulis) | "Latihan menulis: ha" dengan label kategori "Menulis" | Menambahkan latihan menulis aksara ha ke dalam paket tugas apabila dipilih. |
-| I-15-08 | Checkbox (latihan menulis) | "Latihan menulis: ka" dengan label kategori "Menulis" | Menambahkan latihan menulis aksara ka ke dalam paket tugas apabila dipilih. |
-| I-15-09 | Checkbox (latihan bunyi) | "Mencocokkan bunyi: ha–ka" dengan label kategori "Bunyi" | Menambahkan latihan mencocokkan bunyi ha–ka ke dalam paket tugas apabila dipilih. |
-| I-15-10 | Checkbox (latihan merangkai) | "Merangkai suku kata ka–ki" dengan label kategori "Merangkai" | Menambahkan latihan merangkai suku kata ka–ki ke dalam paket tugas apabila dipilih. |
-| I-15-11 | Input (tenggat waktu) | Label "Tenggat"; contoh isi "30/10/2026 · 23.59" | Menentukan batas waktu pengerjaan tugas dan disimpan sebagai bagian dari `DataTugas`. |
-| I-15-12 | Card (ringkasan paket tugas) | Judul "RINGKASAN PAKET TUGAS", judul tugas, kelas, jumlah anggota aktif, jumlah komponen, dan tenggat | Merangkum informasi tugas berdasarkan kelas yang dipilih, data formulir, komponen yang dicentang, dan tenggat waktu. |
-| I-15-13 | Button (utama) | "Terbitkan Tugas" | Memicu `terbitkanTugas(idKelas, data)` pada `HalamanKelolaKelas`. `KelasController` memverifikasi hak akses Pengajar dan kepemilikan kelas, kemudian memanggil `TugasKelas.terbitkan()` agar tugas dapat diakses anggota kelas. |
-| I-15-14 | Button (sekunder) | "Batal" | Membatalkan proses penyusunan tugas dan kembali tanpa menerbitkan tugas. |
-| I-15-15 | Alert (sukses) | "Tugas diterbitkan untuk 28 anggota. (contoh hasil)" | Ditampilkan setelah penerbitan berhasil. Jumlah anggota pada notifikasi mengikuti jumlah penerima tugas pada kelas yang dipilih. |
+| I-15-01 | Textarea (instruksi tugas) | Label "Instruksi" dan contoh isi "Pelajari materi nglegena baris pertama, lalu selesaikan latihan merangkai." | Digunakan Pengajar untuk memasukkan petunjuk pengerjaan tugas. Instruksi disimpan sebagai bagian dari `DataTugas`. |
+| I-15-02 | Input (tenggat waktu) | Label "Tenggat" dan contoh isi "30 Okt 2026, 23.59" | Digunakan untuk menentukan batas waktu pengerjaan tugas. Nilai tenggat disimpan sebagai bagian dari `DataTugas`. |
+| I-15-03 | Kelompok kontrol (komponen tugas) | Dropdown materi "Nglegena 1", dropdown jenis "Latihan menulis", toggle "Wajib", dan tombol "+ Tambah" | Digunakan untuk memilih materi, menentukan jenis komponen, menetapkan apakah komponen wajib diselesaikan, dan menambahkannya ke dalam paket tugas. Komponen yang ditambahkan menjadi bagian dari data tugas yang akan diterbitkan. |
+| I-15-04 | Tabel (daftar komponen tugas) | Kolom "MATERI", "JENIS", dan "WAJIB", beserta daftar komponen dan tombol "Hapus" | Menampilkan komponen yang telah ditambahkan ke dalam paket tugas. Setiap baris menunjukkan materi, jenis komponen, status wajib, dan aksi untuk menghapus komponen dari daftar. |
+| I-15-05 | Button (utama) | "Terbitkan" | Memicu `terbitkanTugas(idKelas, data)` pada `HalamanKelolaKelas`. `KelasController` memverifikasi hak akses Pengajar dan kepemilikan kelas, kemudian meminta `TugasKelas.terbitkan()` agar tugas dapat diakses oleh anggota aktif kelas. |
+| I-15-06 | Alert (sukses) | "Tugas diterbitkan untuk 24 anggota aktif" | Ditampilkan setelah penerbitan berhasil. Jumlah penerima mengikuti jumlah anggota aktif pada kelas yang dipilih. |
 
 ## 6.16 Rancangan Antarmuka I-16
 
@@ -4134,31 +4780,23 @@ Tabel 6.15. Spesifikasi Objek Antarmuka I-15
 **Nama Layar:** Kelola Anggota dan Papan Peringkat
 
 <p align="center">
-<img alt="Rancangan Antarmuka I-16 Kelola Anggota dan Papan Peringkat" src="./assets/ui/I-16.png" width="70%">
+<img alt="Rancangan Antarmuka I-16 Kelola Anggota dan Papan Peringkat" src="./assets/ui/I16.png" width="70%">
 </p>
+
 <p align="center">
 <i>Gambar 6.16. Rancangan Antarmuka I-16 - Kelola Anggota dan Papan Peringkat</i>
 </p>
 
-Tabel 6.16. Spesifikasi Objek Antarmuka I-16
+**Tabel 6.16. Spesifikasi Objek Antarmuka I-16**
 
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
-| I-16-01 | Label (judul halaman) | Breadcrumb "Kelola Kelas / Aksara Jawa 8A / Anggota & Pengaturan" dan judul "Aksara Jawa 8A" | Menunjukkan kelas yang sedang dikelola oleh Pengajar. |
-| I-16-02 | Alert (sukses) | "Kode kelas diganti. Kode lama tidak bisa dipakai lagi." | Menampilkan konfirmasi setelah penggantian kode kelas berhasil. Kode lama dinonaktifkan dan kode bergabung baru menjadi kode aktif. |
-| I-16-03 | Card (kode bergabung aktif) | Label "KODE BERGABUNG AKTIF", kode "K8Q2MX", dan keterangan "Pelajar memakai kode ini di menu Kelas Saya." | Menampilkan kode bergabung aktif yang digunakan Pelajar untuk bergabung ke kelas. |
-| I-16-04 | Button (aksi) | "Ganti Kode" | Memicu `gantiKodeKelas(idKelas)` pada `HalamanKelolaKelas`. `KelasController` memverifikasi hak akses dan kepemilikan kelas sebelum meminta `KelasBelajar.gantiKodeBergabung(idPengajar)` menghasilkan kode baru. |
-| I-16-05 | Card (pengaturan kelas) | Judul "PENGATURAN KELAS" | Mengelompokkan pengaturan papan peringkat kelas. |
-| I-16-06 | Toggle | Label "Papan peringkat kelas" dengan status aktif atau nonaktif | Memicu `aturScoreboard(idKelas, aktif)`. Setelah hak akses dan kepemilikan kelas diverifikasi, `KelasBelajar.aturScoreboard(aktif)` memperbarui status papan peringkat. |
-| I-16-07 | Label (deskripsi pengaturan) | "Anggota melihat urutan poin dengan nama tampilan. Matikan bila kelas tidak ingin berkompetisi." | Menjelaskan bahwa pengaturan ini menentukan apakah papan peringkat kelas diaktifkan atau dinonaktifkan. |
-| I-16-08 | Card (daftar anggota) | Judul "Anggota aktif" dan jumlah anggota, misalnya "28 anggota" | Menampilkan daftar anggota yang berstatus aktif berdasarkan `KeanggotaanKelas.daftarAnggotaAktif(idKelas)`. |
-| I-16-09 | Label (header tabel) | "NAMA TAMPILAN", "BERGABUNG", "STATUS", dan "POIN" | Menunjukkan kolom informasi anggota yang ditampilkan pada tabel. |
-| I-16-10 | Row (data anggota) | Avatar atau inisial, nama tampilan, tanggal bergabung, status "Aktif", dan jumlah poin | Menampilkan data setiap anggota aktif. Profil diperoleh melalui `AkunPengguna.getProfil()`, sedangkan poin diperoleh melalui `MotivasiBelajar.ambilPoinKelas()`. |
-| I-16-11 | Button (aksi anggota) | "Keluarkan" | Membuka dialog konfirmasi untuk anggota yang dipilih. Pengeluaran hanya diproses setelah Pengajar mengonfirmasi tindakan tersebut. |
-| I-16-12 | Dialog konfirmasi | Judul "Keluarkan Dimas dari kelas?" dan keterangan bahwa Dimas tidak dapat membuka tugas kelas, tetapi riwayat belajar pribadinya tetap tersimpan | Meminta konfirmasi sebelum status keanggotaan Pelajar diubah menjadi nonaktif. Nama anggota menyesuaikan anggota yang dipilih. |
-| I-16-13 | Button (sekunder pada dialog) | "Batal" | Menutup dialog tanpa mengubah status keanggotaan anggota. |
-| I-16-14 | Button (utama pada dialog) | "Keluarkan" | Setelah dikonfirmasi, memicu `kelolaAnggota(idKelas)` pada `HalamanKelolaKelas`, yang meneruskan `KelasController.kelolaAnggota(idKelas, idPelajar, status="nonaktif")`. Setelah hak akses dan kepemilikan kelas diverifikasi, sistem memanggil `KeanggotaanKelas.ubahStatus("nonaktif")`. |
-| I-16-15 | Label (jumlah anggota ditampilkan) | "Menampilkan 5 dari 28 anggota" | Menunjukkan jumlah anggota yang sedang ditampilkan dibandingkan dengan jumlah seluruh anggota aktif. Daftar diperbarui setelah pengeluaran anggota berhasil. |
+| I-16-01 | Card (daftar anggota aktif) | Judul "Anggota aktif" dan tabel anggota dengan kolom "NAMA", "BERGABUNG", dan "STATUS" | Menampilkan daftar anggota aktif berdasarkan `KeanggotaanKelas.daftarAnggotaAktif(idKelas)`. Setiap baris memuat inisial atau avatar, nama tampilan, tanggal bergabung, dan status keanggotaan. |
+| I-16-02 | Button (aksi anggota) | "Keluarkan" | Membuka dialog konfirmasi untuk anggota yang dipilih. Pengeluaran hanya diproses setelah Pengajar mengonfirmasi tindakan tersebut. |
+| I-16-03 | Dialog konfirmasi | Judul "Keluarkan Budi dari kelas?" dan keterangan "Akses Budi ke kelas berakhir. Riwayat belajarnya tidak dihapus.", dengan tombol "Ya, keluarkan" dan "Batal" | Meminta konfirmasi sebelum mengubah status keanggotaan Pelajar menjadi nonaktif. Tombol "Ya, keluarkan" memicu `kelolaAnggota(idKelas)` pada `HalamanKelolaKelas`, yang meneruskan permintaan ke `KelasController.kelolaAnggota(idKelas, idPelajar, status="nonaktif")`. Setelah hak akses dan kepemilikan kelas diverifikasi, sistem memanggil `KeanggotaanKelas.ubahStatus("nonaktif")` dan memperbarui daftar anggota aktif. Tombol "Batal" menutup dialog tanpa mengubah keanggotaan. |
+| I-16-04 | Card (papan peringkat) | Judul "Papan peringkat", deskripsi "Bila aktif, anggota melihat urutan poin di halaman progres", toggle, dan daftar tiga anggota teratas | Menampilkan pengaturan serta ringkasan papan peringkat kelas. Ketika aktif, sistem mengambil anggota aktif, profil, dan poin kelas, lalu menyusun peringkat secara menurun melalui `MotivasiBelajar.susunScoreboard()`. |
+| I-16-05 | Toggle (pengaturan papan peringkat) | Toggle aktif atau nonaktif pada card "Papan peringkat" | Memicu `aturScoreboard(idKelas, aktif)` pada `HalamanKelolaKelas`. `KelasController` memverifikasi hak akses dan kepemilikan kelas sebelum memanggil `KelasBelajar.aturScoreboard(aktif)`. Jika diaktifkan, data papan peringkat ditampilkan sesuai hasil pengurutan poin anggota. |
+
 
 ## 6.17 Rancangan Antarmuka I-17
 **Antarmuka:** I-17  
@@ -4268,12 +4906,12 @@ Tabel 6.21. Rancangan Antarmuka Keseluruhan
 | I-08 Latihan Mencocokkan Bunyi | <img src="./assets/ui/I-08 Bunyi.png" alt="I-08 Latihan Mencocokkan Bunyi" width="400"> |
 | I-09 Latihan Merangkai Aksara | <img src="./assets/ui/I-09 Merangkai.png" alt="I-09 Latihan Merangkai Aksara" width="400"> |
 | I-10 Hasil Latihan | <img src="./assets/ui/I-10 Hasil Latihan.png" alt="I-10 Hasil Latihan" width="400"> |
-|I-11 Progres Pelajar | <img src="./assets/diagram/I-11 Progres Pelajar.png" alt="I-11 Progres Pelajar" width="400"> |
-| I-12 | ...                                                                                 |
-| I-13 | ...                                                                                 |
-| I-14 Kelola Kelas| <img src="./assets/diagram/I-14.png" alt="I-11 Progres Pelajar" width="400"> |
-| I-15 Terbitkan Tugas| <img src="./assets/diagram/I-15.png" alt="I-11 Progres Pelajar" width="400"> |
-| I-16 Kelola Anggota dan Papan Peringkat| <img src="./assets/diagram/I-16.png" alt="I-11 Progres Pelajar" width="400"> |
+| I-11 Progres Pelajar | <img src="./assets/diagram/I-11 Progres Pelajar.png" alt="I-11 Progres Pelajar" width="400"> |
+| I-12 Kelas Saya & Daftar Tugas | <img src="./assets/ui/I-12-Polos.png" alt="I-12 Kelas Saya & Daftar Tugas" width="400"> |
+| I-13 Pengerjaan Tugas | <img src="./assets/ui/I-13-Polos.png" alt="I-13 Pengerjaan Tugas" width="400"> |
+| I-14 Kelola Kelas| <img src="./assets/ui/I14.png" alt="I-11 Progres Pelajar" width="400"> |
+| I-15 Terbitkan Tugas| <img src="./assets/ui/I15.png" alt="I-11 Progres Pelajar" width="400"> |
+| I-16 Kelola Anggota dan Papan Peringkat| <img src="./assets/ui/I16.png" alt="I-11 Progres Pelajar" width="400"> |
 |I-17 Pantau Progres Anggota | <img src="./assets/diagram/I-17 Pantau Progres Anggota.png" alt="I-17 Pantau Progres Anggota" width="400">|
 | I-18 Kelola Materi | <img src="./assets/diagram/I-18 Kelola Materi.png" alt="Contoh Desain" width="400"> |
 | I-19 Unggah Materi | <img src="./assets/diagram/I-19 Unggah Materi.png" alt="Contoh Desain" width="400"> |
