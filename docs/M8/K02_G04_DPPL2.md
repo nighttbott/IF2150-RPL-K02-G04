@@ -1472,34 +1472,37 @@ PROCEDURE pilihMenu(kode: String)
 ## 5.8 Kelas HalamanLatihan
 
 **Nama Kelas:** HalamanLatihan  
-**ID Kelas:** C08
+**ID Kelas:** C08  
+**Jenis:** View
+
+Menampilkan latihan aksara pada layar I-06 sampai I-10. Halaman dirender Blade di server, sedangkan interaksi langsung seperti menggambar di kanvas, menyalakan outline, memutar audio, dan menyusun komponen dijalankan JavaScript di browser tanpa menunggu server (KNF04).
 
 Tabel 5.8.1. Operasi Kelas HalamanLatihan
 
-| Nama Operasi                                  | Visibility (private, public) | Keterangan                                                                                                                                                                                                                                                                                                                               |
-| :-------------------------------------------- | :--------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pilihModeLatihan(mode: ModeLatihan): void`   | public                       | Mengirim mode yang dipilih bersama `idMateri` halaman ke `LatihanController.siapkanSoal()` (Algo-021), lalu menyiapkan tampilan sesuai mode: kanvas dengan outline yang bisa dinyalakan atau dimatikan (MENULIS, KF10), tombol putar audio dan pilihan aksara (BUNYI), atau palet komponen (MERANGKAI).                                  |
-| `rekamGoresan(titik: Titik): void`            | public                       | Menambahkan titik ke goresan aktif dan menggambarnya langsung di kanvas (KF11, KNF04). Lihat Algo-020.                                                                                                                                                                                                                                   |
-| `kirimJawaban(jawaban: JawabanLatihan): void` | public                       | Mengirim jawaban ke `LatihanController.nilaiJawaban()` (Algo-022). Untuk MENULIS berisi `goresan`, untuk BUNYI berisi `pilihan` yang diklik, dan untuk MERANGKAI berisi `urutan` komponen.                                                                                                                                               |
-| `tampilkanHasil(hasil: HasilPenilaian): void` | public                       | Menampilkan skor, status, umpan balik, dan posisi komponen yang salah. Jika status `LULUS`, tombol "Selesaikan Latihan" aktif dan membuka ringkasan streak, poin, dan badge (I-10) dari `hasil.motivasi`. Jika `BELUM_TUNTAS`, tombol "Ulangi" mengosongkan kanvas atau susunan di browser untuk soal yang sama (Skenario Alternatif 3). |
-|`tampilkanSoal(soal: SoalLatihan): void` | public | Menyiapkan tampilan sesuai mode: kanvas dan outline (MENULIS), tombol audio dan pilihan aksara (BUNYI), atau palet komponen (MERANGKAI). |
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `pilihModeLatihan(mode: ModeLatihan): void` | public | Mengirim mode yang dipilih bersama `idMateri` halaman ke `LatihanController.siapkanSoal()` (Algo-021), lalu meneruskan soal yang diterima ke `tampilkanSoal()`. |
+| `rekamGoresan(titik: Titik): void` | public | Menambahkan titik ke goresan aktif dan menggambarnya langsung di kanvas (KF11, KNF04). Lihat Algo-020. |
+| `kirimJawaban(jawaban: JawabanLatihan): void` | public | Mengirim jawaban ke `LatihanController.nilaiJawaban()` (Algo-022). Untuk MENULIS berisi `goresan`, untuk BUNYI berisi `pilihan` yang diklik, dan untuk MERANGKAI berisi `urutan` komponen. |
+| `tampilkanHasil(hasil: HasilPenilaian): void` | public | Menampilkan skor, status, umpan balik, dan posisi komponen yang salah. Jika status `berhasil`, tombol "Selesaikan Latihan" aktif. Jika `perlu_diulang`, tombol "Ulangi" ditampilkan. |
+| `tampilkanSoal(soal: SoalLatihan): void` | public | Menyiapkan tampilan sesuai mode: kanvas dan outline (MENULIS), tombol audio dan pilihan aksara (BUNYI), atau palet komponen (MERANGKAI). |
 | `aturOutline(aktif: Boolean): void` | public | Menampilkan atau menyembunyikan outline aksara pada kanvas tanpa menghapus goresan (KF10). Berjalan di browser saja. |
 | `putarAudio(): void` | public | Memutar audio pengucapan soal (`SoalLatihan.audio`) di browser setelah Pelajar menekan tombol putar (Skenario Alternatif 1). |
 | `ulangiLatihan(): void` | public | Mengosongkan goresan atau susunan dan menampilkan soal yang sama tanpa meminta soal baru ke server (Skenario Alternatif 3). |
-| `selesaikanLatihan(): void` | public | Mengirim hasil terakhir ke `LatihanController.simpanHasil()`, lalu membuka ringkasan motivasi (langkah 4 skenario normal). |
+| `selesaikanLatihan(): void` | public | Meminta `LatihanController.simpanHasil()` (Algo-026) menyimpan hasil yang sudah berhasil, lalu meneruskan ringkasannya ke `tampilkanRingkasan()` (langkah 4 skenario normal). |
 | `tampilkanRingkasan(ringkasan: RingkasanMotivasi): void` | public | Menampilkan streak, poin, badge baru, dan pesan jika poin tidak bertambah (layar I-10). |
 
 Tabel 5.8.2. Atribut Kelas HalamanLatihan
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| `modeLatihan` | private | ModeLatihan |
-| `jawabanInput` | private | JawabanLatihan |
-| `goresan` | private | List<Goresan> |
-| `hasilTampilan` | private | HasilPenilaian? |
-| `idMateri` | private | Integer |
-| `soalTampil` | private | SoalLatihan? |
-| outlineAktif` | private | Boolean |
+| `modeLatihan` | private | `ModeLatihan` |
+| `jawabanInput` | private | `JawabanLatihan` |
+| `goresan` | private | `List<Goresan>` |
+| `hasilTampilan` | private | `HasilPenilaian?` |
+| `idMateri` | private | `Integer` |
+| `soalTampil` | private | `SoalLatihan?` |
+| `outlineAktif` | private | `Boolean` |
 
 ### 5.8.1 Algoritma/Query
 
@@ -1907,15 +1910,28 @@ FUNCTION validasiLogin(email: String, password: String): HasilOperasi
 ## 5.16 Kelas LatihanController
 
 **Nama Kelas:** LatihanController  
-**ID Kelas:** C16
+**ID Kelas:** C16  
+**Jenis:** Controller
+
+Mengatur alur UC-03: menyiapkan soal, menilai jawaban, dan menyimpan hasil beserta motivasi belajar. Soal aktif beserta kuncinya dan hasil penilaian terakhir disimpan di session melalui `konteks`, karena satu latihan berlangsung dalam beberapa permintaan HTTP. Kunci jawaban tidak pernah dikirim ke browser.
+
+Struktur data yang dipakai kelas ini:
+
+| Tipe | Isi |
+| :--- | :--- |
+| `SoalLatihan` | `idSoal`, `idMateri`, `mode`, `targetSoal`, serta data tampilan sesuai mode: `templat` (MENULIS), `audio` dan `pilihan` (BUNYI), atau `komponen` (MERANGKAI) |
+| `JawabanLatihan` | `idSoal`, `mode`, dan salah satu dari `goresan`, `pilihan`, atau `urutan` |
+| `HasilLatihan` | `idPelajar`, `idMateri`, `idSoal`, `targetSoal`, `mode`, `skor`, dan `status` (`berhasil` atau `perlu_diulang`, sama dengan nilai status di subbab 5.3) |
+| `HasilPenilaian` | `skor` (0–100), `status`, `umpanBalik`, dan `posisiSalah` (khusus MERANGKAI) |
+| `RingkasanMotivasi` | `streak`, `poin`, `poinBertambah` (Boolean), dan `badgeBaru` (List<String>) |
 
 Tabel 5.16.1. Operasi Kelas LatihanController
 
-| Nama Operasi                                                     | Visibility (private, public) | Keterangan                                                                                                                                                                                                                                                                                         |
-| :--------------------------------------------------------------- | :--------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan` | public                       | Memeriksa hak akses Pelajar, mengambil target latihan (dan audio untuk mode BUNYI), lalu menyusun soal tanpa kunci jawaban. Lihat Algo-021.                                                                                                                                                        |
-| `nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian`          | public                       | Menilai jawaban sesuai mode (akurasi goresan, kecocokan bunyi, atau urutan komponen), lalu mencatat hasilnya melalui `simpanHasil()`. Lihat Algo-022.                                                                                                                                              |
-| `simpanHasil(hasil: HasilLatihan): HasilOperasi`                 | public                       | Mencatat hasil ke riwayat (KF14). Jika tuntas, memperbarui streak, menambah poin hanya untuk soal yang pertama kali dituntaskan, dan memberikan badge yang syaratnya baru terpenuhi. Dipanggil dari `nilaiJawaban()` dengan hasil yang disusun di server, bukan dari data browser. Lihat Algo-023. |
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan` | public | Memeriksa hak akses Pelajar, mengambil target latihan (dan audio untuk mode BUNYI), lalu menyusun soal tanpa kunci jawaban. Lihat Algo-021. |
+| `nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian` | public | Menilai jawaban dengan penilai yang sesuai mode. Percobaan yang perlu diulang langsung dicatat ke riwayat (KF14). Lihat Algo-022. |
+| `simpanHasil(hasil: HasilLatihan): HasilOperasi` | public | Menyimpan hasil yang berhasil, memperbarui streak, menambah poin hanya untuk soal yang pertama kali diselesaikan, dan memberikan badge. Mengembalikan `RingkasanMotivasi` di dalam `HasilOperasi`. Lihat Algo-026. |
 | `hitungAkurasiGoresan(goresan: List<Goresan>, templat: List<Titik>): Decimal` | private | Menghitung skor 0–100 dari kemiripan dan kelengkapan goresan terhadap templat (KF12). Lihat Algo-023. |
 | `cocokkanBunyi(pilihan: String, kunci: String): Boolean` | private | Mencocokkan aksara yang dipilih dengan aksara yang bunyinya diputar (KF21). Lihat Algo-024. |
 | `validasiRangkaian(urutan: List<String>, kunci: List<String>): List<Integer>` | private | Membandingkan susunan dengan urutan yang benar dan mengembalikan posisi yang salah (KF22). Lihat Algo-025. |
@@ -1925,8 +1941,8 @@ Tabel 5.16.2. Atribut Kelas LatihanController
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| `konteks` | private | KonteksPermintaan |
-| `ambangAkurasi` | private | Decimal (nilai awal 70) |
+| `konteks` | private | `KonteksPermintaan` |
+| `ambangAkurasi` | private | `Decimal` (nilai awal 70) |
 
 ### 5.16.1 Algoritma/Query
 
@@ -1959,6 +1975,7 @@ FUNCTION siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan
   konteks.session["soalAktif"] ← { soal, kunci }
   RETURN soal                                  // tanpa kunci jawaban
 ```
+
 ### 5.16.2 Algoritma/Query
 
 **Nama Kelas:** LatihanController  
@@ -1982,14 +1999,15 @@ FUNCTION nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian
     CASE MERANGKAI:
       posisiSalah ← validasiRangkaian(jawaban.urutan, aktif.kunci)
       lulus ← posisiSalah kosong
-      skor ← 100 × (panjang(aktif.kunci) − panjang(posisiSalah)) / panjang(aktif.kunci)
+      skor ← 100 × maks(0, panjang(aktif.kunci) − panjang(posisiSalah)) / panjang(aktif.kunci)
 
-  status ← IF lulus THEN LULUS ELSE BELUM_TUNTAS
-  hasil ← HasilLatihan(konteks.akun.idAkun, soal.idMateri, soal.idSoal, soal.targetSoal, soal.mode, skor, status)
-  IF status = BELUM_TUNTAS THEN
+  status ← IF lulus THEN "berhasil" ELSE "perlu_diulang"
+  hasil ← HasilLatihan(konteks.akun.idAkun, soal.idMateri, soal.idSoal, soal.targetSoal, soal.mode, bulatkan(skor, 1), status)
+  IF status = "perlu_diulang" THEN
     RiwayatLatihan.simpanHasil(hasil)          // percobaan tetap dicatat (KF14), MotivasiBelajar tidak dipanggil
   konteks.session["hasilTerakhir"] ← hasil
-  RETURN HasilPenilaian(skor = bulatkan(skor, 1), status, umpanBalik(soal, status, posisiSalah), posisiSalah)
+  RETURN HasilPenilaian(hasil.skor, status, umpanBalik(soal, status, posisiSalah), posisiSalah)
+  // umpanBalik BUNYI menyebut aksara yang benar beserta bacaannya, misalnya "ꦏ dibaca ka"
 ```
 
 ### 5.16.3 Algoritma/Query
@@ -2032,7 +2050,6 @@ FUNCTION normalisasi(titik)
 ```text
 FUNCTION cocokkanBunyi(pilihan: String, kunci: String): Boolean
   RETURN normalisasi Unicode NFC(pilihan) = normalisasi Unicode NFC(kunci)
-  // umpan balik Algo-022 menyebut aksara yang benar beserta bacaannya, misalnya "ꦏ dibaca ka"
 ```
 
 ### 5.16.5 Algoritma/Query
@@ -2056,24 +2073,24 @@ FUNCTION validasiRangkaian(urutan: List<String>, kunci: List<String>): List<Inte
 **Nama Operasi:** `simpanHasil(hasil: HasilLatihan): HasilOperasi`  
 **ID Algoritma:** Algo-026
 
-Operasi ini menjaga dua aturan SKPL 2.4 butir 6: aktivitas yang belum selesai tidak menambah streak atau poin, dan pengulangan soal yang sama tidak memberikan poin baru.
+Operasi ini menjaga dua aturan SKPL 2.4 butir 6: aktivitas yang belum selesai tidak menambah streak atau poin, dan pengulangan soal yang sama tidak memberikan poin baru. Pemeriksaan soal yang sudah pernah diselesaikan memakai `RiwayatLatihan.cekPernahSelesai()` (Q-009 pada subbab 5.3) dan dilakukan sebelum hasil baru disimpan.
 
 ```text
 FUNCTION simpanHasil(hasil: HasilLatihan): HasilOperasi
   POIN_PER_SOAL ← 10
   terakhir ← konteks.session["hasilTerakhir"]
-  IF terakhir = null OR terakhir.idSoal <> hasil.idSoal OR terakhir.status <> LULUS THEN
-    RETURN HasilOperasi.gagal("BELUM_TUNTAS", "Latihan belum tuntas")
+  IF terakhir = null OR terakhir.idSoal <> hasil.idSoal OR terakhir.status <> "berhasil" THEN
+    RETURN HasilOperasi.gagal("BELUM_BERHASIL", "Latihan belum berhasil diselesaikan")
   hasil ← terakhir                              // nilai dari session dipakai, bukan dari browser
-  hasil.status ← TUNTAS
 
   MULAI TRANSAKSI
-    catat ← RiwayatLatihan.simpanHasil(hasil)               // data.pertamaKaliTuntas, data.idRiwayat
+    pernah ← RiwayatLatihan.cekPernahSelesai(hasil.idPelajar, hasil.targetSoal, hasil.mode)
+    catat ← RiwayatLatihan.simpanHasil(hasil)                // catat.data = idRiwayat baru
     IF catat gagal THEN BATALKAN dan RETURN catat
     m ← MotivasiBelajar milik hasil.idPelajar (Q-026, baris dikunci)
     m.perbaruiStreak(hari ini)
-    IF catat.data.pertamaKaliTuntas THEN
-      m.tambahPoin(catat.data.idRiwayat, POIN_PER_SOAL)
+    IF NOT pernah THEN
+      m.tambahPoin(catat.data, POIN_PER_SOAL)
     badgeBaru ← periksaBadge(m.streak, m.poin, m.daftarBadge)
     FOR EACH kode IN badgeBaru DO m.berikanBadge(kode)
   SELESAI TRANSAKSI
@@ -2082,7 +2099,7 @@ FUNCTION simpanHasil(hasil: HasilLatihan): HasilOperasi
     RETURN HasilOperasi.gagal("GAGAL_SIMPAN", "Hasil belum tersimpan. Coba lagi.")
 
   hapus konteks.session["hasilTerakhir"]          // mencegah hasil yang sama disimpan dua kali
-  RETURN HasilOperasi.sukses(RingkasanMotivasi(m.streak, m.poin, catat.data.pertamaKaliTuntas, badgeBaru))
+  RETURN HasilOperasi.sukses(RingkasanMotivasi(m.streak, m.poin, NOT pernah, badgeBaru))
 ```
 
 Tabel 5.16.3. Query Operasi simpanHasil
@@ -2090,6 +2107,27 @@ Tabel 5.16.3. Query Operasi simpanHasil
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-026 | `SELECT id_pelajar, streak, poin, tanggal_aktif_terakhir, daftar_badge FROM motivasi_belajar WHERE id_pelajar = :id_pelajar FOR UPDATE;` | Mengambil data motivasi dan mengunci barisnya selama transaksi agar dua penyelesaian bersamaan tidak saling menimpa. |
+
+### 5.16.7 Algoritma/Query
+
+**Nama Kelas:** LatihanController  
+**Nama Operasi:** `periksaBadge(streak: Integer, poin: Integer, dimiliki: List<String>): List<String>`  
+**ID Algoritma:** Algo-027
+
+| Kode | Badge | Syarat |
+| :--- | :--- | :--- |
+| `LANGKAH_PERTAMA` | Langkah Pertama | Poin ≥ 10 (latihan pertama berhasil) |
+| `RAJIN_7_HARI` | Rajin 7 Hari | Streak ≥ 7 hari |
+| `SERATUS_POIN` | Seratus Poin | Poin ≥ 100 |
+
+```text
+FUNCTION periksaBadge(streak: Integer, poin: Integer, dimiliki: List<String>): List<String>
+  baru ← list kosong
+  IF poin ≥ 10  AND "LANGKAH_PERTAMA" NOT IN dimiliki THEN baru.tambah("LANGKAH_PERTAMA")
+  IF streak ≥ 7 AND "RAJIN_7_HARI"    NOT IN dimiliki THEN baru.tambah("RAJIN_7_HARI")
+  IF poin ≥ 100 AND "SERATUS_POIN"    NOT IN dimiliki THEN baru.tambah("SERATUS_POIN")
+  RETURN baru
+```
 
 ## 5.17 Kelas MateriController
 
@@ -2577,9 +2615,156 @@ Tabel 5.21.6. Query Operasi arsipkanVersi
 ## 5.22 Kelas MotivasiBelajar
 
 **Nama Kelas:** MotivasiBelajar  
-**ID Kelas:** C22
+**ID Kelas:** C22  
+**Jenis:** Model
 
+Menyimpan streak, poin, dan badge satu Pelajar. Kelas ini diperbarui pada UC-03, ditampilkan pada UC-04, dan dipakai untuk papan peringkat kelas pada UC-04 dan UC-07.
 
+Tabel 5.22.1. Operasi Kelas MotivasiBelajar
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `perbaruiStreak(tanggal: Date): void` | public | Menambah streak jika latihan berhasil terjadi sehari setelah aktivitas terakhir, mempertahankannya jika di hari yang sama, dan mengembalikannya ke 1 jika ada hari yang terlewat. Lihat Algo-028. |
+| `tambahPoin(idAktivitas: Integer, nilai: Integer): HasilOperasi` | public | Menambah poin untuk satu aktivitas (`idRiwayat`) dan mengembalikan total poin terbaru. Lihat Algo-029. |
+| `berikanBadge(kode: String): HasilOperasi` | public | Menyimpan badge jika belum dimiliki. Badge yang sudah dimiliki tidak disimpan ulang. Lihat Algo-030. |
+| `susunScoreboard(anggotaAktif: List<Profil>): List<Peringkat>` | public | Menyusun papan peringkat satu kelas dari poin anggota aktif dengan nama tampilan, tanpa data pribadi lain. Lihat Algo-031. |
+| `ambilMotivasi(idPelajar: Integer): Data` | public | Mengambil streak, poin, tanggal aktif terakhir, dan badge seorang Pelajar untuk halaman progres (I-11). Lihat Algo-032. |
+| `ambilPoinKelas(anggotaAktif: List<Integer>): List<Peringkat>` | public | Mengambil poin seluruh anggota aktif suatu kelas, terurut dari poin tertinggi. Lihat Algo-033. |
+
+Tabel 5.22.2. Atribut Kelas MotivasiBelajar
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idPelajar` | private | `Integer` |
+| `streak` | private | `Integer` |
+| `poin` | private | `Integer` |
+| `tanggalAktifTerakhir` | private | `Date?` |
+| `daftarBadge` | private | `List<String>` |
+
+### 5.22.1 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `perbaruiStreak(tanggal: Date): void`  
+**ID Algoritma:** Algo-028
+
+```text
+// Dipanggil dari Algo-026, yaitu hanya setelah latihan berstatus berhasil
+FUNCTION perbaruiStreak(tanggal: Date): void
+  IF this.tanggalAktifTerakhir = tanggal THEN RETURN          // sudah dihitung hari ini
+  IF this.tanggalAktifTerakhir = tanggal − 1 hari THEN
+    this.streak ← this.streak + 1
+  ELSE
+    this.streak ← 1                                          // ada hari yang terlewat, atau aktivitas pertama
+  this.tanggalAktifTerakhir ← tanggal
+  jalankan Q-028
+```
+
+Tabel 5.22.3. Query Operasi perbaruiStreak
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-028 | `UPDATE motivasi_belajar SET streak = :streak, tanggal_aktif_terakhir = :tanggal WHERE id_pelajar = :id_pelajar;` | Menyimpan streak dan tanggal aktivitas terbaru. |
+
+### 5.22.2 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `tambahPoin(idAktivitas: Integer, nilai: Integer): HasilOperasi`  
+**ID Algoritma:** Algo-029
+
+```text
+FUNCTION tambahPoin(idAktivitas: Integer, nilai: Integer): HasilOperasi
+  IF nilai ≤ 0 THEN
+    RETURN HasilOperasi.gagal("NILAI_TIDAK_VALID", "Poin harus lebih dari 0")
+  baris ← jalankan Q-029
+  IF baris = 0 THEN
+    RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Data motivasi pelajar tidak ditemukan")
+  this.poin ← this.poin + nilai
+  RETURN HasilOperasi.sukses(poin = this.poin, idAktivitas = idAktivitas)
+  // pencegahan poin ganda dijaga pemanggil (Algo-026) melalui RiwayatLatihan.cekPernahSelesai()
+```
+
+Tabel 5.22.4. Query Operasi tambahPoin
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-029 | `UPDATE motivasi_belajar SET poin = poin + :nilai WHERE id_pelajar = :id_pelajar;` | Menambah poin secara atomik di basis data. |
+
+### 5.22.3 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `berikanBadge(kode: String): HasilOperasi`  
+**ID Algoritma:** Algo-030
+
+```text
+FUNCTION berikanBadge(kode: String): HasilOperasi
+  IF kode IN this.daftarBadge THEN
+    RETURN HasilOperasi.sukses(baru = false)
+  this.daftarBadge.tambah(kode)
+  jalankan Q-030 dengan daftar_badge = JSON(this.daftarBadge)
+  RETURN HasilOperasi.sukses(baru = true)
+```
+
+Tabel 5.22.5. Query Operasi berikanBadge
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-030 | `UPDATE motivasi_belajar SET daftar_badge = :daftar_badge WHERE id_pelajar = :id_pelajar;` | Menyimpan daftar badge terbaru dalam format JSON. |
+
+### 5.22.4 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `susunScoreboard(anggotaAktif: List<Profil>): List<Peringkat>`  
+**ID Algoritma:** Algo-031
+
+Papan peringkat hanya untuk satu kelas, memakai nama tampilan, dan hanya disusun bila Pengajar mengaktifkannya (SKPL 2.4 butir 5). Pemeriksaan status aktif dilakukan pemanggil, yaitu `ProgresController.ambilScoreboard()`.
+
+```text
+FUNCTION susunScoreboard(anggotaAktif: List<Profil>): List<Peringkat>
+  IF anggotaAktif kosong THEN RETURN list kosong
+  nama ← peta idPelajar → namaTampilan dari anggotaAktif
+  baris ← ambilPoinKelas(daftar idPelajar dari anggotaAktif)        // Algo-033, sudah urut poin menurun
+  hasil ← list kosong;  peringkat ← 0;  poinSebelumnya ← tak hingga;  urutan ← 0
+  FOR EACH b IN baris DO
+    urutan ← urutan + 1
+    IF b.poin < poinSebelumnya THEN peringkat ← urutan      // poin sama = peringkat sama
+    hasil.tambah(Peringkat(peringkat, nama[b.idPelajar], b.poin))
+    poinSebelumnya ← b.poin
+  RETURN hasil                                    // tanpa email atau data pribadi lain
+```
+
+### 5.22.5 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `ambilMotivasi(idPelajar: Integer): Data`  
+**ID Algoritma:** Algo-032
+
+```text
+FUNCTION ambilMotivasi(idPelajar: Integer): Data
+  baris ← jalankan Q-032
+  IF baris kosong THEN
+    RETURN Data(streak = 0, poin = 0, tanggalAktifTerakhir = null, daftarBadge = [])   // Pelajar baru
+  IF baris.tanggal_aktif_terakhir < hari ini − 1 hari THEN
+    baris.streak ← 0                              // streak terputus, ditampilkan 0 sampai latihan berikutnya
+  RETURN Data(baris.streak, baris.poin, baris.tanggal_aktif_terakhir, baca JSON baris.daftar_badge)
+```
+
+Tabel 5.22.6. Query Operasi ambilMotivasi
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-032 | `SELECT streak, poin, tanggal_aktif_terakhir, daftar_badge FROM motivasi_belajar WHERE id_pelajar = :id_pelajar;` | Mengambil indikator motivasi satu Pelajar. |
+
+### 5.22.6 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `ambilPoinKelas(anggotaAktif: List<Integer>): List<Peringkat>`  
+**ID Algoritma:** Algo-033
+
+Tabel 5.22.7. Query Operasi ambilPoinKelas
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-033 | `SELECT id_pelajar, poin FROM motivasi_belajar WHERE id_pelajar IN (:daftar_id) ORDER BY poin DESC, id_pelajar ASC;` | Mengambil poin anggota aktif satu kelas, terurut dari poin tertinggi. Anggota yang belum punya baris dianggap berpoin 0. |
 
 ## 5.23 Kelas KelasBelajar
 
