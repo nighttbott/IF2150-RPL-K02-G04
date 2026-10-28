@@ -2795,8 +2795,8 @@ Tabel 6.Y. Rancangan Antarmuka Keseluruhan
 | I-01 | <img src="./assets/diagram/contoh-design.png" alt="Contoh Desain" width="400">      |
 | I-02 | ...                                                                                 |
 | I-03 | ...                                                                                 |
-| I-04 | <img src="./assets/diagram/I-04 Daftar Materi.png" alt="Contoh Desain" width="400"> |
-| I-05 | <img src="./assets/diagram/I-05 Detail Materi.png" alt="Contoh Desain" width="400"> |
+| I-04 Daftar Materi | <img src="./assets/diagram/I-04 Daftar Materi.png" alt="Contoh Desain" width="400"> |
+| I-05 Detail Materi | <img src="./assets/diagram/I-05 Detail Materi.png" alt="Contoh Desain" width="400"> |
 | I-06 | ...                                                                                 |
 | I-07 | ...                                                                                 |
 | I-08 | ...                                                                                 |
@@ -2809,8 +2809,8 @@ Tabel 6.Y. Rancangan Antarmuka Keseluruhan
 | I-15 | ...                                                                                 |
 | I-16 | ...                                                                                 |
 |I-17 Pantau Progres Anggota | <img src="./assets/diagram/I-17 Pantau Progres Anggota.png" alt="I-17 Pantau Progres Anggota" width="400">|
-| I-18 | <img src="./assets/diagram/I-18 Kelola Materi.png" alt="Contoh Desain" width="400"> |
-| I-19 | <img src="./assets/diagram/I-19 Unggah Materi.png" alt="Contoh Desain" width="400"> |
+| I-18 Kelola Materi | <img src="./assets/diagram/I-18 Kelola Materi.png" alt="Contoh Desain" width="400"> |
+| I-19 Unggah Materi | <img src="./assets/diagram/I-19 Unggah Materi.png" alt="Contoh Desain" width="400"> |
 | I-20 | ...                                                                                 |
 
 <br>
