@@ -1828,6 +1828,7 @@ Tabel 5.17.3. Query Operasi hapusMateri
 
 ## 5.18 Kelas FeedbackController
 
+## 5.19 Kelas ProgresController
 **Nama Kelas:** ProgresController  
 **ID Kelas:** C19  
 **Jenis:** Controller
@@ -1852,6 +1853,54 @@ Tabel 5.19.2. Atribut Kelas ProgresController
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
 | `konteks` | private | `KonteksPermintaan` |
+
+### 5.19.1 Algoritma/Query: hitungProgres
+
+**Nama Kelas:** ProgresController  
+**Nama Operasi:** `hitungProgres(idPelajar: Integer): RingkasanProgres`  
+**ID Algoritma:** Algo-013
+
+**Algo-013.** Alasan: penguasaan dihitung dari riwayat setiap kali dibutuhkan, tidak disimpan (lihat keputusan data pada subbab 5.27).
+
+```text
+penguasaan <- RiwayatLatihan.hitungPenguasaan(idPelajar)       // Q-010
+riwayat <- RiwayatLatihan.ambilRiwayat(idPelajar, periode)     // Q-011
+kembalikan RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), polaKesalahan = hitungPolaKesalahan(idPelajar))
+```
+
+### 5.19.2 Algoritma/Query: siapkanRekomendasi
+
+**Nama Kelas:** ProgresController  
+**Nama Operasi:** `siapkanRekomendasi(idPelajar: Integer): List<MetadataMateri>`  
+**ID Algoritma:** Algo-014
+
+**Algo-014.** Alasan: Pelajar yang belum punya riwayat tetap mendapat saran materi awal (UC-04 alternatif 1).
+
+```text
+penguasaan <- RiwayatLatihan.hitungPenguasaan(idPelajar)
+JIKA penguasaan kosong MAKA kembalikan MateriAksara.ambilMateriRekomendasi(kosong)
+urut <- urutkan materi pada penguasaan dari nilai terendah ke tertinggi
+JIKA nilai terendah >= 90 MAKA kembalikan materi terbit berikutnya yang belum pernah dikerjakan
+kembalikan MateriAksara.ambilMateriRekomendasi(3 materi dengan nilai terendah)
+```
+
+### 5.19.3 Algoritma/Query: agregasiProgres
+
+**Nama Kelas:** ProgresController  
+**Nama Operasi:** `agregasiProgres(anggotaAktif: List<Integer>, periode: Periode): RingkasanProgres`  
+**ID Algoritma:** Algo-022
+
+**Algo-022.** Alasan: Pengajar melihat ringkasan seluruh anggota aktif, bukan data anggota yang sudah keluar (aturan SKPL nomor 3).
+
+```text
+JIKA anggotaAktif kosong MAKA kembalikan RingkasanProgres kosong
+riwayat <- RiwayatLatihan.ambilRiwayatPelajar(anggotaAktif)    // Q-014
+JIKA riwayat kosong MAKA kembalikan RingkasanProgres kosong (halaman menampilkan keadaan kosong)
+penguasaan <- rata-rata skor per materi dari riwayat
+pola <- RiwayatLatihan.hitungPolaKesalahan(anggotaAktif)       // Q-013
+kembalikan RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), pola)
+```
+
 
 
 ## 5.20 Kelas KelasController
