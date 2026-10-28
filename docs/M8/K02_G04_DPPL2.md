@@ -1228,14 +1228,220 @@ Tabel 5.3.11. Query Operasi hitungPolaKesalahan
 | :--- | :--- | :--- |
 | Q-013 | `SELECT target_soal, COUNT(*) AS jumlah_salah FROM riwayat_latihan WHERE id_pelajar IN (:daftar_id_pelajar) AND status = 'perlu_diulang' GROUP BY target_soal ORDER BY jumlah_salah DESC LIMIT 5;` | Lima aksara yang paling sering salah. |
 
-
-## 5.4 Kelas DataFeedback
-
+### 5.4.1 Algoritma/Query
+ 
+**Nama Kelas:** DataFeedback  
+**Nama Operasi:** `simpan(data: MasukanFeedback): HasilOperasi`  
+**ID Algoritma:** Algo-003
+ 
+```text
+FUNCTION simpan(data: MasukanFeedback): HasilOperasi
+  // data.idAkun diisi FeedbackController dari AkunPengguna.getProfil(), bukan dari browser
+  TRY
+    idBaru ← jalankan Q-003
+  CATCH galat basis data
+    RETURN HasilOperasi.gagal("SIMPAN_GAGAL", "Feedback gagal disimpan")   // UC-09 Alternatif 1
+ 
+  this.idFeedback ← idBaru;  this.idAkun ← data.idAkun
+  this.kategori ← data.kategori;  this.pesan ← data.pesan
+  this.status ← BARU
+  RETURN HasilOperasi.sukses(idFeedback = idBaru)
+```
+ 
+Tabel 5.4.3. Query Operasi simpan
+ 
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-003 | `INSERT INTO data_feedback (id_akun, kategori, pesan, waktu_kirim, status) VALUES (:id_akun, :kategori, :pesan, NOW(), 'BARU');` | Menyimpan feedback baru. Waktu kirim diambil dari server. |
+ 
+### 5.4.2 Algoritma/Query
+ 
+**Nama Kelas:** DataFeedback  
+**Nama Operasi:** `perbaruiStatus(status: StatusFeedback): HasilOperasi`  
+**ID Algoritma:** Algo-004
+ 
+```text
+FUNCTION perbaruiStatus(status: StatusFeedback): HasilOperasi
+  URUTAN ← {BARU: 0, DIPROSES: 1, SELESAI: 2}
+  IF URUTAN[status] ≤ URUTAN[this.status] THEN
+    RETURN HasilOperasi.gagal("STATUS_TIDAK_VALID", "Status hanya dapat dimajukan")
+ 
+  baris ← jalankan Q-004               // syarat status lama mencegah dua pembaruan saling menimpa
+  IF baris = 0 THEN
+    RETURN HasilOperasi.gagal("STATUS_BERUBAH", "Status feedback sudah diubah, muat ulang data")
+  this.status ← status
+  RETURN HasilOperasi.sukses(idFeedback = this.idFeedback)
+```
+ 
+Tabel 5.4.4. Query Operasi perbaruiStatus
+ 
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-004 | `UPDATE data_feedback SET status = :status_baru WHERE id_feedback = :id_feedback AND status = :status_lama;` | Memperbarui status hanya jika status di basis data masih sama dengan yang dibaca. |
+ 
 ## 5.5 Kelas HalamanPendaftaran
-
+ 
+**Nama Kelas:** HalamanPendaftaran  
+**ID Kelas:** C05  
+**Jenis:** View
+ 
+Menampilkan form pendaftaran, pemilihan peran, dan persetujuan Terms & Conditions pada layar I-01.
+ 
+Tabel 5.5.1. Operasi Kelas HalamanPendaftaran
+ 
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanOpsiPeran(): void` | public | Menampilkan pilihan jenis akun Pelajar dan Pengajar (KF01). Akun Tim Materi tidak dibuat melalui halaman ini. |
+| `tampilkanTnC(): void` | public | Menampilkan dokumen Terms & Conditions dan kotak centang persetujuan. Mencentang kotak mengubah `statusPersetujuan` (KF06). |
+| `kirimPendaftaran(data: DataPendaftaran): void` | public | Memeriksa isian wajib di browser, meneruskan data ke `OtentikasiController`, lalu menampilkan pesan berhasil atau pesan galat per isian. Lihat Algo-005. |
+ 
+Tabel 5.5.2. Atribut Kelas HalamanPendaftaran
+ 
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `formInputData` | private | DataPendaftaran |
+| `statusPersetujuan` | private | Boolean (nilai awal `false`) |
+ 
+### 5.5.1 Algoritma/Query
+ 
+**Nama Kelas:** HalamanPendaftaran  
+**Nama Operasi:** `kirimPendaftaran(data: DataPendaftaran): void`  
+**ID Algoritma:** Algo-005
+ 
+```text
+PROCEDURE kirimPendaftaran(data: DataPendaftaran)
+  // pemeriksaan cepat di browser; pemeriksaan sebenarnya tetap di server (Algo-009)
+  IF NOT statusPersetujuan THEN
+    tandai kotak T&C: "Setujui Terms & Conditions untuk melanjutkan"      // KF07
+    RETURN
+  IF ada isian wajib yang kosong THEN
+    tandai isian kosong;  RETURN
+ 
+  nonaktifkan tombol "Daftar"                 // mencegah pengiriman ganda
+  formInputData ← data
+  formInputData.persetujuanTnC ← statusPersetujuan
+ 
+  validasi ← OtentikasiController.verifikasiFormatData(formInputData)
+  IF validasi.valid = false THEN
+    tampilkan pesan galat di bawah setiap isian dari validasi.galat       // UC-01 Alternatif 1
+    aktifkan tombol "Daftar";  RETURN
+ 
+  hasil ← OtentikasiController.simpanAkun(formInputData)
+  IF hasil.berhasil THEN
+    kosongkan isian kata sandi
+    arahkan ke I-02 dengan pesan "Akun berhasil dibuat. Silakan masuk."
+  ELSE
+    tampilkan pesan hasil.pesan ("Email atau username sudah digunakan")
+    kosongkan isian kata sandi;  aktifkan tombol "Daftar"
+```
+ 
 ## 5.6 Kelas HalamanLogin
-
+ 
+**Nama Kelas:** HalamanLogin  
+**ID Kelas:** C06  
+**Jenis:** View
+ 
+Menampilkan form login pada layar I-02. Kata sandi tidak disimpan sebagai atribut halaman.
+ 
+Tabel 5.6.1. Operasi Kelas HalamanLogin
+ 
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `kirimKredensial(email: String, password: String): void` | public | Mengirim email dan kata sandi ke `OtentikasiController.validasiLogin()`, lalu meneruskan hasilnya ke `tampilkanStatusLogin()`. Lihat Algo-006. |
+| `tampilkanStatusLogin(hasil: HasilOperasi): void` | public | Jika berhasil, membuka I-03 Halaman Utama. Jika gagal, menampilkan pesan umum tanpa menyebut isian mana yang salah. |
+ 
+Tabel 5.6.2. Atribut Kelas HalamanLogin
+ 
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `emailInput` | private | String |
+| `statusTampilan` | private | String (`SIAP`, `MEMPROSES`, `GAGAL`, `TERKUNCI`) |
+ 
+### 5.6.1 Algoritma/Query
+ 
+**Nama Kelas:** HalamanLogin  
+**Nama Operasi:** `kirimKredensial(email: String, password: String): void`  
+**ID Algoritma:** Algo-006
+ 
+```text
+PROCEDURE kirimKredensial(email: String, password: String)
+  IF kosong(email) OR kosong(password) THEN
+    tandai isian kosong;  RETURN
+ 
+  emailInput ← email                  // email tetap terisi bila login gagal
+  statusTampilan ← "MEMPROSES";  nonaktifkan tombol "Masuk"
+  hasil ← OtentikasiController.validasiLogin(email, password)
+  tampilkanStatusLogin(hasil)
+ 
+PROCEDURE tampilkanStatusLogin(hasil: HasilOperasi)
+  kosongkan isian kata sandi
+  IF hasil.berhasil THEN
+    arahkan ke I-03 Halaman Utama
+  ELSE IF hasil.kode = "TERLALU_BANYAK_PERCOBAAN" THEN
+    statusTampilan ← "TERKUNCI"
+    tampilkan pesan hasil.pesan ("Coba lagi dalam N detik");  aktifkan tombol setelah N detik
+  ELSE
+    statusTampilan ← "GAGAL"
+    tampilkan pesan "Email atau kata sandi salah";  aktifkan tombol "Masuk"
+```
+ 
 ## 5.7 Kelas HalamanUtama
+ 
+**Nama Kelas:** HalamanUtama  
+**ID Kelas:** C07  
+**Jenis:** View
+ 
+Menampilkan navigasi utama (layar I-03) setelah pengguna masuk. Menu disesuaikan dengan peran pengguna.
+ 
+Tabel 5.7.1. Operasi Kelas HalamanUtama
+ 
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanMenu(peran: Peran): void` | public | Menyusun `menuTersedia` sesuai peran dan menampilkannya di menu samping beserta nama tampilan dari `profil`. Lihat Algo-007. |
+| `pilihMenu(kode: String): void` | public | Membuka halaman tujuan menu yang dipilih. Kode di luar `menuTersedia` diabaikan. Lihat Algo-007. |
+ 
+Tabel 5.7.2. Atribut Kelas HalamanUtama
+ 
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `profil` | private | Profil |
+| `menuTersedia` | private | List<String> |
+ 
+### 5.7.1 Algoritma/Query
+ 
+**Nama Kelas:** HalamanUtama  
+**Nama Operasi:** `tampilkanMenu(peran: Peran): void` dan `pilihMenu(kode: String): void`  
+**ID Algoritma:** Algo-007
+ 
+Daftar menu mengikuti hak akses pada Algo-002. Menyembunyikan menu hanya memudahkan pengguna. Setiap controller tetap memeriksa hak akses sendiri.
+ 
+```text
+TUJUAN ← {
+  MATERI:       HalamanMateri       (I-04),   // UC-02
+  LATIHAN:      HalamanLatihan,               // UC-03
+  PROGRES:      HalamanProgres,               // UC-04
+  KELAS:        HalamanKelasPelajar,          // UC-05
+  KELOLA_KELAS: HalamanKelolaKelas,           // UC-07, UC-08
+  KELOLA_MATERI:HalamanKelolaMateri (I-18),   // UC-06
+  FEEDBACK:     HalamanFeedback     (I-20)    // UC-09
+}
+MENU_PERAN ← {
+  PELAJAR:    [MATERI, LATIHAN, PROGRES, KELAS, FEEDBACK],
+  PENGAJAR:   [KELOLA_KELAS, FEEDBACK],
+  TIM_MATERI: [KELOLA_MATERI]
+}
+ 
+PROCEDURE tampilkanMenu(peran: Peran)
+  menuTersedia ← MENU_PERAN[peran] ?? list kosong
+  render nama tampilan ← profil.namaTampilan
+  render setiap kode dalam menuTersedia sebagai butir menu samping
+  pilihMenu(menuTersedia[0])          // halaman awal: menu pertama, misalnya daftar materi untuk Pelajar (KF09)
+ 
+PROCEDURE pilihMenu(kode: String)
+  IF kode NOT IN menuTersedia THEN RETURN
+  tandai butir menu kode sebagai aktif
+  buka TUJUAN[kode]
+```
 
 ## 5.8 Kelas HalamanLatihan
 
