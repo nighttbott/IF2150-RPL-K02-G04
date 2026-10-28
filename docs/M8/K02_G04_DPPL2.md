@@ -831,47 +831,98 @@ Untuk **setiap kelas**, identifikasi operasi berdasarkan tanggung jawab kelas be
 
 ## 5.1 Kelas AkunPengguna
 
-**Nama Kelas:** _[Nama kelas]_  
-**ID Kelas:** _[ID kelas]_
+**Nama Kelas:** AkunPengguna  
+**ID Kelas:** C01  
+**Jenis:** Model
 
-Tabel 5.1.1. Operasi Kelas [Nama Kelas 1]
+Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi, serta menjadi acuan hak akses seluruh fitur.
 
-| Nama Operasi                                                 | Visibility (private, public) | Keterangan                 |
-| :----------------------------------------------------------- | :--------------------------- | :------------------------- |
-| _[Signature operasi, termasuk parameter dan tipe kembalian]_ | _[Visibility]_               | _[Tanggung jawab operasi]_ |
-| _..._                                                        | _..._                        | _..._                      |
+Tabel 5.1.1. Operasi Kelas AkunPengguna
 
-Tabel 5.1.2. Atribut Kelas [Nama Kelas 1]
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `buatAkunBaru(data: DataPendaftaran): HasilOperasi` | public | Menyimpan akun baru dari email, username, `passwordHash`, peran, dan nama tampilan. Menolak email atau username yang sudah dipakai (UC-01 Skenario Alternatif 1). Lihat Algo-001. |
+| `cariBerdasarkanEmail(email: String): AkunPengguna?` | public | Mengambil akun berdasarkan email untuk proses login. Mengembalikan `null` jika tidak ada. |
+| `cocokkanPassword(password: String): Boolean` | public | Memeriksa kata sandi terhadap `passwordHash` tanpa mengeluarkan nilai hash dari objek. |
+| `getProfil(): Data` | public | Mengembalikan `idAkun`, `username`, `namaTampilan`, dan `peran`. Dipakai `HalamanUtama` dan `FeedbackController`. Tidak memuat email dan `passwordHash`. |
+| `getDetailAkun(): Data` | public | Mengembalikan profil beserta email untuk halaman akun milik pengguna sendiri. Tidak memuat `passwordHash`. |
+| `verifikasiHakAkses(aksi: String): Boolean` | public | Memeriksa apakah peran akun boleh menjalankan aksi tertentu (KF02). Lihat Algo-002. |
 
-| Nama Atribut     | Visibility (private, public) | Tipe                                              |
-| :--------------- | :--------------------------- | :------------------------------------------------ |
-| _[Nama atribut]_ | _[Visibility]_               | _[Tipe sesuai bahasa pemrograman yang digunakan]_ |
-| _..._            | _..._                        | _..._                                             |
+Tabel 5.1.2. Atribut Kelas AkunPengguna
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idAkun` | private | Integer |
+| `email` | private | String |
+| `username` | private | String |
+| `passwordHash` | private | String |
+| `peran` | private | String (`PELAJAR`, `PENGAJAR`, atau `TIM_MATERI`) |
+| `namaTampilan` | private | String |
 
 ### 5.1.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai _pseudocode_. Implementasi _skeleton code_ juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** _[Nama kelas]_  
-**Nama Operasi:** _[Signature operasi]_  
-**ID Algoritma:** _[Algo-001]_
+**Nama Kelas:** AkunPengguna  
+**Nama Operasi:** `buatAkunBaru(data: DataPendaftaran): HasilOperasi`  
+**ID Algoritma:** Algo-001
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+FUNCTION buatAkunBaru(data: DataPendaftaran): HasilOperasi
+  // data.passwordHash sudah di-hash oleh OtentikasiController.hashPassword()
+  email ← huruf kecil(trim(data.email))
+  jumlah ← jalankan Q-001.1
+  IF jumlah > 0 THEN
+    RETURN HasilOperasi.gagal("AKUN_SUDAH_ADA", "Email atau username sudah digunakan")
+
+  TRY
+    idBaru ← jalankan Q-001.2
+  CATCH pelanggaran indeks unik          // dua pendaftaran bersamaan dengan data sama
+    RETURN HasilOperasi.gagal("AKUN_SUDAH_ADA", "Email atau username sudah digunakan")
+
+  this.idAkun ← idBaru
+  this.email ← email;  this.username ← data.username
+  this.passwordHash ← data.passwordHash;  this.peran ← data.peran
+  this.namaTampilan ← data.namaTampilan ?? data.username
+  RETURN HasilOperasi.sukses(idAkun = idBaru)
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut.
+Tabel 5.1.3. Query Operasi buatAkunBaru
 
-Tabel 5.1.1. Query Operasi [Nama Operasi]
-
-| No Query  | Query              | Keterangan       |
-| :-------- | :----------------- | :--------------- |
-| _[Q-001]_ | _[Tuliskan query]_ | _[Fungsi query]_ |
-| _..._     | _..._              | _..._            |
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-001.1 | `SELECT COUNT(*) FROM akun_pengguna WHERE email = :email OR username = :username;` | Mencegah email atau username ganda sebelum menyimpan. |
+| Q-001.2 | `INSERT INTO akun_pengguna (email, username, password_hash, peran, nama_tampilan, created_at) VALUES (:email, :username, :password_hash, :peran, :nama_tampilan, NOW());` | Menyimpan akun baru. Kolom `email` dan `username` diberi indeks `UNIQUE` sebagai pengaman terakhir. |
 
 ### 5.1.2 Algoritma/Query
 
-_[Ulangi pola 5.1.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]_
+**Nama Kelas:** AkunPengguna  
+**Nama Operasi:** `verifikasiHakAkses(aksi: String): Boolean`  
+**ID Algoritma:** Algo-002
+
+Hak akses diturunkan dari aktor setiap use case pada SKPL. Satu tabel ini juga dipakai `HalamanUtama` untuk menentukan menu yang tampil.
+
+```text
+FUNCTION verifikasiHakAkses(aksi: String): Boolean
+  HAK ← {
+    PELAJAR:    {MEMPELAJARI_MATERI, MENGERJAKAN_LATIHAN, MELIHAT_PROGRES,
+                 MENGIKUTI_KELAS, KIRIM_FEEDBACK},                       // UC-02–UC-05, UC-09
+    PENGAJAR:   {KELOLA_KELAS, PANTAU_PROGRES, KIRIM_FEEDBACK},           // UC-07–UC-09
+    TIM_MATERI: {KELOLA_MATERI}                                          // UC-06
+  }
+  IF this.idAkun = null OR this.peran NOT IN HAK THEN
+    RETURN false
+  RETURN huruf besar(aksi) IN HAK[this.peran]
+```
+
+### 5.1.3 Algoritma/Query
+
+**Nama Kelas:** AkunPengguna  
+**Nama Operasi:** `cariBerdasarkanEmail(email: String): AkunPengguna?`
+
+Tabel 5.1.4. Query Operasi cariBerdasarkanEmail
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-002 | `SELECT id_akun, email, username, password_hash, peran, nama_tampilan FROM akun_pengguna WHERE email = :email LIMIT 1;` | Mengambil akun untuk proses login. Email dibandingkan dalam huruf kecil. |
 
 ## 5.2 Kelas MateriAksara
 
@@ -1256,9 +1307,167 @@ Tabel 5.4.4. Query Operasi perbaruiStatus
  
 ## 5.5 Kelas HalamanPendaftaran
 
+**Nama Kelas:** HalamanPendaftaran  
+**ID Kelas:** C05  
+**Jenis:** View
+
+Menampilkan form pendaftaran, pemilihan peran, dan persetujuan Terms & Conditions pada layar I-01.
+
+Tabel 5.5.1. Operasi Kelas HalamanPendaftaran
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanOpsiPeran(): void` | public | Menampilkan pilihan jenis akun Pelajar dan Pengajar (KF01). Akun Tim Materi tidak dibuat melalui halaman ini. |
+| `tampilkanTnC(): void` | public | Menampilkan dokumen Terms & Conditions dan kotak centang persetujuan. Mencentang kotak mengubah `statusPersetujuan` (KF06). |
+| `kirimPendaftaran(data: DataPendaftaran): void` | public | Memeriksa isian wajib di browser, meneruskan data ke `OtentikasiController`, lalu menampilkan pesan berhasil atau pesan galat per isian. Lihat Algo-005. |
+
+Tabel 5.5.2. Atribut Kelas HalamanPendaftaran
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `formInputData` | private | DataPendaftaran |
+| `statusPersetujuan` | private | Boolean (nilai awal `false`) |
+
+### 5.5.1 Algoritma/Query
+
+**Nama Kelas:** HalamanPendaftaran  
+**Nama Operasi:** `kirimPendaftaran(data: DataPendaftaran): void`  
+**ID Algoritma:** Algo-005
+
+```text
+PROCEDURE kirimPendaftaran(data: DataPendaftaran)
+  // pemeriksaan cepat di browser; pemeriksaan sebenarnya tetap di server (Algo-009)
+  IF NOT statusPersetujuan THEN
+    tandai kotak T&C: "Setujui Terms & Conditions untuk melanjutkan"      // KF07
+    RETURN
+  IF ada isian wajib yang kosong THEN
+    tandai isian kosong;  RETURN
+
+  nonaktifkan tombol "Daftar"                 // mencegah pengiriman ganda
+  formInputData ← data
+  formInputData.persetujuanTnC ← statusPersetujuan
+
+  validasi ← OtentikasiController.verifikasiFormatData(formInputData)
+  IF validasi.valid = false THEN
+    tampilkan pesan galat di bawah setiap isian dari validasi.galat       // UC-01 Alternatif 1
+    aktifkan tombol "Daftar";  RETURN
+
+  hasil ← OtentikasiController.simpanAkun(formInputData)
+  IF hasil.berhasil THEN
+    kosongkan isian kata sandi
+    arahkan ke I-02 dengan pesan "Akun berhasil dibuat. Silakan masuk."
+  ELSE
+    tampilkan pesan hasil.pesan ("Email atau username sudah digunakan")
+    kosongkan isian kata sandi;  aktifkan tombol "Daftar"
+```
+
 ## 5.6 Kelas HalamanLogin
 
+**Nama Kelas:** HalamanLogin  
+**ID Kelas:** C06  
+**Jenis:** View
+
+Menampilkan form login pada layar I-02. Kata sandi tidak disimpan sebagai atribut halaman.
+
+Tabel 5.6.1. Operasi Kelas HalamanLogin
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `kirimKredensial(email: String, password: String): void` | public | Mengirim email dan kata sandi ke `OtentikasiController.validasiLogin()`, lalu meneruskan hasilnya ke `tampilkanStatusLogin()`. Lihat Algo-006. |
+| `tampilkanStatusLogin(hasil: HasilOperasi): void` | public | Jika berhasil, membuka I-03 Halaman Utama. Jika gagal, menampilkan pesan umum tanpa menyebut isian mana yang salah. |
+
+Tabel 5.6.2. Atribut Kelas HalamanLogin
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `emailInput` | private | String |
+| `statusTampilan` | private | String (`SIAP`, `MEMPROSES`, `GAGAL`, `TERKUNCI`) |
+
+### 5.6.1 Algoritma/Query
+
+**Nama Kelas:** HalamanLogin  
+**Nama Operasi:** `kirimKredensial(email: String, password: String): void`  
+**ID Algoritma:** Algo-006
+
+```text
+PROCEDURE kirimKredensial(email: String, password: String)
+  IF kosong(email) OR kosong(password) THEN
+    tandai isian kosong;  RETURN
+
+  emailInput ← email                  // email tetap terisi bila login gagal
+  statusTampilan ← "MEMPROSES";  nonaktifkan tombol "Masuk"
+  hasil ← OtentikasiController.validasiLogin(email, password)
+  tampilkanStatusLogin(hasil)
+
+PROCEDURE tampilkanStatusLogin(hasil: HasilOperasi)
+  kosongkan isian kata sandi
+  IF hasil.berhasil THEN
+    arahkan ke I-03 Halaman Utama
+  ELSE IF hasil.kode = "TERLALU_BANYAK_PERCOBAAN" THEN
+    statusTampilan ← "TERKUNCI"
+    tampilkan pesan hasil.pesan ("Coba lagi dalam N detik");  aktifkan tombol setelah N detik
+  ELSE
+    statusTampilan ← "GAGAL"
+    tampilkan pesan "Email atau kata sandi salah";  aktifkan tombol "Masuk"
+```
+
 ## 5.7 Kelas HalamanUtama
+
+**Nama Kelas:** HalamanUtama  
+**ID Kelas:** C07  
+**Jenis:** View
+
+Menampilkan navigasi utama (layar I-03) setelah pengguna masuk. Menu disesuaikan dengan peran pengguna.
+
+Tabel 5.7.1. Operasi Kelas HalamanUtama
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanMenu(peran: Peran): void` | public | Menyusun `menuTersedia` sesuai peran dan menampilkannya di menu samping beserta nama tampilan dari `profil`. Lihat Algo-007. |
+| `pilihMenu(kode: String): void` | public | Membuka halaman tujuan menu yang dipilih. Kode di luar `menuTersedia` diabaikan. Lihat Algo-007. |
+
+Tabel 5.7.2. Atribut Kelas HalamanUtama
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `profil` | private | Profil |
+| `menuTersedia` | private | List<String> |
+
+### 5.7.1 Algoritma/Query
+
+**Nama Kelas:** HalamanUtama  
+**Nama Operasi:** `tampilkanMenu(peran: Peran): void` dan `pilihMenu(kode: String): void`  
+**ID Algoritma:** Algo-007
+
+Daftar menu mengikuti hak akses pada Algo-002. Menyembunyikan menu hanya memudahkan pengguna. Setiap controller tetap memeriksa hak akses sendiri.
+
+```text
+TUJUAN ← {
+  MATERI:       HalamanMateri       (I-04),   // UC-02
+  LATIHAN:      HalamanLatihan,               // UC-03
+  PROGRES:      HalamanProgres,               // UC-04
+  KELAS:        HalamanKelasPelajar,          // UC-05
+  KELOLA_KELAS: HalamanKelolaKelas,           // UC-07, UC-08
+  KELOLA_MATERI:HalamanKelolaMateri (I-18),   // UC-06
+  FEEDBACK:     HalamanFeedback     (I-20)    // UC-09
+}
+MENU_PERAN ← {
+  PELAJAR:    [MATERI, LATIHAN, PROGRES, KELAS, FEEDBACK],
+  PENGAJAR:   [KELOLA_KELAS, FEEDBACK],
+  TIM_MATERI: [KELOLA_MATERI]
+}
+
+PROCEDURE tampilkanMenu(peran: Peran)
+  menuTersedia ← MENU_PERAN[peran] ?? list kosong
+  render nama tampilan ← profil.namaTampilan
+  render setiap kode dalam menuTersedia sebagai butir menu samping
+  pilihMenu(menuTersedia[0])          // halaman awal: menu pertama, misalnya daftar materi untuk Pelajar (KF09)
+
+PROCEDURE pilihMenu(kode: String)
+  IF kode NOT IN menuTersedia THEN RETURN
+  tandai butir menu kode sebagai aktif
+  buka TUJUAN[kode]
+```
 
 ## 5.8 Kelas HalamanLatihan
 
@@ -1398,6 +1607,66 @@ PROCEDURE suntingMateri(idMateri: Integer)
 ```
 
 ## 5.10 Kelas HalamanFeedback
+
+**Nama Kelas:** HalamanFeedback  
+**ID Kelas:** C10  
+**Jenis:** View
+
+Menampilkan form feedback (layar I-20) dan konfirmasi hasil pengiriman.
+
+Tabel 5.10.1. Operasi Kelas HalamanFeedback
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanFormFeedback(): void` | public | Menampilkan pilihan kategori (performa, tampilan, fitur, materi) sebagai pertanyaan tertutup dan isian pesan sebagai pertanyaan terbuka (KF18). |
+| `kirimFeedback(data: MasukanFeedback): void` | public | Mengirim feedback ke `FeedbackController`, menangani kegagalan server maupun jaringan, lalu menampilkan konfirmasi. Lihat Algo-008. |
+| `tampilkanKonfirmasi(konfirmasi: Konfirmasi): void` | public | Menampilkan pesan berhasil atau gagal terkirim (KF20, KNF05). Jika gagal, isi form tetap dipertahankan agar pengguna dapat mengirim ulang. |
+
+Tabel 5.10.2. Atribut Kelas HalamanFeedback
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `kategoriFeedback` | private | KategoriFeedback |
+| `pesanFeedback` | private | String |
+| `statusKirim` | private | StatusKirim (`SIAP`, `MENGIRIM`, `TERKIRIM`, `GAGAL`) |
+
+### 5.10.1 Algoritma/Query
+
+**Nama Kelas:** HalamanFeedback  
+**Nama Operasi:** `kirimFeedback(data: MasukanFeedback): void`  
+**ID Algoritma:** Algo-008
+
+Kedua cabang UC-09 Skenario Alternatif 1 ditangani di sini: server menerima permintaan tetapi gagal menyimpan, atau permintaan tidak sampai ke server.
+
+```text
+PROCEDURE kirimFeedback(data: MasukanFeedback)
+  IF statusKirim = "MENGIRIM" THEN RETURN          // mencegah pengiriman ganda
+  kategoriFeedback ← data.kategori;  pesanFeedback ← data.pesan
+  statusKirim ← "MENGIRIM";  nonaktifkan tombol "Kirim"
+
+  TRY (batas waktu 10 detik)
+    validasi ← FeedbackController.validasiFeedback(data)
+    IF validasi.valid = false THEN
+      statusKirim ← "SIAP"
+      tampilkan pesan galat di bawah isian dari validasi.galat
+      aktifkan tombol "Kirim";  RETURN
+    hasil ← FeedbackController.simpanFeedback(data)
+    konfirmasi ← FeedbackController.kirimKonfirmasi(hasil)
+  CATCH galat jaringan atau batas waktu habis
+    konfirmasi ← Konfirmasi(berhasil = false,
+                            pesan = "Feedback gagal terkirim. Periksa koneksi lalu coba lagi.")
+
+  tampilkanKonfirmasi(konfirmasi)
+
+PROCEDURE tampilkanKonfirmasi(konfirmasi: Konfirmasi)
+  IF konfirmasi.berhasil THEN
+    statusKirim ← "TERKIRIM"
+    kosongkan form;  tampilkan notifikasi berhasil konfirmasi.pesan
+  ELSE
+    statusKirim ← "GAGAL"
+    pertahankan kategoriFeedback dan pesanFeedback pada form
+    tampilkan notifikasi galat konfirmasi.pesan;  aktifkan tombol "Kirim"
+```
 
 ## 5.11 Kelas HalamanKelasPelajar
 
@@ -1788,8 +2057,163 @@ PROCEDURE putarAudioPengucapan(sumber: ReferensiBerkas)
 ```
 
 ## 5.14 Kelas HalamanProgres
+**Nama Kelas:** HalamanProgres  
+**ID Kelas:** C14  
+**Jenis:** View
+
+Menampilkan riwayat, progres, rekomendasi materi, dan indikator motivasi belajar Pelajar.
+
+Tabel 5.14.1. Operasi Kelas HalamanProgres
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanProgres(data: RingkasanProgres): void` | public | Menampilkan penguasaan per materi dan riwayat. |
+| `pilihPeriode(periode: Periode): void` | public | Mengubah periode riwayat yang ditampilkan. |
+| `tampilkanScoreboard(data: List<Peringkat>): void` | public | Menampilkan papan peringkat bila diaktifkan Pengajar. |
+| `bukaHalamanProgres(): void` | public | Meminta ringkasan progres Pelajar. |
+| `tampilkanKeadaanKosong(data: List<MetadataMateri>): void` | public | Menampilkan keadaan belum ada riwayat beserta materi awal yang disarankan. |
+| `pilihMateriRiwayat(idMateri: Integer): void` | public | Meminta detail hasil pada satu materi. |
+| `tampilkanDetailHasil(data: List<RiwayatLatihan>): void` | public | Menampilkan hasil latihan pada materi terpilih. |
+| `tampilkanRekomendasi(data: List<MetadataMateri>): void` | public | Menampilkan materi yang direkomendasikan. |
+| `bukaRekomendasi(idMateri: Integer): void` | public | Membuka halaman materi dari rekomendasi. |
+| `lihatIndikatorMotivasi(): void` | public | Meminta data streak, poin, dan badge. |
+| `tampilkanMotivasi(data: Data): void` | public | Menampilkan streak, poin, dan badge. |
+| `bukaPapanPeringkat(idKelas: Integer): void` | public | Meminta papan peringkat kelas. |
+
+Tabel 5.14.2. Atribut Kelas HalamanProgres
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `filterPeriode` | private | `Periode` |
+| `dataTampilan` | private | `RingkasanProgres?` |
+| `idKelasTerpilih` | private | `Integer?` |
 
 ## 5.15 Kelas OtentikasiController
+
+**Nama Kelas:** OtentikasiController  
+**ID Kelas:** C15  
+**Jenis:** Controller
+
+Memvalidasi data pendaftaran dan login, mengamankan kata sandi, serta membuat sesi pengguna (KF01–KF07).
+
+Tabel 5.15.1. Operasi Kelas OtentikasiController
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `verifikasiFormatData(data: DataPendaftaran): HasilValidasi` | public | Memeriksa peran, format email, username, kekuatan kata sandi, dan persetujuan T&C (KF04, KF07). Mengembalikan seluruh galat per isian sekaligus. Lihat Algo-009. |
+| `hashPassword(password: String): String` | private | Membuat hash adaptif bersalt dari kata sandi (KF05). Lihat Algo-010. |
+| `simpanAkun(data: DataPendaftaran): HasilOperasi` | public | Memvalidasi ulang data, membuat hash kata sandi, lalu memanggil `AkunPengguna.buatAkunBaru()`. Kegagalan dicatat ke `LogAplikasi` (KF17). Lihat Algo-011. |
+| `validasiLogin(email: String, password: String): HasilOperasi` | public | Memeriksa kredensial, membatasi percobaan gagal, dan membuat sesi jika berhasil (KF03–KF04). Lihat Algo-012. |
+
+Tabel 5.15.2. Atribut Kelas OtentikasiController
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `konteks` | private | KonteksPermintaan |
+| `batasPercobaanLogin` | private | Integer (nilai awal 5 per menit) |
+
+### 5.15.1 Algoritma/Query
+
+**Nama Kelas:** OtentikasiController  
+**Nama Operasi:** `verifikasiFormatData(data: DataPendaftaran): HasilValidasi`  
+**ID Algoritma:** Algo-009
+
+```text
+FUNCTION verifikasiFormatData(data: DataPendaftaran): HasilValidasi
+  galat ← map kosong                                   // nama isian → pesan
+
+  IF data.peran NOT IN {PELAJAR, PENGAJAR} THEN
+    galat["peran"] ← "Pilih jenis akun Pelajar atau Pengajar"            // KF01
+  IF NOT formatEmailValid(data.email) OR panjang(data.email) > 255 THEN
+    galat["email"] ← "Format email tidak valid"
+  IF NOT cocok(data.username, ^[A-Za-z0-9_]{3,30}$) THEN
+    galat["username"] ← "Username 3–30 karakter: huruf, angka, atau garis bawah"
+  IF panjang(data.password) < 8 OR tidak memuat huruf OR tidak memuat angka THEN
+    galat["password"] ← "Kata sandi minimal 8 karakter dan memuat huruf serta angka"
+  IF data.password <> data.konfirmasiPassword THEN
+    galat["konfirmasiPassword"] ← "Konfirmasi kata sandi tidak sama"
+  IF data.persetujuanTnC <> true THEN
+    galat["persetujuanTnC"] ← "Terms & Conditions belum disetujui"       // KF07
+
+  IF galat kosong THEN RETURN HasilValidasi.valid()
+  RETURN HasilValidasi.tidakValid(galat)
+```
+
+### 5.15.2 Algoritma/Query
+
+**Nama Kelas:** OtentikasiController  
+**Nama Operasi:** `hashPassword(password: String): String`  
+**ID Algoritma:** Algo-010
+
+Kata sandi di-hash dengan fungsi satu arah, bukan dienkripsi, sehingga teks aslinya tidak dapat dikembalikan oleh siapa pun, termasuk pengelola basis data.
+
+```text
+FUNCTION hashPassword(password: String): String
+  // Laravel Hash facade dengan bcrypt (cost 12); salt acak dibuat otomatis dan disimpan di dalam hash
+  RETURN Hash::make(password, ['rounds' => 12])
+  // kata sandi asli tidak pernah disimpan atau ditulis ke log
+```
+
+### 5.15.3 Algoritma/Query
+
+**Nama Kelas:** OtentikasiController  
+**Nama Operasi:** `simpanAkun(data: DataPendaftaran): HasilOperasi`  
+**ID Algoritma:** Algo-011
+
+```text
+FUNCTION simpanAkun(data: DataPendaftaran): HasilOperasi
+  validasi ← verifikasiFormatData(data)      // server tidak mengandalkan pemeriksaan sebelumnya
+  IF validasi.valid = false THEN
+    RETURN HasilOperasi.gagal("DATA_TIDAK_VALID", validasi.galat)
+
+  dataSimpan ← DataPendaftaran(
+    email = data.email, username = data.username, peran = data.peran,
+    namaTampilan = data.namaTampilan, passwordHash = hashPassword(data.password))
+  hapus data.password dan data.konfirmasiPassword dari memori permintaan
+
+  TRY
+    hasil ← new AkunPengguna().buatAkunBaru(dataSimpan)        // Algo-001
+  CATCH galat
+    LogAplikasi.catat("ERROR", "Pendaftaran gagal", {username: data.username})   // KF17
+    RETURN HasilOperasi.gagal("SIMPAN_GAGAL", "Akun gagal dibuat, coba lagi")
+
+  IF hasil.berhasil THEN
+    LogAplikasi.catat("INFO", "Akun baru dibuat", {idAkun: hasil.idAkun})
+  RETURN hasil
+```
+
+### 5.15.4 Algoritma/Query
+
+**Nama Kelas:** OtentikasiController  
+**Nama Operasi:** `validasiLogin(email: String, password: String): HasilOperasi`  
+**ID Algoritma:** Algo-012
+
+```text
+FUNCTION validasiLogin(email: String, password: String): HasilOperasi
+  kunci ← "login:" + huruf kecil(trim(email)) + "|" + konteks.ip
+  IF RateLimiter.terlaluBanyak(kunci, batasPercobaanLogin) THEN
+    RETURN HasilOperasi.gagal("TERLALU_BANYAK_PERCOBAAN",
+                              "Coba lagi dalam " + RateLimiter.sisaDetik(kunci) + " detik")
+
+  akun ← AkunPengguna.cariBerdasarkanEmail(huruf kecil(trim(email)))     // Q-002
+  IF akun = null THEN
+    Hash::check(password, HASH_DUMMY)       // waktu proses tetap sama walau email tidak terdaftar
+    cocok ← false
+  ELSE
+    cocok ← akun.cocokkanPassword(password)
+
+  IF NOT cocok THEN
+    RateLimiter.tambah(kunci, kedaluwarsa = 60 detik)
+    LogAplikasi.catat("WARNING", "Login gagal", {ip: konteks.ip})          // KF17
+    RETURN HasilOperasi.gagal("KREDENSIAL_SALAH", "Email atau kata sandi salah")
+
+  RateLimiter.hapus(kunci)
+  konteks.session.regenerasiId()           // mencegah session fixation
+  profil ← akun.getProfil()
+  konteks.session["idAkun"] ← profil.idAkun
+  konteks.session["peran"] ← profil.peran
+  RETURN HasilOperasi.sukses(profil = profil)
+```
 
 ## 5.16 Kelas LatihanController
 
@@ -2218,7 +2642,149 @@ Tabel 5.17.3. Query Operasi hapusMateri
 
 ## 5.18 Kelas FeedbackController
 
+**Nama Kelas:** FeedbackController  
+**ID Kelas:** C18  
+**Jenis:** Controller
+
+Memvalidasi feedback, menghubungkannya dengan akun pengirim, menyimpannya, dan menyiapkan konfirmasi (KF18–KF20).
+
+Tabel 5.18.1. Operasi Kelas FeedbackController
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `validasiFeedback(data: MasukanFeedback): HasilValidasi` | public | Memeriksa hak akses pengirim, kategori, dan panjang pesan. Lihat Algo-013. |
+| `simpanFeedback(data: MasukanFeedback): HasilOperasi` | public | Mengambil `idAkun` dari `AkunPengguna.getProfil()`, lalu menyimpan feedback melalui `DataFeedback.simpan()`. Kegagalan dicatat ke `LogAplikasi`. Lihat Algo-014. |
+| `kirimKonfirmasi(hasil: HasilOperasi): Konfirmasi` | public | Menyusun pesan konfirmasi berhasil atau gagal terkirim untuk `HalamanFeedback` (KF20, KNF05). |
+
+Tabel 5.18.2. Atribut Kelas FeedbackController
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `konteks` | private | KonteksPermintaan |
+
+### 5.18.1 Algoritma/Query
+
+**Nama Kelas:** FeedbackController  
+**Nama Operasi:** `validasiFeedback(data: MasukanFeedback): HasilValidasi`  
+**ID Algoritma:** Algo-013
+
+```text
+FUNCTION validasiFeedback(data: MasukanFeedback): HasilValidasi
+  IF konteks.akun = null OR NOT konteks.akun.verifikasiHakAkses("KIRIM_FEEDBACK") THEN
+    tolak permintaan (403 "Fitur feedback khusus Pelajar dan Pengajar")
+
+  galat ← map kosong
+  IF data.kategori NOT IN {PERFORMA, TAMPILAN, FITUR, MATERI} THEN
+    galat["kategori"] ← "Pilih kategori feedback"
+  pesan ← trim(data.pesan)
+  IF panjang(pesan) < 10 OR panjang(pesan) > 1000 THEN
+    galat["pesan"] ← "Feedback 10–1.000 karakter"
+
+  IF galat kosong THEN RETURN HasilValidasi.valid()
+  RETURN HasilValidasi.tidakValid(galat)
+```
+
+### 5.18.2 Algoritma/Query
+
+**Nama Kelas:** FeedbackController  
+**Nama Operasi:** `simpanFeedback(data: MasukanFeedback): HasilOperasi`  
+**ID Algoritma:** Algo-014
+
+```text
+FUNCTION simpanFeedback(data: MasukanFeedback): HasilOperasi
+  validasi ← validasiFeedback(data)         // server tidak mengandalkan pemeriksaan sebelumnya
+  IF validasi.valid = false THEN
+    RETURN HasilOperasi.gagal("DATA_TIDAK_VALID", validasi.galat)
+
+  profil ← konteks.akun.getProfil()
+  data.idAkun ← profil.idAkun                // pengirim diambil dari sesi, bukan dari browser
+  data.pesan ← trim(data.pesan)              // Blade melakukan escape saat pesan ditampilkan
+
+  hasil ← new DataFeedback().simpan(data)    // Algo-003
+  IF hasil.berhasil = false THEN
+    LogAplikasi.catat("ERROR", "Feedback gagal disimpan", {idAkun: profil.idAkun})   // KF17
+  RETURN hasil
+
+FUNCTION kirimKonfirmasi(hasil: HasilOperasi): Konfirmasi
+  IF hasil.berhasil THEN
+    RETURN Konfirmasi(berhasil = true, pesan = "Feedback berhasil terkirim. Terima kasih atas masukan Anda.")
+  RETURN Konfirmasi(berhasil = false, pesan = "Feedback gagal terkirim. Silakan coba lagi.")
+```
+
 ## 5.19 Kelas ProgresController
+**Nama Kelas:** ProgresController  
+**ID Kelas:** C19  
+**Jenis:** Controller
+
+Mengolah riwayat dan progres belajar, menyiapkan rekomendasi materi serta papan peringkat.
+
+Tabel 5.19.1. Operasi Kelas ProgresController
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>` | public | Mengambil riwayat Pelajar pada periode tertentu. |
+| `hitungProgres(idPelajar: Integer): RingkasanProgres` | public | Menghitung penguasaan per materi dan ringkasan riwayat. |
+| `siapkanRekomendasi(idPelajar: Integer): List<MetadataMateri>` | public | Menyusun materi rekomendasi dari penguasaan terendah. |
+| `ambilScoreboard(idKelas: Integer): HasilScoreboard` | public | Menyusun papan peringkat bila Pengajar mengaktifkannya. |
+| `agregasiProgres(anggotaAktif: List<Integer>, periode: Periode): RingkasanProgres` | public | Menggabungkan progres seluruh anggota aktif kelas. |
+| `hitungPolaKesalahan(idPelajar: Integer): Data` | public | Menghitung pola kesalahan satu Pelajar. |
+| `ambilDetailHasil(idPelajar: Integer, idMateri: Integer): List<RiwayatLatihan>` | public | Mengambil hasil latihan Pelajar pada satu materi. |
+| `ambilIndikatorMotivasi(idPelajar: Integer): Data` | public | Mengambil streak, poin, dan badge dari MotivasiBelajar. |
+
+Tabel 5.19.2. Atribut Kelas ProgresController
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `konteks` | private | `KonteksPermintaan` |
+
+### 5.19.1 Algoritma/Query: hitungProgres
+
+**Nama Kelas:** ProgresController  
+**Nama Operasi:** `hitungProgres(idPelajar: Integer): RingkasanProgres`  
+**ID Algoritma:** Algo-100
+
+**Algo-100.** Alasan: penguasaan dihitung dari riwayat setiap kali dibutuhkan, tidak disimpan (lihat keputusan data pada subbab 5.27).
+
+```text
+penguasaan <- RiwayatLatihan.hitungPenguasaan(idPelajar)       // Q-010
+riwayat <- RiwayatLatihan.ambilRiwayat(idPelajar, periode)     // Q-011
+kembalikan RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), polaKesalahan = hitungPolaKesalahan(idPelajar))
+```
+
+### 5.19.2 Algoritma/Query: siapkanRekomendasi
+
+**Nama Kelas:** ProgresController  
+**Nama Operasi:** `siapkanRekomendasi(idPelajar: Integer): List<MetadataMateri>`  
+**ID Algoritma:** Algo-101
+
+**Algo-101.** Alasan: Pelajar yang belum punya riwayat tetap mendapat saran materi awal (UC-04 alternatif 1).
+
+```text
+penguasaan <- RiwayatLatihan.hitungPenguasaan(idPelajar)
+JIKA penguasaan kosong MAKA kembalikan MateriAksara.ambilMateriRekomendasi(kosong)
+urut <- urutkan materi pada penguasaan dari nilai terendah ke tertinggi
+JIKA nilai terendah >= 90 MAKA kembalikan materi terbit berikutnya yang belum pernah dikerjakan
+kembalikan MateriAksara.ambilMateriRekomendasi(3 materi dengan nilai terendah)
+```
+
+### 5.19.3 Algoritma/Query: agregasiProgres
+
+**Nama Kelas:** ProgresController  
+**Nama Operasi:** `agregasiProgres(anggotaAktif: List<Integer>, periode: Periode): RingkasanProgres`  
+**ID Algoritma:** Algo-102
+
+**Algo-102.** Alasan: Pengajar melihat ringkasan seluruh anggota aktif, bukan data anggota yang sudah keluar (aturan SKPL nomor 3).
+
+```text
+JIKA anggotaAktif kosong MAKA kembalikan RingkasanProgres kosong
+riwayat <- daftar kosong
+UNTUK SETIAP id DALAM anggotaAktif
+    tambahkan RiwayatLatihan.ambilRiwayatPelajar(id) ke riwayat        // Q-014
+JIKA riwayat kosong MAKA kembalikan RingkasanProgres kosong (halaman menampilkan keadaan kosong)
+penguasaan <- rata-rata skor per materi dari riwayat
+pola <- jumlahkan hasil RiwayatLatihan.hitungPolaKesalahan(id) untuk setiap id, ambil lima terbanyak     // Q-013
+kembalikan RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), pola)
+```
 
 ## 5.20 Kelas KelasController
 **Nama Kelas:** KelasController
