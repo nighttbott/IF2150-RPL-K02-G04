@@ -2116,14 +2116,14 @@ Tabel 5.16.3. Query Operasi simpanHasil
 
 | Kode | Badge | Syarat |
 | :--- | :--- | :--- |
-| `LANGKAH_PERTAMA` | Langkah Pertama | Poin ≥ 10 (latihan pertama berhasil) |
+| `PEMULA_AKSARA` | Pemula Aksara | Menyelesaikan latihan pertama (poin ≥ 10) |
 | `RAJIN_7_HARI` | Rajin 7 Hari | Streak ≥ 7 hari |
 | `SERATUS_POIN` | Seratus Poin | Poin ≥ 100 |
 
 ```text
 FUNCTION periksaBadge(streak: Integer, poin: Integer, dimiliki: List<String>): List<String>
   baru ← list kosong
-  IF poin ≥ 10  AND "LANGKAH_PERTAMA" NOT IN dimiliki THEN baru.tambah("LANGKAH_PERTAMA")
+  IF poin ≥ 10  AND "PEMULA_AKSARA"   NOT IN dimiliki THEN baru.tambah("PEMULA_AKSARA")
   IF streak ≥ 7 AND "RAJIN_7_HARI"    NOT IN dimiliki THEN baru.tambah("RAJIN_7_HARI")
   IF poin ≥ 100 AND "SERATUS_POIN"    NOT IN dimiliki THEN baru.tambah("SERATUS_POIN")
   RETURN baru
@@ -2853,13 +2853,125 @@ Tabel 6.5. Spesifikasi Objek Antarmuka I-05
 
 ## 6.6 Rancangan Antarmuka I-06
 
+**Antarmuka:** I-06  
+**Nama Layar:** Pilih Mode Latihan
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-06 Pilih Mode Latihan" src="./assets/ui/I-06 Pilih Mode.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.6. Rancangan Antarmuka I-06 - Pilih Mode Latihan</i>
+</p>
+
+Tabel 6.6. Spesifikasi Objek Antarmuka I-06
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-06-01 | Card (pilihan mode) dan Button | Ikon pensil, "Menulis", "Gambar aksara di kanvas dengan bantuan garis.", tombol "Mulai" | Menjalankan `pilihModeLatihan(MENULIS)` → `LatihanController.siapkanSoal()` (Algo-021), lalu membuka I-07. |
+| I-06-02 | Card (pilihan mode) dan Button | Ikon speaker, "Mencocokkan bunyi", "Dengarkan bunyi, pilih aksara yang sesuai.", tombol "Mulai" | Menjalankan `pilihModeLatihan(BUNYI)` → Algo-021, lalu membuka I-08. |
+| I-06-03 | Card (pilihan mode) dan Button | Ikon dokumen, "Merangkai aksara", "Susun aksara dan tanda baca menjadi kata.", tombol "Mulai" | Menjalankan `pilihModeLatihan(MERANGKAI)` → Algo-021, lalu membuka I-09. |
+| I-06-04 | Card (pilihan mode) dan Button | Ikon pensil, "Transliterasi", "Ubah aksara ke huruf Latin atau sebaliknya.", tombol "Mulai" | Mode transliterasi (KF23). Membuka panel transliterasi pada I-09-04. |
+| I-06-05 | Card (informasi) | Maskot, "Mau latihan apa?", "Semua mode memberi poin untuk soal yang baru pertama kali kamu selesaikan.", serta streak (mis. 5 hari), total poin (mis. 240), dan jumlah badge (mis. 3) | Angka diambil dari `MotivasiBelajar.ambilMotivasi()` (Algo-032). Aturan poin sesuai Algo-026. Tidak interaktif. |
+| I-06-06 | Button (teks) | "← Kembali ke materi" | Kembali ke I-05 untuk materi yang sama. |
+
+Jika materi belum memiliki soal untuk mode yang dipilih, Algo-021 menolak permintaan dan layar ini menampilkan pesan "Materi ini belum memiliki soal untuk mode yang dipilih" tanpa berpindah layar.
+
 ## 6.7 Rancangan Antarmuka I-07
+
+**Antarmuka:** I-07  
+**Nama Layar:** Latihan Menulis
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-07 Latihan Menulis" src="./assets/ui/I-07 Menulis.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.7. Rancangan Antarmuka I-07 - Latihan Menulis</i>
+</p>
+
+Tabel 6.7. Spesifikasi Objek Antarmuka I-07
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-07-01 | Progress bar | Bar kemajuan latihan dan ikon pelita dengan angka streak (mis. 5) | Bagian terisi bertambah setiap aksara target pada materi ini berhasil diselesaikan dalam sesi latihan. Angka di kanan adalah streak Pelajar dari `MotivasiBelajar`. |
+| I-07-02 | Label (soal) | "LATIHAN MENULIS", "Tulis aksara "ha"", dan "Ikuti garis bantu, lalu tekan Periksa." | Diisi `tampilkanSoal(soal)` dari `SoalLatihan.targetSoal` (Algo-021). Kartu "Contoh" di sebelah kanan menampilkan bentuk aksara target dan cara membacanya. |
+| I-07-03 | Canvas | Area menggambar dengan outline aksara target | Menangkap Pointer Events melalui `rekamGoresan()` (Algo-020). Goresan digambar di browser tanpa menunggu server (KNF04). Outline berasal dari `SoalLatihan.templat`. |
+| I-07-04 | Toggle | "Tampilkan outline" | Menjalankan `aturOutline(aktif)` untuk menyalakan atau mematikan outline tanpa menghapus goresan (KF10). |
+| I-07-05 | Button (sekunder) | "× Bersihkan" | Menjalankan `ulangiLatihan()`: goresan dihapus, soal dan outline tetap. |
+| I-07-06 | Button (utama) | "Periksa" | Menjalankan `kirimJawaban(jawaban)` → `LatihanController.nilaiJawaban()` (Algo-022, Algo-023). Nonaktif selama kanvas kosong. Setelah hasil `berhasil`, tombol ini menjalankan `selesaikanLatihan()` → `simpanHasil()` (Algo-026) lalu membuka I-10. |
+| I-07-07 | Alert (hasil) | "Belum tepat" dan "Akurasi 62%. Tulis lebih dekat ke garis bantu.", tombol "Ulangi" | Diisi `tampilkanHasil(hasil)`. Untuk status `perlu_diulang` (akurasi di bawah 70), percobaan dicatat tanpa menambah streak atau poin, dan tombol "Ulangi" menjalankan `ulangiLatihan()` pada aksara yang sama (Skenario Alternatif 3). Untuk status `berhasil`, alert berwarna hijau. |
+| I-07-08 | Button (ikon) | "×" | Keluar dari latihan dan kembali ke I-06 tanpa menyimpan soal yang belum dikirim. |
 
 ## 6.8 Rancangan Antarmuka I-08
 
+**Antarmuka:** I-08  
+**Nama Layar:** Latihan Mencocokkan Bunyi
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-08 Latihan Mencocokkan Bunyi" src="./assets/ui/I-08 Bunyi.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.8. Rancangan Antarmuka I-08 - Latihan Mencocokkan Bunyi</i>
+</p>
+
+Tabel 6.8. Spesifikasi Objek Antarmuka I-08
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-08-01 | Progress bar | Bar kemajuan latihan dan angka streak | Sama seperti I-07-01. |
+| I-08-02 | Label (soal) | "LATIHAN MENCOCOKKAN BUNYI" dan "Pilih aksara yang sesuai bunyi" | Diisi `tampilkanSoal(soal)` (Algo-021). |
+| I-08-03 | Button (ikon audio) | Tombol speaker, maskot, dan "Dengarkan baik-baik, lalu pilih satu aksara." | Menjalankan `putarAudio()` untuk `SoalLatihan.audio` dari `ambilAudioPengucapan()` (Algo-021). Boleh diputar berulang. Suara hanya diputar setelah Pelajar menekan tombol (Skenario Alternatif 1). |
+| I-08-04 | Button (pilihan, 4 buah) | Empat aksara beserta label "pilihan 1" s.d. "pilihan 4" | Berisi `SoalLatihan.pilihan`. Mengklik satu kartu menandainya sebagai pilihan (garis tepi berwarna) dan menyimpannya ke `jawabanInput.pilihan`. |
+| I-08-05 | Button (utama) | "Periksa" | Menjalankan `kirimJawaban(jawaban)` → `LatihanController.nilaiJawaban()` (Algo-022, Algo-024). Nonaktif sebelum ada pilihan. Setelah hasil `berhasil`, tombol ini menjalankan `selesaikanLatihan()` → `simpanHasil()` (Algo-026) lalu membuka I-10. |
+| I-08-06 | Alert (hasil) | "Benar!" dan "Bunyi yang diputar adalah "na"." | Diisi `tampilkanHasil(hasil)`. Jawaban salah ditampilkan dengan alert merah yang menyebut aksara yang benar. |
+| I-08-07 | Button (ikon) | "×" | Sama seperti I-07-08. |
+
 ## 6.9 Rancangan Antarmuka I-09
 
+**Antarmuka:** I-09  
+**Nama Layar:** Latihan Merangkai Aksara
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-09 Latihan Merangkai Aksara" src="./assets/ui/I-09 Merangkai.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.9. Rancangan Antarmuka I-09 - Latihan Merangkai Aksara</i>
+</p>
+
+Tabel 6.9. Spesifikasi Objek Antarmuka I-09
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-09-01 | Progress bar | Bar kemajuan latihan dan angka streak | Sama seperti I-07-01. |
+| I-09-02 | Label (soal) | "LATIHAN MERANGKAI AKSARA" dan "Susun kata "cara"" | Diisi `tampilkanSoal(soal)` dari `SoalLatihan.targetSoal` (Algo-021). |
+| I-09-03 | Card (area susunan dan palet) | "SUSUNANMU" berisi komponen yang sudah dipilih, dan "KOMPONEN TERSEDIA" berisi aksara serta sandhangan | Palet berisi `SoalLatihan.komponen`. Mengklik komponen memindahkannya ke susunan (komponen di palet menjadi pudar), dan mengklik komponen di susunan mengembalikannya. Urutan disimpan sebagai `jawabanInput.urutan` dan diproses di browser. |
+| I-09-04 | Card (panel transliterasi) | "Mode transliterasi", aksara soal, input "Tulis dalam huruf Latin", pilihan arah "Aksara → Latin" / "Latin → Aksara" | Hanya tampil bila mode Transliterasi dipilih pada I-06 (I-06-04). |
+| I-09-05 | Button (utama) | "Periksa" | Menjalankan `kirimJawaban(jawaban)` → `LatihanController.nilaiJawaban()` (Algo-022, Algo-025). Nonaktif selama susunan kosong. Setelah hasil `berhasil`, tombol ini menjalankan `selesaikanLatihan()` → `simpanHasil()` (Algo-026) lalu membuka I-10. |
+| I-09-06 | Alert (hasil) | "Susunan benar" dan "ꦕ + ꦫ dibaca "cara"." | Diisi `tampilkanHasil(hasil)`. Bila susunan salah, komponen pada `posisiSalah` diberi garis merah. |
+| I-09-07 | Button (ikon) | "×" | Sama seperti I-07-08. |
+
 ## 6.10 Rancangan Antarmuka I-10
+
+**Antarmuka:** I-10  
+**Nama Layar:** Hasil Latihan
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-10 Hasil Latihan" src="./assets/ui/I-10 Hasil Latihan.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.10. Rancangan Antarmuka I-10 - Hasil Latihan</i>
+</p>
+
+Tabel 6.10. Spesifikasi Objek Antarmuka I-10
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-10-01 | Label (judul hasil) | Maskot, "Latihan rampung!", dan "Apik tenan! Kamu menyelesaikan latihan menulis "ha na ca ra ka"." | Ditampilkan `tampilkanRingkasan(ringkasan)` setelah `simpanHasil()` berhasil (Algo-026). |
+| I-10-02 | Card (statistik) | "POIN" dan "+10" | Dari `RingkasanMotivasi.poinBertambah`, hasil `tambahPoin()` (Algo-029). Menjadi "+0" bila soal sudah pernah diselesaikan (`cekPernahSelesai()`, SKPL 2.4 butir 6). |
+| I-10-03 | Card (statistik) | "AKURASI" dan "88%" | Skor dari `HasilPenilaian` latihan yang baru diselesaikan. |
+| I-10-04 | Card (statistik) | "STREAK" dan "6 hari" | Dari `RingkasanMotivasi.streak`, hasil `perbaruiStreak()` (Algo-028). |
+| I-10-05 | Card (badge baru) | "BADGE BARU", "Pemula Aksara", dan "Menyelesaikan latihan pertama." | Dari `RingkasanMotivasi.badgeBaru` (Algo-027, Algo-030). Disembunyikan bila tidak ada badge baru. |
+| I-10-06 | Button (sekunder) | "Ulangi latihan" | Mengulang latihan pada mode yang sama (`pilihModeLatihan(mode)`, Algo-021). Poin tidak bertambah untuk soal yang sudah pernah diselesaikan. |
+| I-10-07 | Button (utama) | "→ Lanjut" | Membuka soal berikutnya pada mode yang sama (Algo-021). Bila semua aksara target pada materi sudah berhasil, Pelajar kembali ke I-05. |
 
 ## 6.11 Rancangan Antarmuka I-11
 **Antarmuka:** I-11  
@@ -2982,11 +3094,11 @@ Tabel 6.Y. Rancangan Antarmuka Keseluruhan
 | I-03 | ...                                                                                 |
 | I-04 Daftar Materi | <img src="./assets/diagram/I-04 Daftar Materi.png" alt="Contoh Desain" width="400"> |
 | I-05 Detail Materi | <img src="./assets/diagram/I-05 Detail Materi.png" alt="Contoh Desain" width="400"> |
-| I-06 | ...                                                                                 |
-| I-07 | ...                                                                                 |
-| I-08 | ...                                                                                 |
-| I-09 | ...                                                                                 |
-| I-10 | ...                                                                                 |
+| I-06 Pilih Mode Latihan | <img src="./assets/ui/I-06 Pilih Mode.png" alt="I-06 Pilih Mode Latihan" width="400"> |
+| I-07 Latihan Menulis | <img src="./assets/ui/I-07 Menulis.png" alt="I-07 Latihan Menulis" width="400"> |
+| I-08 Latihan Mencocokkan Bunyi | <img src="./assets/ui/I-08 Bunyi.png" alt="I-08 Latihan Mencocokkan Bunyi" width="400"> |
+| I-09 Latihan Merangkai Aksara | <img src="./assets/ui/I-09 Merangkai.png" alt="I-09 Latihan Merangkai Aksara" width="400"> |
+| I-10 Hasil Latihan | <img src="./assets/ui/I-10 Hasil Latihan.png" alt="I-10 Hasil Latihan" width="400"> |
 |I-11 Progres Pelajar | <img src="./assets/diagram/I-11 Progres Pelajar.png" alt="I-11 Progres Pelajar" width="400"> |
 | I-12 | ...                                                                                 |
 | I-13 | ...                                                                                 |
