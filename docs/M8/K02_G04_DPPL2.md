@@ -1578,6 +1578,66 @@ PROCEDURE suntingMateri(idMateri: Integer)
 ```
 
 ## 5.10 Kelas HalamanFeedback
+ 
+**Nama Kelas:** HalamanFeedback  
+**ID Kelas:** C10  
+**Jenis:** View
+ 
+Menampilkan form feedback (layar I-20) dan konfirmasi hasil pengiriman.
+ 
+Tabel 5.10.1. Operasi Kelas HalamanFeedback
+ 
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `tampilkanFormFeedback(): void` | public | Menampilkan pilihan kategori (performa, tampilan, fitur, materi) sebagai pertanyaan tertutup dan isian pesan sebagai pertanyaan terbuka (KF18). |
+| `kirimFeedback(data: MasukanFeedback): void` | public | Mengirim feedback ke `FeedbackController`, menangani kegagalan server maupun jaringan, lalu menampilkan konfirmasi. Lihat Algo-008. |
+| `tampilkanKonfirmasi(konfirmasi: Konfirmasi): void` | public | Menampilkan pesan berhasil atau gagal terkirim (KF20, KNF05). Jika gagal, isi form tetap dipertahankan agar pengguna dapat mengirim ulang. |
+ 
+Tabel 5.10.2. Atribut Kelas HalamanFeedback
+ 
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `kategoriFeedback` | private | KategoriFeedback |
+| `pesanFeedback` | private | String |
+| `statusKirim` | private | StatusKirim (`SIAP`, `MENGIRIM`, `TERKIRIM`, `GAGAL`) |
+ 
+### 5.10.1 Algoritma/Query
+ 
+**Nama Kelas:** HalamanFeedback  
+**Nama Operasi:** `kirimFeedback(data: MasukanFeedback): void`  
+**ID Algoritma:** Algo-008
+ 
+Kedua cabang UC-09 Skenario Alternatif 1 ditangani di sini: server menerima permintaan tetapi gagal menyimpan, atau permintaan tidak sampai ke server.
+ 
+```text
+PROCEDURE kirimFeedback(data: MasukanFeedback)
+  IF statusKirim = "MENGIRIM" THEN RETURN          // mencegah pengiriman ganda
+  kategoriFeedback ← data.kategori;  pesanFeedback ← data.pesan
+  statusKirim ← "MENGIRIM";  nonaktifkan tombol "Kirim"
+ 
+  TRY (batas waktu 10 detik)
+    validasi ← FeedbackController.validasiFeedback(data)
+    IF validasi.valid = false THEN
+      statusKirim ← "SIAP"
+      tampilkan pesan galat di bawah isian dari validasi.galat
+      aktifkan tombol "Kirim";  RETURN
+    hasil ← FeedbackController.simpanFeedback(data)
+    konfirmasi ← FeedbackController.kirimKonfirmasi(hasil)
+  CATCH galat jaringan atau batas waktu habis
+    konfirmasi ← Konfirmasi(berhasil = false,
+                            pesan = "Feedback gagal terkirim. Periksa koneksi lalu coba lagi.")
+ 
+  tampilkanKonfirmasi(konfirmasi)
+ 
+PROCEDURE tampilkanKonfirmasi(konfirmasi: Konfirmasi)
+  IF konfirmasi.berhasil THEN
+    statusKirim ← "TERKIRIM"
+    kosongkan form;  tampilkan notifikasi berhasil konfirmasi.pesan
+  ELSE
+    statusKirim ← "GAGAL"
+    pertahankan kategoriFeedback dan pesanFeedback pada form
+    tampilkan notifikasi galat konfirmasi.pesan;  aktifkan tombol "Kirim"
+```
 
 ## 5.11 Kelas HalamanKelasPelajar
 
