@@ -1144,6 +1144,28 @@ Tabel 5.3.8. Query Operasi ambilStatusProgres
 | :--- | :--- | :--- |
 | Q-012 | `SELECT id_materi, SUM(status = 'berhasil') AS jumlah_berhasil, COUNT(*) AS jumlah_percobaan FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND id_materi IN (:daftar_id_materi) GROUP BY id_materi;` | Materi tanpa baris berstatus belum, jumlah_berhasil 0 berstatus sedang, selebihnya selesai. |
 
+### 5.3.7 Algoritma/Query: hitungPenguasaan
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `hitungPenguasaan(idPelajar: Integer): Data`
+
+Tabel 5.3.9. Query Operasi hitungPenguasaan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-010 | `SELECT id_materi, ROUND(AVG(skor), 2) AS penguasaan FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND skor IS NOT NULL GROUP BY id_materi;` | Penguasaan per materi sebagai rata-rata skor. Dihitung setiap kali, tidak disimpan. |
+
+### 5.3.8 Algoritma/Query: ambilRiwayatPelajar
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `ambilRiwayatPelajar(daftarIdPelajar: List<Integer>): List<RiwayatLatihan>`
+
+Tabel 5.3.10. Query Operasi ambilRiwayatPelajar
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-014 | `SELECT id_pelajar, id_materi, mode, skor, status, tanggal_pengerjaan FROM riwayat_latihan WHERE id_pelajar IN (:daftar_id_pelajar) ORDER BY tanggal_pengerjaan DESC;` | Riwayat banyak Pelajar sekaligus untuk pemantauan kelas. |
+
 ## 5.4 Kelas DataFeedback
 
 ## 5.5 Kelas HalamanPendaftaran
