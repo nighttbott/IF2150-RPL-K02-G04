@@ -4,8 +4,8 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | *Selasa* |
-| **Tanggal** | *15/09/2026* |
+| **Hari** | Selasa |
+| **Tanggal** | 27/10/2026 |
 | **Kelas** | 02 |
 | **Nomor Kelompok** | 04 |
 | **Nama Kelompok** | 0sks |
