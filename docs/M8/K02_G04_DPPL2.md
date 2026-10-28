@@ -4071,9 +4071,94 @@ Tabel 6.11. Spesifikasi Objek Antarmuka I-11
 
 ## 6.14 Rancangan Antarmuka I-14
 
+**Antarmuka:** I-14  
+**Nama Layar:** Kelola Kelas
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-14 Kelola Kelas" src="./assets/ui/I-14.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.14. Rancangan Antarmuka I-14 - Kelola Kelas</i>
+</p>
+
+Tabel 6.14. Spesifikasi Objek Antarmuka I-14
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-14-01 | Label (judul halaman) | Breadcrumb "Beranda / Kelola Kelas" dan judul "Kelola Kelas" | Menunjukkan halaman untuk mengelola kelas yang diampu oleh Pengajar. |
+| I-14-02 | Card (form pembuatan kelas) | Judul "Buat kelas baru", label "Nama kelas", dan kolom input nama kelas | Digunakan Pengajar untuk memasukkan nama kelas baru sebagai bagian dari `DataKelas`. |
+| I-14-03 | Button (utama) | "Buat Kelas" | Memicu `buatKelas(data: DataKelas)` pada `HalamanKelolaKelas`. Permintaan diteruskan ke `KelasController.buatKelas(data)` untuk memverifikasi hak akses Pengajar dan menyimpan kelas melalui `KelasBelajar.simpan(data)`. |
+| I-14-04 | Label (validasi) | "Nama kelas wajib diisi. (contoh)" | Menampilkan pesan validasi ketika nama kelas belum diisi. Kelas tidak dibuat sebelum data yang diperlukan valid. |
+| I-14-05 | Card (hasil pembuatan kelas) | Judul "KELAS BERHASIL DIBUAT", nama kelas, dan kode bergabung, misalnya "P4TR7K" | Ditampilkan setelah pembuatan kelas berhasil. Kode bergabung dibangkitkan melalui `buatKodeBergabung()` dan dikembalikan bersama `HasilOperasi(idKelas, kodeBergabung)`. |
+| I-14-06 | Button (aksi) | "Salin Kode" | Menyalin kode bergabung yang ditampilkan pada card hasil pembuatan kelas agar dapat dibagikan kepada Pelajar. |
+| I-14-07 | Card (daftar kelas) | Judul "Kelas yang kamu ampu", nama kelas, kode bergabung, jumlah anggota, dan jumlah tugas aktif | Menampilkan daftar kelas yang dikelola Pengajar beserta ringkasan informasi setiap kelas. |
+| I-14-08 | Button (navigasi) | "Anggota & Pengaturan" | Membuka antarmuka I-16 untuk mengelola anggota dan pengaturan papan peringkat pada kelas yang dipilih. |
+| I-14-09 | Button (navigasi) | "Terbitkan Tugas" | Membuka antarmuka I-15 untuk menyusun dan menerbitkan tugas pada kelas yang dipilih. |
+| I-14-10 | Button (navigasi) | "Pantau Progres" | Membuka halaman pemantauan progres belajar anggota pada kelas yang dipilih. |
+
 ## 6.15 Rancangan Antarmuka I-15
 
+**Antarmuka:** I-15  
+**Nama Layar:** Terbitkan Tugas
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-15 Terbitkan Tugas" src="./assets/ui/I-15.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.15. Rancangan Antarmuka I-15 - Terbitkan Tugas</i>
+</p>
+
+Tabel 6.15. Spesifikasi Objek Antarmuka I-15
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-15-01 | Label (judul halaman) | Breadcrumb "Kelola Kelas / Terbitkan Tugas" dan judul "Terbitkan tugas" | Menunjukkan halaman untuk menyusun dan menerbitkan tugas bagi anggota kelas. |
+| I-15-02 | Dropdown (pemilihan kelas) | Label "Kelas" dan pilihan kelas, misalnya "Aksara Jawa 8A · 28 anggota" | Menentukan kelas penerima tugas dan nilai `idKelas` yang digunakan saat menyimpan atau menerbitkan tugas. |
+| I-15-03 | Text Input | Label "Judul tugas"; contoh isi "Latihan menulis nglegena ha–ka" | Digunakan untuk memasukkan judul tugas sebagai bagian dari `DataTugas`. |
+| I-15-04 | Textarea | Label "Instruksi" dan petunjuk pengerjaan tugas | Digunakan untuk memasukkan instruksi yang akan dibaca Pelajar saat mengerjakan tugas. Instruksi disimpan sebagai bagian dari `DataTugas`. |
+| I-15-05 | Label (komponen tugas) | Judul "Komponen tugas" | Menandai daftar materi dan latihan yang dapat dipilih untuk dimasukkan ke dalam paket tugas. |
+| I-15-06 | Checkbox (materi) | "Aksara Nglegena Dasar" dengan label kategori "Materi" | Menentukan apakah materi Aksara Nglegena Dasar disertakan dalam paket tugas. |
+| I-15-07 | Checkbox (latihan menulis) | "Latihan menulis: ha" dengan label kategori "Menulis" | Menambahkan latihan menulis aksara ha ke dalam paket tugas apabila dipilih. |
+| I-15-08 | Checkbox (latihan menulis) | "Latihan menulis: ka" dengan label kategori "Menulis" | Menambahkan latihan menulis aksara ka ke dalam paket tugas apabila dipilih. |
+| I-15-09 | Checkbox (latihan bunyi) | "Mencocokkan bunyi: ha–ka" dengan label kategori "Bunyi" | Menambahkan latihan mencocokkan bunyi ha–ka ke dalam paket tugas apabila dipilih. |
+| I-15-10 | Checkbox (latihan merangkai) | "Merangkai suku kata ka–ki" dengan label kategori "Merangkai" | Menambahkan latihan merangkai suku kata ka–ki ke dalam paket tugas apabila dipilih. |
+| I-15-11 | Input (tenggat waktu) | Label "Tenggat"; contoh isi "30/10/2026 · 23.59" | Menentukan batas waktu pengerjaan tugas dan disimpan sebagai bagian dari `DataTugas`. |
+| I-15-12 | Card (ringkasan paket tugas) | Judul "RINGKASAN PAKET TUGAS", judul tugas, kelas, jumlah anggota aktif, jumlah komponen, dan tenggat | Merangkum informasi tugas berdasarkan kelas yang dipilih, data formulir, komponen yang dicentang, dan tenggat waktu. |
+| I-15-13 | Button (utama) | "Terbitkan Tugas" | Memicu `terbitkanTugas(idKelas, data)` pada `HalamanKelolaKelas`. `KelasController` memverifikasi hak akses Pengajar dan kepemilikan kelas, kemudian memanggil `TugasKelas.terbitkan()` agar tugas dapat diakses anggota kelas. |
+| I-15-14 | Button (sekunder) | "Batal" | Membatalkan proses penyusunan tugas dan kembali tanpa menerbitkan tugas. |
+| I-15-15 | Alert (sukses) | "Tugas diterbitkan untuk 28 anggota. (contoh hasil)" | Ditampilkan setelah penerbitan berhasil. Jumlah anggota pada notifikasi mengikuti jumlah penerima tugas pada kelas yang dipilih. |
+
 ## 6.16 Rancangan Antarmuka I-16
+
+**Antarmuka:** I-16  
+**Nama Layar:** Kelola Anggota dan Papan Peringkat
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-16 Kelola Anggota dan Papan Peringkat" src="./assets/ui/I-16.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.16. Rancangan Antarmuka I-16 - Kelola Anggota dan Papan Peringkat</i>
+</p>
+
+Tabel 6.16. Spesifikasi Objek Antarmuka I-16
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-16-01 | Label (judul halaman) | Breadcrumb "Kelola Kelas / Aksara Jawa 8A / Anggota & Pengaturan" dan judul "Aksara Jawa 8A" | Menunjukkan kelas yang sedang dikelola oleh Pengajar. |
+| I-16-02 | Alert (sukses) | "Kode kelas diganti. Kode lama tidak bisa dipakai lagi." | Menampilkan konfirmasi setelah penggantian kode kelas berhasil. Kode lama dinonaktifkan dan kode bergabung baru menjadi kode aktif. |
+| I-16-03 | Card (kode bergabung aktif) | Label "KODE BERGABUNG AKTIF", kode "K8Q2MX", dan keterangan "Pelajar memakai kode ini di menu Kelas Saya." | Menampilkan kode bergabung aktif yang digunakan Pelajar untuk bergabung ke kelas. |
+| I-16-04 | Button (aksi) | "Ganti Kode" | Memicu `gantiKodeKelas(idKelas)` pada `HalamanKelolaKelas`. `KelasController` memverifikasi hak akses dan kepemilikan kelas sebelum meminta `KelasBelajar.gantiKodeBergabung(idPengajar)` menghasilkan kode baru. |
+| I-16-05 | Card (pengaturan kelas) | Judul "PENGATURAN KELAS" | Mengelompokkan pengaturan papan peringkat kelas. |
+| I-16-06 | Toggle | Label "Papan peringkat kelas" dengan status aktif atau nonaktif | Memicu `aturScoreboard(idKelas, aktif)`. Setelah hak akses dan kepemilikan kelas diverifikasi, `KelasBelajar.aturScoreboard(aktif)` memperbarui status papan peringkat. |
+| I-16-07 | Label (deskripsi pengaturan) | "Anggota melihat urutan poin dengan nama tampilan. Matikan bila kelas tidak ingin berkompetisi." | Menjelaskan bahwa pengaturan ini menentukan apakah papan peringkat kelas diaktifkan atau dinonaktifkan. |
+| I-16-08 | Card (daftar anggota) | Judul "Anggota aktif" dan jumlah anggota, misalnya "28 anggota" | Menampilkan daftar anggota yang berstatus aktif berdasarkan `KeanggotaanKelas.daftarAnggotaAktif(idKelas)`. |
+| I-16-09 | Label (header tabel) | "NAMA TAMPILAN", "BERGABUNG", "STATUS", dan "POIN" | Menunjukkan kolom informasi anggota yang ditampilkan pada tabel. |
+| I-16-10 | Row (data anggota) | Avatar atau inisial, nama tampilan, tanggal bergabung, status "Aktif", dan jumlah poin | Menampilkan data setiap anggota aktif. Profil diperoleh melalui `AkunPengguna.getProfil()`, sedangkan poin diperoleh melalui `MotivasiBelajar.ambilPoinKelas()`. |
+| I-16-11 | Button (aksi anggota) | "Keluarkan" | Membuka dialog konfirmasi untuk anggota yang dipilih. Pengeluaran hanya diproses setelah Pengajar mengonfirmasi tindakan tersebut. |
+| I-16-12 | Dialog konfirmasi | Judul "Keluarkan Dimas dari kelas?" dan keterangan bahwa Dimas tidak dapat membuka tugas kelas, tetapi riwayat belajar pribadinya tetap tersimpan | Meminta konfirmasi sebelum status keanggotaan Pelajar diubah menjadi nonaktif. Nama anggota menyesuaikan anggota yang dipilih. |
+| I-16-13 | Button (sekunder pada dialog) | "Batal" | Menutup dialog tanpa mengubah status keanggotaan anggota. |
+| I-16-14 | Button (utama pada dialog) | "Keluarkan" | Setelah dikonfirmasi, memicu `kelolaAnggota(idKelas)` pada `HalamanKelolaKelas`, yang meneruskan `KelasController.kelolaAnggota(idKelas, idPelajar, status="nonaktif")`. Setelah hak akses dan kepemilikan kelas diverifikasi, sistem memanggil `KeanggotaanKelas.ubahStatus("nonaktif")`. |
+| I-16-15 | Label (jumlah anggota ditampilkan) | "Menampilkan 5 dari 28 anggota" | Menunjukkan jumlah anggota yang sedang ditampilkan dibandingkan dengan jumlah seluruh anggota aktif. Daftar diperbarui setelah pengeluaran anggota berhasil. |
 
 ## 6.17 Rancangan Antarmuka I-17
 **Antarmuka:** I-17  
@@ -4188,9 +4273,9 @@ Tabel 6.21. Rancangan Antarmuka Keseluruhan
 |I-11 Progres Pelajar | <img src="./assets/diagram/I-11 Progres Pelajar.png" alt="I-11 Progres Pelajar" width="400"> |
 | I-12 | ...                                                                                 |
 | I-13 | ...                                                                                 |
-| I-14 | ...                                                                                 |
-| I-15 | ...                                                                                 |
-| I-16 | ...                                                                                 |
+| I-14 Kelola Kelas| <img src="./assets/diagram/I-14.png" alt="I-11 Progres Pelajar" width="400"> |
+| I-15 Terbitkan Tugas| <img src="./assets/diagram/I-15.png" alt="I-11 Progres Pelajar" width="400"> |
+| I-16 Kelola Anggota dan Papan Peringkat| <img src="./assets/diagram/I-16.png" alt="I-11 Progres Pelajar" width="400"> |
 |I-17 Pantau Progres Anggota | <img src="./assets/diagram/I-17 Pantau Progres Anggota.png" alt="I-17 Pantau Progres Anggota" width="400">|
 | I-18 Kelola Materi | <img src="./assets/diagram/I-18 Kelola Materi.png" alt="Contoh Desain" width="400"> |
 | I-19 Unggah Materi | <img src="./assets/diagram/I-19 Unggah Materi.png" alt="Contoh Desain" width="400"> |
