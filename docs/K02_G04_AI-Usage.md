@@ -29,8 +29,8 @@
 * [Milestone 4](#milestone-4)
 * [Milestone 5](#milestone-5)
 * [Milestone 6](#milestone-6)
-* [Milestone 6](#milestone-7)
-* [Milestone 6](#milestone-8)
+* [Milestone 7](#milestone-7)
+* [Milestone 8](#milestone-8)
 
 ---
 
