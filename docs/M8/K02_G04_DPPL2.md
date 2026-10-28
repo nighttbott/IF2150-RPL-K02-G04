@@ -1752,6 +1752,131 @@ Tabel 5.14.2. Atribut Kelas HalamanProgres
 | `idKelasTerpilih` | private | `Integer?` |
 
 ## 5.15 Kelas OtentikasiController
+ 
+**Nama Kelas:** OtentikasiController  
+**ID Kelas:** C15  
+**Jenis:** Controller
+ 
+Memvalidasi data pendaftaran dan login, mengamankan kata sandi, serta membuat sesi pengguna (KF01–KF07).
+ 
+Tabel 5.15.1. Operasi Kelas OtentikasiController
+ 
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `verifikasiFormatData(data: DataPendaftaran): HasilValidasi` | public | Memeriksa peran, format email, username, kekuatan kata sandi, dan persetujuan T&C (KF04, KF07). Mengembalikan seluruh galat per isian sekaligus. Lihat Algo-009. |
+| `hashPassword(password: String): String` | private | Membuat hash adaptif bersalt dari kata sandi (KF05). Lihat Algo-010. |
+| `simpanAkun(data: DataPendaftaran): HasilOperasi` | public | Memvalidasi ulang data, membuat hash kata sandi, lalu memanggil `AkunPengguna.buatAkunBaru()`. Kegagalan dicatat ke `LogAplikasi` (KF17). Lihat Algo-011. |
+| `validasiLogin(email: String, password: String): HasilOperasi` | public | Memeriksa kredensial, membatasi percobaan gagal, dan membuat sesi jika berhasil (KF03–KF04). Lihat Algo-012. |
+ 
+Tabel 5.15.2. Atribut Kelas OtentikasiController
+ 
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `konteks` | private | KonteksPermintaan |
+| `batasPercobaanLogin` | private | Integer (nilai awal 5 per menit) |
+ 
+### 5.15.1 Algoritma/Query
+ 
+**Nama Kelas:** OtentikasiController  
+**Nama Operasi:** `verifikasiFormatData(data: DataPendaftaran): HasilValidasi`  
+**ID Algoritma:** Algo-009
+ 
+```text
+FUNCTION verifikasiFormatData(data: DataPendaftaran): HasilValidasi
+  galat ← map kosong                                   // nama isian → pesan
+ 
+  IF data.peran NOT IN {PELAJAR, PENGAJAR} THEN
+    galat["peran"] ← "Pilih jenis akun Pelajar atau Pengajar"            // KF01
+  IF NOT formatEmailValid(data.email) OR panjang(data.email) > 255 THEN
+    galat["email"] ← "Format email tidak valid"
+  IF NOT cocok(data.username, ^[A-Za-z0-9_]{3,30}$) THEN
+    galat["username"] ← "Username 3–30 karakter: huruf, angka, atau garis bawah"
+  IF panjang(data.password) < 8 OR tidak memuat huruf OR tidak memuat angka THEN
+    galat["password"] ← "Kata sandi minimal 8 karakter dan memuat huruf serta angka"
+  IF data.password <> data.konfirmasiPassword THEN
+    galat["konfirmasiPassword"] ← "Konfirmasi kata sandi tidak sama"
+  IF data.persetujuanTnC <> true THEN
+    galat["persetujuanTnC"] ← "Terms & Conditions belum disetujui"       // KF07
+ 
+  IF galat kosong THEN RETURN HasilValidasi.valid()
+  RETURN HasilValidasi.tidakValid(galat)
+```
+ 
+### 5.15.2 Algoritma/Query
+ 
+**Nama Kelas:** OtentikasiController  
+**Nama Operasi:** `hashPassword(password: String): String`  
+**ID Algoritma:** Algo-010
+ 
+Kata sandi di-hash dengan fungsi satu arah, bukan dienkripsi, sehingga teks aslinya tidak dapat dikembalikan oleh siapa pun, termasuk pengelola basis data.
+ 
+```text
+FUNCTION hashPassword(password: String): String
+  // Laravel Hash facade dengan bcrypt (cost 12); salt acak dibuat otomatis dan disimpan di dalam hash
+  RETURN Hash::make(password, ['rounds' => 12])
+  // kata sandi asli tidak pernah disimpan atau ditulis ke log
+```
+ 
+### 5.15.3 Algoritma/Query
+ 
+**Nama Kelas:** OtentikasiController  
+**Nama Operasi:** `simpanAkun(data: DataPendaftaran): HasilOperasi`  
+**ID Algoritma:** Algo-011
+ 
+```text
+FUNCTION simpanAkun(data: DataPendaftaran): HasilOperasi
+  validasi ← verifikasiFormatData(data)      // server tidak mengandalkan pemeriksaan sebelumnya
+  IF validasi.valid = false THEN
+    RETURN HasilOperasi.gagal("DATA_TIDAK_VALID", validasi.galat)
+ 
+  dataSimpan ← DataPendaftaran(
+    email = data.email, username = data.username, peran = data.peran,
+    namaTampilan = data.namaTampilan, passwordHash = hashPassword(data.password))
+  hapus data.password dan data.konfirmasiPassword dari memori permintaan
+ 
+  TRY
+    hasil ← new AkunPengguna().buatAkunBaru(dataSimpan)        // Algo-001
+  CATCH galat
+    LogAplikasi.catat("ERROR", "Pendaftaran gagal", {username: data.username})   // KF17
+    RETURN HasilOperasi.gagal("SIMPAN_GAGAL", "Akun gagal dibuat, coba lagi")
+ 
+  IF hasil.berhasil THEN
+    LogAplikasi.catat("INFO", "Akun baru dibuat", {idAkun: hasil.idAkun})
+  RETURN hasil
+```
+ 
+### 5.15.4 Algoritma/Query
+ 
+**Nama Kelas:** OtentikasiController  
+**Nama Operasi:** `validasiLogin(email: String, password: String): HasilOperasi`  
+**ID Algoritma:** Algo-012
+ 
+```text
+FUNCTION validasiLogin(email: String, password: String): HasilOperasi
+  kunci ← "login:" + huruf kecil(trim(email)) + "|" + konteks.ip
+  IF RateLimiter.terlaluBanyak(kunci, batasPercobaanLogin) THEN
+    RETURN HasilOperasi.gagal("TERLALU_BANYAK_PERCOBAAN",
+                              "Coba lagi dalam " + RateLimiter.sisaDetik(kunci) + " detik")
+ 
+  akun ← AkunPengguna.cariBerdasarkanEmail(huruf kecil(trim(email)))     // Q-002
+  IF akun = null THEN
+    Hash::check(password, HASH_DUMMY)       // waktu proses tetap sama walau email tidak terdaftar
+    cocok ← false
+  ELSE
+    cocok ← akun.cocokkanPassword(password)
+ 
+  IF NOT cocok THEN
+    RateLimiter.tambah(kunci, kedaluwarsa = 60 detik)
+    LogAplikasi.catat("WARNING", "Login gagal", {ip: konteks.ip})          // KF17
+    RETURN HasilOperasi.gagal("KREDENSIAL_SALAH", "Email atau kata sandi salah")
+ 
+  RateLimiter.hapus(kunci)
+  konteks.session.regenerasiId()           // mencegah session fixation
+  profil ← akun.getProfil()
+  konteks.session["idAkun"] ← profil.idAkun
+  konteks.session["peran"] ← profil.peran
+  RETURN HasilOperasi.sukses(profil = profil)
+```
 
 ## 5.16 Kelas LatihanController
 
