@@ -131,7 +131,7 @@ Tabel 1.3. Definisi Istilah dan Singkatan
 
 ## 1.6 Deskripsi Umum Dokumen (Ikhtisar)
 
-Dokumen ini terdiri atas lima bab. Bab 1 menguraikan tujuan, lingkup masalah, istilah, aturan penomoran, dan referensi. Bab 2 memaparkan perancangan arsitektur, yaitu lingkungan implementasi, pola arsitektur acuan, identifikasi komponen, dan model arsitektur yang diturunkan dari APL. Bab 3 berisi realisasi use case UC-01 sampai UC-09 berupa identifikasi kelas, sequence diagram untuk setiap skenario, dan diagram kelas per use case. Bab 4 menyajikan diagram kelas perancangan keseluruhan beserta daftar atribut dan operasinya. Bab 5 memuat matriks kerunutan yang memetakan setiap kelas ke use case yang merealisasikannya.
+Dokumen ini terdiri atas tujuh bab. Bab 1 menguraikan tujuan penulisan, lingkup masalah, definisi dan istilah, aturan penomoran, referensi, serta ikhtisar dokumen. Bab 2 memaparkan perancangan arsitektur, yaitu lingkungan implementasi, pola arsitektur acuan, identifikasi komponen, dan model arsitektur _Logical View_ yang diturunkan dari APL. Bab 3 berisi realisasi use case UC-01 sampai UC-09 berupa identifikasi kelas, sequence diagram untuk setiap skenario, dan diagram kelas per use case. Bab 4 menyajikan diagram kelas perancangan keseluruhan beserta daftar atribut dan operasi setiap kelas. Bab 5 menjabarkan perancangan rinci kelas C01 sampai C26, yaitu operasi, atribut, serta algoritma dan query yang penting. Bab 6 menyajikan rancangan antarmuka layar I-01 sampai I-20 beserta spesifikasi objek pada setiap layar dan daftar antarmuka keseluruhan. Bab 7 memuat matriks kerunutan yang memetakan setiap kelas perancangan ke use case yang merealisasikannya.
 
 <br>
 
@@ -237,7 +237,7 @@ Tabel 2.3. Identifikasi Komponen/Modul/Subsistem
 Logical View dipilih untuk menggambarkan Ngaksara karena view ini menunjukkan pembagian tanggung jawab antarkomponen secara langsung yang merupakan inti dari pola MVC. Selain itu, Logical View juga cocok dengan Ngaksara karena Ngaksara dipakai oleh peran Pelajar, Pengajar, juga Tim Materi dengan halaman dan akses yang berbeda. Logical View dapat memperlihatkan perbedaan halaman yang melayani tiap peran.
 
 <p align="center">
-<img alt=" Logical View Ngaksara" src="./assets/diagram/DiagramFinal.jpg" width="50%">
+<img alt="Logical View Ngaksara" src="./assets/diagram/DiagramFinal.jpg" width="50%">
 </p>
 <p align="center">
 <i>Gambar 2. Logical View pada Ngaksara</i>
@@ -265,7 +265,7 @@ Alur Interaksi
 1. `HalamanPendaftaran` dan `HalamanLogin` memanggil `OtentikasiController`. Controller memvalidasi kredensial dan mengakses `AkunPengguna`. Akun yang tersimpan menjadi dasar hak akses ketiga peran pada alur berikutnya.
 2. `HalamanMateri` memanggil `MateriController`, yang mengakses `MateriAksara` untuk daftar dan metadata materi serta `KontenMateri` untuk isi dan audio pengucapan. `HalamanUtama` berperan sebagai navigasi menuju halaman-halaman tersebut.
 3. `HalamanLatihan` memanggil `LatihanController`. Controller mengakses `MateriAksara` dan `KontenMateri` untuk menyiapkan soal, menilai jawaban, lalu mengakses `RiwayatLatihan` untuk menyimpan hasilnya dan `MotivasiBelajar` untuk memperbarui streak dan poin.
-4. `HalamanProgres` memanggil `ProgressController`, yang mengakses `RiwayatLatihan` untuk menghitung penguasaan, `MateriAksara` untuk rekomendasi materi, dan `MotivasiBelajar` untuk streak, poin, badge, dan papan peringkat.
+4. `HalamanProgres` memanggil `ProgresController`, yang mengakses `RiwayatLatihan` untuk menghitung penguasaan, `MateriAksara` untuk rekomendasi materi, dan `MotivasiBelajar` untuk streak, poin, badge, dan papan peringkat.
 5. `HalamanKelolaKelas` (Pengajar) dan `HalamanKelasPelajar` (Pelajar) sama-sama memanggil `KelasController`. Controller ini mengakses `KelasBelajar`, `KeanggotaanKelas`, `TugasKelas`, dan `PenyelesaianTugas` untuk membuat kelas, memproses kode bergabung, menerbitkan tugas, dan mencatat status pengumpulan.
 6. `HalamanKelolaMateri` memanggil `MateriController`, yang mengakses `MateriAksara` dan `KontenMateri` untuk menambah atau memperbarui materi.
 7. `HalamanFeedback` memanggil `FeedbackController`, yang mengakses `DataFeedback` untuk menyimpan masukan.
@@ -283,14 +283,14 @@ Pada semua alur tersebut, data pada setiap Model akhirnya disimpan ke `Database`
 
 ### 3.1.1 Identifikasi Kelas
 
-Tabel 3.1.1 Identifikasi Kelas Use Case UC-01
+Tabel 3.1.1. Identifikasi Kelas Use Case UC-01
 
-| No  | Nama Kelas Perancangan     | Nama Kelas Analisis Terkait |
-| :-- | :------------------------- | :-------------------------- |
-| 1   | C05 - HalamanPendaftaran   | C05 - HalamanPendaftaran    |
-| 2   | C06 - HalamanLogin         | C06 - HalamanLogin          |
-| 3   | C15 - OtentikasiController | C15 - OtentikasiController  |
-| 4   | C01 - AkunPengguna         | C01 - AkunPengguna          |
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :-- | :--- | :--- |
+| 1 | C05 - HalamanPendaftaran | C05 - HalamanPendaftaran |
+| 2 | C06 - HalamanLogin | C06 - HalamanLogin |
+| 3 | C15 - OtentikasiController | C15 - OtentikasiController |
+| 4 | C01 - AkunPengguna | C01 - AkunPengguna |
 
 ### 3.1.2 Sequence Diagram
 
@@ -324,16 +324,16 @@ Tabel 3.1.1 Identifikasi Kelas Use Case UC-01
 
 ### 3.2.1 Identifikasi Kelas
 
-Tabel 3.2.1 Identifikasi Kelas Use Case UC-02
+Tabel 3.2.1. Identifikasi Kelas Use Case UC-02
 
-| No  | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
-| :-- | :--------------------- | :-------------------------- |
-| 1   | C13 — HalamanMateri    | C13 — HalamanMateri         |
-| 2   | C17 — MateriController | C17 — MateriController      |
-| 3   | C02 — MateriAksara     | C02 — MateriAksara          |
-| 4   | C21 — KontenMateri     | C21 — KontenMateri          |
-| 5   | C03 — RiwayatLatihan   | C03 — RiwayatLatihan        |
-| 6   | C01 — AkunPengguna     | C01 — AkunPengguna          |
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :-- | :--- | :--- |
+| 1 | C13 - HalamanMateri | C13 - HalamanMateri |
+| 2 | C17 - MateriController | C17 - MateriController |
+| 3 | C02 - MateriAksara | C02 - MateriAksara |
+| 4 | C21 - KontenMateri | C21 - KontenMateri |
+| 5 | C03 - RiwayatLatihan | C03 - RiwayatLatihan |
+| 6 | C01 - AkunPengguna | C01 - AkunPengguna |
 
 ### 3.2.2 Sequence Diagram
 
@@ -372,18 +372,18 @@ Tabel 3.2.1 Identifikasi Kelas Use Case UC-02
 
 ### 3.3.1 Identifikasi Kelas
 
-Tabel 3.3. Identifikasi Kelas Use Case UC-03
+Tabel 3.3.1. Identifikasi Kelas Use Case UC-03
 
-| No  | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
-| :-- | :--------------------- | :-------------------------- |
-| 1   | `HalamanLatihan`       | C08 - `HalamanLatihan`      |
-| 2   | `LatihanController`    | C16 - `LatihanController`   |
-| 3   | `MateriController`     | C17 - `MateriController`    |
-| 4   | `AkunPengguna`         | C01 - `AkunPengguna`        |
-| 5   | `MateriAksara`         | C02 - `MateriAksara`        |
-| 6   | `KontenMateri`         | C21 - `KontenMateri`        |
-| 7   | `RiwayatLatihan`       | C03 - `RiwayatLatihan`      |
-| 8   | `MotivasiBelajar`      | C22 - `MotivasiBelajar`     |
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :-- | :--- | :--- |
+| 1 | C08 - HalamanLatihan | C08 - HalamanLatihan |
+| 2 | C16 - LatihanController | C16 - LatihanController |
+| 3 | C17 - MateriController | C17 - MateriController |
+| 4 | C01 - AkunPengguna | C01 - AkunPengguna |
+| 5 | C02 - MateriAksara | C02 - MateriAksara |
+| 6 | C21 - KontenMateri | C21 - KontenMateri |
+| 7 | C03 - RiwayatLatihan | C03 - RiwayatLatihan |
+| 8 | C22 - MotivasiBelajar | C22 - MotivasiBelajar |
 
 ### 3.3.2 Sequence Diagram
 
@@ -432,26 +432,26 @@ Tabel 3.3. Identifikasi Kelas Use Case UC-03
 <i>Gambar 14. Diagram Kelas Use Case UC-03</i>
 </p>
 
-## 3.4 Use Case UC-04: Meninjau Progres dan Motivasi
+## 3.4 Use Case Meninjau Progres dan Motivasi
 
 **ID Use Case:** UC-04  
 **Nama Use Case:** Meninjau Progres dan Motivasi
 
 ### 3.4.1 Identifikasi Kelas
 
-Tabel 3.4. Identifikasi Kelas Use Case UC-04
+Tabel 3.4.1. Identifikasi Kelas Use Case UC-04
 
-| No  | Nama Kelas Perancangan    | Nama Kelas Analisis Terkait |
-| :-- | :------------------------ | :-------------------------- |
-| 1   | `HalamanMateri` (C13)     | HalamanMateri (C13)         |
-| 2   | `HalamanProgres` (C14)    | HalamanProgres (C14)        |
-| 3   | `ProgresController` (C19) | ProgresController (C19)     |
-| 4   | `AkunPengguna` (C01)      | AkunPengguna (C01)          |
-| 5   | `KeanggotaanKelas` (C24)  | KeanggotaanKelas (C24)      |
-| 6   | `KelasBelajar` (C23)      | KelasBelajar (C23)          |
-| 7   | `MateriAksara` (C02)      | MateriAksara (C02)          |
-| 8   | `MotivasiBelajar` (C22)   | MotivasiBelajar (C22)       |
-| 9   | `RiwayatLatihan` (C03)    | RiwayatLatihan (C03)        |
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :-- | :--- | :--- |
+| 1 | C13 - HalamanMateri | C13 - HalamanMateri |
+| 2 | C14 - HalamanProgres | C14 - HalamanProgres |
+| 3 | C19 - ProgresController | C19 - ProgresController |
+| 4 | C01 - AkunPengguna | C01 - AkunPengguna |
+| 5 | C24 - KeanggotaanKelas | C24 - KeanggotaanKelas |
+| 6 | C23 - KelasBelajar | C23 - KelasBelajar |
+| 7 | C02 - MateriAksara | C02 - MateriAksara |
+| 8 | C22 - MotivasiBelajar | C22 - MotivasiBelajar |
+| 9 | C03 - RiwayatLatihan | C03 - RiwayatLatihan |
 
 ### 3.4.2 Sequence Diagram
 
@@ -490,18 +490,18 @@ Tabel 3.4. Identifikasi Kelas Use Case UC-04
 
 ### 3.5.1 Identifikasi Kelas
 
-Tabel 3.5.1 Identifikasi Kelas Use Case UC05
+Tabel 3.5.1. Identifikasi Kelas Use Case UC-05
 
-| No  | Nama Kelas Perancangan    | Nama Kelas Analisis Terkait |
-| :-- | :------------------------ | :-------------------------- |
-| 1   | C11 — HalamanKelasPelajar | C11 — HalamanKelasPelajar   |
-| 2   | C20 — KelasController     | C20 — KelasController       |
-| 3   | C01 — AkunPengguna        | C01 — AkunPengguna          |
-| 4   | C23 — KelasBelajar        | C23 — KelasBelajar          |
-| 5   | C24 — KeanggotaanKelas    | C24 — KeanggotaanKelas      |
-| 6   | C25 — TugasKelas          | C25 — TugasKelas            |
-| 7   | C03 — RiwayatLatihan      | C03 — RiwayatLatihan        |
-| 8   | C26 — PenyelesaianTugas   | C26 — PenyelesaianTugas     |
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :-- | :--- | :--- |
+| 1 | C11 - HalamanKelasPelajar | C11 - HalamanKelasPelajar |
+| 2 | C20 - KelasController | C20 - KelasController |
+| 3 | C01 - AkunPengguna | C01 - AkunPengguna |
+| 4 | C23 - KelasBelajar | C23 - KelasBelajar |
+| 5 | C24 - KeanggotaanKelas | C24 - KeanggotaanKelas |
+| 6 | C25 - TugasKelas | C25 - TugasKelas |
+| 7 | C03 - RiwayatLatihan | C03 - RiwayatLatihan |
+| 8 | C26 - PenyelesaianTugas | C26 - PenyelesaianTugas |
 
 ### 3.5.2 Sequence Diagram
 
@@ -565,15 +565,15 @@ Tabel 3.5.1 Identifikasi Kelas Use Case UC05
 
 ### 3.6.1 Identifikasi Kelas
 
-Tabel 3.6.1 Identifikasi Kelas Use Case UC-06
+Tabel 3.6.1. Identifikasi Kelas Use Case UC-06
 
-| No  | Nama Kelas Perancangan    | Nama Kelas Analisis Terkait |
-| :-- | :------------------------ | :-------------------------- |
-| 1   | C09 — HalamanKelolaMateri | C09 — HalamanKelolaMateri   |
-| 2   | C17 — MateriController    | C17 — MateriController      |
-| 3   | C02 — MateriAksara        | C02 — MateriAksara          |
-| 4   | C21 — KontenMateri        | C21 — KontenMateri          |
-| 5   | C01 — AkunPengguna        | C01 — AkunPengguna          |
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :-- | :--- | :--- |
+| 1 | C09 - HalamanKelolaMateri | C09 - HalamanKelolaMateri |
+| 2 | C17 - MateriController | C17 - MateriController |
+| 3 | C02 - MateriAksara | C02 - MateriAksara |
+| 4 | C21 - KontenMateri | C21 - KontenMateri |
+| 5 | C01 - AkunPengguna | C01 - AkunPengguna |
 
 ### 3.6.2 Sequence Diagram
 
@@ -598,24 +598,24 @@ Tabel 3.6.1 Identifikasi Kelas Use Case UC-06
 </p>
 <p align="center"><i>Gambar 28. Diagram kelas UC-06 — Memperbaharui Materi</i></p>
 
-## 3.7 Use Case UC-07: Menyiapkan Pembelajaran Kelas
+## 3.7 Use Case Menyiapkan Pembelajaran Kelas
 
 **ID Use Case:** UC-07
 **Nama Use Case:** Menyiapkan Pembelajaran Kelas
 
 ### 3.7.1 Identifikasi Kelas
 
-Tabel 3.7. Identifikasi Kelas Use Case UC-7
+Tabel 3.7.1. Identifikasi Kelas Use Case UC-07
 
-| No  | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
-| :-- | :--------------------- | :-------------------------- |
-| 1   | `HalamanKelolaKelas`   | HalamanKelolaKelas (C12)    |
-| 2   | `KelasController`      | KelasController (C20)       |
-| 3   | `TugasKelas`           | ProgresController (C25)     |
-| 4   | `AkunPengguna`         | AkunPengguna (C01)          |
-| 5   | `KeanggotaanKelas`     | KeanggotaanKelas (C24)      |
-| 6   | `KelasBelajar`         | KelasBelajar (C23)          |
-| 7   | `MotivasiBelajar`      | RiwayatLatihan (C22)        |
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :-- | :--- | :--- |
+| 1 | C12 - HalamanKelolaKelas | C12 - HalamanKelolaKelas |
+| 2 | C20 - KelasController | C20 - KelasController |
+| 3 | C25 - TugasKelas | C25 - TugasKelas |
+| 4 | C01 - AkunPengguna | C01 - AkunPengguna |
+| 5 | C24 - KeanggotaanKelas | C24 - KeanggotaanKelas |
+| 6 | C23 - KelasBelajar | C23 - KelasBelajar |
+| 7 | C22 - MotivasiBelajar | C22 - MotivasiBelajar |
 
 ### 3.7.2 Sequence Diagram
 
@@ -654,24 +654,24 @@ Tabel 3.7. Identifikasi Kelas Use Case UC-7
 </p>
 <p align="center"><i>Gambar 33. Diagram Kelas Menyiapkan Pembelajaran Kelas (UC-07)</i></p>
 
-## 3.8 Use Case UC-08: Memantau dan Menindaklanjuti Progres
+## 3.8 Use Case Memantau dan Menindaklanjuti Progres
 
 **ID Use Case:** UC-08  
 **Nama Use Case:** Memantau dan Menindaklanjuti Progres
 
 ### 3.8.1 Identifikasi Kelas
 
-Tabel 3.8. Identifikasi Kelas Use Case UC-08
+Tabel 3.8.1. Identifikasi Kelas Use Case UC-08
 
-| No  | Nama Kelas Perancangan     | Nama Kelas Analisis Terkait |
-| :-- | :------------------------- | :-------------------------- |
-| 1   | `HalamanKelolaKelas` (C12) | HalamanKelolaKelas (C12)    |
-| 2   | `KelasController` (C20)    | KelasController (C20)       |
-| 3   | `ProgresController` (C19)  | ProgresController (C19)     |
-| 4   | `AkunPengguna` (C01)       | AkunPengguna (C01)          |
-| 5   | `KeanggotaanKelas` (C24)   | KeanggotaanKelas (C24)      |
-| 6   | `KelasBelajar` (C23)       | KelasBelajar (C23)          |
-| 7   | `RiwayatLatihan` (C03)     | RiwayatLatihan (C03)        |
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :-- | :--- | :--- |
+| 1 | C12 - HalamanKelolaKelas | C12 - HalamanKelolaKelas |
+| 2 | C20 - KelasController | C20 - KelasController |
+| 3 | C19 - ProgresController | C19 - ProgresController |
+| 4 | C01 - AkunPengguna | C01 - AkunPengguna |
+| 5 | C24 - KeanggotaanKelas | C24 - KeanggotaanKelas |
+| 6 | C23 - KelasBelajar | C23 - KelasBelajar |
+| 7 | C03 - RiwayatLatihan | C03 - RiwayatLatihan |
 
 ### 3.8.2 Sequence Diagram
 
@@ -694,7 +694,7 @@ Tabel 3.8. Identifikasi Kelas Use Case UC-08
 <p align="center">
 <img alt="Gambar 34. Sequence Diagram UC-08 - Skenario Alternatif 2: Anggota yang dipilih bukan anggota aktif kelas" src="./assets/diagram/UC08 Alternatif 2.png" width="100%">
 </p>
-<p align="center"><i>Gambar 36.Diagram sekuens UC-08 - Skenario Alternatif 2: Anggota yang dipilih bukan anggota aktif kelas</i></p>
+<p align="center"><i>Gambar 36. Diagram sekuens UC-08 - Skenario Alternatif 2: Anggota yang dipilih bukan anggota aktif kelas</i></p>
 
 ### 3.8.3 Diagram Kelas
 
@@ -710,14 +710,14 @@ Tabel 3.8. Identifikasi Kelas Use Case UC-08
 
 ### 3.9.1 Identifikasi Kelas
 
-Tabel 3.9.1 Identifikasi Kelas Use Case UC-09
+Tabel 3.9.1. Identifikasi Kelas Use Case UC-09
 
-| No  | Nama Kelas Perancangan   | Nama Kelas Analisis Terkait |
-| :-- | :----------------------- | :-------------------------- |
-| 1   | C10 - HalamanFeedback    | C10 - HalamanFeedback       |
-| 2   | C18 - FeedbackController | C18 - FeedbackController    |
-| 3   | C04 - DataFeedback       | C04 - DataFeedback          |
-| 4   | C01 - AkunPengguna       | C01 - AkunPengguna          |
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :-- | :--- | :--- |
+| 1 | C10 - HalamanFeedback | C10 - HalamanFeedback |
+| 2 | C18 - FeedbackController | C18 - FeedbackController |
+| 3 | C04 - DataFeedback | C04 - DataFeedback |
+| 4 | C01 - AkunPengguna | C01 - AkunPengguna |
 
 ### 3.9.2 Sequence Diagram
 
@@ -761,25 +761,25 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| C01 | AkunPengguna | `- idAkun: Integer`<br>`- email: String`<br>`- username: String`<br>`- passwordHash: String`<br>`- peran: String`<br>`- namaTampilan: String` | `+ buatAkunBaru(data: DataPendaftaran): HasilOperasi`<br>`+ getProfil(): Data`<br>`+ verifikasiHakAkses(aksi: String): Boolean`<br>`+ getDetailAkun(): Data` |
+| C01 | AkunPengguna | `- idAkun: Integer`<br>`- email: String`<br>`- username: String`<br>`- passwordHash: String`<br>`- peran: String`<br>`- namaTampilan: String` | `+ buatAkunBaru(data: DataPendaftaran): HasilOperasi`<br>`+ getProfil(): Data`<br>`+ verifikasiHakAkses(aksi: String): Boolean`<br>`+ getDetailAkun(): Data`<br>`+ cariBerdasarkanEmail(email: String): AkunPengguna?`<br>`+ cocokkanPassword(password: String): Boolean` |
 | C02 | MateriAksara | `- idMateri: Integer`<br>`- namaMateri: String`<br>`- jenisAksara: JenisAksara`<br>`- tingkatKesulitan: Integer`<br>`- statusPublikasi: StatusPublikasi` | `+ ambilMetadata(): MetadataMateri`<br>`+ ambilTargetLatihan(mode: ModeLatihan): TargetLatihan`<br>`+ perbaruiData(data: MetadataMateri): HasilOperasi`<br>`+ simpan(data: MetadataMateri): HasilOperasi`<br>`+ ambilDaftarMateri(filter: FilterMateri): List<MateriAksara>`<br>`+ ambilMateriRekomendasi(penguasaan: Data): List<MateriAksara>` |
-| C03 | RiwayatLatihan | `- idRiwayat: Integer`<br>`- idPelajar: Integer`<br>`- idMateri: Integer`<br>`- mode: ModeLatihan?`<br>`- skor: Decimal?`<br>`- tanggalPengerjaan: DateTime`<br>`- status: String`<br>`- idTugas: Integer?`<br>`- idKomponen: Integer?`<br>`- modeAktivitas: String`<br>`- waktuSelesai: DateTime?` | `+ simpanHasil(hasil: HasilLatihan): HasilOperasi`<br>`+ catatAktivitas(aktivitas: AktivitasBelajar): HasilOperasi`<br>`+ ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>`<br>`+ ambilBuktiPenyelesaian(idPelajar: Integer, idTugas: Integer): BuktiPenyelesaian`<br>`+ ambilStatusProgres(idPelajar: Integer): Data`<br>`+ hitungPenguasaan(idPelajar: Integer): Data`<br>`+ ambilRiwayatPelajar(idPelajar: Integer): List<RiwayatLatihan>`<br>`+ hitungPolaKesalahan(idPelajar: Integer): Data` |
+| C03 | RiwayatLatihan | `- idRiwayat: Integer`<br>`- idPelajar: Integer`<br>`- idMateri: Integer`<br>`- mode: ModeLatihan?`<br>`- skor: Decimal?`<br>`- tanggalPengerjaan: DateTime`<br>`- status: String`<br>`- idTugas: Integer?`<br>`- idKomponen: Integer?`<br>`- modeAktivitas: String`<br>`- waktuSelesai: DateTime?`<br>`- targetSoal: String?` | `+ simpanHasil(hasil: HasilLatihan): HasilOperasi`<br>`+ catatAktivitas(aktivitas: AktivitasBelajar): HasilOperasi`<br>`+ ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>`<br>`+ ambilBuktiPenyelesaian(idPelajar: Integer, idTugas: Integer): BuktiPenyelesaian`<br>`+ ambilStatusProgres(idPelajar: Integer): Data`<br>`+ hitungPenguasaan(idPelajar: Integer): Data`<br>`+ ambilRiwayatPelajar(idPelajar: Integer): List<RiwayatLatihan>`<br>`+ hitungPolaKesalahan(idPelajar: Integer): Data`<br>`+ cekPernahSelesai(idPelajar: Integer, targetSoal: String, mode: ModeLatihan): Boolean`<br>`+ ambilRiwayatMateri(idPelajar: Integer, idMateri: Integer): List<RiwayatLatihan>` |
 | C04 | DataFeedback | `- idFeedback: Integer`<br>`- idAkun: Integer`<br>`- kategori: KategoriFeedback`<br>`- pesan: String`<br>`- waktuKirim: DateTime`<br>`- status: StatusFeedback` | `+ simpan(data: MasukanFeedback): HasilOperasi`<br>`+ perbaruiStatus(status: StatusFeedback): HasilOperasi` |
 | C05 | HalamanPendaftaran | `- formInputData: DataPendaftaran`<br>`- statusPersetujuan: Boolean` | `+ tampilkanTnC(): void`<br>`+ kirimPendaftaran(data: DataPendaftaran): void`<br>`+ tampilkanOpsiPeran(): void` |
 | C06 | HalamanLogin | `- emailInput: String`<br>`- statusTampilan: String` | `+ kirimKredensial(email: String, password: String): void`<br>`+ tampilkanStatusLogin(hasil: HasilOperasi): void` |
 | C07 | HalamanUtama | `- profil: Profil`<br>`- menuTersedia: List<String>` | `+ tampilkanMenu(peran: Peran): void`<br>`+ pilihMenu(kode: String): void` |
-| C08 | HalamanLatihan | `- modeLatihan: ModeLatihan`<br>`- jawabanInput: JawabanLatihan`<br>`- goresan: List<Goresan>`<br>`- hasilTampilan: HasilPenilaian?` | `+ pilihModeLatihan(mode: ModeLatihan): void`<br>`+ rekamGoresan(titik: Titik): void`<br>`+ kirimJawaban(jawaban: JawabanLatihan): void`<br>`+ tampilkanHasil(hasil: HasilPenilaian): void` |
+| C08 | HalamanLatihan | `- modeLatihan: ModeLatihan`<br>`- jawabanInput: JawabanLatihan`<br>`- goresan: List<Goresan>`<br>`- hasilTampilan: HasilPenilaian?`<br>`- idMateri: Integer`<br>`- soalTampil: SoalLatihan?`<br>`- outlineAktif: Boolean` | `+ pilihModeLatihan(mode: ModeLatihan): void`<br>`+ rekamGoresan(titik: Titik): void`<br>`+ kirimJawaban(jawaban: JawabanLatihan): void`<br>`+ tampilkanHasil(hasil: HasilPenilaian): void`<br>`+ tampilkanSoal(soal: SoalLatihan): void`<br>`+ aturOutline(aktif: Boolean): void`<br>`+ putarAudio(): void`<br>`+ ulangiLatihan(): void`<br>`+ selesaikanLatihan(): void`<br>`+ tampilkanRingkasan(ringkasan: RingkasanMotivasi): void` |
 | C09 | HalamanKelolaMateri | `- daftarMateri: List<MetadataMateri>`<br>`- detailInput: DataKonten`<br>`- fileMateriInput: Berkas?` | `+ unggahFileMateri(berkas: Berkas, detail: DataKonten): void`<br>`+ suntingMateri(idMateri: Integer): void`<br>`+ tampilkanStatus(hasil: HasilOperasi): void`<br>`+ tampilkanDaftarMateri(data: List<MateriAksara>): void` |
-| C10 | HalamanFeedback | `- kategoriFeedback: KategoriFeedback`<br>`- pesanFeedback: String`<br>`- statusKirim: StatusKirim` | `+ kirimFeedback(data: MasukanFeedback): void`<br>`+ tampilkanKonfirmasi(hasil: HasilOperasi): void`<br>`+ tampilkanFormFeedback(): void` |
+| C10 | HalamanFeedback | `- kategoriFeedback: KategoriFeedback`<br>`- pesanFeedback: String`<br>`- statusKirim: StatusKirim` | `+ kirimFeedback(data: MasukanFeedback): void`<br>`+ tampilkanKonfirmasi(konfirmasi: Konfirmasi): void`<br>`+ tampilkanFormFeedback(): void` |
 | C11 | HalamanKelasPelajar | `- kodeKelasInput: String`<br>`- tugasAktif: Integer?`<br>`- detailTugas: DetailTugas?`<br>`- idKelasAktif: Integer` | `+ kirimKodeBergabung(kode: String): void`<br>`+ bukaTugas(idKelas: Integer, idTugas: Integer): void`<br>`+ kerjakanTugas(idKelas: Integer, idTugas: Integer): void`<br>`- finalisasiTugas(idKelas: Integer, idTugas: Integer): HasilOperasi`<br>`+ bukaKelas(idKelas: Integer): void`<br>`- tampilkanPesan(pesan: String): void`<br>`- tampilkanTugas(data: Data): void`<br>`- tampilkanDetail(data: Data): void`<br>`- tampilkanHasil(data: Data): void`<br>`+ periksaPenyelesaian(idKelas: Integer, idTugas: Integer): void` |
-| C12 | HalamanKelolaKelas | `- idKelasTerpilih: Integer?`<br>`- daftarAnggota: List<Profil>`<br>`- ringkasanProgres: RingkasanProgres?`<br>`- pesanInput: String` | `+ buatKelas(data: DataKelas): void`<br>`+ buatTugas(data: DataTugas): void`<br>`+ pilihAnggota(idPelajar: Integer): void`<br>`+ kirimUmpanBalik(data: DataUmpanBalik): void`<br>`+ kelolaAnggota(idKelas: Integer): void`<br>`+ aturScoreboard(idKelas: Integer, aktif: Boolean): void`<br>`+ terbitkanTugas(idKelas: Integer, data: DataTugas): void`<br>`+ gantiKodeKelas(idKelas: Integer): void`<br>`- tampilkanHasil(data: Data): void`<br>`- tampilkanAnggota(data: List<Profil>): void`<br>`- tampilkanProgres(data: RingkasanProgres): void` |
+| C12 | HalamanKelolaKelas | `- idKelasTerpilih: Integer?`<br>`- daftarAnggota: List<Profil>`<br>`- ringkasanProgres: RingkasanProgres?`<br>`- pesanInput: String`<br>`- idPelajarTerpilih: Integer?`<br>`- idAnggotaDikeluarkan: Integer?` | `+ buatKelas(data: DataKelas): void`<br>`+ buatTugas(data: DataTugas): void`<br>`+ pilihAnggota(idPelajar: Integer): void`<br>`+ kirimUmpanBalik(data: DataUmpanBalik): void`<br>`+ kelolaAnggota(idKelas: Integer): void`<br>`+ aturScoreboard(idKelas: Integer, aktif: Boolean): void`<br>`+ terbitkanTugas(idKelas: Integer, data: DataTugas): void`<br>`+ gantiKodeKelas(idKelas: Integer): void`<br>`- tampilkanHasil(data: Data): void`<br>`- tampilkanAnggota(data: List<Profil>): void`<br>`- tampilkanProgres(data: RingkasanProgres): void` |
 | C13 | HalamanMateri | `- materiTerpilih: Integer?`<br>`- statusTampilan: String`<br>`- statusAudio: String` | `+ pilihMateri(idMateri: Integer): void`<br>`+ tampilkanIsiMateri(paket: PaketMateri): void`<br>`+ putarAudioPengucapan(sumber: ReferensiBerkas): void` |
-| C14 | HalamanProgres | `- filterPeriode: Periode`<br>`- dataTampilan: RingkasanProgres?`<br>`- idKelasTerpilih: Integer?` | `+ tampilkanProgres(data: RingkasanProgres): void`<br>`+ pilihPeriode(periode: Periode): void`<br>`+ tampilkanScoreboard(data: List<Peringkat>): void` |
-| C15 | OtentikasiController | `- konteks: KonteksPermintaan` | `+ verifikasiFormatData(data: DataPendaftaran): HasilValidasi`<br>`- hashPassword(password: String): String`<br>`+ simpanAkun(data: DataPendaftaran): HasilOperasi`<br>`+ validasiLogin(email: String, password: String): HasilOperasi` |
-| C16 | LatihanController | `- konteks: KonteksPermintaan` | `+ siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan`<br>`+ nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian`<br>`+ simpanHasil(hasil: HasilLatihan): HasilOperasi` |
+| C14 | HalamanProgres | `- filterPeriode: Periode`<br>`- dataTampilan: RingkasanProgres?`<br>`- idKelasTerpilih: Integer?` | `+ tampilkanProgres(data: RingkasanProgres): void`<br>`+ pilihPeriode(periode: Periode): void`<br>`+ tampilkanScoreboard(data: List<Peringkat>): void`<br>`+ bukaHalamanProgres(): void`<br>`+ tampilkanKeadaanKosong(data: List<MetadataMateri>): void`<br>`+ pilihMateriRiwayat(idMateri: Integer): void`<br>`+ tampilkanDetailHasil(data: List<RiwayatLatihan>): void`<br>`+ tampilkanRekomendasi(data: List<MetadataMateri>): void`<br>`+ bukaRekomendasi(idMateri: Integer): void`<br>`+ lihatIndikatorMotivasi(): void`<br>`+ tampilkanMotivasi(data: Data): void`<br>`+ bukaPapanPeringkat(idKelas: Integer): void` |
+| C15 | OtentikasiController | `- konteks: KonteksPermintaan`<br>`- batasPercobaanLogin: Integer` | `+ verifikasiFormatData(data: DataPendaftaran): HasilValidasi`<br>`- hashPassword(password: String): String`<br>`+ simpanAkun(data: DataPendaftaran): HasilOperasi`<br>`+ validasiLogin(email: String, password: String): HasilOperasi` |
+| C16 | LatihanController | `- konteks: KonteksPermintaan`<br>`- ambangAkurasi: Decimal` | `+ siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan`<br>`+ nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian`<br>`+ simpanHasil(hasil: HasilLatihan): HasilOperasi`<br>`- hitungAkurasiGoresan(goresan: List<Goresan>, templat: List<Titik>): Decimal`<br>`- cocokkanBunyi(pilihan: String, kunci: String): Boolean`<br>`- validasiRangkaian(urutan: List<String>, kunci: List<String>): List<Integer>`<br>`- periksaBadge(streak: Integer, poin: Integer, dimiliki: List<String>): List<String>` |
 | C17 | MateriController | `- konteks: KonteksPermintaan` | `+ ambilDaftarMateri(filter: FilterMateri): List<MetadataMateri>`<br>`+ muatPaketMateri(idMateri: Integer, versiAplikasi: String): PaketMateri`<br>`+ ambilAudioPengucapan(idMateri: Integer): HasilBerkas`<br>`+ ambilKontenLatihan(idMateri: Integer, mode: ModeLatihan): TargetLatihan`<br>`+ tambahMateri(data: DataKonten, berkas: Berkas): HasilOperasi`<br>`+ perbaruiMateri(idMateri: Integer, data: DataKonten): HasilOperasi`<br>`+ validasiFormatFile(berkas: Berkas): HasilValidasi`<br>`+ hapusMateri(idMateri: Integer): HasilOperasi` |
 | C18 | FeedbackController | `- konteks: KonteksPermintaan` | `+ validasiFeedback(data: MasukanFeedback): HasilValidasi`<br>`+ simpanFeedback(data: MasukanFeedback): HasilOperasi`<br>`+ kirimKonfirmasi(hasil: HasilOperasi): Konfirmasi` |
-| C19 | ProgresController | `- konteks: KonteksPermintaan` | `+ ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>`<br>`+ hitungProgres(idPelajar: Integer): RingkasanProgres`<br>`+ siapkanRekomendasi(idPelajar: Integer): List<MetadataMateri>`<br>`+ ambilScoreboard(idKelas: Integer): HasilScoreboard`<br>`+ agregasiProgres(anggotaAktif: List<Integer>, periode: Periode): RingkasanProgres`<br>`+ hitungPolaKesalahan(idPelajar: Integer): Data` |
+| C19 | ProgresController | `- konteks: KonteksPermintaan` | `+ ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>`<br>`+ hitungProgres(idPelajar: Integer): RingkasanProgres`<br>`+ siapkanRekomendasi(idPelajar: Integer): List<MetadataMateri>`<br>`+ ambilScoreboard(idKelas: Integer): HasilScoreboard`<br>`+ agregasiProgres(anggotaAktif: List<Integer>, periode: Periode): RingkasanProgres`<br>`+ hitungPolaKesalahan(idPelajar: Integer): Data`<br>`+ ambilDetailHasil(idPelajar: Integer, idMateri: Integer): List<RiwayatLatihan>`<br>`+ ambilIndikatorMotivasi(idPelajar: Integer): Data` |
 | C20 | KelasController | `- konteks: KonteksPermintaan`<br>`- idPelajar: Integer`<br>`- idKelas: Integer` | `+ validasiKodeBergabung(kode: String): HasilOperasi`<br>`+ ambilTugasAktif(idKelas: Integer): HasilOperasi`<br>`+ simpanPengumpulan(idKelas: Integer, idTugas: Integer): HasilOperasi`<br>`+ buatKelas(data: DataKelas): HasilOperasi`<br>`+ terbitkanTugas(idKelas: Integer, data: DataTugas): HasilOperasi`<br>`+ ambilDaftarAnggota(idKelas: Integer): List<Profil>`<br>`+ kirimUmpanBalik(idKelas: Integer, data: DataUmpanBalik): HasilOperasi`<br>`+ bukaTugas(idKelas: Integer, idTugas: Integer): HasilOperasi`<br>`+ hasilkanKodeUnik(): String`<br>`+ gabungkanPelajar(idKelas: Integer): HasilOperasi`<br>`+ kelolaAnggota(idKelas: Integer, idPelajar: Integer, status: String): HasilOperasi`<br>`+ ambilKelasPengajar(): List<KelasBelajar>`<br>`+ gantiKodeKelas(idKelas: Integer): HasilOperasi`<br>`+ aturScoreboard(idKelas: Integer, aktif: Boolean): HasilOperasi`<br>`+ ambilProgresAnggota(idKelas: Integer, idPelajar: Integer): Data`<br>`+ buatTugas(idKelas: Integer, data: DataTugas): HasilOperasi` |
 | C21 | KontenMateri | `- idKonten: Integer`<br>`- idMateri: Integer`<br>`- bentukAksara: String`<br>`- aturan: String`<br>`- contoh: String`<br>`- pathAudio: String?`<br>`- versiKonten: String`<br>`- versiAplikasiMinimum: String` | `+ ambilKonten(versiAplikasi: String): PaketMateri`<br>`+ ambilAudio(): HasilBerkas`<br>`+ perbaruiKonten(data: DataKonten): HasilOperasi`<br>`+ arsipkanVersi(): HasilOperasi`<br>`+ simpanKonten(data: DataKonten): HasilOperasi` |
 | C22 | MotivasiBelajar | `- idPelajar: Integer`<br>`- streak: Integer`<br>`- poin: Integer`<br>`- tanggalAktifTerakhir: Date?`<br>`- daftarBadge: List<String>` | `+ perbaruiStreak(tanggal: Date): void`<br>`+ tambahPoin(idAktivitas: Integer, nilai: Integer): HasilOperasi`<br>`+ berikanBadge(kode: String): HasilOperasi`<br>`+ susunScoreboard(anggotaAktif: List<Profil>): List<Peringkat>`<br>`+ ambilMotivasi(idPelajar: Integer): Data`<br>`+ ambilPoinKelas(anggotaAktif: List<Integer>): List<Peringkat>` |
@@ -1678,7 +1678,7 @@ PROCEDURE tampilkanKonfirmasi(konfirmasi: Konfirmasi)
 
 ## 5.11 Kelas HalamanKelasPelajar
 
-**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Kelas:** HalamanKelasPelajar  
 **ID Kelas:** C11
 
 Tabel 5.11.1. Operasi Kelas HalamanKelasPelajar
@@ -1700,119 +1700,119 @@ Tabel 5.11.2. Atribut Kelas HalamanKelasPelajar
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| `kodeKelasInput` | private | `string` |
-| `tugasAktif` | private | `?int` |
-| `detailTugas` | private | `?DetailTugas` |
-| `idKelasAktif` | private | `int` |
+| `kodeKelasInput` | private | String |
+| `tugasAktif` | private | Integer? |
+| `detailTugas` | private | DetailTugas? |
+| `idKelasAktif` | private | Integer |
 
-### 5.11.1 Algoritma kirimKodeBergabung
+### 5.11.1 Algoritma/Query: kirimKodeBergabung
 
-**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Kelas:** HalamanKelasPelajar  
 **Nama Operasi:** `kirimKodeBergabung(kode: String): void`  
-**ID Algoritma:** Algo-C11-01
+**ID Algoritma:** Algo-103
 
 ```text
-procedure kirimKodeBergabung (input kode: string)
-    kodeKelasInput ← trim(kode)
-    if kodeKelasInput = "" then
-        tampilkanPesan("Kode kelas wajib diisi")
-    else
-        hasil ← KelasController.validasiKodeBergabung(kodeKelasInput)
-        if hasil.kode = "belumTerkonfirmasi" then
-            tampilkanPesan("Hasil belum dapat dikonfirmasi. Silakan coba kembali.")
-        else
-            tampilkanPesan(hasil.pesan)
+PROCEDURE kirimKodeBergabung(kode: String)
+  kodeKelasInput ← trim(kode)
+  IF kodeKelasInput = "" THEN
+    tampilkanPesan("Kode kelas wajib diisi")
+  ELSE
+    hasil ← KelasController.validasiKodeBergabung(kodeKelasInput)
+    IF hasil.kode = "belumTerkonfirmasi" THEN
+      tampilkanPesan("Hasil belum dapat dikonfirmasi. Silakan coba kembali.")
+    ELSE
+      tampilkanPesan(hasil.pesan)
 ```
 
-### 5.11.2 Algoritma bukaKelas
+### 5.11.2 Algoritma/Query: bukaKelas
 
-**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Kelas:** HalamanKelasPelajar  
 **Nama Operasi:** `bukaKelas(idKelas: Integer): void`  
-**ID Algoritma:** Algo-C11-02
+**ID Algoritma:** Algo-104
 
 ```text
-procedure bukaKelas (input idKelas: integer)
-    hasil ← KelasController.ambilTugasAktif(idKelas)
-    if hasil.berhasil then
-        idKelasAktif ← idKelas
-        tugasAktif ← Nil
-        detailTugas ← Nil
-        tampilkanTugas(hasil.data)
-    else
-        kosongkanTampilanKelas()
-        tampilkanPesan(hasil.pesan)
+PROCEDURE bukaKelas(idKelas: Integer)
+  hasil ← KelasController.ambilTugasAktif(idKelas)
+  IF hasil.berhasil THEN
+    idKelasAktif ← idKelas
+    tugasAktif ← null
+    detailTugas ← null
+    tampilkanTugas(hasil.data)
+  ELSE
+    kosongkanTampilanKelas()
+    tampilkanPesan(hasil.pesan)
 ```
 
-### 5.11.3 Algoritma bukaTugas
+### 5.11.3 Algoritma/Query: bukaTugas
 
-**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Kelas:** HalamanKelasPelajar  
 **Nama Operasi:** `bukaTugas(idKelas: Integer, idTugas: Integer): void`  
-**ID Algoritma:** Algo-C11-03
+**ID Algoritma:** Algo-105
 
 ```text
-procedure bukaTugas (input idKelas: integer, idTugas: integer)
-    tugasAktif ← Nil
-    detailTugas ← Nil
-    hasil ← KelasController.bukaTugas(idKelas, idTugas)
-    if hasil.berhasil then
-        idKelasAktif ← idKelas
-        tugasAktif ← idTugas
-        detailTugas ← hasil.data.detailTugas
-        tampilkanDetail(hasil.data)
-    else
-        kosongkanTampilanDetail()
-        tampilkanPesan(hasil.pesan)
+PROCEDURE bukaTugas(idKelas: Integer, idTugas: Integer)
+  tugasAktif ← null
+  detailTugas ← null
+  hasil ← KelasController.bukaTugas(idKelas, idTugas)
+  IF hasil.berhasil THEN
+    idKelasAktif ← idKelas
+    tugasAktif ← idTugas
+    detailTugas ← hasil.data.detailTugas
+    tampilkanDetail(hasil.data)
+  ELSE
+    kosongkanTampilanDetail()
+    tampilkanPesan(hasil.pesan)
 ```
 
-### 5.11.4 Algoritma kerjakanTugas
+### 5.11.4 Algoritma/Query: kerjakanTugas
 
-**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Kelas:** HalamanKelasPelajar  
 **Nama Operasi:** `kerjakanTugas(idKelas: Integer, idTugas: Integer): void`  
-**ID Algoritma:** Algo-C11-04
+**ID Algoritma:** Algo-106
 
 ```text
-procedure kerjakanTugas (input idKelas: integer, idTugas: integer)
-    bukaTugas(idKelas, idTugas)
-    if tugasAktif = idTugas then
-        komponen ← ambilKomponenWajibBelumSelesai(detailTugas)
-        i ← 1
-        lanjut ← true
-        while (i ≤ komponen.Neff) and lanjut do
-            if komponen.Tab[i].jenis = "materi" then
-                hasil ← jalankanUC02(idKelas, idTugas, komponen.Tab[i].idKomponen)
-            else
-                hasil ← jalankanUC03(idKelas, idTugas, komponen.Tab[i].idKomponen)
-            lanjut ← hasil.berhasil
-            i ← i + 1
-        if lanjut then
-            periksaPenyelesaian(idKelas, idTugas)
+PROCEDURE kerjakanTugas(idKelas: Integer, idTugas: Integer)
+  bukaTugas(idKelas, idTugas)
+  IF tugasAktif = idTugas THEN
+    komponen ← ambilKomponenWajibBelumSelesai(detailTugas)
+    i ← 1
+    lanjut ← true
+    WHILE (i ≤ panjang(komponen)) AND lanjut DO
+      IF komponen[i].jenis = "materi" THEN
+        hasil ← jalankanUC02(idKelas, idTugas, komponen[i].idKomponen)
+      ELSE
+        hasil ← jalankanUC03(idKelas, idTugas, komponen[i].idKomponen)
+      lanjut ← hasil.berhasil
+      i ← i + 1
+    IF lanjut THEN
+      periksaPenyelesaian(idKelas, idTugas)
 ```
 
-### 5.11.5 Algoritma finalisasiTugas
+### 5.11.5 Algoritma/Query: finalisasiTugas
 
-**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Kelas:** HalamanKelasPelajar  
 **Nama Operasi:** `finalisasiTugas(idKelas: Integer, idTugas: Integer): HasilOperasi`  
-**ID Algoritma:** Algo-C11-05
+**ID Algoritma:** Algo-107
 
 ```text
-function finalisasiTugas (idKelas: integer, idTugas: integer) → HasilOperasi
-    hasil ← KelasController.simpanPengumpulan(idKelas, idTugas)
-    → hasil
+FUNCTION finalisasiTugas(idKelas: Integer, idTugas: Integer): HasilOperasi
+  hasil ← KelasController.simpanPengumpulan(idKelas, idTugas)
+  RETURN hasil
 ```
 
-### 5.11.6 Algoritma periksaPenyelesaian
+### 5.11.6 Algoritma/Query: periksaPenyelesaian
 
-**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Kelas:** HalamanKelasPelajar  
 **Nama Operasi:** `periksaPenyelesaian(idKelas: Integer, idTugas: Integer): void`  
-**ID Algoritma:** Algo-C11-06
+**ID Algoritma:** Algo-108
 
 ```text
-procedure periksaPenyelesaian (input idKelas: integer, idTugas: integer)
-    hasil ← finalisasiTugas(idKelas, idTugas)
-    if hasil.berhasil then
-        tampilkanHasil(hasil.data)
-    else
-        tampilkanPesan(hasil.pesan)
+PROCEDURE periksaPenyelesaian(idKelas: Integer, idTugas: Integer)
+  hasil ← finalisasiTugas(idKelas, idTugas)
+  IF hasil.berhasil THEN
+    tampilkanHasil(hasil.data)
+  ELSE
+    tampilkanPesan(hasil.pesan)
 ```
 
 ## 5.12 Kelas HalamanKelolaKelas
@@ -3926,7 +3926,7 @@ FUNCTION finalisasiTugas(idPelajar: Integer, idTugas: Integer, bukti: BuktiPenye
 ```
 ## 5.24 Kelas KeanggotaanKelas
 
-**Nama Kelas:** `KeanggotaanKelas`  
+**Nama Kelas:** KeanggotaanKelas  
 **ID Kelas:** C24
 
 Tabel 5.24.1. Operasi Kelas KeanggotaanKelas
@@ -3944,125 +3944,125 @@ Tabel 5.24.2. Atribut Kelas KeanggotaanKelas
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| `idKeanggotaan` | private | `int` |
-| `idKelas` | private | `int` |
-| `idPelajar` | private | `int` |
-| `status` | private | `string` |
+| `idKeanggotaan` | private | Integer |
+| `idKelas` | private | Integer |
+| `idPelajar` | private | Integer |
+| `status` | private | String |
 
-### 5.24.1 Algoritma simpanKeanggotaan
+### 5.24.1 Algoritma/Query: simpanKeanggotaan
 
-**Nama Kelas:** `KeanggotaanKelas`  
+**Nama Kelas:** KeanggotaanKelas  
 **Nama Operasi:** `simpanKeanggotaan(idPelajar: Integer, idKelas: Integer): HasilOperasi`  
-**ID Algoritma:** Algo-C24-01
+**ID Algoritma:** Algo-109
 
 ```text
-function simpanKeanggotaan (idPelajar: integer, idKelas: integer) → HasilOperasi
-    hasil ← gagal("gagalSimpan")
-    mulaiTransaksi(tx)
-    if not tx.gagal then
-        kelas ← kunciKelas(idKelas, tx)
-        if not tx.gagal then
-            if kelas.aktif then
-                anggota ← cariKeanggotaan(idPelajar, idKelas, tx)
-                if not tx.gagal then
-                    if anggota = Nil then
-                        sisipkanKeanggotaan(idPelajar, idKelas, "aktif", tx)
-                        kodeHasil ← "berhasilBergabung"
-                    else
-                        if anggota.status = "aktif" then
-                            kodeHasil ← "sudahAnggota"
-                        else
-                            kodeHasil ← "anggotaNonaktif"
-                    if not tx.gagal then
-                        if kodeHasil = "anggotaNonaktif" then
-                            batalkanTransaksi(tx)
-                            hasil ← gagal(kodeHasil)
-                        else
-                            commit(tx)
-                            if tx.terkonfirmasi then
-                                hasil ← berhasil(kodeHasil)
-            else
-                batalkanTransaksi(tx)
-                hasil ← gagal("kelasTidakAktif")
-    if tx.konflikUnik then
+FUNCTION simpanKeanggotaan(idPelajar: Integer, idKelas: Integer): HasilOperasi
+  hasil ← HasilOperasi.gagal("gagalSimpan")
+  mulaiTransaksi(tx)
+  IF NOT tx.gagal THEN
+    kelas ← kunciKelas(idKelas, tx)
+    IF NOT tx.gagal THEN
+      IF kelas.aktif THEN
+        anggota ← cariKeanggotaan(idPelajar, idKelas, tx)
+        IF NOT tx.gagal THEN
+          IF anggota = null THEN
+            sisipkanKeanggotaan(idPelajar, idKelas, "aktif", tx)
+            kodeHasil ← "berhasilBergabung"
+          ELSE
+            IF anggota.status = "aktif" THEN
+              kodeHasil ← "sudahAnggota"
+            ELSE
+              kodeHasil ← "anggotaNonaktif"
+          IF NOT tx.gagal THEN
+            IF kodeHasil = "anggotaNonaktif" THEN
+              batalkanTransaksi(tx)
+              hasil ← HasilOperasi.gagal(kodeHasil)
+            ELSE
+              commit(tx)
+              IF tx.terkonfirmasi THEN
+                hasil ← HasilOperasi.berhasil(kodeHasil)
+      ELSE
         batalkanTransaksi(tx)
-        anggota ← bacaUlangKeanggotaan(idPelajar, idKelas)
-        if anggota = Nil then
-            hasil ← gagal("gagalSimpan")
-        else
-            if anggota.status = "aktif" then
-                hasil ← berhasil("sudahAnggota")
-            else
-                hasil ← gagal("anggotaNonaktif")
-    else
-        if tx.tidakPasti then
-            hasil ← gagal("belumTerkonfirmasi")
-        else
-            if tx.gagal then
-                batalkanTransaksi(tx)
-                catatError(tx)
-    → hasil
+        hasil ← HasilOperasi.gagal("kelasTidakAktif")
+  IF tx.konflikUnik THEN
+    batalkanTransaksi(tx)
+    anggota ← bacaUlangKeanggotaan(idPelajar, idKelas)
+    IF anggota = null THEN
+      hasil ← HasilOperasi.gagal("gagalSimpan")
+    ELSE
+      IF anggota.status = "aktif" THEN
+        hasil ← HasilOperasi.berhasil("sudahAnggota")
+      ELSE
+        hasil ← HasilOperasi.gagal("anggotaNonaktif")
+  ELSE
+    IF tx.tidakPasti THEN
+      hasil ← HasilOperasi.gagal("belumTerkonfirmasi")
+    ELSE
+      IF tx.gagal THEN
+        batalkanTransaksi(tx)
+        catatError(tx)
+  RETURN hasil
 ```
 
-### 5.24.2 Algoritma periksaAkses
+### 5.24.2 Algoritma/Query: periksaAkses
 
-**Nama Kelas:** `KeanggotaanKelas`  
+**Nama Kelas:** KeanggotaanKelas  
 **Nama Operasi:** `periksaAkses(idPelajar: Integer, idKelas: Integer): Boolean`  
-**ID Algoritma:** Algo-C24-02
+**ID Algoritma:** Algo-110
 
 ```text
-function periksaAkses (idPelajar: integer, idKelas: integer) → boolean
-    anggota ← bacaKeanggotaan(idPelajar, idKelas)
-    if anggota = Nil then
-        → false
-    else
-        → (anggota.status = "aktif")
+FUNCTION periksaAkses(idPelajar: Integer, idKelas: Integer): Boolean
+  anggota ← bacaKeanggotaan(idPelajar, idKelas)
+  IF anggota = null THEN
+    RETURN false
+  ELSE
+    RETURN (anggota.status = "aktif")
 ```
 
-### 5.24.3 Algoritma ubahStatus
+### 5.24.3 Algoritma/Query: ubahStatus
 
-**Nama Kelas:** `KeanggotaanKelas`  
+**Nama Kelas:** KeanggotaanKelas  
 **Nama Operasi:** `ubahStatus(status: String): HasilOperasi`  
-**ID Algoritma:** Algo-C24-03
+**ID Algoritma:** Algo-111
 
 ```text
-function ubahStatus (status: string) → HasilOperasi
-    hasil ← gagal("statusTidakValid")
-    if (status = "aktif") or (status = "nonaktif") then
-        hasil ← gagal("gagalSimpan")
-        mulaiTransaksi(tx)
-        if not tx.gagal then
-            anggota ← kunciKeanggotaan(idKeanggotaan, idKelas, tx)
-            if not tx.gagal then
-                if anggota = Nil then
-                    batalkanTransaksi(tx)
-                    hasil ← gagal("tidakDitemukan")
-                else
-                    perbaruiStatusKeanggotaan(idKeanggotaan, status, tx)
-                    if not tx.gagal then
-                        commit(tx)
-                        if tx.terkonfirmasi then
-                            muatUlangObjekKeanggotaan(idKeanggotaan)
-                            hasil ← berhasil("statusDiperbarui")
-        if tx.tidakPasti then
-            hasil ← gagal("belumTerkonfirmasi")
-        else
-            if tx.gagal then
-                batalkanTransaksi(tx)
-                catatError(tx)
-    → hasil
+FUNCTION ubahStatus(status: String): HasilOperasi
+  hasil ← HasilOperasi.gagal("statusTidakValid")
+  IF (status = "aktif") OR (status = "nonaktif") THEN
+    hasil ← HasilOperasi.gagal("gagalSimpan")
+    mulaiTransaksi(tx)
+    IF NOT tx.gagal THEN
+      anggota ← kunciKeanggotaan(idKeanggotaan, idKelas, tx)
+      IF NOT tx.gagal THEN
+        IF anggota = null THEN
+          batalkanTransaksi(tx)
+          hasil ← HasilOperasi.gagal("tidakDitemukan")
+        ELSE
+          perbaruiStatusKeanggotaan(idKeanggotaan, status, tx)
+          IF NOT tx.gagal THEN
+            commit(tx)
+            IF tx.terkonfirmasi THEN
+              muatUlangObjekKeanggotaan(idKeanggotaan)
+              hasil ← HasilOperasi.berhasil("statusDiperbarui")
+    IF tx.tidakPasti THEN
+      hasil ← HasilOperasi.gagal("belumTerkonfirmasi")
+    ELSE
+      IF tx.gagal THEN
+        batalkanTransaksi(tx)
+        catatError(tx)
+  RETURN hasil
 ```
 
-### 5.24.4 Algoritma daftarAnggotaAktif
+### 5.24.4 Algoritma/Query: daftarAnggotaAktif
 
-**Nama Kelas:** `KeanggotaanKelas`  
+**Nama Kelas:** KeanggotaanKelas  
 **Nama Operasi:** `daftarAnggotaAktif(idKelas: Integer): List<KeanggotaanKelas>`  
-**ID Algoritma:** Algo-C24-04
+**ID Algoritma:** Algo-112
 
 ```text
-function daftarAnggotaAktif (idKelas: integer) → List<KeanggotaanKelas>
-    anggota ← bacaDaftarAnggota(idKelas, "aktif")
-    → anggota
+FUNCTION daftarAnggotaAktif(idKelas: Integer): List<KeanggotaanKelas>
+  anggota ← bacaDaftarAnggota(idKelas, "aktif")
+  RETURN anggota
 ```
 
 #### Query Pendukung Kelas C24
@@ -4080,7 +4080,7 @@ Tabel 5.24.3. Query Pendukung
 
 ## 5.25 Kelas TugasKelas
 
-**Nama Kelas:** `TugasKelas`  
+**Nama Kelas:** TugasKelas  
 **ID Kelas:** C25
 
 Tabel 5.25.1. Operasi Kelas TugasKelas
@@ -4099,176 +4099,176 @@ Tabel 5.25.2. Atribut Kelas TugasKelas
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| `idTugas` | private | `int` |
-| `idKelas` | private | `int` |
-| `instruksi` | private | `string` |
-| `tenggat` | private | `DateTimeImmutable` |
-| `status` | private | `StatusTugas` |
-| `komponenTugas` | private | `array (elemen KomponenTugas)` |
+| `idTugas` | private | Integer |
+| `idKelas` | private | Integer |
+| `instruksi` | private | String |
+| `tenggat` | private | DateTime |
+| `status` | private | StatusTugas |
+| `komponenTugas` | private | List<KomponenTugas> |
 
-### 5.25.1 Algoritma simpan
+### 5.25.1 Algoritma/Query: simpan
 
-**Nama Kelas:** `TugasKelas`  
+**Nama Kelas:** TugasKelas  
 **Nama Operasi:** `simpan(data: DataTugas): HasilOperasi`  
-**ID Algoritma:** Algo-C25-01
+**ID Algoritma:** Algo-113
 
 ```text
-function simpan (data: DataTugas) → HasilOperasi
-    if not dataTugasValid(data) then
-        hasil ← gagal("dataTidakValid")
-    else
-        hasil ← gagal("gagalSimpan")
-        mulaiTransaksi(tx)
-        if not tx.gagal then
-            bolehSimpan ← periksaDrafUntukDisimpan(data, tx)
-            if not tx.gagal then
-                if bolehSimpan then
-                    idTugasTersimpan ← simpanMetadataDraf(data, tx)
-                    if not tx.gagal then
-                        simpanKomponenTugas(idTugasTersimpan, data.komponenTugas, tx)
-                    if not tx.gagal then
-                        commit(tx)
-                        if tx.terkonfirmasi then
-                            hasil ← berhasil(idTugasTersimpan)
-                else
-                    batalkanTransaksi(tx)
-                    hasil ← gagal("tugasTidakDapatDiubah")
-        if tx.tidakPasti then
-            hasil ← gagal("belumTerkonfirmasi")
-        else
-            if tx.gagal then
-                batalkanTransaksi(tx)
-                catatError(tx)
-    → hasil
-```
-
-### 5.25.2 Algoritma terbitkan
-
-**Nama Kelas:** `TugasKelas`  
-**Nama Operasi:** `terbitkan(): HasilOperasi`  
-**ID Algoritma:** Algo-C25-02
-
-```text
-function terbitkan () → HasilOperasi
-    hasil ← gagal("gagalSimpan")
+FUNCTION simpan(data: DataTugas): HasilOperasi
+  IF NOT dataTugasValid(data) THEN
+    hasil ← HasilOperasi.gagal("dataTidakValid")
+  ELSE
+    hasil ← HasilOperasi.gagal("gagalSimpan")
     mulaiTransaksi(tx)
-    if not tx.gagal then
-        tugas ← kunciTugasBesertaKomponen(idKelas, idTugas, tx)
-        if not tx.gagal then
-            if tugas = Nil then
-                batalkanTransaksi(tx)
-                hasil ← gagal("tugasTidakDitemukan")
-            else
-                if tugas.status = "terbit" then
-                    commit(tx)
-                    if tx.terkonfirmasi then
-                        hasil ← berhasil("sudahTerbit")
-                else
-                    if dataTugasValid(tugas) then
-                        perbaruiStatusTugas(idTugas, "terbit", tx)
-                        if not tx.gagal then
-                            commit(tx)
-                            if tx.terkonfirmasi then
-                                hasil ← berhasil("tugasDiterbitkan")
-                    else
-                        batalkanTransaksi(tx)
-                        hasil ← gagal("dataTidakValid")
-    if tx.tidakPasti then
-        hasil ← gagal("belumTerkonfirmasi")
-    else
-        if tx.gagal then
+    IF NOT tx.gagal THEN
+      bolehSimpan ← periksaDrafUntukDisimpan(data, tx)
+      IF NOT tx.gagal THEN
+        IF bolehSimpan THEN
+          idTugasTersimpan ← simpanMetadataDraf(data, tx)
+          IF NOT tx.gagal THEN
+            simpanKomponenTugas(idTugasTersimpan, data.komponenTugas, tx)
+          IF NOT tx.gagal THEN
+            commit(tx)
+            IF tx.terkonfirmasi THEN
+              hasil ← HasilOperasi.berhasil(idTugasTersimpan)
+        ELSE
+          batalkanTransaksi(tx)
+          hasil ← HasilOperasi.gagal("tugasTidakDapatDiubah")
+    IF tx.tidakPasti THEN
+      hasil ← HasilOperasi.gagal("belumTerkonfirmasi")
+    ELSE
+      IF tx.gagal THEN
+        batalkanTransaksi(tx)
+        catatError(tx)
+  RETURN hasil
+```
+
+### 5.25.2 Algoritma/Query: terbitkan
+
+**Nama Kelas:** TugasKelas  
+**Nama Operasi:** `terbitkan(): HasilOperasi`  
+**ID Algoritma:** Algo-114
+
+```text
+FUNCTION terbitkan(): HasilOperasi
+  hasil ← HasilOperasi.gagal("gagalSimpan")
+  mulaiTransaksi(tx)
+  IF NOT tx.gagal THEN
+    tugas ← kunciTugasBesertaKomponen(idKelas, idTugas, tx)
+    IF NOT tx.gagal THEN
+      IF tugas = null THEN
+        batalkanTransaksi(tx)
+        hasil ← HasilOperasi.gagal("tugasTidakDitemukan")
+      ELSE
+        IF tugas.status = "terbit" THEN
+          commit(tx)
+          IF tx.terkonfirmasi THEN
+            hasil ← HasilOperasi.berhasil("sudahTerbit")
+        ELSE
+          IF dataTugasValid(tugas) THEN
+            perbaruiStatusTugas(idTugas, "terbit", tx)
+            IF NOT tx.gagal THEN
+              commit(tx)
+              IF tx.terkonfirmasi THEN
+                hasil ← HasilOperasi.berhasil("tugasDiterbitkan")
+          ELSE
             batalkanTransaksi(tx)
-            catatError(tx)
-    → hasil
+            hasil ← HasilOperasi.gagal("dataTidakValid")
+  IF tx.tidakPasti THEN
+    hasil ← HasilOperasi.gagal("belumTerkonfirmasi")
+  ELSE
+    IF tx.gagal THEN
+      batalkanTransaksi(tx)
+      catatError(tx)
+  RETURN hasil
 ```
 
-### 5.25.3 Algoritma verifikasiDanSimpan
+### 5.25.3 Algoritma/Query: verifikasiDanSimpan
 
-**Nama Kelas:** `TugasKelas`  
+**Nama Kelas:** TugasKelas  
 **Nama Operasi:** `verifikasiDanSimpan(idKelas: Integer, idTugas: Integer, idPelajar: Integer, bukti: BuktiPenyelesaian): HasilOperasi`  
-**ID Algoritma:** Algo-C25-03
+**ID Algoritma:** Algo-115
 
 ```text
-function verifikasiDanSimpan (idKelas: integer, idTugas: integer, idPelajar: integer, bukti: BuktiPenyelesaian) → HasilOperasi
-    tugas ← ambilDetail(idKelas, idTugas)
-    if tugas = Nil then
-        hasil ← gagal("tugasTidakDitemukan")
-    else
-        if (bukti.idPelajar ≠ idPelajar) or (bukti.idTugas ≠ idTugas) then
-            hasil ← gagal("buktiTidakValid")
-        else
-            muatAtributTugas(tugas)
-            verifikasi ← periksaKomponenWajib(bukti)
-            if verifikasi.valid then
-                hasil ← PenyelesaianTugas.simpanPengumpulan(idPelajar, idTugas,
-                    verifikasi.waktuSelesai, tugas.tenggat)
-            else
-                hasil ← gagal(verifikasi.alasan)
-                hasil.data ← verifikasi.komponenBelumSelesai
-    → hasil
+FUNCTION verifikasiDanSimpan(idKelas: Integer, idTugas: Integer, idPelajar: Integer, bukti: BuktiPenyelesaian): HasilOperasi
+  tugas ← ambilDetail(idKelas, idTugas)
+  IF tugas = null THEN
+    hasil ← HasilOperasi.gagal("tugasTidakDitemukan")
+  ELSE
+    IF (bukti.idPelajar ≠ idPelajar) OR (bukti.idTugas ≠ idTugas) THEN
+      hasil ← HasilOperasi.gagal("buktiTidakValid")
+    ELSE
+      muatAtributTugas(tugas)
+      verifikasi ← periksaKomponenWajib(bukti)
+      IF verifikasi.valid THEN
+        hasil ← PenyelesaianTugas.simpanPengumpulan(idPelajar, idTugas,
+          verifikasi.waktuSelesai, tugas.tenggat)
+      ELSE
+        hasil ← HasilOperasi.gagal(verifikasi.alasan)
+        hasil.data ← verifikasi.komponenBelumSelesai
+  RETURN hasil
 ```
 
-### 5.25.4 Algoritma periksaKomponenWajib
+### 5.25.4 Algoritma/Query: periksaKomponenWajib
 
-**Nama Kelas:** `TugasKelas`  
+**Nama Kelas:** TugasKelas  
 **Nama Operasi:** `periksaKomponenWajib(bukti: BuktiPenyelesaian): HasilVerifikasi`  
-**ID Algoritma:** Algo-C25-04
+**ID Algoritma:** Algo-116
 
 ```text
-function periksaKomponenWajib (bukti: BuktiPenyelesaian) → HasilVerifikasi
-    jumlahWajib ← 0
-    hasil.komponenBelumSelesai.Neff ← 0
-    akhirSemua ← Nil
-    i ← 1
-    while i ≤ komponenTugas.Neff do
-        komponen ← komponenTugas.Tab[i]
-        if komponen.wajib then
-            jumlahWajib ← jumlahWajib + 1
-            ditemukan ← false
-            awalKomponen ← Nil
-            j ← 1
-            while j ≤ bukti.catatan.Neff do
-                catatan ← bukti.catatan.Tab[j]
-                if buktiCocokDanSelesai(catatan, komponen, bukti) then
-                    if not ditemukan then
-                        awalKomponen ← catatan.waktuSelesai
-                        ditemukan ← true
-                    else
-                        if catatan.waktuSelesai < awalKomponen then
-                            awalKomponen ← catatan.waktuSelesai
-                j ← j + 1
-            if ditemukan then
-                if akhirSemua = Nil then
-                    akhirSemua ← awalKomponen
-                else
-                    if awalKomponen > akhirSemua then
-                        akhirSemua ← awalKomponen
-            else
-                tambahID(hasil.komponenBelumSelesai, komponen.idKomponen)
-        i ← i + 1
-    hasil.valid ← (jumlahWajib > 0) and (hasil.komponenBelumSelesai.Neff = 0)
-    hasil.waktuSelesai ← Nil
-    if hasil.valid then
-        hasil.waktuSelesai ← akhirSemua
-        hasil.alasan ← "Seluruh komponen wajib selesai"
-    else
-        if jumlahWajib = 0 then
-            hasil.alasan ← "komponenWajibKosong"
-        else
-            hasil.alasan ← "komponenBelumLengkap"
-    → hasil
+FUNCTION periksaKomponenWajib(bukti: BuktiPenyelesaian): HasilVerifikasi
+  jumlahWajib ← 0
+  hasil.komponenBelumSelesai ← list kosong
+  akhirSemua ← null
+  i ← 1
+  WHILE i ≤ panjang(komponenTugas) DO
+    komponen ← komponenTugas[i]
+    IF komponen.wajib THEN
+      jumlahWajib ← jumlahWajib + 1
+      ditemukan ← false
+      awalKomponen ← null
+      j ← 1
+      WHILE j ≤ panjang(bukti.catatan) DO
+        catatan ← bukti.catatan[j]
+        IF buktiCocokDanSelesai(catatan, komponen, bukti) THEN
+          IF NOT ditemukan THEN
+            awalKomponen ← catatan.waktuSelesai
+            ditemukan ← true
+          ELSE
+            IF catatan.waktuSelesai < awalKomponen THEN
+              awalKomponen ← catatan.waktuSelesai
+        j ← j + 1
+      IF ditemukan THEN
+        IF akhirSemua = null THEN
+          akhirSemua ← awalKomponen
+        ELSE
+          IF awalKomponen > akhirSemua THEN
+            akhirSemua ← awalKomponen
+      ELSE
+        tambahID(hasil.komponenBelumSelesai, komponen.idKomponen)
+    i ← i + 1
+  hasil.valid ← (jumlahWajib > 0) AND (panjang(hasil.komponenBelumSelesai) = 0)
+  hasil.waktuSelesai ← null
+  IF hasil.valid THEN
+    hasil.waktuSelesai ← akhirSemua
+    hasil.alasan ← "Seluruh komponen wajib selesai"
+  ELSE
+    IF jumlahWajib = 0 THEN
+      hasil.alasan ← "komponenWajibKosong"
+    ELSE
+      hasil.alasan ← "komponenBelumLengkap"
+  RETURN hasil
 ```
 
-### 5.25.5 Algoritma ambilTugasAktif
+### 5.25.5 Algoritma/Query: ambilTugasAktif
 
-**Nama Kelas:** `TugasKelas`  
+**Nama Kelas:** TugasKelas  
 **Nama Operasi:** `ambilTugasAktif(idKelas: Integer): List`  
-**ID Algoritma:** Algo-C25-05
+**ID Algoritma:** Algo-117
 
 ```text
-function ambilTugasAktif (idKelas: integer) → List
-    daftarTugas ← bacaTugasTerbit(idKelas)
-    → daftarTugas
+FUNCTION ambilTugasAktif(idKelas: Integer): List
+  daftarTugas ← bacaTugasTerbit(idKelas)
+  RETURN daftarTugas
 ```
 
 #### Query Pendukung Kelas C25
@@ -4287,7 +4287,7 @@ Tabel 5.25.3. Query Pendukung
 
 ## 5.26 Kelas PenyelesaianTugas
 
-**Nama Kelas:** `PenyelesaianTugas`  
+**Nama Kelas:** PenyelesaianTugas  
 **ID Kelas:** C26
 
 Tabel 5.26.1. Operasi Kelas PenyelesaianTugas
@@ -4304,99 +4304,99 @@ Tabel 5.26.2. Atribut Kelas PenyelesaianTugas
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| `idPenyelesaian` | private | `int` |
-| `idTugas` | private | `int` |
-| `idPelajar` | private | `int` |
-| `waktuKumpul` | private | `DateTimeImmutable` |
-| `status` | private | `string` |
+| `idPenyelesaian` | private | Integer |
+| `idTugas` | private | Integer |
+| `idPelajar` | private | Integer |
+| `waktuKumpul` | private | DateTime |
+| `status` | private | String |
 
-### 5.26.1 Algoritma simpanPengumpulan
+### 5.26.1 Algoritma/Query: simpanPengumpulan
 
-**Nama Kelas:** `PenyelesaianTugas`  
+**Nama Kelas:** PenyelesaianTugas  
 **Nama Operasi:** `simpanPengumpulan(idPelajar: Integer, idTugas: Integer, waktuSelesai: DateTime, tenggat: DateTime): HasilOperasi`  
-**ID Algoritma:** Algo-C26-01
+**ID Algoritma:** Algo-118
 
 ```text
-function simpanPengumpulan (idPelajar: integer, idTugas: integer, waktuSelesai: DateTime, tenggat: DateTime) → HasilOperasi
-    siapkanObjekPenyelesaian(idPelajar, idTugas, waktuSelesai,
-        tentukanStatusKetepatan(waktuSelesai, tenggat))
-    hasil ← simpanAtomik()
-    → hasil
+FUNCTION simpanPengumpulan(idPelajar: Integer, idTugas: Integer, waktuSelesai: DateTime, tenggat: DateTime): HasilOperasi
+  siapkanObjekPenyelesaian(idPelajar, idTugas, waktuSelesai,
+    tentukanStatusKetepatan(waktuSelesai, tenggat))
+  hasil ← simpanAtomik()
+  RETURN hasil
 ```
 
-### 5.26.2 Algoritma tentukanStatusKetepatan
+### 5.26.2 Algoritma/Query: tentukanStatusKetepatan
 
-**Nama Kelas:** `PenyelesaianTugas`  
+**Nama Kelas:** PenyelesaianTugas  
 **Nama Operasi:** `tentukanStatusKetepatan(waktuSelesai: DateTime, tenggat: DateTime): String`  
-**ID Algoritma:** Algo-C26-02
+**ID Algoritma:** Algo-119
 
 ```text
-function tentukanStatusKetepatan (waktuSelesai: DateTime, tenggat: DateTime) → string
-    if waktuSelesai ≤ tenggat then
-        → "tepatWaktu"
-    else
-        → "terlambat"
+FUNCTION tentukanStatusKetepatan(waktuSelesai: DateTime, tenggat: DateTime): String
+  IF waktuSelesai ≤ tenggat THEN
+    RETURN "tepatWaktu"
+  ELSE
+    RETURN "terlambat"
 ```
 
-### 5.26.3 Algoritma simpanAtomik
+### 5.26.3 Algoritma/Query: simpanAtomik
 
-**Nama Kelas:** `PenyelesaianTugas`  
+**Nama Kelas:** PenyelesaianTugas  
 **Nama Operasi:** `simpanAtomik(): HasilOperasi`  
-**ID Algoritma:** Algo-C26-03
+**ID Algoritma:** Algo-120
 
 ```text
-function simpanAtomik () → HasilOperasi
-    hasil ← gagal("gagalSimpan")
-    mulaiTransaksi(tx)
-    if not tx.gagal then
-        sah ← kunciTugasDanPeriksaKeanggotaan(idTugas, idPelajar, tx)
-        if not tx.gagal then
-            if sah then
-                lama ← cariPengumpulan(idTugas, idPelajar, tx)
-                if not tx.gagal then
-                    if lama = Nil then
-                        sisipkanPenyelesaian(idTugas, idPelajar, waktuKumpul, status, tx)
-                    if not tx.gagal then
-                        commit(tx)
-                        if tx.terkonfirmasi then
-                            if lama = Nil then
-                                hasil ← berhasil(dataObjekPenyelesaian())
-                            else
-                                hasil ← berhasil(lama)
-            else
-                batalkanTransaksi(tx)
-                hasil ← gagal("aksesDitolak")
-    if tx.tidakPasti then
-        hasil ← gagal("belumTerkonfirmasi")
-    else
-        if tx.gagal then
-            batalkanTransaksi(tx)
-            catatError(tx)
-    → hasil
+FUNCTION simpanAtomik(): HasilOperasi
+  hasil ← HasilOperasi.gagal("gagalSimpan")
+  mulaiTransaksi(tx)
+  IF NOT tx.gagal THEN
+    sah ← kunciTugasDanPeriksaKeanggotaan(idTugas, idPelajar, tx)
+    IF NOT tx.gagal THEN
+      IF sah THEN
+        lama ← cariPengumpulan(idTugas, idPelajar, tx)
+        IF NOT tx.gagal THEN
+          IF lama = null THEN
+            sisipkanPenyelesaian(idTugas, idPelajar, waktuKumpul, status, tx)
+          IF NOT tx.gagal THEN
+            commit(tx)
+            IF tx.terkonfirmasi THEN
+              IF lama = null THEN
+                hasil ← HasilOperasi.berhasil(dataObjekPenyelesaian())
+              ELSE
+                hasil ← HasilOperasi.berhasil(lama)
+      ELSE
+        batalkanTransaksi(tx)
+        hasil ← HasilOperasi.gagal("aksesDitolak")
+  IF tx.tidakPasti THEN
+    hasil ← HasilOperasi.gagal("belumTerkonfirmasi")
+  ELSE
+    IF tx.gagal THEN
+      batalkanTransaksi(tx)
+      catatError(tx)
+  RETURN hasil
 ```
 
-### 5.26.4 Algoritma ambilStatus
+### 5.26.4 Algoritma/Query: ambilStatus
 
-**Nama Kelas:** `PenyelesaianTugas`  
+**Nama Kelas:** PenyelesaianTugas  
 **Nama Operasi:** `ambilStatus(idPelajar: Integer, daftarTugas: List): List`  
-**ID Algoritma:** Algo-C26-04
+**ID Algoritma:** Algo-121
 
 ```text
-function ambilStatus (idPelajar: integer, daftarTugas: List) → List
-    hasil.Neff ← daftarTugas.Neff
-    if daftarTugas.Neff > 0 then
-        tersimpan ← bacaPengumpulan(idPelajar, daftarTugas)
-        i ← 1
-        while i ≤ daftarTugas.Neff do
-            statusLama ← cariStatus(tersimpan, daftarTugas.Tab[i].idTugas)
-            if statusLama = Nil then
-                hasil.Tab[i].idTugas ← daftarTugas.Tab[i].idTugas
-                hasil.Tab[i].status ← "belumSelesai"
-                hasil.Tab[i].waktuKumpul ← Nil
-            else
-                hasil.Tab[i] ← statusLama
-            i ← i + 1
-    → hasil
+FUNCTION ambilStatus(idPelajar: Integer, daftarTugas: List): List
+  hasil ← list kosong sepanjang daftarTugas
+  IF panjang(daftarTugas) > 0 THEN
+    tersimpan ← bacaPengumpulan(idPelajar, daftarTugas)
+    i ← 1
+    WHILE i ≤ panjang(daftarTugas) DO
+      statusLama ← cariStatus(tersimpan, daftarTugas[i].idTugas)
+      IF statusLama = null THEN
+        hasil[i].idTugas ← daftarTugas[i].idTugas
+        hasil[i].status ← "belumSelesai"
+        hasil[i].waktuKumpul ← null
+      ELSE
+        hasil[i] ← statusLama
+      i ← i + 1
+  RETURN hasil
 ```
 
 #### Query Pendukung Kelas C26
@@ -4425,7 +4425,7 @@ Tabel 5.26.3. Query Pendukung
 <img alt="Rancangan Antarmuka I-01 Pendaftaran" src="./assets/diagram/I-01 Pendaftaran.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 6.1. Rancangan Antarmuka I-01 - Pendaftaran</i>
+<i>Gambar 42. Rancangan Antarmuka I-01 - Pendaftaran</i>
 </p>
 Tabel 6.1. Spesifikasi Objek Antarmuka I-01
  
@@ -4452,7 +4452,7 @@ Tabel 6.1. Spesifikasi Objek Antarmuka I-01
 <img alt="Rancangan Antarmuka I-02 Login" src="./assets/diagram/I-02 Login.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 6.2. Rancangan Antarmuka I-02 - Login</i>
+<i>Gambar 43. Rancangan Antarmuka I-02 - Login</i>
 </p>
 Tabel 6.2. Spesifikasi Objek Antarmuka I-02
  
@@ -4475,7 +4475,7 @@ Tabel 6.2. Spesifikasi Objek Antarmuka I-02
 <img alt="Rancangan Antarmuka I-03 Halaman Utama" src="./assets/diagram/I-03 Halaman Utama.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 6.3. Rancangan Antarmuka I-03 - Halaman Utama</i>
+<i>Gambar 44. Rancangan Antarmuka I-03 - Halaman Utama</i>
 </p>
 Tabel 6.3. Spesifikasi Objek Antarmuka I-03
  
@@ -4498,7 +4498,7 @@ Tabel 6.3. Spesifikasi Objek Antarmuka I-03
 <img alt="Rancangan Antarmuka I-04 Daftar Materi" src="./assets/diagram/I-04 Daftar Materi (tag).png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 6.4. Rancangan Antarmuka I-04 - Daftar Materi</i>
+<i>Gambar 45. Rancangan Antarmuka I-04 - Daftar Materi</i>
 </p>
 
 Tabel 6.4. Spesifikasi Objek Antarmuka I-04
@@ -4520,7 +4520,7 @@ Tabel 6.4. Spesifikasi Objek Antarmuka I-04
 <img alt="Rancangan Antarmuka I-05 Detail Materi" src="./assets/diagram/I-05 Detail Materi (tag).png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 6.5. Rancangan Antarmuka I-05 - Detail Materi</i>
+<i>Gambar 46. Rancangan Antarmuka I-05 - Detail Materi</i>
 </p>
 
 Tabel 6.5. Spesifikasi Objek Antarmuka I-05
@@ -4545,7 +4545,7 @@ Tabel 6.5. Spesifikasi Objek Antarmuka I-05
 <img alt="Rancangan Antarmuka I-06 Pilih Mode Latihan" src="./assets/ui/I-06 Pilih Mode.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 6.6. Rancangan Antarmuka I-06 - Pilih Mode Latihan</i>
+<i>Gambar 47. Rancangan Antarmuka I-06 - Pilih Mode Latihan</i>
 </p>
 
 Tabel 6.6. Spesifikasi Objek Antarmuka I-06
@@ -4570,7 +4570,7 @@ Jika materi belum memiliki soal untuk mode yang dipilih, Algo-021 menolak permin
 <img alt="Rancangan Antarmuka I-07 Latihan Menulis" src="./assets/ui/I-07 Menulis.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 6.7. Rancangan Antarmuka I-07 - Latihan Menulis</i>
+<i>Gambar 48. Rancangan Antarmuka I-07 - Latihan Menulis</i>
 </p>
 
 Tabel 6.7. Spesifikasi Objek Antarmuka I-07
@@ -4595,7 +4595,7 @@ Tabel 6.7. Spesifikasi Objek Antarmuka I-07
 <img alt="Rancangan Antarmuka I-08 Latihan Mencocokkan Bunyi" src="./assets/ui/I-08 Bunyi.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 6.8. Rancangan Antarmuka I-08 - Latihan Mencocokkan Bunyi</i>
+<i>Gambar 49. Rancangan Antarmuka I-08 - Latihan Mencocokkan Bunyi</i>
 </p>
 
 Tabel 6.8. Spesifikasi Objek Antarmuka I-08
@@ -4619,7 +4619,7 @@ Tabel 6.8. Spesifikasi Objek Antarmuka I-08
 <img alt="Rancangan Antarmuka I-09 Latihan Merangkai Aksara" src="./assets/ui/I-09 Merangkai.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 6.9. Rancangan Antarmuka I-09 - Latihan Merangkai Aksara</i>
+<i>Gambar 50. Rancangan Antarmuka I-09 - Latihan Merangkai Aksara</i>
 </p>
 
 Tabel 6.9. Spesifikasi Objek Antarmuka I-09
@@ -4643,7 +4643,7 @@ Tabel 6.9. Spesifikasi Objek Antarmuka I-09
 <img alt="Rancangan Antarmuka I-10 Hasil Latihan" src="./assets/ui/I-10 Hasil Latihan.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 6.10. Rancangan Antarmuka I-10 - Hasil Latihan</i>
+<i>Gambar 51. Rancangan Antarmuka I-10 - Hasil Latihan</i>
 </p>
 
 Tabel 6.10. Spesifikasi Objek Antarmuka I-10
@@ -4667,20 +4667,20 @@ Tabel 6.10. Spesifikasi Objek Antarmuka I-10
 <p align="center">
 <img alt="Rancangan Antarmuka I-11 - Progres Pelajar" src="./assets/diagram/I-11 Progres Pelajar.png" width="100%">
 </p>
-<p align="center"><i>Gambar 53. Rancangan Antarmuka I-11 - Progres Pelajar</i></p>
+<p align="center"><i>Gambar 52. Rancangan Antarmuka I-11 - Progres Pelajar</i></p>
 
 Tabel 6.11. Spesifikasi Objek Antarmuka I-11
 
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
-| I-11.1 | Drop-down list | Periode riwayat | Menjalankan pilihPeriode(periode). Riwayat diambil dengan ProgresController.ambilRiwayat(idPelajar, periode). |
-| I-11.2 | Diagram batang | Penguasaan per materi | Ditampilkan oleh tampilkanProgres(data) dari ProgresController.hitungProgres() (Algo-100). |
-| I-11.3 | Tabel | Riwayat latihan | Tanggal, materi, mode, skor, dan status dari RiwayatLatihan. |
-| I-11.4 | Kartu | Streak, poin, dan hari aktif pekan ini | Dari MotivasiBelajar.ambilMotivasi(). |
-| I-11.5 | Kartu | Badge | Badge yang sudah diperoleh tampil penuh, yang belum tampil pudar. |
-| I-11.6 | Kartu + button | Rekomendasi materi | Dari ProgresController.siapkanRekomendasi() (Algo-101). Tombol membuka I-05. |
-| I-11.7 | Tabel peringkat | Papan peringkat kelas | Ditampilkan oleh tampilkanScoreboard(data) dari ProgresController.ambilScoreboard(). Hanya tampil bila Pengajar mengaktifkannya (UC-04 alternatif 2). |
-| I-11.8 | Pesan informasi | Belum ada riwayat | Muncul bila riwayat kosong (UC-04 alternatif 1). |
+| I-11-01 | Drop-down list | Periode riwayat | Menjalankan pilihPeriode(periode). Riwayat diambil dengan ProgresController.ambilRiwayat(idPelajar, periode). |
+| I-11-02 | Diagram batang | Penguasaan per materi | Ditampilkan oleh tampilkanProgres(data) dari ProgresController.hitungProgres() (Algo-100). |
+| I-11-03 | Tabel | Riwayat latihan | Tanggal, materi, mode, skor, dan status dari RiwayatLatihan. |
+| I-11-04 | Kartu | Streak, poin, dan hari aktif pekan ini | Dari MotivasiBelajar.ambilMotivasi(). |
+| I-11-05 | Kartu | Badge | Badge yang sudah diperoleh tampil penuh, yang belum tampil pudar. |
+| I-11-06 | Kartu + button | Rekomendasi materi | Dari ProgresController.siapkanRekomendasi() (Algo-101). Tombol membuka I-05. |
+| I-11-07 | Tabel peringkat | Papan peringkat kelas | Ditampilkan oleh tampilkanScoreboard(data) dari ProgresController.ambilScoreboard(). Hanya tampil bila Pengajar mengaktifkannya (UC-04 alternatif 2). |
+| I-11-08 | Pesan informasi | Belum ada riwayat | Muncul bila riwayat kosong (UC-04 alternatif 1). |
 
 ## 6.12 Rancangan Antarmuka I-12
 
@@ -4690,18 +4690,18 @@ Tabel 6.11. Spesifikasi Objek Antarmuka I-11
 <p align="center">
 <img alt="Rancangan Antarmuka I-12 - Kelas Saya & Daftar Tugas" src="./assets/ui/I-12-Tags.png" width="100%">
 </p>
-<p align="center"><i>Gambar 54. Rancangan Antarmuka I-12 - Kelas Saya & Daftar Tugas</i></p>
+<p align="center"><i>Gambar 53. Rancangan Antarmuka I-12 - Kelas Saya & Daftar Tugas</i></p>
 
 Tabel 6.12. Spesifikasi Objek Antarmuka I-12
 
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
-| I-12.1 | Text box | Kode bergabung | Kode kelas dari Pengajar. |
-| I-12.2 | Button | Gabung | Menjalankan kirimKodeBergabung(kode), lalu KelasController.validasiKodeBergabung() (Algo-081). |
-| I-12.3 | Pesan | Hasil bergabung | Ditampilkan oleh tampilkanPesan(pesan): berhasil, sudah menjadi anggota (UC-05 alternatif 1), atau kode tidak valid (UC-05 alternatif 3). |
-| I-12.4 | Tab | Kelas yang diikuti | Memilih kelas menjalankan bukaKelas(idKelas). |
-| I-12.5 | Daftar | Tugas aktif, tenggat, status | Ditampilkan oleh tampilkanTugas(data) dari KelasController.ambilTugasAktif(). |
-| I-12.6 | Button | Buka | Menjalankan bukaTugas(idKelas, idTugas), lalu membuka I-13. |
+| I-12-01 | Text box | Kode bergabung | Kode kelas dari Pengajar. |
+| I-12-02 | Button | Gabung | Menjalankan kirimKodeBergabung(kode), lalu KelasController.validasiKodeBergabung() (Algo-082). |
+| I-12-03 | Pesan | Hasil bergabung | Ditampilkan oleh tampilkanPesan(pesan): berhasil, sudah menjadi anggota (UC-05 alternatif 1), atau kode tidak valid (UC-05 alternatif 3). |
+| I-12-04 | Tab | Kelas yang diikuti | Memilih kelas menjalankan bukaKelas(idKelas). |
+| I-12-05 | Daftar | Tugas aktif, tenggat, status | Ditampilkan oleh tampilkanTugas(data) dari KelasController.ambilTugasAktif(). |
+| I-12-06 | Button | Buka | Menjalankan bukaTugas(idKelas, idTugas), lalu membuka I-13. |
 
 ## 6.13 Rancangan Antarmuka I-13
 
@@ -4711,19 +4711,19 @@ Tabel 6.12. Spesifikasi Objek Antarmuka I-12
 <p align="center">
 <img alt="Rancangan Antarmuka I-13 - Pengerjaan Tugas" src="./assets/ui/I-13-Tags.png" width="100%">
 </p>
-<p align="center"><i>Gambar 55. Rancangan Antarmuka I-13 - Pengerjaan Tugas</i></p>
+<p align="center"><i>Gambar 54. Rancangan Antarmuka I-13 - Pengerjaan Tugas</i></p>
 
 Tabel 6.13. Spesifikasi Objek Antarmuka I-13
 
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
-| I-13.1 | Panel | Instruksi, tenggat, penanda terlambat | Ditampilkan oleh tampilkanDetail(data). Penanda muncul bila tenggat sudah lewat (UC-05 alternatif 2). |
-| I-13.2 | Daftar | Komponen tugas dan kemajuan | Status dari RiwayatLatihan.ambilBuktiPenyelesaian(). |
-| I-13.3 | Button | Kerjakan | Menjalankan kerjakanTugas(idKelas, idTugas) lalu membuka I-05 atau I-06. |
-| I-13.4 | Button | Kumpulkan tugas | Menjalankan periksaPenyelesaian(), lalu finalisasiTugas() dan KelasController.simpanPengumpulan() (Algo-082). Aktif bila semua komponen wajib selesai. |
-| I-13.5 | Pesan | Status pengumpulan | Ditampilkan oleh tampilkanHasil(data): tepat waktu atau terlambat (Algo-064). |
-| I-13.6 | Pesan kesalahan | Pengumpulan gagal | Muncul bila penyimpanan gagal. Semua perubahan dibatalkan (UC-05 eksepsi). |
-| I-13.7 | Link | Kembali ke Kelas Saya | Kembali ke I-12. |
+| I-13-01 | Panel | Instruksi, tenggat, penanda terlambat | Ditampilkan oleh tampilkanDetail(data). Penanda muncul bila tenggat sudah lewat (UC-05 alternatif 2). |
+| I-13-02 | Daftar | Komponen tugas dan kemajuan | Status dari RiwayatLatihan.ambilBuktiPenyelesaian(). |
+| I-13-03 | Button | Kerjakan | Menjalankan kerjakanTugas(idKelas, idTugas) lalu membuka I-05 atau I-06. |
+| I-13-04 | Button | Kumpulkan tugas | Menjalankan periksaPenyelesaian(), lalu finalisasiTugas() dan KelasController.simpanPengumpulan() (Algo-086). Aktif bila semua komponen wajib selesai. |
+| I-13-05 | Pesan | Status pengumpulan | Ditampilkan oleh tampilkanHasil(data): tepat waktu atau terlambat (Algo-118). |
+| I-13-06 | Pesan kesalahan | Pengumpulan gagal | Muncul bila penyimpanan gagal. Semua perubahan dibatalkan (UC-05 eksepsi). |
+| I-13-07 | Link | Kembali ke Kelas Saya | Kembali ke I-12. |
 
 ## 6.14 Rancangan Antarmuka I-14
 
@@ -4735,10 +4735,10 @@ Tabel 6.13. Spesifikasi Objek Antarmuka I-13
 </p>
 
 <p align="center">
-<i>Gambar 6.14. Rancangan Antarmuka I-14 - Kelola Kelas</i>
+<i>Gambar 55. Rancangan Antarmuka I-14 - Kelola Kelas</i>
 </p>
 
-**Tabel 6.14. Spesifikasi Objek Antarmuka I-14**
+Tabel 6.14. Spesifikasi Objek Antarmuka I-14
 
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
@@ -4760,10 +4760,10 @@ Tabel 6.13. Spesifikasi Objek Antarmuka I-13
 </p>
 
 <p align="center">
-<i>Gambar 6.15. Rancangan Antarmuka I-15 - Terbitkan Tugas</i>
+<i>Gambar 56. Rancangan Antarmuka I-15 - Terbitkan Tugas</i>
 </p>
 
-**Tabel 6.15. Spesifikasi Objek Antarmuka I-15**
+Tabel 6.15. Spesifikasi Objek Antarmuka I-15
 
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
@@ -4784,10 +4784,10 @@ Tabel 6.13. Spesifikasi Objek Antarmuka I-13
 </p>
 
 <p align="center">
-<i>Gambar 6.16. Rancangan Antarmuka I-16 - Kelola Anggota dan Papan Peringkat</i>
+<i>Gambar 57. Rancangan Antarmuka I-16 - Kelola Anggota dan Papan Peringkat</i>
 </p>
 
-**Tabel 6.16. Spesifikasi Objek Antarmuka I-16**
+Tabel 6.16. Spesifikasi Objek Antarmuka I-16
 
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
@@ -4807,20 +4807,20 @@ Tabel 6.13. Spesifikasi Objek Antarmuka I-13
 <p align="center">
 <img alt="Rancangan Antarmuka I-17 - Pantau Progres Anggota" src="./assets/diagram/I-17 Pantau Progres Anggota.png" width="100%">
 </p>
-<p align="center"><i>Gambar 59. Rancangan Antarmuka I-17 - Pantau Progres Anggota</i></p>
+<p align="center"><i>Gambar 58. Rancangan Antarmuka I-17 - Pantau Progres Anggota</i></p>
 
 Tabel 6.17. Spesifikasi Objek Antarmuka I-17
 
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
-| I-17.1 | Kartu ringkasan | Jumlah anggota aktif, rata-rata penguasaan, tugas terkumpul | Dari ProgresController.agregasiProgres(anggotaAktif, periode) (Algo-102). |
-| I-17.2 | Tabel | Progres tiap anggota aktif | Ditampilkan oleh tampilkanProgres(data). Anggota yang sudah keluar tidak ditampilkan. |
-| I-17.3 | Button | Detail | Menjalankan pilihAnggota(idPelajar), lalu KelasController.ambilProgresAnggota() (KF13). |
-| I-17.4 | Daftar | Aksara yang sering salah | Dari ProgresController.hitungPolaKesalahan(). |
-| I-17.5 | Panel | Detail anggota terpilih | Riwayat latihan anggota terpilih. |
-| I-17.6 | Text area + button | Umpan balik untuk anggota | Menjalankan kirimUmpanBalik(data), lalu KelasController.kirimUmpanBalik(idKelas, data). |
-| I-17.7 | Pesan informasi | Belum ada riwayat | Muncul bila anggota belum berlatih (UC-08 alternatif 1). |
-| I-17.8 | Pesan kesalahan | Bukan anggota aktif | Muncul bila Pengajar membuka progres pengguna yang bukan anggota aktif (UC-08 alternatif 2). |
+| I-17-01 | Kartu ringkasan | Jumlah anggota aktif, rata-rata penguasaan, tugas terkumpul | Dari ProgresController.agregasiProgres(anggotaAktif, periode) (Algo-102). |
+| I-17-02 | Tabel | Progres tiap anggota aktif | Ditampilkan oleh tampilkanProgres(data). Anggota yang sudah keluar tidak ditampilkan. |
+| I-17-03 | Button | Detail | Menjalankan pilihAnggota(idPelajar), lalu KelasController.ambilProgresAnggota() (KF13). |
+| I-17-04 | Daftar | Aksara yang sering salah | Dari ProgresController.hitungPolaKesalahan(). |
+| I-17-05 | Panel | Detail anggota terpilih | Riwayat latihan anggota terpilih. |
+| I-17-06 | Text area + button | Umpan balik untuk anggota | Menjalankan kirimUmpanBalik(data), lalu KelasController.kirimUmpanBalik(idKelas, data). |
+| I-17-07 | Pesan informasi | Belum ada riwayat | Muncul bila anggota belum berlatih (UC-08 alternatif 1). |
+| I-17-08 | Pesan kesalahan | Bukan anggota aktif | Muncul bila Pengajar membuka progres pengguna yang bukan anggota aktif (UC-08 alternatif 2). |
 
 ## 6.18 Rancangan Antarmuka I-18
 
@@ -4831,7 +4831,7 @@ Tabel 6.17. Spesifikasi Objek Antarmuka I-17
 <img alt="Rancangan Antarmuka I-18 Kelola Materi" src="./assets/diagram/I-18 Kelola Materi (tag).png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 6.18. Rancangan Antarmuka I-18 - Kelola Materi</i>
+<i>Gambar 59. Rancangan Antarmuka I-18 - Kelola Materi</i>
 </p>
 
 Tabel 6.18. Spesifikasi Objek Antarmuka I-18
@@ -4853,7 +4853,7 @@ Tabel 6.18. Spesifikasi Objek Antarmuka I-18
 <img alt="Rancangan Antarmuka I-19 Unggah Materi" src="./assets/diagram/I-19 Unggah Materi (tag).png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 6.19. Rancangan Antarmuka I-19 - Unggah Materi</i>
+<i>Gambar 60. Rancangan Antarmuka I-19 - Unggah Materi</i>
 </p>
 
 Tabel 6.19. Spesifikasi Objek Antarmuka I-19
@@ -4878,7 +4878,7 @@ Tabel 6.19. Spesifikasi Objek Antarmuka I-19
 <img alt="Rancangan Antarmuka I-20 Feedback" src="./assets/diagram/I-20 Feedback.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 6.20. Rancangan Antarmuka I-20 - Kirim Feedback</i>
+<i>Gambar 61. Rancangan Antarmuka I-20 - Kirim Feedback</i>
 </p>
 Tabel 6.20. Spesifikasi Objek Antarmuka I-20
  
@@ -4909,9 +4909,9 @@ Tabel 6.21. Rancangan Antarmuka Keseluruhan
 | I-11 Progres Pelajar | <img src="./assets/diagram/I-11 Progres Pelajar.png" alt="I-11 Progres Pelajar" width="400"> |
 | I-12 Kelas Saya & Daftar Tugas | <img src="./assets/ui/I-12-Polos.png" alt="I-12 Kelas Saya & Daftar Tugas" width="400"> |
 | I-13 Pengerjaan Tugas | <img src="./assets/ui/I-13-Polos.png" alt="I-13 Pengerjaan Tugas" width="400"> |
-| I-14 Kelola Kelas| <img src="./assets/ui/I14.png" alt="I-11 Progres Pelajar" width="400"> |
-| I-15 Terbitkan Tugas| <img src="./assets/ui/I15.png" alt="I-11 Progres Pelajar" width="400"> |
-| I-16 Kelola Anggota dan Papan Peringkat| <img src="./assets/ui/I16.png" alt="I-11 Progres Pelajar" width="400"> |
+| I-14 Kelola Kelas| <img src="./assets/ui/I14.png" alt="I-14 Kelola Kelas" width="400"> |
+| I-15 Terbitkan Tugas| <img src="./assets/ui/I15.png" alt="I-15 Terbitkan Tugas" width="400"> |
+| I-16 Kelola Anggota dan Papan Peringkat| <img src="./assets/ui/I16.png" alt="I-16 Kelola Anggota dan Papan Peringkat" width="400"> |
 |I-17 Pantau Progres Anggota | <img src="./assets/diagram/I-17 Pantau Progres Anggota.png" alt="I-17 Pantau Progres Anggota" width="400">|
 | I-18 Kelola Materi | <img src="./assets/diagram/I-18 Kelola Materi.png" alt="Contoh Desain" width="400"> |
 | I-19 Unggah Materi | <img src="./assets/diagram/I-19 Unggah Materi.png" alt="Contoh Desain" width="400"> |
@@ -4927,29 +4927,29 @@ Tabel 7.1. Matriks Kerunutan Kelas terhadap Use Case
 
 | Kelas                      | Use Case Terkait                                                                                                                                                                                                                                                                                                                                  |
 | :------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| C01 - AkunPengguna         | UC-01 - Melakukan Pendaftaran Akun<br>UC-02 - Mempelajari Materi<br>UC-03 - Mengerjakan Latihan Aksara<br>UC-04 - Meninjau Progres dan Motivasi<br>UC-05 - Mengikuti Pembelajaran Kelas<br>UC-06 - Memperbaharui Materi<br>UC-07 - Menyiapkan Pembelajaran Kelas<br>UC-08 - Memantau dan Menindaklanjuti Progres<br>UC-09 - Menyampaikan Feedback |
-| C02 - MateriAksara         | UC-02 - Mempelajari Materi<br>UC-03 - Mengerjakan Latihan Aksara<br>UC-04 - Meninjau Progres dan Motivasi<br>UC-06 - Memperbaharui Materi                                                                                                                                                                                                         |
-| C03 - RiwayatLatihan       | UC-02 - Mempelajari Materi<br>UC-03 - Mengerjakan Latihan Aksara<br>UC-04 - Meninjau Progres dan Motivasi<br>UC-05 - Mengikuti Pembelajaran Kelas<br>UC-08 - Memantau dan Menindaklanjuti Progres                                                                                                                                                 |
-| C04 - DataFeedback         | UC-09 - Menyampaikan Feedback                                                                                                                                                                                                                                                                                                                     |
-| C05 - HalamanPendaftaran   | UC-01 - Melakukan Pendaftaran Akun                                                                                                                                                                                                                                                                                                                |
-| C06 - HalamanLogin         | UC-01 - Melakukan Pendaftaran Akun                                                                                                                                                                                                                                                                                                                |
-| C07 - HalamanUtama         | UC-02 - Mempelajari Materi<br>UC-03 - Mengerjakan Latihan Aksara<br>UC-04 - Meninjau Progres dan Motivasi<br>UC-05 - Mengikuti Pembelajaran Kelas<br>UC-06 - Memperbaharui Materi<br>UC-07 - Menyiapkan Pembelajaran Kelas<br>UC-08 - Memantau dan Menindaklanjuti Progres<br>UC-09 - Menyampaikan Feedback                                       |
-| C08 - HalamanLatihan       | UC-03 - Mengerjakan Latihan Aksara                                                                                                                                                                                                                                                                                                                |
-| C09 - HalamanKelolaMateri  | UC-06 - Memperbaharui Materi                                                                                                                                                                                                                                                                                                                      |
-| C10 - HalamanFeedback      | UC-09 - Menyampaikan Feedback                                                                                                                                                                                                                                                                                                                     |
-| C11 - HalamanKelasPelajar  | UC-05 - Mengikuti Pembelajaran Kelas                                                                                                                                                                                                                                                                                                              |
-| C12 - HalamanKelolaKelas   | UC-07 - Menyiapkan Pembelajaran Kelas<br>UC-08 - Memantau dan Menindaklanjuti Progres                                                                                                                                                                                                                                                             |
-| C13 - HalamanMateri        | UC-02 - Mempelajari Materi                                                                                                                                                                                                                                                                                                                        |
-| C14 - HalamanProgres       | UC-04 - Meninjau Progres dan Motivasi                                                                                                                                                                                                                                                                                                             |
-| C15 - OtentikasiController | UC-01 - Melakukan Pendaftaran Akun                                                                                                                                                                                                                                                                                                                |
-| C16 - LatihanController    | UC-03 - Mengerjakan Latihan Aksara                                                                                                                                                                                                                                                                                                                |
-| C17 - MateriController     | UC-02 - Mempelajari Materi<br>UC-03 - Mengerjakan Latihan Aksara<br>UC-06 - Memperbaharui Materi                                                                                                                                                                                                                                                  |
-| C18 - FeedbackController   | UC-09 - Menyampaikan Feedback                                                                                                                                                                                                                                                                                                                     |
-| C19 - ProgresController    | UC-04 - Meninjau Progres dan Motivasi<br>UC-08 - Memantau dan Menindaklanjuti Progres                                                                                                                                                                                                                                                             |
-| C20 - KelasController      | UC-05 - Mengikuti Pembelajaran Kelas<br>UC-07 - Menyiapkan Pembelajaran Kelas<br>UC-08 - Memantau dan Menindaklanjuti Progres                                                                                                                                                                                                                     |
-| C21 - KontenMateri         | UC-02 - Mempelajari Materi<br>UC-03 - Mengerjakan Latihan Aksara<br>UC-06 - Memperbaharui Materi                                                                                                                                                                                                                                                  |
-| C22 - MotivasiBelajar      | UC-03 - Mengerjakan Latihan Aksara<br>UC-04 - Meninjau Progres dan Motivasi<br>UC-07 - Menyiapkan Pembelajaran Kelas                                                                                                                                                                                                                              |
-| C23 - KelasBelajar         | UC-05 - Mengikuti Pembelajaran Kelas<br>UC-07 - Menyiapkan Pembelajaran Kelas<br>UC-08 - Memantau dan Menindaklanjuti Progres                                                                                                                                                                                                                     |
-| C24 - KeanggotaanKelas     | UC-05 - Mengikuti Pembelajaran Kelas<br>UC-07 - Menyiapkan Pembelajaran Kelas<br>UC-08 - Memantau dan Menindaklanjuti Progres                                                                                                                                                                                                                     |
-| C25 - TugasKelas           | UC-05 - Mengikuti Pembelajaran Kelas<br>UC-07 - Menyiapkan Pembelajaran Kelas                                                                                                                                                                                                                                                                     |
-| C26 - PenyelesaianTugas    | UC-05 - Mengikuti Pembelajaran Kelas                                                                                                                                                                                                                                                                                                              |
+| C01 - AkunPengguna | UC-01 - Melakukan Pendaftaran Akun<br>UC-02 - Mempelajari Materi<br>UC-03 - Mengerjakan Latihan Aksara<br>UC-04 - Meninjau Progres dan Motivasi<br>UC-05 - Mengikuti Pembelajaran Kelas<br>UC-06 - Memperbaharui Materi<br>UC-07 - Menyiapkan Pembelajaran Kelas<br>UC-08 - Memantau dan Menindaklanjuti Progres<br>UC-09 - Menyampaikan Feedback |
+| C02 - MateriAksara | UC-02 - Mempelajari Materi<br>UC-03 - Mengerjakan Latihan Aksara<br>UC-04 - Meninjau Progres dan Motivasi<br>UC-06 - Memperbaharui Materi |
+| C03 - RiwayatLatihan | UC-02 - Mempelajari Materi<br>UC-03 - Mengerjakan Latihan Aksara<br>UC-04 - Meninjau Progres dan Motivasi<br>UC-05 - Mengikuti Pembelajaran Kelas<br>UC-08 - Memantau dan Menindaklanjuti Progres |
+| C04 - DataFeedback | UC-09 - Menyampaikan Feedback |
+| C05 - HalamanPendaftaran | UC-01 - Melakukan Pendaftaran Akun |
+| C06 - HalamanLogin | UC-01 - Melakukan Pendaftaran Akun |
+| C07 - HalamanUtama | UC-02 - Mempelajari Materi<br>UC-03 - Mengerjakan Latihan Aksara<br>UC-04 - Meninjau Progres dan Motivasi<br>UC-05 - Mengikuti Pembelajaran Kelas<br>UC-06 - Memperbaharui Materi<br>UC-07 - Menyiapkan Pembelajaran Kelas<br>UC-08 - Memantau dan Menindaklanjuti Progres<br>UC-09 - Menyampaikan Feedback |
+| C08 - HalamanLatihan | UC-03 - Mengerjakan Latihan Aksara |
+| C09 - HalamanKelolaMateri | UC-06 - Memperbaharui Materi |
+| C10 - HalamanFeedback | UC-09 - Menyampaikan Feedback |
+| C11 - HalamanKelasPelajar | UC-05 - Mengikuti Pembelajaran Kelas |
+| C12 - HalamanKelolaKelas | UC-07 - Menyiapkan Pembelajaran Kelas<br>UC-08 - Memantau dan Menindaklanjuti Progres |
+| C13 - HalamanMateri | UC-02 - Mempelajari Materi<br>UC-04 - Meninjau Progres dan Motivasi |
+| C14 - HalamanProgres | UC-04 - Meninjau Progres dan Motivasi |
+| C15 - OtentikasiController | UC-01 - Melakukan Pendaftaran Akun |
+| C16 - LatihanController | UC-03 - Mengerjakan Latihan Aksara |
+| C17 - MateriController | UC-02 - Mempelajari Materi<br>UC-03 - Mengerjakan Latihan Aksara<br>UC-06 - Memperbaharui Materi |
+| C18 - FeedbackController | UC-09 - Menyampaikan Feedback |
+| C19 - ProgresController | UC-04 - Meninjau Progres dan Motivasi<br>UC-08 - Memantau dan Menindaklanjuti Progres |
+| C20 - KelasController | UC-05 - Mengikuti Pembelajaran Kelas<br>UC-07 - Menyiapkan Pembelajaran Kelas<br>UC-08 - Memantau dan Menindaklanjuti Progres |
+| C21 - KontenMateri | UC-02 - Mempelajari Materi<br>UC-03 - Mengerjakan Latihan Aksara<br>UC-06 - Memperbaharui Materi |
+| C22 - MotivasiBelajar | UC-03 - Mengerjakan Latihan Aksara<br>UC-04 - Meninjau Progres dan Motivasi<br>UC-07 - Menyiapkan Pembelajaran Kelas |
+| C23 - KelasBelajar | UC-04 - Meninjau Progres dan Motivasi<br>UC-05 - Mengikuti Pembelajaran Kelas<br>UC-07 - Menyiapkan Pembelajaran Kelas<br>UC-08 - Memantau dan Menindaklanjuti Progres |
+| C24 - KeanggotaanKelas | UC-04 - Meninjau Progres dan Motivasi<br>UC-05 - Mengikuti Pembelajaran Kelas<br>UC-07 - Menyiapkan Pembelajaran Kelas<br>UC-08 - Memantau dan Menindaklanjuti Progres |
+| C25 - TugasKelas | UC-05 - Mengikuti Pembelajaran Kelas<br>UC-07 - Menyiapkan Pembelajaran Kelas |
+| C26 - PenyelesaianTugas | UC-05 - Mengikuti Pembelajaran Kelas |
