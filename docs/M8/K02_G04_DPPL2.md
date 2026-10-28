@@ -2268,7 +2268,77 @@ Tabel 5.17.3. Query Operasi hapusMateri
 | :------- | :--------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------- |
 | Q-055    | `UPDATE materi_aksara SET deleted_at = NOW(), status_publikasi = 'DRAF' WHERE id_materi = :id AND deleted_at IS NULL;` | Penghapusan lunak: materi hilang dari daftar tetapi `riwayat_latihan` pelajar tetap utuh. |
 
+ 
 ## 5.18 Kelas FeedbackController
+ 
+**Nama Kelas:** FeedbackController  
+**ID Kelas:** C18  
+**Jenis:** Controller
+ 
+Memvalidasi feedback, menghubungkannya dengan akun pengirim, menyimpannya, dan menyiapkan konfirmasi (KF18–KF20).
+ 
+Tabel 5.18.1. Operasi Kelas FeedbackController
+ 
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `validasiFeedback(data: MasukanFeedback): HasilValidasi` | public | Memeriksa hak akses pengirim, kategori, dan panjang pesan. Lihat Algo-013. |
+| `simpanFeedback(data: MasukanFeedback): HasilOperasi` | public | Mengambil `idAkun` dari `AkunPengguna.getProfil()`, lalu menyimpan feedback melalui `DataFeedback.simpan()`. Kegagalan dicatat ke `LogAplikasi`. Lihat Algo-014. |
+| `kirimKonfirmasi(hasil: HasilOperasi): Konfirmasi` | public | Menyusun pesan konfirmasi berhasil atau gagal terkirim untuk `HalamanFeedback` (KF20, KNF05). |
+ 
+Tabel 5.18.2. Atribut Kelas FeedbackController
+ 
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `konteks` | private | KonteksPermintaan |
+ 
+### 5.18.1 Algoritma/Query
+ 
+**Nama Kelas:** FeedbackController  
+**Nama Operasi:** `validasiFeedback(data: MasukanFeedback): HasilValidasi`  
+**ID Algoritma:** Algo-013
+ 
+```text
+FUNCTION validasiFeedback(data: MasukanFeedback): HasilValidasi
+  IF konteks.akun = null OR NOT konteks.akun.verifikasiHakAkses("KIRIM_FEEDBACK") THEN
+    tolak permintaan (403 "Fitur feedback khusus Pelajar dan Pengajar")
+ 
+  galat ← map kosong
+  IF data.kategori NOT IN {PERFORMA, TAMPILAN, FITUR, MATERI} THEN
+    galat["kategori"] ← "Pilih kategori feedback"
+  pesan ← trim(data.pesan)
+  IF panjang(pesan) < 10 OR panjang(pesan) > 1000 THEN
+    galat["pesan"] ← "Feedback 10–1.000 karakter"
+ 
+  IF galat kosong THEN RETURN HasilValidasi.valid()
+  RETURN HasilValidasi.tidakValid(galat)
+```
+ 
+### 5.18.2 Algoritma/Query
+ 
+**Nama Kelas:** FeedbackController  
+**Nama Operasi:** `simpanFeedback(data: MasukanFeedback): HasilOperasi`  
+**ID Algoritma:** Algo-014
+ 
+```text
+FUNCTION simpanFeedback(data: MasukanFeedback): HasilOperasi
+  validasi ← validasiFeedback(data)         // server tidak mengandalkan pemeriksaan sebelumnya
+  IF validasi.valid = false THEN
+    RETURN HasilOperasi.gagal("DATA_TIDAK_VALID", validasi.galat)
+ 
+  profil ← konteks.akun.getProfil()
+  data.idAkun ← profil.idAkun                // pengirim diambil dari sesi, bukan dari browser
+  data.pesan ← trim(data.pesan)              // Blade melakukan escape saat pesan ditampilkan
+ 
+  hasil ← new DataFeedback().simpan(data)    // Algo-003
+  IF hasil.berhasil = false THEN
+    LogAplikasi.catat("ERROR", "Feedback gagal disimpan", {idAkun: profil.idAkun})   // KF17
+  RETURN hasil
+ 
+FUNCTION kirimKonfirmasi(hasil: HasilOperasi): Konfirmasi
+  IF hasil.berhasil THEN
+    RETURN Konfirmasi(berhasil = true, pesan = "Feedback berhasil terkirim. Terima kasih atas masukan Anda.")
+  RETURN Konfirmasi(berhasil = false, pesan = "Feedback gagal terkirim. Silakan coba lagi.")
+```
 
 ## 5.19 Kelas ProgresController
 **Nama Kelas:** ProgresController  
