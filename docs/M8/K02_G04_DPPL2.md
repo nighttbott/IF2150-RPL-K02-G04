@@ -1828,7 +1828,31 @@ Tabel 5.17.3. Query Operasi hapusMateri
 
 ## 5.18 Kelas FeedbackController
 
-## 5.19 Kelas ProgresController
+**Nama Kelas:** ProgresController  
+**ID Kelas:** C19  
+**Jenis:** Controller
+
+Mengolah riwayat dan progres belajar, menyiapkan rekomendasi materi serta papan peringkat.
+
+Tabel 5.19.1. Operasi Kelas ProgresController
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>` | public | Mengambil riwayat Pelajar pada periode tertentu. |
+| `hitungProgres(idPelajar: Integer): RingkasanProgres` | public | Menghitung penguasaan per materi dan ringkasan riwayat. |
+| `ambilDetailHasil(idPelajar: Integer, idMateri: Integer): List<RiwayatLatihan>` | public | Mengambil hasil latihan Pelajar pada satu materi. |
+| `siapkanRekomendasi(idPelajar: Integer): List<MetadataMateri>` | public | Menyusun materi rekomendasi dari penguasaan terendah. |
+| `ambilIndikatorMotivasi(idPelajar: Integer): Data` | public | Mengambil streak, poin, dan badge dari MotivasiBelajar. |
+| `ambilScoreboard(idKelas: Integer): HasilScoreboard` | public | Menyusun papan peringkat bila Pengajar mengaktifkannya. |
+| `agregasiProgres(anggotaAktif: List<Integer>, periode: Periode): RingkasanProgres` | public | Menggabungkan progres seluruh anggota aktif kelas. |
+| `hitungPolaKesalahan(idPelajar: Integer): Data` | public | Menghitung pola kesalahan satu Pelajar. |
+
+Tabel 5.19.2. Atribut Kelas ProgresController
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `konteks` | private | `KonteksPermintaan` |
+
 
 ## 5.20 Kelas KelasController
 
