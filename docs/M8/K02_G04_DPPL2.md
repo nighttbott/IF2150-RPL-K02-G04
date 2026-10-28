@@ -4953,3 +4953,7 @@ Tabel 7.1. Matriks Kerunutan Kelas terhadap Use Case
 | C24 - KeanggotaanKelas | UC-04 - Meninjau Progres dan Motivasi<br>UC-05 - Mengikuti Pembelajaran Kelas<br>UC-07 - Menyiapkan Pembelajaran Kelas<br>UC-08 - Memantau dan Menindaklanjuti Progres |
 | C25 - TugasKelas | UC-05 - Mengikuti Pembelajaran Kelas<br>UC-07 - Menyiapkan Pembelajaran Kelas |
 | C26 - PenyelesaianTugas | UC-05 - Mengikuti Pembelajaran Kelas |
+
+# Referensi
+
+- Prototipe antarmuka Ngaksara: [https://www.figma.com/design/wRWy7TBjhXTELpAR6xHutU/Ngaksara?node-id=1-2](https://www.figma.com/design/wRWy7TBjhXTELpAR6xHutU/Ngaksara?node-id=1-2)
