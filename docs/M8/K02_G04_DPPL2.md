@@ -2838,23 +2838,50 @@ Tabel 6.19. Spesifikasi Objek Antarmuka I-19
 | I-19-04 | Dropzone + Button | "Seret berkas ke sini atau pilih berkas"; "Format: json, mp3, png, svg. Maksimal 10 MB."; tombol "Pilih berkas" | Menerima berkas materi dan memeriksa format serta ukurannya (Algo-045, Algo-052). |
 | I-19-05 | Button (utama) | "Simpan sebagai draf" | Menjalankan `unggahFileMateri` (Algo-045, Algo-053). Materi baru tersimpan berstatus Draf, lalu kembali ke I-18. Tombol "Batal" di sebelahnya membuang isian dan kembali ke I-18. |
 | I-19-06 | Alert (galat) | "Jenis berkas tidak didukung" dan "Pilih berkas lain. Materi tidak berubah." | Tampil bila format berkas tidak sesuai (Algo-045, Algo-052). Data materi tidak disimpan. |
-## 6.20 Rancangan Antarmuka I-20
 
-## 6.X Rancangan Antarmuka [ID Layar X]
+## 6.20 Rancangan Antarmuka I-20
+ 
+**Antarmuka:** I-20  
+**Nama Layar:** Feedback  
+**Kelas View:** `HalamanFeedback`  
+**Use Case:** UC-09
+ 
+<p align="center">
+<img alt="Rancangan Antarmuka I-20 Feedback" src="./assets/diagram/I-20 Feedback.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.20. Rancangan Antarmuka I-20 - Feedback</i>
+</p>
+Tabel 6.20. Spesifikasi Objek Antarmuka I-20
+ 
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-20-01 | Card (header halaman) | "Feedback" dan deskripsi singkat | Ditampilkan oleh `tampilkanFormFeedback` (KF18). Hanya untuk Pelajar dan Pengajar (Algo-013). |
+| I-20-02 | Button (pilihan) | "Performa" | Kategori `PERFORMA` (pertanyaan tertutup). |
+| I-20-03 | Button (pilihan) | "Tampilan" | Kategori `TAMPILAN`. |
+| I-20-04 | Button (pilihan) | "Fitur" | Kategori `FITUR`. |
+| I-20-05 | Button (pilihan) | "Materi" | Kategori `MATERI`. |
+| I-20-06 | Text Area | Label "Tuliskan masukan Anda" dan penghitung karakter | Pertanyaan terbuka, 10–1.000 karakter (Algo-013). |
+| I-20-07 | Button (utama) | "Kirim Feedback" | Menjalankan `kirimFeedback` (Algo-008 → Algo-013 → Algo-014 → Algo-003). Nonaktif selama status `MENGIRIM`. |
+| I-20-08 | Teks galat (per isian) | Misalnya "Pilih kategori feedback" | Tampil bila validasi gagal (Algo-013). |
+| I-20-09 | Alert (sukses) | "Feedback berhasil terkirim. Terima kasih atas masukan Anda." | Tampil bila penyimpanan berhasil; form dikosongkan (`tampilkanKonfirmasi`, KF20). |
+| I-20-10 | Alert (galat) | "Feedback gagal terkirim. Silakan coba lagi." | Tampil bila server gagal menyimpan atau koneksi terputus (UC-09 Skenario Alternatif 1, KNF05). Isi form dipertahankan agar dapat dikirim ulang (Algo-008). |
+
+## 6.21 Rancangan Antarmuka [ID Layar X]
 
 _[Ulangi pola 6.1 untuk layar berikutnya sampai semua layar teridentifikasi]_
 
-## 6.Y Rancangan Antarmuka Keseluruhan
+## 6.22 Rancangan Antarmuka Keseluruhan
 
 Tuliskan daftar gambar seluruh antarmuka. Berikan ID unik untuk setiap tampilan dan gunakan ID yang sama pada subbab perancangan antarmuka masing-masing.
 
-Tabel 6.Y. Rancangan Antarmuka Keseluruhan
+Tabel 6.22. Rancangan Antarmuka Keseluruhan
 
 | No   | Tampilan Antarmuka                                                                  |
 | :--- | :---------------------------------------------------------------------------------- |
-| I-01 | <img src="./assets/diagram/contoh-design.png" alt="Contoh Desain" width="400">      |
-| I-02 | ...                                                                                 |
-| I-03 | ...                                                                                 |
+| I-01 | <img src="./assets/diagram/I-01 Pendaftaran.png" alt="I-01 Pendaftaran" width="400"> |
+| I-02 | <img src="./assets/diagram/I-02 Login.png" alt="I-02 Login" width="400"> |
+| I-03 | <img src="./assets/diagram/I-03 Halaman Utama.png" alt="I-03 Halaman Utama" width="400"> |
 | I-04 Daftar Materi | <img src="./assets/diagram/I-04 Daftar Materi.png" alt="Contoh Desain" width="400"> |
 | I-05 Detail Materi | <img src="./assets/diagram/I-05 Detail Materi.png" alt="Contoh Desain" width="400"> |
 | I-06 | ...                                                                                 |
@@ -2871,7 +2898,7 @@ Tabel 6.Y. Rancangan Antarmuka Keseluruhan
 |I-17 Pantau Progres Anggota | <img src="./assets/diagram/I-17 Pantau Progres Anggota.png" alt="I-17 Pantau Progres Anggota" width="400">|
 | I-18 Kelola Materi | <img src="./assets/diagram/I-18 Kelola Materi.png" alt="Contoh Desain" width="400"> |
 | I-19 Unggah Materi | <img src="./assets/diagram/I-19 Unggah Materi.png" alt="Contoh Desain" width="400"> |
-| I-20 | ...                                                                                 |
+| I-20 | <img src="./assets/diagram/I-20 Feedback.png" alt="I-20 Feedback" width="400"> |
 
 <br>
 
