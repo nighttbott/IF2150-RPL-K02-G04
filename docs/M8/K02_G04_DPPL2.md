@@ -1122,6 +1122,28 @@ Tabel 5.3.6. Query Operasi ambilRiwayat
 | :--- | :--- | :--- |
 | Q-011 | `SELECT id_riwayat, id_materi, mode, skor, status, tanggal_pengerjaan FROM riwayat_latihan WHERE id_pelajar = :id_pelajar   AND tanggal_pengerjaan BETWEEN :mulai AND :selesai ORDER BY tanggal_pengerjaan DESC;` | Riwayat Pelajar pada periode terpilih. |
 
+### 5.3.5 Algoritma/Query: ambilBuktiPenyelesaian
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `ambilBuktiPenyelesaian(idPelajar: Integer, idTugas: Integer): BuktiPenyelesaian`
+
+Tabel 5.3.7. Query Operasi ambilBuktiPenyelesaian
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-015 | `SELECT id_komponen, waktu_selesai FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND id_tugas = :id_tugas AND id_komponen IS NOT NULL;` | Komponen tugas yang sudah diselesaikan Pelajar. |
+
+### 5.3.6 Algoritma/Query: ambilStatusProgres
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `ambilStatusProgres(idPelajar: Integer, daftarIdMateri: List<Integer>): Data`
+
+Tabel 5.3.8. Query Operasi ambilStatusProgres
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-012 | `SELECT id_materi, SUM(status = 'berhasil') AS jumlah_berhasil, COUNT(*) AS jumlah_percobaan FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND id_materi IN (:daftar_id_materi) GROUP BY id_materi;` | Materi tanpa baris berstatus belum, jumlah_berhasil 0 berstatus sedang, selebihnya selesai. |
+
 ## 5.4 Kelas DataFeedback
 
 ## 5.5 Kelas HalamanPendaftaran
