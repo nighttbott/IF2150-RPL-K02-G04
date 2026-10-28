@@ -830,49 +830,100 @@ Tabel 5.1. Daftar Kelas Perancangan dan Kelas Analisis Terkait
 Untuk **setiap kelas**, identifikasi operasi berdasarkan tanggung jawab kelas beserta _visibility_-nya, serta atribut beserta _visibility_ dan tipenya. Buat subbab tersendiri untuk setiap kelas.
 
 ## 5.1 Kelas AkunPengguna
-
-**Nama Kelas:** _[Nama kelas]_  
-**ID Kelas:** _[ID kelas]_
-
-Tabel 5.1.1. Operasi Kelas [Nama Kelas 1]
-
-| Nama Operasi                                                 | Visibility (private, public) | Keterangan                 |
-| :----------------------------------------------------------- | :--------------------------- | :------------------------- |
-| _[Signature operasi, termasuk parameter dan tipe kembalian]_ | _[Visibility]_               | _[Tanggung jawab operasi]_ |
-| _..._                                                        | _..._                        | _..._                      |
-
-Tabel 5.1.2. Atribut Kelas [Nama Kelas 1]
-
-| Nama Atribut     | Visibility (private, public) | Tipe                                              |
-| :--------------- | :--------------------------- | :------------------------------------------------ |
-| _[Nama atribut]_ | _[Visibility]_               | _[Tipe sesuai bahasa pemrograman yang digunakan]_ |
-| _..._            | _..._                        | _..._                                             |
-
+ 
+**Nama Kelas:** AkunPengguna  
+**ID Kelas:** C01  
+**Jenis:** Model
+ 
+Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi, serta menjadi acuan hak akses seluruh fitur.
+ 
+Tabel 5.1.1. Operasi Kelas AkunPengguna
+ 
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `buatAkunBaru(data: DataPendaftaran): HasilOperasi` | public | Menyimpan akun baru dari email, username, `passwordHash`, peran, dan nama tampilan. Menolak email atau username yang sudah dipakai (UC-01 Skenario Alternatif 1). Lihat Algo-001. |
+| `cariBerdasarkanEmail(email: String): AkunPengguna?` | public | Mengambil akun berdasarkan email untuk proses login. Mengembalikan `null` jika tidak ada. |
+| `cocokkanPassword(password: String): Boolean` | public | Memeriksa kata sandi terhadap `passwordHash` tanpa mengeluarkan nilai hash dari objek. |
+| `getProfil(): Data` | public | Mengembalikan `idAkun`, `username`, `namaTampilan`, dan `peran`. Dipakai `HalamanUtama` dan `FeedbackController`. Tidak memuat email dan `passwordHash`. |
+| `getDetailAkun(): Data` | public | Mengembalikan profil beserta email untuk halaman akun milik pengguna sendiri. Tidak memuat `passwordHash`. |
+| `verifikasiHakAkses(aksi: String): Boolean` | public | Memeriksa apakah peran akun boleh menjalankan aksi tertentu (KF02). Lihat Algo-002. |
+ 
+Tabel 5.1.2. Atribut Kelas AkunPengguna
+ 
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idAkun` | private | Integer |
+| `email` | private | String |
+| `username` | private | String |
+| `passwordHash` | private | String |
+| `peran` | private | String (`PELAJAR`, `PENGAJAR`, atau `TIM_MATERI`) |
+| `namaTampilan` | private | String |
+ 
 ### 5.1.1 Algoritma/Query
-
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai _pseudocode_. Implementasi _skeleton code_ juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** _[Nama kelas]_  
-**Nama Operasi:** _[Signature operasi]_  
-**ID Algoritma:** _[Algo-001]_
-
+ 
+**Nama Kelas:** AkunPengguna  
+**Nama Operasi:** `buatAkunBaru(data: DataPendaftaran): HasilOperasi`  
+**ID Algoritma:** Algo-001
+ 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+FUNCTION buatAkunBaru(data: DataPendaftaran): HasilOperasi
+  // data.passwordHash sudah di-hash oleh OtentikasiController.hashPassword()
+  email ← huruf kecil(trim(data.email))
+  jumlah ← jalankan Q-001.1
+  IF jumlah > 0 THEN
+    RETURN HasilOperasi.gagal("AKUN_SUDAH_ADA", "Email atau username sudah digunakan")
+ 
+  TRY
+    idBaru ← jalankan Q-001.2
+  CATCH pelanggaran indeks unik          // dua pendaftaran bersamaan dengan data sama
+    RETURN HasilOperasi.gagal("AKUN_SUDAH_ADA", "Email atau username sudah digunakan")
+ 
+  this.idAkun ← idBaru
+  this.email ← email;  this.username ← data.username
+  this.passwordHash ← data.passwordHash;  this.peran ← data.peran
+  this.namaTampilan ← data.namaTampilan ?? data.username
+  RETURN HasilOperasi.sukses(idAkun = idBaru)
 ```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut.
-
-Tabel 5.1.1. Query Operasi [Nama Operasi]
-
-| No Query  | Query              | Keterangan       |
-| :-------- | :----------------- | :--------------- |
-| _[Q-001]_ | _[Tuliskan query]_ | _[Fungsi query]_ |
-| _..._     | _..._              | _..._            |
-
+ 
+Tabel 5.1.3. Query Operasi buatAkunBaru
+ 
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-001.1 | `SELECT COUNT(*) FROM akun_pengguna WHERE email = :email OR username = :username;` | Mencegah email atau username ganda sebelum menyimpan. |
+| Q-001.2 | `INSERT INTO akun_pengguna (email, username, password_hash, peran, nama_tampilan, created_at) VALUES (:email, :username, :password_hash, :peran, :nama_tampilan, NOW());` | Menyimpan akun baru. Kolom `email` dan `username` diberi indeks `UNIQUE` sebagai pengaman terakhir. |
+ 
 ### 5.1.2 Algoritma/Query
-
-_[Ulangi pola 5.1.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]_
-
+ 
+**Nama Kelas:** AkunPengguna  
+**Nama Operasi:** `verifikasiHakAkses(aksi: String): Boolean`  
+**ID Algoritma:** Algo-002
+ 
+Hak akses diturunkan dari aktor setiap use case pada SKPL. Satu tabel ini juga dipakai `HalamanUtama` untuk menentukan menu yang tampil.
+ 
+```text
+FUNCTION verifikasiHakAkses(aksi: String): Boolean
+  HAK ← {
+    PELAJAR:    {MEMPELAJARI_MATERI, MENGERJAKAN_LATIHAN, MELIHAT_PROGRES,
+                 MENGIKUTI_KELAS, KIRIM_FEEDBACK},                       // UC-02–UC-05, UC-09
+    PENGAJAR:   {KELOLA_KELAS, PANTAU_PROGRES, KIRIM_FEEDBACK},           // UC-07–UC-09
+    TIM_MATERI: {KELOLA_MATERI}                                          // UC-06
+  }
+  IF this.idAkun = null OR this.peran NOT IN HAK THEN
+    RETURN false
+  RETURN huruf besar(aksi) IN HAK[this.peran]
+```
+ 
+### 5.1.3 Algoritma/Query
+ 
+**Nama Kelas:** AkunPengguna  
+**Nama Operasi:** `cariBerdasarkanEmail(email: String): AkunPengguna?`
+ 
+Tabel 5.1.4. Query Operasi cariBerdasarkanEmail
+ 
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-002 | `SELECT id_akun, email, username, password_hash, peran, nama_tampilan FROM akun_pengguna WHERE email = :email LIMIT 1;` | Mengambil akun untuk proses login. Email dibandingkan dalam huruf kecil. |
+ 
 ## 5.2 Kelas MateriAksara
 
 **Nama Kelas:** MateriAksara  
