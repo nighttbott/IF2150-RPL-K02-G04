@@ -1166,6 +1166,18 @@ Tabel 5.3.10. Query Operasi ambilRiwayatPelajar
 | :--- | :--- | :--- |
 | Q-014 | `SELECT id_pelajar, id_materi, mode, skor, status, tanggal_pengerjaan FROM riwayat_latihan WHERE id_pelajar IN (:daftar_id_pelajar) ORDER BY tanggal_pengerjaan DESC;` | Riwayat banyak Pelajar sekaligus untuk pemantauan kelas. |
 
+### 5.3.9 Algoritma/Query: hitungPolaKesalahan
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `hitungPolaKesalahan(daftarIdPelajar: List<Integer>): Data`
+
+Tabel 5.3.11. Query Operasi hitungPolaKesalahan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-013 | `SELECT target_soal, COUNT(*) AS jumlah_salah FROM riwayat_latihan WHERE id_pelajar IN (:daftar_id_pelajar) AND status = 'perlu_diulang' GROUP BY target_soal ORDER BY jumlah_salah DESC LIMIT 5;` | Lima aksara yang paling sering salah. |
+
+
 ## 5.4 Kelas DataFeedback
 
 ## 5.5 Kelas HalamanPendaftaran
