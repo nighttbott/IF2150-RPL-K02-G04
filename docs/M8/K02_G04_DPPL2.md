@@ -2594,30 +2594,90 @@ Tabel 5.21.6. Query Operasi arsipkanVersi
 # BAB 6: Perancangan Antarmuka
 
 ## 6.1 Rancangan Antarmuka I-01
-
-Masukkan versi awal prototipe antarmuka, dimana untuk setiap antarmuka/layar, tuliskan spesifikasi rinci objek yang ditampilkan dan reaksi sistem terhadap interaksi pengguna.
-
-**Antarmuka:** _[ID layar]_  
-**Nama Layar:** _[Nama layar]_
-
+ 
+**Antarmuka:** I-01  
+**Nama Layar:** Pendaftaran  
+**Kelas View:** `HalamanPendaftaran`  
+**Use Case:** UC-01
+ 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh-design.png" width="50%">
+<img alt="Rancangan Antarmuka I-01 Pendaftaran" src="./assets/diagram/I-01 Pendaftaran.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 6.1. Rancangan Antarmuka [ID Layar] - [Nama Layar]</i>
+<i>Gambar 6.1. Rancangan Antarmuka I-01 - Pendaftaran</i>
 </p>
-
-Tabel 6.1. Spesifikasi Objek Antarmuka [ID Layar]
-
-| Id_Objek     | Jenis                                          | Konten                            | Keterangan                                                                 |
-| :----------- | :--------------------------------------------- | :-------------------------------- | :------------------------------------------------------------------------- |
-| _[ID objek]_ | _[Jenis objek, misalnya Button, RTF Box, dll]_ | _[String yang tampil pada layar]_ | _[Reaksi sistem, layar tujuan, tautan, atau ID algoritma yang dijalankan]_ |
-| _[ID objek]_ | _[Jenis objek]_                                | _[Konten yang ditampilkan]_       | _[Reaksi sistem atau nama file terkait beserta deskripsi ringkasnya]_      |
-| _..._        | _..._                                          | _..._                             | _..._                                                                      |
-
+Tabel 6.1. Spesifikasi Objek Antarmuka I-01
+ 
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-01-01 | Card (header halaman) | "Daftar Akun Ngaksara" dan deskripsi singkat | Judul halaman; tidak interaktif. |
+| I-01-02 | Button (pilihan) | "Pelajar" | Memilih peran `PELAJAR` (`tampilkanOpsiPeran`, KF01). |
+| I-01-03 | Button (pilihan) | "Pengajar" | Memilih peran `PENGAJAR` (KF01). Akun Tim Materi tidak dapat didaftarkan dari layar ini. |
+| I-01-04 | Text Input | Label "Email" | Wajib; format email diperiksa di server (Algo-009). |
+| I-01-05 | Text Input | Label "Username" | Wajib, 3–30 karakter huruf, angka, atau garis bawah (Algo-009). |
+| I-01-06 | Text Input | Label "Nama tampilan" | Opsional; jika kosong, username dipakai sebagai nama tampilan (Algo-001). |
+| I-01-07 | Password Input | Label "Kata sandi" | Wajib, minimal 8 karakter dengan huruf dan angka (Algo-009). Dikosongkan setiap kali pengiriman selesai. |
+| I-01-08 | Password Input | Label "Konfirmasi kata sandi" | Harus sama dengan I-01-07 (Algo-009). |
+| I-01-09 | Link | "Baca Terms & Conditions" | Membuka dokumen T&C (`tampilkanTnC`, KF06). |
+| I-01-10 | Checkbox | "Saya telah membaca dan menyetujui Terms & Conditions" | Mengubah `statusPersetujuan`. Pendaftaran ditolak bila belum dicentang (KF07). |
+| I-01-11 | Button (utama) | "Daftar" | Menjalankan `kirimPendaftaran` (Algo-005 → Algo-009 → Algo-011 → Algo-001). Nonaktif selama permintaan diproses. |
+| I-01-12 | Teks galat (per isian) | Misalnya "Format email tidak valid" | Tampil di bawah isian yang tidak valid (UC-01 Skenario Alternatif 1; Algo-009). |
+| I-01-13 | Alert (galat) | "Email atau username sudah digunakan." | Tampil bila akun ganda ditolak (UC-01 Skenario Alternatif 1; Algo-001). |
+| I-01-14 | Link | "Sudah punya akun? Masuk" | Membuka I-02 Login. |
+ 
 ## 6.2 Rancangan Antarmuka I-02
-
+ 
+**Antarmuka:** I-02  
+**Nama Layar:** Login  
+**Kelas View:** `HalamanLogin`  
+**Use Case:** UC-01
+ 
+<p align="center">
+<img alt="Rancangan Antarmuka I-02 Login" src="./assets/diagram/I-02 Login.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.2. Rancangan Antarmuka I-02 - Login</i>
+</p>
+Tabel 6.2. Spesifikasi Objek Antarmuka I-02
+ 
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-02-01 | Card (header halaman) | "Masuk ke Ngaksara" | Judul halaman; tidak interaktif. |
+| I-02-02 | Alert (sukses) | "Akun berhasil dibuat. Silakan masuk." | Tampil hanya setelah pendaftaran berhasil dari I-01 (Algo-005). |
+| I-02-03 | Text Input | Label "Email" | Wajib. Isian tetap terisi bila login gagal (`emailInput`, Algo-006). |
+| I-02-04 | Password Input | Label "Kata sandi" | Wajib. Dikosongkan setelah setiap percobaan (Algo-006). |
+| I-02-05 | Button (utama) | "Masuk" | Menjalankan `kirimKredensial` (Algo-006 → Algo-012). Bila berhasil, membuka I-03 sesuai peran akun. |
+| I-02-06 | Alert (galat) | "Email atau kata sandi salah." | Pesan umum tanpa menyebut isian mana yang salah (`tampilkanStatusLogin`, Algo-012). |
+| I-02-07 | Alert (peringatan) | "Terlalu banyak percobaan. Coba lagi dalam N detik." | Tampil setelah 5 percobaan gagal dalam satu menit; tombol I-02-05 nonaktif sampai waktu tunggu habis (Algo-012). |
+| I-02-08 | Link | "Belum punya akun? Daftar" | Membuka I-01 Pendaftaran. |
+ 
 ## 6.3 Rancangan Antarmuka I-03
+ 
+**Antarmuka:** I-03  
+**Nama Layar:** Halaman Utama  
+**Kelas View:** `HalamanUtama`  
+**Use Case:** UC-02–UC-09 (navigasi)
+ 
+<p align="center">
+<img alt="Rancangan Antarmuka I-03 Halaman Utama" src="./assets/diagram/I-03 Halaman Utama.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.3. Rancangan Antarmuka I-03 - Halaman Utama</i>
+</p>
+Tabel 6.3. Spesifikasi Objek Antarmuka I-03
+ 
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-03-01 | Header | Logo Ngaksara dan nama tampilan pengguna | Nama diambil dari `profil` (`AkunPengguna.getProfil()`). |
+| I-03-02 | Sidebar (menu) | Daftar menu sesuai peran | Diisi oleh `tampilkanMenu(peran)` (Algo-007). Menu yang tidak sesuai peran tidak ditampilkan. |
+| I-03-03 | Menu item | "Materi" | Pelajar. Membuka I-04 Daftar Materi (UC-02); menjadi halaman awal Pelajar (KF09). |
+| I-03-04 | Menu item | "Latihan" | Pelajar. Membuka `HalamanLatihan` (UC-03). |
+| I-03-05 | Menu item | "Progres" | Pelajar. Membuka I-11 Progres Pelajar (UC-04). |
+| I-03-06 | Menu item | "Kelas" | Pelajar. Membuka `HalamanKelasPelajar` (UC-05). |
+| I-03-07 | Menu item | "Kelola Kelas" | Pengajar. Membuka `HalamanKelolaKelas` (UC-07, UC-08); menjadi halaman awal Pengajar. |
+| I-03-08 | Menu item | "Kelola Materi" | Tim Materi. Membuka I-18 Kelola Materi (UC-06); menjadi halaman awal Tim Materi. |
+| I-03-09 | Menu item | "Feedback" | Pelajar dan Pengajar. Membuka I-20 Feedback (UC-09). |
+| I-03-10 | Area konten | Halaman tujuan menu aktif | Diisi oleh `pilihMenu(kode)` (Algo-007). Butir menu yang sedang dibuka ditandai aktif. |
 
 ## 6.4 Rancangan Antarmuka I-04
 
