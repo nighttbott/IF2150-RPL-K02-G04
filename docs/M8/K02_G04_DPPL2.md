@@ -4688,7 +4688,7 @@ Tabel 6.11. Spesifikasi Objek Antarmuka I-11
 **Nama Layar:** Kelas Saya & Daftar Tugas  
 
 <p align="center">
-<img alt="Rancangan Antarmuka I-12 - Kelas Saya & Daftar Tugas" src="./assets/diagram/I-12-Tags.png" width="100%">
+<img alt="Rancangan Antarmuka I-12 - Kelas Saya & Daftar Tugas" src="./assets/ui/I-12-Tags.png" width="100%">
 </p>
 <p align="center"><i>Gambar 54. Rancangan Antarmuka I-12 - Kelas Saya & Daftar Tugas</i></p>
 
@@ -4709,7 +4709,7 @@ Tabel 6.12. Spesifikasi Objek Antarmuka I-12
 **Nama Layar:** Pengerjaan Tugas  
 
 <p align="center">
-<img alt="Rancangan Antarmuka I-13 - Pengerjaan Tugas" src="./assets/diagram/I-13-Tags.png" width="100%">
+<img alt="Rancangan Antarmuka I-13 - Pengerjaan Tugas" src="./assets/ui/I-13-Tags.png" width="100%">
 </p>
 <p align="center"><i>Gambar 55. Rancangan Antarmuka I-13 - Pengerjaan Tugas</i></p>
 
@@ -4927,8 +4927,8 @@ Tabel 6.21. Rancangan Antarmuka Keseluruhan
 | I-09 Latihan Merangkai Aksara | <img src="./assets/ui/I-09 Merangkai.png" alt="I-09 Latihan Merangkai Aksara" width="400"> |
 | I-10 Hasil Latihan | <img src="./assets/ui/I-10 Hasil Latihan.png" alt="I-10 Hasil Latihan" width="400"> |
 | I-11 Progres Pelajar | <img src="./assets/diagram/I-11 Progres Pelajar.png" alt="I-11 Progres Pelajar" width="400"> |
-| I-12 Kelas Saya & Daftar Tugas | <img src="./assets/diagram/I-12-Polos.png" alt="I-12 Kelas Saya & Daftar Tugas" width="400"> |
-| I-13 Pengerjaan Tugas | <img src="./assets/diagram/I-13-Polos.png" alt="I-13 Pengerjaan Tugas" width="400"> |
+| I-12 Kelas Saya & Daftar Tugas | <img src="./assets/ui/I-12-Polos.png" alt="I-12 Kelas Saya & Daftar Tugas" width="400"> |
+| I-13 Pengerjaan Tugas | <img src="./assets/ui/I-13-Polos.png" alt="I-13 Pengerjaan Tugas" width="400"> |
 | I-14 Kelola Kelas| <img src="./assets/diagram/I-14.png" alt="I-11 Progres Pelajar" width="400"> |
 | I-15 Terbitkan Tugas| <img src="./assets/diagram/I-15.png" alt="I-11 Progres Pelajar" width="400"> |
 | I-16 Kelola Anggota dan Papan Peringkat| <img src="./assets/diagram/I-16.png" alt="I-11 Progres Pelajar" width="400"> |
