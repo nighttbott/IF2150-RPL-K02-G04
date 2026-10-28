@@ -1052,14 +1052,14 @@ Tabel 5.3.1. Operasi Kelas RiwayatLatihan
 | :--- | :--- | :--- |
 | `simpanHasil(hasil: HasilLatihan): HasilOperasi` | public | Menyimpan hasil satu latihan beserta skor dan status (berhasil atau perlu diulang). |
 | `catatAktivitas(aktivitas: AktivitasBelajar): HasilOperasi` | public | Mencatat aktivitas belajar selain latihan, misalnya komponen tugas kelas yang diselesaikan (KF14). |
-| `cekPernahSelesai(idPelajar: Integer, targetSoal: String, mode: ModeLatihan): Boolean` | public | Memeriksa apakah soal yang sama sudah pernah diselesaikan, agar poin tidak diberikan dua kali. |
 | `ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>` | public | Mengambil riwayat milik satu Pelajar pada periode tertentu. |
-| `ambilRiwayatMateri(idPelajar: Integer, idMateri: Integer): List<RiwayatLatihan>` | public | Mengambil seluruh riwayat Pelajar pada satu materi untuk halaman detail hasil. |
 | `ambilBuktiPenyelesaian(idPelajar: Integer, idTugas: Integer): BuktiPenyelesaian` | public | Mengambil catatan komponen tugas yang sudah diselesaikan Pelajar. |
-| `ambilStatusProgres(idPelajar: Integer, daftarIdMateri: List<Integer>): Data` | public | Mengembalikan status belajar (belum, sedang, selesai) untuk setiap materi pada daftar. |
+| `ambilStatusProgres(idPelajar: Integer): Data` | public | Mengembalikan status belajar (belum, sedang, selesai) untuk setiap materi pada daftar. |
 | `hitungPenguasaan(idPelajar: Integer): Data` | public | Menghitung tingkat penguasaan per materi dari riwayat. Nilai ini dihitung, tidak disimpan. |
-| `ambilRiwayatPelajar(daftarIdPelajar: List<Integer>): List<RiwayatLatihan>` | public | Mengambil riwayat sejumlah Pelajar sekaligus untuk pemantauan kelas. |
-| `hitungPolaKesalahan(daftarIdPelajar: List<Integer>): Data` | public | Menghitung aksara yang paling sering salah pada sekelompok Pelajar. |
+| `ambilRiwayatPelajar(idPelajar: Integer): List<RiwayatLatihan>` | public | Mengambil riwayat sejumlah Pelajar sekaligus untuk pemantauan kelas. |
+| `hitungPolaKesalahan(idPelajar: Integer): Data` | public | Menghitung aksara yang paling sering salah pada sekelompok Pelajar. |
+| `cekPernahSelesai(idPelajar: Integer, targetSoal: String, mode: ModeLatihan): Boolean` | public | Memeriksa apakah soal yang sama sudah pernah diselesaikan, agar poin tidak diberikan dua kali. |
+| `ambilRiwayatMateri(idPelajar: Integer, idMateri: Integer): List<RiwayatLatihan>` | public | Mengambil seluruh riwayat Pelajar pada satu materi untuk halaman detail hasil. |
 
 Tabel 5.3.2. Atribut Kelas RiwayatLatihan
 
@@ -1068,7 +1068,6 @@ Tabel 5.3.2. Atribut Kelas RiwayatLatihan
 | `idRiwayat` | private | `Integer` |
 | `idPelajar` | private | `Integer` |
 | `idMateri` | private | `Integer` |
-| `targetSoal` | private | `String?` |
 | `mode` | private | `ModeLatihan?` |
 | `skor` | private | `Decimal?` |
 | `tanggalPengerjaan` | private | `DateTime` |
@@ -1077,6 +1076,7 @@ Tabel 5.3.2. Atribut Kelas RiwayatLatihan
 | `idKomponen` | private | `Integer?` |
 | `modeAktivitas` | private | `String` |
 | `waktuSelesai` | private | `DateTime?` |
+| `targetSoal` | private | `String?` |
 
 ### 5.3.1 Algoritma/Query: simpanHasil
 
@@ -1100,82 +1100,82 @@ Tabel 5.3.4. Query Operasi catatAktivitas
 | :--- | :--- | :--- |
 | Q-016 | `INSERT INTO riwayat_latihan (id_pelajar, id_materi, tanggal_pengerjaan, status,   id_tugas, id_komponen, mode_aktivitas, waktu_selesai) VALUES (:id_pelajar, :id_materi, NOW(), :status, :id_tugas, :id_komponen, :mode_aktivitas, :waktu_selesai);` | Mencatat aktivitas belajar selain latihan. |
 
-### 5.3.3 Algoritma/Query: cekPernahSelesai
-
-**Nama Kelas:** RiwayatLatihan  
-**Nama Operasi:** `cekPernahSelesai(idPelajar: Integer, targetSoal: String, mode: ModeLatihan): Boolean`
-
-Tabel 5.3.5. Query Operasi cekPernahSelesai
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| Q-009 | `SELECT COUNT(*) FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND target_soal = :target_soal   AND mode = :mode AND status = 'berhasil';` | Hasil lebih dari 0 berarti soal sudah pernah diselesaikan. |
-
-### 5.3.4 Algoritma/Query: ambilRiwayat
+### 5.3.3 Algoritma/Query: ambilRiwayat
 
 **Nama Kelas:** RiwayatLatihan  
 **Nama Operasi:** `ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>`
 
-Tabel 5.3.6. Query Operasi ambilRiwayat
+Tabel 5.3.5. Query Operasi ambilRiwayat
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-011 | `SELECT id_riwayat, id_materi, mode, skor, status, tanggal_pengerjaan FROM riwayat_latihan WHERE id_pelajar = :id_pelajar   AND tanggal_pengerjaan BETWEEN :mulai AND :selesai ORDER BY tanggal_pengerjaan DESC;` | Riwayat Pelajar pada periode terpilih. |
 
-### 5.3.5 Algoritma/Query: ambilBuktiPenyelesaian
+### 5.3.4 Algoritma/Query: ambilBuktiPenyelesaian
 
 **Nama Kelas:** RiwayatLatihan  
 **Nama Operasi:** `ambilBuktiPenyelesaian(idPelajar: Integer, idTugas: Integer): BuktiPenyelesaian`
 
-Tabel 5.3.7. Query Operasi ambilBuktiPenyelesaian
+Tabel 5.3.6. Query Operasi ambilBuktiPenyelesaian
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-015 | `SELECT id_komponen, waktu_selesai FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND id_tugas = :id_tugas AND id_komponen IS NOT NULL;` | Komponen tugas yang sudah diselesaikan Pelajar. |
 
-### 5.3.6 Algoritma/Query: ambilStatusProgres
+### 5.3.5 Algoritma/Query: ambilStatusProgres
 
 **Nama Kelas:** RiwayatLatihan  
-**Nama Operasi:** `ambilStatusProgres(idPelajar: Integer, daftarIdMateri: List<Integer>): Data`
+**Nama Operasi:** `ambilStatusProgres(idPelajar: Integer): Data`
 
-Tabel 5.3.8. Query Operasi ambilStatusProgres
+Tabel 5.3.7. Query Operasi ambilStatusProgres
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-012 | `SELECT id_materi, SUM(status = 'berhasil') AS jumlah_berhasil, COUNT(*) AS jumlah_percobaan FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND id_materi IN (:daftar_id_materi) GROUP BY id_materi;` | Materi tanpa baris berstatus belum, jumlah_berhasil 0 berstatus sedang, selebihnya selesai. |
 
-### 5.3.7 Algoritma/Query: hitungPenguasaan
+### 5.3.6 Algoritma/Query: hitungPenguasaan
 
 **Nama Kelas:** RiwayatLatihan  
 **Nama Operasi:** `hitungPenguasaan(idPelajar: Integer): Data`
 
-Tabel 5.3.9. Query Operasi hitungPenguasaan
+Tabel 5.3.8. Query Operasi hitungPenguasaan
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-010 | `SELECT id_materi, ROUND(AVG(skor), 2) AS penguasaan FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND skor IS NOT NULL GROUP BY id_materi;` | Penguasaan per materi sebagai rata-rata skor. Dihitung setiap kali, tidak disimpan. |
 
-### 5.3.8 Algoritma/Query: ambilRiwayatPelajar
+### 5.3.7 Algoritma/Query: ambilRiwayatPelajar
 
 **Nama Kelas:** RiwayatLatihan  
-**Nama Operasi:** `ambilRiwayatPelajar(daftarIdPelajar: List<Integer>): List<RiwayatLatihan>`
+**Nama Operasi:** `ambilRiwayatPelajar(idPelajar: Integer): List<RiwayatLatihan>`
 
-Tabel 5.3.10. Query Operasi ambilRiwayatPelajar
+Tabel 5.3.9. Query Operasi ambilRiwayatPelajar
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-014 | `SELECT id_pelajar, id_materi, mode, skor, status, tanggal_pengerjaan FROM riwayat_latihan WHERE id_pelajar IN (:daftar_id_pelajar) ORDER BY tanggal_pengerjaan DESC;` | Riwayat banyak Pelajar sekaligus untuk pemantauan kelas. |
+| Q-014 | `SELECT id_pelajar, id_materi, mode, skor, status, tanggal_pengerjaan FROM riwayat_latihan WHERE id_pelajar = :id_pelajar ORDER BY tanggal_pengerjaan DESC;` | Riwayat satu Pelajar. Dipanggil untuk setiap anggota aktif pada pemantauan kelas. |
 
-### 5.3.9 Algoritma/Query: hitungPolaKesalahan
+### 5.3.8 Algoritma/Query: hitungPolaKesalahan
 
 **Nama Kelas:** RiwayatLatihan  
-**Nama Operasi:** `hitungPolaKesalahan(daftarIdPelajar: List<Integer>): Data`
+**Nama Operasi:** `hitungPolaKesalahan(idPelajar: Integer): Data`
 
-Tabel 5.3.11. Query Operasi hitungPolaKesalahan
+Tabel 5.3.10. Query Operasi hitungPolaKesalahan
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-013 | `SELECT target_soal, COUNT(*) AS jumlah_salah FROM riwayat_latihan WHERE id_pelajar IN (:daftar_id_pelajar) AND status = 'perlu_diulang' GROUP BY target_soal ORDER BY jumlah_salah DESC LIMIT 5;` | Lima aksara yang paling sering salah. |
+| Q-013 | `SELECT target_soal, COUNT(*) AS jumlah_salah FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND status = 'perlu_diulang' GROUP BY target_soal ORDER BY jumlah_salah DESC LIMIT 5;` | Lima aksara yang paling sering salah pada satu Pelajar. |
+
+### 5.3.9 Algoritma/Query: cekPernahSelesai
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `cekPernahSelesai(idPelajar: Integer, targetSoal: String, mode: ModeLatihan): Boolean`
+
+Tabel 5.3.11. Query Operasi cekPernahSelesai
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-009 | `SELECT COUNT(*) FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND target_soal = :target_soal   AND mode = :mode AND status = 'berhasil';` | Hasil lebih dari 0 berarti soal sudah pernah diselesaikan. |
 
 
 ## 5.4 Kelas DataFeedback
@@ -1413,9 +1413,10 @@ Tabel 5.14.1. Operasi Kelas HalamanProgres
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| `bukaHalamanProgres(): void` | public | Meminta ringkasan progres Pelajar. |
-| `pilihPeriode(periode: Periode): void` | public | Mengubah periode riwayat yang ditampilkan. |
 | `tampilkanProgres(data: RingkasanProgres): void` | public | Menampilkan penguasaan per materi dan riwayat. |
+| `pilihPeriode(periode: Periode): void` | public | Mengubah periode riwayat yang ditampilkan. |
+| `tampilkanScoreboard(data: List<Peringkat>): void` | public | Menampilkan papan peringkat bila diaktifkan Pengajar. |
+| `bukaHalamanProgres(): void` | public | Meminta ringkasan progres Pelajar. |
 | `tampilkanKeadaanKosong(data: List<MetadataMateri>): void` | public | Menampilkan keadaan belum ada riwayat beserta materi awal yang disarankan. |
 | `pilihMateriRiwayat(idMateri: Integer): void` | public | Meminta detail hasil pada satu materi. |
 | `tampilkanDetailHasil(data: List<RiwayatLatihan>): void` | public | Menampilkan hasil latihan pada materi terpilih. |
@@ -1424,7 +1425,6 @@ Tabel 5.14.1. Operasi Kelas HalamanProgres
 | `lihatIndikatorMotivasi(): void` | public | Meminta data streak, poin, dan badge. |
 | `tampilkanMotivasi(data: Data): void` | public | Menampilkan streak, poin, dan badge. |
 | `bukaPapanPeringkat(idKelas: Integer): void` | public | Meminta papan peringkat kelas. |
-| `tampilkanScoreboard(data: List<Peringkat>): void` | public | Menampilkan papan peringkat bila diaktifkan Pengajar. |
 
 Tabel 5.14.2. Atribut Kelas HalamanProgres
 
@@ -1841,12 +1841,12 @@ Tabel 5.19.1. Operasi Kelas ProgresController
 | :--- | :--- | :--- |
 | `ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>` | public | Mengambil riwayat Pelajar pada periode tertentu. |
 | `hitungProgres(idPelajar: Integer): RingkasanProgres` | public | Menghitung penguasaan per materi dan ringkasan riwayat. |
-| `ambilDetailHasil(idPelajar: Integer, idMateri: Integer): List<RiwayatLatihan>` | public | Mengambil hasil latihan Pelajar pada satu materi. |
 | `siapkanRekomendasi(idPelajar: Integer): List<MetadataMateri>` | public | Menyusun materi rekomendasi dari penguasaan terendah. |
-| `ambilIndikatorMotivasi(idPelajar: Integer): Data` | public | Mengambil streak, poin, dan badge dari MotivasiBelajar. |
 | `ambilScoreboard(idKelas: Integer): HasilScoreboard` | public | Menyusun papan peringkat bila Pengajar mengaktifkannya. |
 | `agregasiProgres(anggotaAktif: List<Integer>, periode: Periode): RingkasanProgres` | public | Menggabungkan progres seluruh anggota aktif kelas. |
 | `hitungPolaKesalahan(idPelajar: Integer): Data` | public | Menghitung pola kesalahan satu Pelajar. |
+| `ambilDetailHasil(idPelajar: Integer, idMateri: Integer): List<RiwayatLatihan>` | public | Mengambil hasil latihan Pelajar pada satu materi. |
+| `ambilIndikatorMotivasi(idPelajar: Integer): Data` | public | Mengambil streak, poin, dan badge dari MotivasiBelajar. |
 
 Tabel 5.19.2. Atribut Kelas ProgresController
 
@@ -1858,9 +1858,9 @@ Tabel 5.19.2. Atribut Kelas ProgresController
 
 **Nama Kelas:** ProgresController  
 **Nama Operasi:** `hitungProgres(idPelajar: Integer): RingkasanProgres`  
-**ID Algoritma:** Algo-013
+**ID Algoritma:** Algo-100
 
-**Algo-013.** Alasan: penguasaan dihitung dari riwayat setiap kali dibutuhkan, tidak disimpan (lihat keputusan data pada subbab 5.27).
+**Algo-100.** Alasan: penguasaan dihitung dari riwayat setiap kali dibutuhkan, tidak disimpan (lihat keputusan data pada subbab 5.27).
 
 ```text
 penguasaan <- RiwayatLatihan.hitungPenguasaan(idPelajar)       // Q-010
@@ -1872,9 +1872,9 @@ kembalikan RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), polaKes
 
 **Nama Kelas:** ProgresController  
 **Nama Operasi:** `siapkanRekomendasi(idPelajar: Integer): List<MetadataMateri>`  
-**ID Algoritma:** Algo-014
+**ID Algoritma:** Algo-101
 
-**Algo-014.** Alasan: Pelajar yang belum punya riwayat tetap mendapat saran materi awal (UC-04 alternatif 1).
+**Algo-101.** Alasan: Pelajar yang belum punya riwayat tetap mendapat saran materi awal (UC-04 alternatif 1).
 
 ```text
 penguasaan <- RiwayatLatihan.hitungPenguasaan(idPelajar)
@@ -1888,16 +1888,18 @@ kembalikan MateriAksara.ambilMateriRekomendasi(3 materi dengan nilai terendah)
 
 **Nama Kelas:** ProgresController  
 **Nama Operasi:** `agregasiProgres(anggotaAktif: List<Integer>, periode: Periode): RingkasanProgres`  
-**ID Algoritma:** Algo-022
+**ID Algoritma:** Algo-102
 
-**Algo-022.** Alasan: Pengajar melihat ringkasan seluruh anggota aktif, bukan data anggota yang sudah keluar (aturan SKPL nomor 3).
+**Algo-102.** Alasan: Pengajar melihat ringkasan seluruh anggota aktif, bukan data anggota yang sudah keluar (aturan SKPL nomor 3).
 
 ```text
 JIKA anggotaAktif kosong MAKA kembalikan RingkasanProgres kosong
-riwayat <- RiwayatLatihan.ambilRiwayatPelajar(anggotaAktif)    // Q-014
+riwayat <- daftar kosong
+UNTUK SETIAP id DALAM anggotaAktif
+    tambahkan RiwayatLatihan.ambilRiwayatPelajar(id) ke riwayat        // Q-014
 JIKA riwayat kosong MAKA kembalikan RingkasanProgres kosong (halaman menampilkan keadaan kosong)
 penguasaan <- rata-rata skor per materi dari riwayat
-pola <- RiwayatLatihan.hitungPolaKesalahan(anggotaAktif)       // Q-013
+pola <- jumlahkan hasil RiwayatLatihan.hitungPolaKesalahan(id) untuk setiap id, ambil lima terbanyak     // Q-013
 kembalikan RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), pola)
 ```
 
@@ -2148,6 +2150,28 @@ Tabel 6.5. Spesifikasi Objek Antarmuka I-05
 ## 6.10 Rancangan Antarmuka I-10
 
 ## 6.11 Rancangan Antarmuka I-11
+**Antarmuka:** I-11  
+**Nama Layar:** Progres Pelajar  
+**Kelas View:** `HalamanProgres`  
+**Use Case:** UC-04
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-11 - Progres Pelajar" src="./assets/diagram/I-11-progres-pelajar.png" width="100%">
+</p>
+<p align="center"><i>Gambar 53. Rancangan Antarmuka I-11 - Progres Pelajar</i></p>
+
+Tabel 6.11. Spesifikasi Objek Antarmuka I-11
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-11.1 | Drop-down list | Periode riwayat | Menjalankan pilihPeriode(periode). Riwayat diambil dengan ProgresController.ambilRiwayat(idPelajar, periode). |
+| I-11.2 | Diagram batang | Penguasaan per materi | Ditampilkan oleh tampilkanProgres(data) dari ProgresController.hitungProgres() (Algo-100). |
+| I-11.3 | Tabel | Riwayat latihan | Tanggal, materi, mode, skor, dan status dari RiwayatLatihan. |
+| I-11.4 | Kartu | Streak, poin, dan hari aktif pekan ini | Dari MotivasiBelajar.ambilMotivasi(). |
+| I-11.5 | Kartu | Badge | Badge yang sudah diperoleh tampil penuh, yang belum tampil pudar. |
+| I-11.6 | Kartu + button | Rekomendasi materi | Dari ProgresController.siapkanRekomendasi() (Algo-101). Tombol membuka I-05. |
+| I-11.7 | Tabel peringkat | Papan peringkat kelas | Ditampilkan oleh tampilkanScoreboard(data) dari ProgresController.ambilScoreboard(). Hanya tampil bila Pengajar mengaktifkannya (UC-04 alternatif 2). |
+| I-11.8 | Pesan informasi | Belum ada riwayat | Muncul bila riwayat kosong (UC-04 alternatif 1). |
 
 ## 6.12 Rancangan Antarmuka I-12
 
