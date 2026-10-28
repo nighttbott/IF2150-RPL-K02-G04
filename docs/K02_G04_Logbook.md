@@ -156,7 +156,7 @@
 | 25-10-2026 | Natan | M8 5.1 | 1 | Done | - |
 | 25-10-2026 | Abduh | Menyesuaikan daftar perubahan  | 1 | Done | - |
 | 27-10-2026 | Aria | M8 5.2, 5.9, 5.13, 5.17, 5.21 | 2 | Done | - |
-| 28-10-2026 | Aria | M8 I-04, I-05, I-18, I-19 | 2 | Done | - |
+| 28-10-2026 | Aria | M8 I-04, I-05, I-18, I-19, AI-Usage, Form Asistensi | 2 | Done | - |
 | 28-10-2026 | Naufal | M8 5.8, 5.16, 5.22, I-06, I-07, I-08, I09, I10 | 2 | Done | - |
 | 28-10-2026 | Marvel | M8 5.12, 5.20, 5.23, I-14, I-15, I-16 | 2 | Done | - |
 | 28-10-2026 | Abduh | M8 5.11, 5.24, 5.25, 5.26, I-12, I-13 | 2 | Done | - |
