@@ -2501,6 +2501,28 @@ Tabel 6.11. Spesifikasi Objek Antarmuka I-11
 ## 6.16 Rancangan Antarmuka I-16
 
 ## 6.17 Rancangan Antarmuka I-17
+**Antarmuka:** I-17  
+**Nama Layar:** Pantau Progres Anggota  
+**Kelas View:** `HalamanKelolaKelas`  
+**Use Case:** UC-08
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-17 - Pantau Progres Anggota" src="./assets/diagram/I-17-pantau-progres-anggota.png" width="100%">
+</p>
+<p align="center"><i>Gambar 59. Rancangan Antarmuka I-17 - Pantau Progres Anggota</i></p>
+
+Tabel 6.17. Spesifikasi Objek Antarmuka I-17
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-17.1 | Kartu ringkasan | Jumlah anggota aktif, rata-rata penguasaan, tugas terkumpul | Dari ProgresController.agregasiProgres(anggotaAktif, periode) (Algo-102). |
+| I-17.2 | Tabel | Progres tiap anggota aktif | Ditampilkan oleh tampilkanProgres(data). Anggota yang sudah keluar tidak ditampilkan. |
+| I-17.3 | Button | Detail | Menjalankan pilihAnggota(idPelajar), lalu KelasController.ambilProgresAnggota() (KF13). |
+| I-17.4 | Daftar | Aksara yang sering salah | Dari ProgresController.hitungPolaKesalahan(). |
+| I-17.5 | Panel | Detail anggota terpilih | Riwayat latihan anggota terpilih. |
+| I-17.6 | Text area + button | Umpan balik untuk anggota | Menjalankan kirimUmpanBalik(data), lalu KelasController.kirimUmpanBalik(idKelas, data). |
+| I-17.7 | Pesan informasi | Belum ada riwayat | Muncul bila anggota belum berlatih (UC-08 alternatif 1). |
+| I-17.8 | Pesan kesalahan | Bukan anggota aktif | Muncul bila Pengajar membuka progres pengguna yang bukan anggota aktif (UC-08 alternatif 2). |
 
 ## 6.18 Rancangan Antarmuka I-18
 
