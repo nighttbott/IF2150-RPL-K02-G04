@@ -1100,6 +1100,28 @@ Tabel 5.3.4. Query Operasi catatAktivitas
 | :--- | :--- | :--- |
 | Q-016 | `INSERT INTO riwayat_latihan (id_pelajar, id_materi, tanggal_pengerjaan, status,   id_tugas, id_komponen, mode_aktivitas, waktu_selesai) VALUES (:id_pelajar, :id_materi, NOW(), :status, :id_tugas, :id_komponen, :mode_aktivitas, :waktu_selesai);` | Mencatat aktivitas belajar selain latihan. |
 
+### 5.3.3 Algoritma/Query: cekPernahSelesai
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `cekPernahSelesai(idPelajar: Integer, targetSoal: String, mode: ModeLatihan): Boolean`
+
+Tabel 5.3.5. Query Operasi cekPernahSelesai
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-009 | `SELECT COUNT(*) FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND target_soal = :target_soal   AND mode = :mode AND status = 'berhasil';` | Hasil lebih dari 0 berarti soal sudah pernah diselesaikan. |
+
+### 5.3.4 Algoritma/Query: ambilRiwayat
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>`
+
+Tabel 5.3.6. Query Operasi ambilRiwayat
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-011 | `SELECT id_riwayat, id_materi, mode, skor, status, tanggal_pengerjaan FROM riwayat_latihan WHERE id_pelajar = :id_pelajar   AND tanggal_pengerjaan BETWEEN :mulai AND :selesai ORDER BY tanggal_pengerjaan DESC;` | Riwayat Pelajar pada periode terpilih. |
+
 ## 5.4 Kelas DataFeedback
 
 ## 5.5 Kelas HalamanPendaftaran
