@@ -1,7 +1,7 @@
 <h1>
 IF2150 REKAYASA PERANGKAT LUNAK
 <br>
-TUGAS 5
+TUGAS 8
 <br>
 DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 </h1>
@@ -10,7 +10,7 @@ DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 ## Ngaksara
 
 <p align="center">
-<img alt="Penerapan Arsitektur MVC pada Ngaksara" src="./assets/diagram/LOGO.png" width="40%">
+<img alt="Logo Ngaksara" src="./assets/diagram/LOGO.png" width="40%">
 </p>
 
 ### Untuk: Amanda Aurellia Salsabilla
