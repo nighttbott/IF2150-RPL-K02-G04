@@ -4911,9 +4911,9 @@ Tabel 6.21. Rancangan Antarmuka Keseluruhan
 | I-11 Progres Pelajar | <img src="./assets/diagram/I-11 Progres Pelajar.png" alt="I-11 Progres Pelajar" width="400"> |
 | I-12 Kelas Saya & Daftar Tugas | <img src="./assets/ui/I-12-Polos.png" alt="I-12 Kelas Saya & Daftar Tugas" width="400"> |
 | I-13 Pengerjaan Tugas | <img src="./assets/ui/I-13-Polos.png" alt="I-13 Pengerjaan Tugas" width="400"> |
-| I-14 Kelola Kelas| <img src="./assets/diagram/I14.png" alt="I-11 Progres Pelajar" width="400"> |
-| I-15 Terbitkan Tugas| <img src="./assets/diagram/I15.png" alt="I-11 Progres Pelajar" width="400"> |
-| I-16 Kelola Anggota dan Papan Peringkat| <img src="./assets/diagram/I16.png" alt="I-11 Progres Pelajar" width="400"> |
+| I-14 Kelola Kelas| <img src="./assets/ui/I14.png" alt="I-11 Progres Pelajar" width="400"> |
+| I-15 Terbitkan Tugas| <img src="./assets/ui/I15.png" alt="I-11 Progres Pelajar" width="400"> |
+| I-16 Kelola Anggota dan Papan Peringkat| <img src="./assets/ui/I16.png" alt="I-11 Progres Pelajar" width="400"> |
 |I-17 Pantau Progres Anggota | <img src="./assets/diagram/I-17 Pantau Progres Anggota.png" alt="I-17 Pantau Progres Anggota" width="400">|
 | I-18 Kelola Materi | <img src="./assets/diagram/I-18 Kelola Materi.png" alt="Contoh Desain" width="400"> |
 | I-19 Unggah Materi | <img src="./assets/diagram/I-19 Unggah Materi.png" alt="Contoh Desain" width="400"> |
