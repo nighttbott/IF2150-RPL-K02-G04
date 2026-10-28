@@ -794,7 +794,7 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 
 # BAB 5: Perancangan Rinci Kelas
 
-Bagian ini diisi dengan daftar seluruh kelas dalam tabel berikut:
+Tabel 5.1 memuat daftar seluruh kelas perancangan beserta kelas analisis terkait. Subbab berikutnya menjabarkan operasi, atribut, serta algoritma dan query yang penting untuk setiap kelas.
 
 Tabel 5.1. Daftar Kelas Perancangan dan Kelas Analisis Terkait
 
@@ -826,8 +826,6 @@ Tabel 5.1. Daftar Kelas Perancangan dan Kelas Analisis Terkait
 | 24  | `KeanggotaanKelas` (C24)     | KeanggotaanKelas (C24)      |
 | 25  | `TugasKelas` (C25)           | TugasKelas (C25)            |
 | 26  | `PenyelesaianTugas` (C26)    | PenyelesaianTugas (C26)     |
-
-Untuk **setiap kelas**, identifikasi operasi berdasarkan tanggung jawab kelas beserta _visibility_-nya, serta atribut beserta _visibility_ dan tipenya. Buat subbab tersendiri untuk setiap kelas.
 
 ## 5.1 Kelas AkunPengguna
 
@@ -869,9 +867,11 @@ Tabel 5.1.2. Atribut Kelas AkunPengguna
 FUNCTION buatAkunBaru(data: DataPendaftaran): HasilOperasi
   // data.passwordHash sudah di-hash oleh OtentikasiController.hashPassword()
   email ← huruf kecil(trim(data.email))
-  jumlah ← jalankan Q-001.1
-  IF jumlah > 0 THEN
-    RETURN HasilOperasi.gagal("AKUN_SUDAH_ADA", "Email atau username sudah digunakan")
+  cek ← jalankan Q-001.1
+  IF cek.email_dipakai > 0 THEN
+    RETURN HasilOperasi.gagal("EMAIL_TERDAFTAR", "Email sudah terdaftar")
+  IF cek.username_dipakai > 0 THEN
+    RETURN HasilOperasi.gagal("USERNAME_TERPAKAI", "Username sudah digunakan")
 
   TRY
     idBaru ← jalankan Q-001.2
@@ -889,7 +889,7 @@ Tabel 5.1.3. Query Operasi buatAkunBaru
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-001.1 | `SELECT COUNT(*) FROM akun_pengguna WHERE email = :email OR username = :username;` | Mencegah email atau username ganda sebelum menyimpan. |
+| Q-001.1 | `SELECT COALESCE(SUM(email = :email), 0) AS email_dipakai, COALESCE(SUM(username = :username), 0) AS username_dipakai FROM akun_pengguna WHERE email = :email OR username = :username;` | Memeriksa apakah email atau username sudah dipakai, agar pesan galat dapat menyebut isian yang bermasalah. |
 | Q-001.2 | `INSERT INTO akun_pengguna (email, username, password_hash, peran, nama_tampilan, created_at) VALUES (:email, :username, :password_hash, :peran, :nama_tampilan, NOW());` | Menyimpan akun baru. Kolom `email` dan `username` diberi indeks `UNIQUE` sebagai pengaman terakhir. |
 
 ### 5.1.2 Algoritma/Query
@@ -904,13 +904,20 @@ Hak akses diturunkan dari aktor setiap use case pada SKPL. Satu tabel ini juga d
 FUNCTION verifikasiHakAkses(aksi: String): Boolean
   HAK ← {
     PELAJAR:    {MEMPELAJARI_MATERI, MENGERJAKAN_LATIHAN, MELIHAT_PROGRES,
-                 MENGIKUTI_KELAS, KIRIM_FEEDBACK},                       // UC-02–UC-05, UC-09
-    PENGAJAR:   {KELOLA_KELAS, PANTAU_PROGRES, KIRIM_FEEDBACK},           // UC-07–UC-09
-    TIM_MATERI: {KELOLA_MATERI}                                          // UC-06
+                 MENGIKUTI_KELAS, KIRIM_FEEDBACK},                        // UC-02–UC-05, UC-09
+    PENGAJAR:   {KELOLA_KELAS, BUAT_KELAS, BUAT_TUGAS, TERBITKAN_TUGAS,
+                 GANTI_KODE, KELOLA_ANGGOTA, LIHAT_ANGGOTA, ATUR_SCOREBOARD,
+                 PANTAU_PROGRES, KIRIM_FEEDBACK},                         // UC-07–UC-09
+    TIM_MATERI: {KELOLA_MATERI}                                           // UC-06
   }
   IF this.idAkun = null OR this.peran NOT IN HAK THEN
     RETURN false
-  RETURN huruf besar(aksi) IN HAK[this.peran]
+  kode ← normalisasi(aksi)      // "kelola_materi", "kelolaMateri", "KELOLA_MATERI" → "KELOLA_MATERI"
+  RETURN kode IN HAK[this.peran]
+
+FUNCTION normalisasi(aksi: String): String
+  sisipkan "_" sebelum setiap huruf besar yang didahului huruf kecil   // camelCase → snake_case
+  RETURN huruf besar(hasil)
 ```
 
 ### 5.1.3 Algoritma/Query
@@ -1357,7 +1364,7 @@ PROCEDURE kirimPendaftaran(data: DataPendaftaran)
     kosongkan isian kata sandi
     arahkan ke I-02 dengan pesan "Akun berhasil dibuat. Silakan masuk."
   ELSE
-    tampilkan pesan hasil.pesan ("Email atau username sudah digunakan")
+    tampilkan alert galat hasil.pesan        // I-01-09
     kosongkan isian kata sandi;  aktifkan tombol "Daftar"
 ```
 
@@ -1443,6 +1450,7 @@ Daftar menu mengikuti hak akses pada Algo-002. Menyembunyikan menu hanya memudah
 
 ```text
 TUJUAN ← {
+  BERANDA:      HalamanUtama        (I-03),   // ringkasan belajar
   MATERI:       HalamanMateri       (I-04),   // UC-02
   LATIHAN:      HalamanLatihan,               // UC-03
   PROGRES:      HalamanProgres,               // UC-04
@@ -1452,7 +1460,7 @@ TUJUAN ← {
   FEEDBACK:     HalamanFeedback     (I-20)    // UC-09
 }
 MENU_PERAN ← {
-  PELAJAR:    [MATERI, LATIHAN, PROGRES, KELAS, FEEDBACK],
+  PELAJAR:    [BERANDA, MATERI, LATIHAN, PROGRES, KELAS, FEEDBACK],
   PENGAJAR:   [KELOLA_KELAS, FEEDBACK],
   TIM_MATERI: [KELOLA_MATERI]
 }
@@ -1461,7 +1469,7 @@ PROCEDURE tampilkanMenu(peran: Peran)
   menuTersedia ← MENU_PERAN[peran] ?? list kosong
   render nama tampilan ← profil.namaTampilan
   render setiap kode dalam menuTersedia sebagai butir menu samping
-  pilihMenu(menuTersedia[0])          // halaman awal: menu pertama, misalnya daftar materi untuk Pelajar (KF09)
+  pilihMenu(menuTersedia[0])          // halaman awal: menu pertama, yaitu Beranda untuk Pelajar
 
 PROCEDURE pilihMenu(kode: String)
   IF kode NOT IN menuTersedia THEN RETURN
@@ -1654,7 +1662,7 @@ PROCEDURE kirimFeedback(data: MasukanFeedback)
     konfirmasi ← FeedbackController.kirimKonfirmasi(hasil)
   CATCH galat jaringan atau batas waktu habis
     konfirmasi ← Konfirmasi(berhasil = false,
-                            pesan = "Feedback gagal terkirim. Periksa koneksi lalu coba lagi.")
+                            pesan = "Feedback gagal terkirim. Periksa koneksi lalu coba lagi. Isi pesanmu tidak hilang.")
 
   tampilkanKonfirmasi(konfirmasi)
 
@@ -2267,8 +2275,6 @@ FUNCTION verifikasiFormatData(data: DataPendaftaran): HasilValidasi
     galat["username"] ← "Username 3–30 karakter: huruf, angka, atau garis bawah"
   IF panjang(data.password) < 8 OR tidak memuat huruf OR tidak memuat angka THEN
     galat["password"] ← "Kata sandi minimal 8 karakter dan memuat huruf serta angka"
-  IF data.password <> data.konfirmasiPassword THEN
-    galat["konfirmasiPassword"] ← "Konfirmasi kata sandi tidak sama"
   IF data.persetujuanTnC <> true THEN
     galat["persetujuanTnC"] ← "Terms & Conditions belum disetujui"       // KF07
 
@@ -2306,7 +2312,7 @@ FUNCTION simpanAkun(data: DataPendaftaran): HasilOperasi
   dataSimpan ← DataPendaftaran(
     email = data.email, username = data.username, peran = data.peran,
     namaTampilan = data.namaTampilan, passwordHash = hashPassword(data.password))
-  hapus data.password dan data.konfirmasiPassword dari memori permintaan
+  hapus data.password dari memori permintaan
 
   TRY
     hasil ← new AkunPengguna().buatAkunBaru(dataSimpan)        // Algo-001
@@ -2844,8 +2850,8 @@ FUNCTION simpanFeedback(data: MasukanFeedback): HasilOperasi
 
 FUNCTION kirimKonfirmasi(hasil: HasilOperasi): Konfirmasi
   IF hasil.berhasil THEN
-    RETURN Konfirmasi(berhasil = true, pesan = "Feedback berhasil terkirim. Terima kasih atas masukan Anda.")
-  RETURN Konfirmasi(berhasil = false, pesan = "Feedback gagal terkirim. Silakan coba lagi.")
+    RETURN Konfirmasi(berhasil = true, pesan = "Feedback terkirim. Matur nuwun!")
+  RETURN Konfirmasi(berhasil = false, pesan = "Feedback gagal terkirim. Periksa koneksi lalu coba lagi. Isi pesanmu tidak hilang.")
 ```
 
 ## 5.19 Kelas ProgresController
@@ -2880,12 +2886,14 @@ Tabel 5.19.2. Atribut Kelas ProgresController
 **Nama Operasi:** `hitungProgres(idPelajar: Integer): RingkasanProgres`  
 **ID Algoritma:** Algo-100
 
-**Algo-100.** Alasan: penguasaan dihitung dari riwayat setiap kali dibutuhkan, tidak disimpan (lihat keputusan data pada subbab 5.27).
+**Algo-100.** Alasan: penguasaan dihitung dari riwayat setiap kali dibutuhkan, tidak disimpan (lihat `hitungPenguasaan` pada subbab 5.3.6).
 
 ```text
-penguasaan <- RiwayatLatihan.hitungPenguasaan(idPelajar)       // Q-010
-riwayat <- RiwayatLatihan.ambilRiwayat(idPelajar, periode)     // Q-011
-kembalikan RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), polaKesalahan = hitungPolaKesalahan(idPelajar))
+FUNCTION hitungProgres(idPelajar: Integer): RingkasanProgres
+  penguasaan ← RiwayatLatihan.hitungPenguasaan(idPelajar)       // Q-010
+  riwayat ← RiwayatLatihan.ambilRiwayat(idPelajar, periode)     // Q-011
+  RETURN RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat),
+                          polaKesalahan = hitungPolaKesalahan(idPelajar))
 ```
 
 ### 5.19.2 Algoritma/Query: siapkanRekomendasi
@@ -2897,11 +2905,14 @@ kembalikan RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), polaKes
 **Algo-101.** Alasan: Pelajar yang belum punya riwayat tetap mendapat saran materi awal (UC-04 alternatif 1).
 
 ```text
-penguasaan <- RiwayatLatihan.hitungPenguasaan(idPelajar)
-JIKA penguasaan kosong MAKA kembalikan MateriAksara.ambilMateriRekomendasi(kosong)
-urut <- urutkan materi pada penguasaan dari nilai terendah ke tertinggi
-JIKA nilai terendah >= 90 MAKA kembalikan materi terbit berikutnya yang belum pernah dikerjakan
-kembalikan MateriAksara.ambilMateriRekomendasi(3 materi dengan nilai terendah)
+FUNCTION siapkanRekomendasi(idPelajar: Integer): List<MetadataMateri>
+  penguasaan ← RiwayatLatihan.hitungPenguasaan(idPelajar)
+  IF penguasaan kosong THEN
+    RETURN MateriAksara.ambilMateriRekomendasi(kosong)
+  urut ← urutkan materi pada penguasaan dari nilai terendah ke tertinggi
+  IF nilai terendah ≥ 90 THEN
+    RETURN materi terbit berikutnya yang belum pernah dikerjakan
+  RETURN MateriAksara.ambilMateriRekomendasi(3 materi dengan nilai terendah)
 ```
 
 ### 5.19.3 Algoritma/Query: agregasiProgres
@@ -2913,14 +2924,17 @@ kembalikan MateriAksara.ambilMateriRekomendasi(3 materi dengan nilai terendah)
 **Algo-102.** Alasan: Pengajar melihat ringkasan seluruh anggota aktif, bukan data anggota yang sudah keluar (aturan SKPL nomor 3).
 
 ```text
-JIKA anggotaAktif kosong MAKA kembalikan RingkasanProgres kosong
-riwayat <- daftar kosong
-UNTUK SETIAP id DALAM anggotaAktif
-    tambahkan RiwayatLatihan.ambilRiwayatPelajar(id) ke riwayat        // Q-014
-JIKA riwayat kosong MAKA kembalikan RingkasanProgres kosong (halaman menampilkan keadaan kosong)
-penguasaan <- rata-rata skor per materi dari riwayat
-pola <- jumlahkan hasil RiwayatLatihan.hitungPolaKesalahan(id) untuk setiap id, ambil lima terbanyak     // Q-013
-kembalikan RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), pola)
+FUNCTION agregasiProgres(anggotaAktif: List<Integer>, periode: Periode): RingkasanProgres
+  IF anggotaAktif kosong THEN
+    RETURN RingkasanProgres.kosong()
+  riwayat ← list kosong
+  FOR EACH id IN anggotaAktif DO
+    riwayat.tambahSemua(RiwayatLatihan.ambilRiwayatPelajar(id))        // Q-014
+  IF riwayat kosong THEN
+    RETURN RingkasanProgres.kosong()          // halaman menampilkan keadaan kosong
+  penguasaan ← rata-rata skor per materi dari riwayat
+  pola ← gabungkan RiwayatLatihan.hitungPolaKesalahan(id) untuk setiap id, ambil lima terbanyak   // Q-013
+  RETURN RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), pola)
 ```
 
 ## 5.20 Kelas KelasController
