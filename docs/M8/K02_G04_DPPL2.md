@@ -1040,6 +1040,27 @@ Tabel 5.2.7. Query Operasi perbaruiData
 
 ## 5.3 Kelas RiwayatLatihan
 
+**Nama Kelas:** RiwayatLatihan  
+**ID Kelas:** C03  
+**Jenis:** Model
+
+Menyimpan hasil latihan, status, dan waktu pengerjaan Pelajar.
+
+Tabel 5.3.1. Operasi Kelas RiwayatLatihan
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `simpanHasil(hasil: HasilLatihan): HasilOperasi` | public | Menyimpan hasil satu latihan beserta skor dan status (berhasil atau perlu diulang). |
+| `catatAktivitas(aktivitas: AktivitasBelajar): HasilOperasi` | public | Mencatat aktivitas belajar selain latihan, misalnya komponen tugas kelas yang diselesaikan (KF14). |
+| `cekPernahSelesai(idPelajar: Integer, targetSoal: String, mode: ModeLatihan): Boolean` | public | Memeriksa apakah soal yang sama sudah pernah diselesaikan, agar poin tidak diberikan dua kali. |
+| `ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>` | public | Mengambil riwayat milik satu Pelajar pada periode tertentu. |
+| `ambilRiwayatMateri(idPelajar: Integer, idMateri: Integer): List<RiwayatLatihan>` | public | Mengambil seluruh riwayat Pelajar pada satu materi untuk halaman detail hasil. |
+| `ambilBuktiPenyelesaian(idPelajar: Integer, idTugas: Integer): BuktiPenyelesaian` | public | Mengambil catatan komponen tugas yang sudah diselesaikan Pelajar. |
+| `ambilStatusProgres(idPelajar: Integer, daftarIdMateri: List<Integer>): Data` | public | Mengembalikan status belajar (belum, sedang, selesai) untuk setiap materi pada daftar. |
+| `hitungPenguasaan(idPelajar: Integer): Data` | public | Menghitung tingkat penguasaan per materi dari riwayat. Nilai ini dihitung, tidak disimpan. |
+| `ambilRiwayatPelajar(daftarIdPelajar: List<Integer>): List<RiwayatLatihan>` | public | Mengambil riwayat sejumlah Pelajar sekaligus untuk pemantauan kelas. |
+| `hitungPolaKesalahan(daftarIdPelajar: List<Integer>): Data` | public | Menghitung aksara yang paling sering salah pada sekelompok Pelajar. |
+
 ## 5.4 Kelas DataFeedback
 
 ## 5.5 Kelas HalamanPendaftaran
