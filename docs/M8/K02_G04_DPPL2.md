@@ -237,10 +237,10 @@ Tabel 2.3. Identifikasi Komponen/Modul/Subsistem
 Logical View dipilih untuk menggambarkan Ngaksara karena view ini menunjukkan pembagian tanggung jawab antarkomponen secara langsung yang merupakan inti dari pola MVC. Selain itu, Logical View juga cocok dengan Ngaksara karena Ngaksara dipakai oleh peran Pelajar, Pengajar, juga Tim Materi dengan halaman dan akses yang berbeda. Logical View dapat memperlihatkan perbedaan halaman yang melayani tiap peran.
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/DiagramFinal.jpg" width="50%">
+<img alt=" Logical View Ngaksara" src="./assets/diagram/DiagramFinal.jpg" width="50%">
 </p>
 <p align="center">
-<i>Gambar 2. Contoh Logical View pada P/L E-Commerce</i>
+<i>Gambar 2. Logical View pada Ngaksara</i>
 </p>
 
 Hubungan Antarkomponen pada diagram tersebut adalah sebagai berikut.
@@ -4254,8 +4254,6 @@ Tabel 6.20. Spesifikasi Objek Antarmuka I-20
 
 ## 6.21 Rancangan Antarmuka Keseluruhan
 
-Tuliskan daftar gambar seluruh antarmuka. Berikan ID unik untuk setiap tampilan dan gunakan ID yang sama pada subbab perancangan antarmuka masing-masing.
-
 Tabel 6.21. Rancangan Antarmuka Keseluruhan
 
 | No   | Tampilan Antarmuka                                                                  |
@@ -4286,8 +4284,6 @@ Tabel 6.21. Rancangan Antarmuka Keseluruhan
 ---
 
 # BAB 7: Matriks Kerunutan
-
-Petakan kelas perancangan dengan use case yang terkait. Gunakan **BAB 6 Traceability pada dokumen SKPL** sebagai acuan keterkaitan kelas analisis dan use case, lalu sesuaikan dengan realisasi use case dan kelas perancangan pada BAB 3–BAB 5 DPPL.
 
 Tabel 7.1. Matriks Kerunutan Kelas terhadap Use Case
 
