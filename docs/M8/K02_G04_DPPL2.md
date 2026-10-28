@@ -1,7 +1,7 @@
 <h1>
 IF2150 REKAYASA PERANGKAT LUNAK
 <br>
-TUGAS 5
+TUGAS 8
 <br>
 DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 </h1>
@@ -10,7 +10,7 @@ DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 ## Ngaksara
 
 <p align="center">
-<img alt="Penerapan Arsitektur MVC pada Ngaksara" src="./assets/diagram/LOGO.png" width="40%">
+<img alt="Logo Ngaksara" src="./assets/diagram/LOGO.png" width="40%">
 </p>
 
 ### Untuk: Amanda Aurellia Salsabilla
@@ -1040,8 +1040,220 @@ Tabel 5.2.7. Query Operasi perbaruiData
 
 ## 5.3 Kelas RiwayatLatihan
 
-## 5.4 Kelas DataFeedback
+**Nama Kelas:** RiwayatLatihan  
+**ID Kelas:** C03  
+**Jenis:** Model
 
+Menyimpan hasil latihan, status, dan waktu pengerjaan Pelajar.
+
+Tabel 5.3.1. Operasi Kelas RiwayatLatihan
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `simpanHasil(hasil: HasilLatihan): HasilOperasi` | public | Menyimpan hasil satu latihan beserta skor dan status (berhasil atau perlu diulang). |
+| `catatAktivitas(aktivitas: AktivitasBelajar): HasilOperasi` | public | Mencatat aktivitas belajar selain latihan, misalnya komponen tugas kelas yang diselesaikan (KF14). |
+| `ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>` | public | Mengambil riwayat milik satu Pelajar pada periode tertentu. |
+| `ambilBuktiPenyelesaian(idPelajar: Integer, idTugas: Integer): BuktiPenyelesaian` | public | Mengambil catatan komponen tugas yang sudah diselesaikan Pelajar. |
+| `ambilStatusProgres(idPelajar: Integer): Data` | public | Mengembalikan status belajar (belum, sedang, selesai) untuk setiap materi pada daftar. |
+| `hitungPenguasaan(idPelajar: Integer): Data` | public | Menghitung tingkat penguasaan per materi dari riwayat. Nilai ini dihitung, tidak disimpan. |
+| `ambilRiwayatPelajar(idPelajar: Integer): List<RiwayatLatihan>` | public | Mengambil riwayat sejumlah Pelajar sekaligus untuk pemantauan kelas. |
+| `hitungPolaKesalahan(idPelajar: Integer): Data` | public | Menghitung aksara yang paling sering salah pada sekelompok Pelajar. |
+| `cekPernahSelesai(idPelajar: Integer, targetSoal: String, mode: ModeLatihan): Boolean` | public | Memeriksa apakah soal yang sama sudah pernah diselesaikan, agar poin tidak diberikan dua kali. |
+| `ambilRiwayatMateri(idPelajar: Integer, idMateri: Integer): List<RiwayatLatihan>` | public | Mengambil seluruh riwayat Pelajar pada satu materi untuk halaman detail hasil. |
+
+Tabel 5.3.2. Atribut Kelas RiwayatLatihan
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idRiwayat` | private | `Integer` |
+| `idPelajar` | private | `Integer` |
+| `idMateri` | private | `Integer` |
+| `mode` | private | `ModeLatihan?` |
+| `skor` | private | `Decimal?` |
+| `tanggalPengerjaan` | private | `DateTime` |
+| `status` | private | `String` |
+| `idTugas` | private | `Integer?` |
+| `idKomponen` | private | `Integer?` |
+| `modeAktivitas` | private | `String` |
+| `waktuSelesai` | private | `DateTime?` |
+| `targetSoal` | private | `String?` |
+
+### 5.3.1 Algoritma/Query: simpanHasil
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `simpanHasil(hasil: HasilLatihan): HasilOperasi`
+
+Tabel 5.3.3. Query Operasi simpanHasil
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-008 | `INSERT INTO riwayat_latihan (id_pelajar, id_materi, target_soal, mode, skor,   tanggal_pengerjaan, status, mode_aktivitas) VALUES (:id_pelajar, :id_materi, :target_soal, :mode, :skor, NOW(), :status, 'latihan');` | Menyimpan hasil satu latihan. |
+
+### 5.3.2 Algoritma/Query: catatAktivitas
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `catatAktivitas(aktivitas: AktivitasBelajar): HasilOperasi`
+
+Tabel 5.3.4. Query Operasi catatAktivitas
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-016 | `INSERT INTO riwayat_latihan (id_pelajar, id_materi, tanggal_pengerjaan, status,   id_tugas, id_komponen, mode_aktivitas, waktu_selesai) VALUES (:id_pelajar, :id_materi, NOW(), :status, :id_tugas, :id_komponen, :mode_aktivitas, :waktu_selesai);` | Mencatat aktivitas belajar selain latihan. |
+
+### 5.3.3 Algoritma/Query: ambilRiwayat
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>`
+
+Tabel 5.3.5. Query Operasi ambilRiwayat
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-011 | `SELECT id_riwayat, id_materi, mode, skor, status, tanggal_pengerjaan FROM riwayat_latihan WHERE id_pelajar = :id_pelajar   AND tanggal_pengerjaan BETWEEN :mulai AND :selesai ORDER BY tanggal_pengerjaan DESC;` | Riwayat Pelajar pada periode terpilih. |
+
+### 5.3.4 Algoritma/Query: ambilBuktiPenyelesaian
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `ambilBuktiPenyelesaian(idPelajar: Integer, idTugas: Integer): BuktiPenyelesaian`
+
+Tabel 5.3.6. Query Operasi ambilBuktiPenyelesaian
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-015 | `SELECT id_komponen, waktu_selesai FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND id_tugas = :id_tugas AND id_komponen IS NOT NULL;` | Komponen tugas yang sudah diselesaikan Pelajar. |
+
+### 5.3.5 Algoritma/Query: ambilStatusProgres
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `ambilStatusProgres(idPelajar: Integer): Data`
+
+Tabel 5.3.7. Query Operasi ambilStatusProgres
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-012 | `SELECT id_materi, SUM(status = 'berhasil') AS jumlah_berhasil, COUNT(*) AS jumlah_percobaan FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND id_materi IN (:daftar_id_materi) GROUP BY id_materi;` | Materi tanpa baris berstatus belum, jumlah_berhasil 0 berstatus sedang, selebihnya selesai. |
+
+### 5.3.6 Algoritma/Query: hitungPenguasaan
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `hitungPenguasaan(idPelajar: Integer): Data`
+
+Tabel 5.3.8. Query Operasi hitungPenguasaan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-010 | `SELECT id_materi, ROUND(AVG(skor), 2) AS penguasaan FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND skor IS NOT NULL GROUP BY id_materi;` | Penguasaan per materi sebagai rata-rata skor. Dihitung setiap kali, tidak disimpan. |
+
+### 5.3.7 Algoritma/Query: ambilRiwayatPelajar
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `ambilRiwayatPelajar(idPelajar: Integer): List<RiwayatLatihan>`
+
+Tabel 5.3.9. Query Operasi ambilRiwayatPelajar
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-014 | `SELECT id_pelajar, id_materi, mode, skor, status, tanggal_pengerjaan FROM riwayat_latihan WHERE id_pelajar = :id_pelajar ORDER BY tanggal_pengerjaan DESC;` | Riwayat satu Pelajar. Dipanggil untuk setiap anggota aktif pada pemantauan kelas. |
+
+### 5.3.8 Algoritma/Query: hitungPolaKesalahan
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `hitungPolaKesalahan(idPelajar: Integer): Data`
+
+Tabel 5.3.10. Query Operasi hitungPolaKesalahan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-013 | `SELECT target_soal, COUNT(*) AS jumlah_salah FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND status = 'perlu_diulang' GROUP BY target_soal ORDER BY jumlah_salah DESC LIMIT 5;` | Lima aksara yang paling sering salah pada satu Pelajar. |
+
+### 5.3.9 Algoritma/Query: cekPernahSelesai
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `cekPernahSelesai(idPelajar: Integer, targetSoal: String, mode: ModeLatihan): Boolean`
+
+Tabel 5.3.11. Query Operasi cekPernahSelesai
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-009 | `SELECT COUNT(*) FROM riwayat_latihan WHERE id_pelajar = :id_pelajar AND target_soal = :target_soal   AND mode = :mode AND status = 'berhasil';` | Hasil lebih dari 0 berarti soal sudah pernah diselesaikan. |
+
+## 5.4 Kelas DataFeedback
+ 
+**Nama Kelas:** DataFeedback  
+**ID Kelas:** C04  
+**Jenis:** Model
+ 
+Menyimpan feedback, akun pengirim, waktu kirim, dan status tindak lanjut (KF19–KF20).
+ 
+Tabel 5.4.1. Operasi Kelas DataFeedback
+ 
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `simpan(data: MasukanFeedback): HasilOperasi` | public | Menyimpan feedback yang sudah divalidasi dengan status awal `BARU` dan waktu kirim dari server. Lihat Algo-003. |
+| `perbaruiStatus(status: StatusFeedback): HasilOperasi` | public | Mengubah status tindak lanjut feedback. Status hanya boleh maju (`BARU` → `DIPROSES` → `SELESAI`). Lihat Algo-004. |
+ 
+Tabel 5.4.2. Atribut Kelas DataFeedback
+ 
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idFeedback` | private | Integer |
+| `idAkun` | private | Integer |
+| `kategori` | private | KategoriFeedback (`PERFORMA`, `TAMPILAN`, `FITUR`, `MATERI`) |
+| `pesan` | private | String |
+| `waktuKirim` | private | DateTime |
+| `status` | private | StatusFeedback (`BARU`, `DIPROSES`, `SELESAI`) |
+ 
+### 5.4.1 Algoritma/Query
+ 
+**Nama Kelas:** DataFeedback  
+**Nama Operasi:** `simpan(data: MasukanFeedback): HasilOperasi`  
+**ID Algoritma:** Algo-003
+ 
+```text
+FUNCTION simpan(data: MasukanFeedback): HasilOperasi
+  // data.idAkun diisi FeedbackController dari AkunPengguna.getProfil(), bukan dari browser
+  TRY
+    idBaru ← jalankan Q-003
+  CATCH galat basis data
+    RETURN HasilOperasi.gagal("SIMPAN_GAGAL", "Feedback gagal disimpan")   // UC-09 Alternatif 1
+ 
+  this.idFeedback ← idBaru;  this.idAkun ← data.idAkun
+  this.kategori ← data.kategori;  this.pesan ← data.pesan
+  this.status ← BARU
+  RETURN HasilOperasi.sukses(idFeedback = idBaru)
+```
+ 
+Tabel 5.4.3. Query Operasi simpan
+ 
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-003 | `INSERT INTO data_feedback (id_akun, kategori, pesan, waktu_kirim, status) VALUES (:id_akun, :kategori, :pesan, NOW(), 'BARU');` | Menyimpan feedback baru. Waktu kirim diambil dari server. |
+ 
+### 5.4.2 Algoritma/Query
+ 
+**Nama Kelas:** DataFeedback  
+**Nama Operasi:** `perbaruiStatus(status: StatusFeedback): HasilOperasi`  
+**ID Algoritma:** Algo-004
+ 
+```text
+FUNCTION perbaruiStatus(status: StatusFeedback): HasilOperasi
+  URUTAN ← {BARU: 0, DIPROSES: 1, SELESAI: 2}
+  IF URUTAN[status] ≤ URUTAN[this.status] THEN
+    RETURN HasilOperasi.gagal("STATUS_TIDAK_VALID", "Status hanya dapat dimajukan")
+ 
+  baris ← jalankan Q-004               // syarat status lama mencegah dua pembaruan saling menimpa
+  IF baris = 0 THEN
+    RETURN HasilOperasi.gagal("STATUS_BERUBAH", "Status feedback sudah diubah, muat ulang data")
+  this.status ← status
+  RETURN HasilOperasi.sukses(idFeedback = this.idFeedback)
+```
+ 
+Tabel 5.4.4. Query Operasi perbaruiStatus
+ 
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-004 | `UPDATE data_feedback SET status = :status_baru WHERE id_feedback = :id_feedback AND status = :status_lama;` | Memperbarui status hanya jika status di basis data masih sama dengan yang dibaca. |
+ 
 ## 5.5 Kelas HalamanPendaftaran
 
 ## 5.6 Kelas HalamanLogin
@@ -1051,34 +1263,37 @@ Tabel 5.2.7. Query Operasi perbaruiData
 ## 5.8 Kelas HalamanLatihan
 
 **Nama Kelas:** HalamanLatihan  
-**ID Kelas:** C08
+**ID Kelas:** C08  
+**Jenis:** View
+
+Menampilkan latihan aksara pada layar I-06 sampai I-10. Halaman dirender Blade di server, sedangkan interaksi langsung seperti menggambar di kanvas, menyalakan outline, memutar audio, dan menyusun komponen dijalankan JavaScript di browser tanpa menunggu server (KNF04).
 
 Tabel 5.8.1. Operasi Kelas HalamanLatihan
 
-| Nama Operasi                                  | Visibility (private, public) | Keterangan                                                                                                                                                                                                                                                                                                                               |
-| :-------------------------------------------- | :--------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pilihModeLatihan(mode: ModeLatihan): void`   | public                       | Mengirim mode yang dipilih bersama `idMateri` halaman ke `LatihanController.siapkanSoal()` (Algo-021), lalu menyiapkan tampilan sesuai mode: kanvas dengan outline yang bisa dinyalakan atau dimatikan (MENULIS, KF10), tombol putar audio dan pilihan aksara (BUNYI), atau palet komponen (MERANGKAI).                                  |
-| `rekamGoresan(titik: Titik): void`            | public                       | Menambahkan titik ke goresan aktif dan menggambarnya langsung di kanvas (KF11, KNF04). Lihat Algo-020.                                                                                                                                                                                                                                   |
-| `kirimJawaban(jawaban: JawabanLatihan): void` | public                       | Mengirim jawaban ke `LatihanController.nilaiJawaban()` (Algo-022). Untuk MENULIS berisi `goresan`, untuk BUNYI berisi `pilihan` yang diklik, dan untuk MERANGKAI berisi `urutan` komponen.                                                                                                                                               |
-| `tampilkanHasil(hasil: HasilPenilaian): void` | public                       | Menampilkan skor, status, umpan balik, dan posisi komponen yang salah. Jika status `LULUS`, tombol "Selesaikan Latihan" aktif dan membuka ringkasan streak, poin, dan badge (I-10) dari `hasil.motivasi`. Jika `BELUM_TUNTAS`, tombol "Ulangi" mengosongkan kanvas atau susunan di browser untuk soal yang sama (Skenario Alternatif 3). |
-|`tampilkanSoal(soal: SoalLatihan): void` | public | Menyiapkan tampilan sesuai mode: kanvas dan outline (MENULIS), tombol audio dan pilihan aksara (BUNYI), atau palet komponen (MERANGKAI). |
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `pilihModeLatihan(mode: ModeLatihan): void` | public | Mengirim mode yang dipilih bersama `idMateri` halaman ke `LatihanController.siapkanSoal()` (Algo-021), lalu meneruskan soal yang diterima ke `tampilkanSoal()`. |
+| `rekamGoresan(titik: Titik): void` | public | Menambahkan titik ke goresan aktif dan menggambarnya langsung di kanvas (KF11, KNF04). Lihat Algo-020. |
+| `kirimJawaban(jawaban: JawabanLatihan): void` | public | Mengirim jawaban ke `LatihanController.nilaiJawaban()` (Algo-022). Untuk MENULIS berisi `goresan`, untuk BUNYI berisi `pilihan` yang diklik, dan untuk MERANGKAI berisi `urutan` komponen. |
+| `tampilkanHasil(hasil: HasilPenilaian): void` | public | Menampilkan skor, status, umpan balik, dan posisi komponen yang salah. Jika status `berhasil`, tombol "Selesaikan Latihan" aktif. Jika `perlu_diulang`, tombol "Ulangi" ditampilkan. |
+| `tampilkanSoal(soal: SoalLatihan): void` | public | Menyiapkan tampilan sesuai mode: kanvas dan outline (MENULIS), tombol audio dan pilihan aksara (BUNYI), atau palet komponen (MERANGKAI). |
 | `aturOutline(aktif: Boolean): void` | public | Menampilkan atau menyembunyikan outline aksara pada kanvas tanpa menghapus goresan (KF10). Berjalan di browser saja. |
 | `putarAudio(): void` | public | Memutar audio pengucapan soal (`SoalLatihan.audio`) di browser setelah Pelajar menekan tombol putar (Skenario Alternatif 1). |
 | `ulangiLatihan(): void` | public | Mengosongkan goresan atau susunan dan menampilkan soal yang sama tanpa meminta soal baru ke server (Skenario Alternatif 3). |
-| `selesaikanLatihan(): void` | public | Mengirim hasil terakhir ke `LatihanController.simpanHasil()`, lalu membuka ringkasan motivasi (langkah 4 skenario normal). |
+| `selesaikanLatihan(): void` | public | Meminta `LatihanController.simpanHasil()` (Algo-026) menyimpan hasil yang sudah berhasil, lalu meneruskan ringkasannya ke `tampilkanRingkasan()` (langkah 4 skenario normal). |
 | `tampilkanRingkasan(ringkasan: RingkasanMotivasi): void` | public | Menampilkan streak, poin, badge baru, dan pesan jika poin tidak bertambah (layar I-10). |
 
 Tabel 5.8.2. Atribut Kelas HalamanLatihan
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| `modeLatihan` | private | ModeLatihan |
-| `jawabanInput` | private | JawabanLatihan |
-| `goresan` | private | List<Goresan> |
-| `hasilTampilan` | private | HasilPenilaian? |
-| `idMateri` | private | Integer |
-| `soalTampil` | private | SoalLatihan? |
-| outlineAktif` | private | Boolean |
+| `modeLatihan` | private | `ModeLatihan` |
+| `jawabanInput` | private | `JawabanLatihan` |
+| `goresan` | private | `List<Goresan>` |
+| `hasilTampilan` | private | `HasilPenilaian?` |
+| `idMateri` | private | `Integer` |
+| `soalTampil` | private | `SoalLatihan?` |
+| `outlineAktif` | private | `Boolean` |
 
 ### 5.8.1 Algoritma/Query
 
@@ -1579,15 +1794,28 @@ PROCEDURE putarAudioPengucapan(sumber: ReferensiBerkas)
 ## 5.16 Kelas LatihanController
 
 **Nama Kelas:** LatihanController  
-**ID Kelas:** C16
+**ID Kelas:** C16  
+**Jenis:** Controller
+
+Mengatur alur UC-03: menyiapkan soal, menilai jawaban, dan menyimpan hasil beserta motivasi belajar. Soal aktif beserta kuncinya dan hasil penilaian terakhir disimpan di session melalui `konteks`, karena satu latihan berlangsung dalam beberapa permintaan HTTP. Kunci jawaban tidak pernah dikirim ke browser.
+
+Struktur data yang dipakai kelas ini:
+
+| Tipe | Isi |
+| :--- | :--- |
+| `SoalLatihan` | `idSoal`, `idMateri`, `mode`, `targetSoal`, serta data tampilan sesuai mode: `templat` (MENULIS), `audio` dan `pilihan` (BUNYI), atau `komponen` (MERANGKAI) |
+| `JawabanLatihan` | `idSoal`, `mode`, dan salah satu dari `goresan`, `pilihan`, atau `urutan` |
+| `HasilLatihan` | `idPelajar`, `idMateri`, `idSoal`, `targetSoal`, `mode`, `skor`, dan `status` (`berhasil` atau `perlu_diulang`, sama dengan nilai status di subbab 5.3) |
+| `HasilPenilaian` | `skor` (0–100), `status`, `umpanBalik`, dan `posisiSalah` (khusus MERANGKAI) |
+| `RingkasanMotivasi` | `streak`, `poin`, `poinBertambah` (Boolean), dan `badgeBaru` (List<String>) |
 
 Tabel 5.16.1. Operasi Kelas LatihanController
 
-| Nama Operasi                                                     | Visibility (private, public) | Keterangan                                                                                                                                                                                                                                                                                         |
-| :--------------------------------------------------------------- | :--------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan` | public                       | Memeriksa hak akses Pelajar, mengambil target latihan (dan audio untuk mode BUNYI), lalu menyusun soal tanpa kunci jawaban. Lihat Algo-021.                                                                                                                                                        |
-| `nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian`          | public                       | Menilai jawaban sesuai mode (akurasi goresan, kecocokan bunyi, atau urutan komponen), lalu mencatat hasilnya melalui `simpanHasil()`. Lihat Algo-022.                                                                                                                                              |
-| `simpanHasil(hasil: HasilLatihan): HasilOperasi`                 | public                       | Mencatat hasil ke riwayat (KF14). Jika tuntas, memperbarui streak, menambah poin hanya untuk soal yang pertama kali dituntaskan, dan memberikan badge yang syaratnya baru terpenuhi. Dipanggil dari `nilaiJawaban()` dengan hasil yang disusun di server, bukan dari data browser. Lihat Algo-023. |
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan` | public | Memeriksa hak akses Pelajar, mengambil target latihan (dan audio untuk mode BUNYI), lalu menyusun soal tanpa kunci jawaban. Lihat Algo-021. |
+| `nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian` | public | Menilai jawaban dengan penilai yang sesuai mode. Percobaan yang perlu diulang langsung dicatat ke riwayat (KF14). Lihat Algo-022. |
+| `simpanHasil(hasil: HasilLatihan): HasilOperasi` | public | Menyimpan hasil yang berhasil, memperbarui streak, menambah poin hanya untuk soal yang pertama kali diselesaikan, dan memberikan badge. Mengembalikan `RingkasanMotivasi` di dalam `HasilOperasi`. Lihat Algo-026. |
 | `hitungAkurasiGoresan(goresan: List<Goresan>, templat: List<Titik>): Decimal` | private | Menghitung skor 0–100 dari kemiripan dan kelengkapan goresan terhadap templat (KF12). Lihat Algo-023. |
 | `cocokkanBunyi(pilihan: String, kunci: String): Boolean` | private | Mencocokkan aksara yang dipilih dengan aksara yang bunyinya diputar (KF21). Lihat Algo-024. |
 | `validasiRangkaian(urutan: List<String>, kunci: List<String>): List<Integer>` | private | Membandingkan susunan dengan urutan yang benar dan mengembalikan posisi yang salah (KF22). Lihat Algo-025. |
@@ -1597,8 +1825,8 @@ Tabel 5.16.2. Atribut Kelas LatihanController
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| `konteks` | private | KonteksPermintaan |
-| `ambangAkurasi` | private | Decimal (nilai awal 70) |
+| `konteks` | private | `KonteksPermintaan` |
+| `ambangAkurasi` | private | `Decimal` (nilai awal 70) |
 
 ### 5.16.1 Algoritma/Query
 
@@ -1631,6 +1859,7 @@ FUNCTION siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan
   konteks.session["soalAktif"] ← { soal, kunci }
   RETURN soal                                  // tanpa kunci jawaban
 ```
+
 ### 5.16.2 Algoritma/Query
 
 **Nama Kelas:** LatihanController  
@@ -1654,14 +1883,15 @@ FUNCTION nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian
     CASE MERANGKAI:
       posisiSalah ← validasiRangkaian(jawaban.urutan, aktif.kunci)
       lulus ← posisiSalah kosong
-      skor ← 100 × (panjang(aktif.kunci) − panjang(posisiSalah)) / panjang(aktif.kunci)
+      skor ← 100 × maks(0, panjang(aktif.kunci) − panjang(posisiSalah)) / panjang(aktif.kunci)
 
-  status ← IF lulus THEN LULUS ELSE BELUM_TUNTAS
-  hasil ← HasilLatihan(konteks.akun.idAkun, soal.idMateri, soal.idSoal, soal.targetSoal, soal.mode, skor, status)
-  IF status = BELUM_TUNTAS THEN
+  status ← IF lulus THEN "berhasil" ELSE "perlu_diulang"
+  hasil ← HasilLatihan(konteks.akun.idAkun, soal.idMateri, soal.idSoal, soal.targetSoal, soal.mode, bulatkan(skor, 1), status)
+  IF status = "perlu_diulang" THEN
     RiwayatLatihan.simpanHasil(hasil)          // percobaan tetap dicatat (KF14), MotivasiBelajar tidak dipanggil
   konteks.session["hasilTerakhir"] ← hasil
-  RETURN HasilPenilaian(skor = bulatkan(skor, 1), status, umpanBalik(soal, status, posisiSalah), posisiSalah)
+  RETURN HasilPenilaian(hasil.skor, status, umpanBalik(soal, status, posisiSalah), posisiSalah)
+  // umpanBalik BUNYI menyebut aksara yang benar beserta bacaannya, misalnya "ꦏ dibaca ka"
 ```
 
 ### 5.16.3 Algoritma/Query
@@ -1704,7 +1934,6 @@ FUNCTION normalisasi(titik)
 ```text
 FUNCTION cocokkanBunyi(pilihan: String, kunci: String): Boolean
   RETURN normalisasi Unicode NFC(pilihan) = normalisasi Unicode NFC(kunci)
-  // umpan balik Algo-022 menyebut aksara yang benar beserta bacaannya, misalnya "ꦏ dibaca ka"
 ```
 
 ### 5.16.5 Algoritma/Query
@@ -1728,24 +1957,24 @@ FUNCTION validasiRangkaian(urutan: List<String>, kunci: List<String>): List<Inte
 **Nama Operasi:** `simpanHasil(hasil: HasilLatihan): HasilOperasi`  
 **ID Algoritma:** Algo-026
 
-Operasi ini menjaga dua aturan SKPL 2.4 butir 6: aktivitas yang belum selesai tidak menambah streak atau poin, dan pengulangan soal yang sama tidak memberikan poin baru.
+Operasi ini menjaga dua aturan SKPL 2.4 butir 6: aktivitas yang belum selesai tidak menambah streak atau poin, dan pengulangan soal yang sama tidak memberikan poin baru. Pemeriksaan soal yang sudah pernah diselesaikan memakai `RiwayatLatihan.cekPernahSelesai()` (Q-009 pada subbab 5.3) dan dilakukan sebelum hasil baru disimpan.
 
 ```text
 FUNCTION simpanHasil(hasil: HasilLatihan): HasilOperasi
   POIN_PER_SOAL ← 10
   terakhir ← konteks.session["hasilTerakhir"]
-  IF terakhir = null OR terakhir.idSoal <> hasil.idSoal OR terakhir.status <> LULUS THEN
-    RETURN HasilOperasi.gagal("BELUM_TUNTAS", "Latihan belum tuntas")
+  IF terakhir = null OR terakhir.idSoal <> hasil.idSoal OR terakhir.status <> "berhasil" THEN
+    RETURN HasilOperasi.gagal("BELUM_BERHASIL", "Latihan belum berhasil diselesaikan")
   hasil ← terakhir                              // nilai dari session dipakai, bukan dari browser
-  hasil.status ← TUNTAS
 
   MULAI TRANSAKSI
-    catat ← RiwayatLatihan.simpanHasil(hasil)               // data.pertamaKaliTuntas, data.idRiwayat
+    pernah ← RiwayatLatihan.cekPernahSelesai(hasil.idPelajar, hasil.targetSoal, hasil.mode)
+    catat ← RiwayatLatihan.simpanHasil(hasil)                // catat.data = idRiwayat baru
     IF catat gagal THEN BATALKAN dan RETURN catat
     m ← MotivasiBelajar milik hasil.idPelajar (Q-026, baris dikunci)
     m.perbaruiStreak(hari ini)
-    IF catat.data.pertamaKaliTuntas THEN
-      m.tambahPoin(catat.data.idRiwayat, POIN_PER_SOAL)
+    IF NOT pernah THEN
+      m.tambahPoin(catat.data, POIN_PER_SOAL)
     badgeBaru ← periksaBadge(m.streak, m.poin, m.daftarBadge)
     FOR EACH kode IN badgeBaru DO m.berikanBadge(kode)
   SELESAI TRANSAKSI
@@ -1754,7 +1983,7 @@ FUNCTION simpanHasil(hasil: HasilLatihan): HasilOperasi
     RETURN HasilOperasi.gagal("GAGAL_SIMPAN", "Hasil belum tersimpan. Coba lagi.")
 
   hapus konteks.session["hasilTerakhir"]          // mencegah hasil yang sama disimpan dua kali
-  RETURN HasilOperasi.sukses(RingkasanMotivasi(m.streak, m.poin, catat.data.pertamaKaliTuntas, badgeBaru))
+  RETURN HasilOperasi.sukses(RingkasanMotivasi(m.streak, m.poin, NOT pernah, badgeBaru))
 ```
 
 Tabel 5.16.3. Query Operasi simpanHasil
@@ -1762,6 +1991,27 @@ Tabel 5.16.3. Query Operasi simpanHasil
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-026 | `SELECT id_pelajar, streak, poin, tanggal_aktif_terakhir, daftar_badge FROM motivasi_belajar WHERE id_pelajar = :id_pelajar FOR UPDATE;` | Mengambil data motivasi dan mengunci barisnya selama transaksi agar dua penyelesaian bersamaan tidak saling menimpa. |
+
+### 5.16.7 Algoritma/Query
+
+**Nama Kelas:** LatihanController  
+**Nama Operasi:** `periksaBadge(streak: Integer, poin: Integer, dimiliki: List<String>): List<String>`  
+**ID Algoritma:** Algo-027
+
+| Kode | Badge | Syarat |
+| :--- | :--- | :--- |
+| `PEMULA_AKSARA` | Pemula Aksara | Menyelesaikan latihan pertama (poin ≥ 10) |
+| `RAJIN_7_HARI` | Rajin 7 Hari | Streak ≥ 7 hari |
+| `SERATUS_POIN` | Seratus Poin | Poin ≥ 100 |
+
+```text
+FUNCTION periksaBadge(streak: Integer, poin: Integer, dimiliki: List<String>): List<String>
+  baru ← list kosong
+  IF poin ≥ 10  AND "PEMULA_AKSARA"   NOT IN dimiliki THEN baru.tambah("PEMULA_AKSARA")
+  IF streak ≥ 7 AND "RAJIN_7_HARI"    NOT IN dimiliki THEN baru.tambah("RAJIN_7_HARI")
+  IF poin ≥ 100 AND "SERATUS_POIN"    NOT IN dimiliki THEN baru.tambah("SERATUS_POIN")
+  RETURN baru
+```
 
 ## 5.17 Kelas MateriController
 
@@ -2524,9 +2774,156 @@ Tabel 5.21.6. Query Operasi arsipkanVersi
 ## 5.22 Kelas MotivasiBelajar
 
 **Nama Kelas:** MotivasiBelajar  
-**ID Kelas:** C22
+**ID Kelas:** C22  
+**Jenis:** Model
 
+Menyimpan streak, poin, dan badge satu Pelajar. Kelas ini diperbarui pada UC-03, ditampilkan pada UC-04, dan dipakai untuk papan peringkat kelas pada UC-04 dan UC-07.
 
+Tabel 5.22.1. Operasi Kelas MotivasiBelajar
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `perbaruiStreak(tanggal: Date): void` | public | Menambah streak jika latihan berhasil terjadi sehari setelah aktivitas terakhir, mempertahankannya jika di hari yang sama, dan mengembalikannya ke 1 jika ada hari yang terlewat. Lihat Algo-028. |
+| `tambahPoin(idAktivitas: Integer, nilai: Integer): HasilOperasi` | public | Menambah poin untuk satu aktivitas (`idRiwayat`) dan mengembalikan total poin terbaru. Lihat Algo-029. |
+| `berikanBadge(kode: String): HasilOperasi` | public | Menyimpan badge jika belum dimiliki. Badge yang sudah dimiliki tidak disimpan ulang. Lihat Algo-030. |
+| `susunScoreboard(anggotaAktif: List<Profil>): List<Peringkat>` | public | Menyusun papan peringkat satu kelas dari poin anggota aktif dengan nama tampilan, tanpa data pribadi lain. Lihat Algo-031. |
+| `ambilMotivasi(idPelajar: Integer): Data` | public | Mengambil streak, poin, tanggal aktif terakhir, dan badge seorang Pelajar untuk halaman progres (I-11). Lihat Algo-032. |
+| `ambilPoinKelas(anggotaAktif: List<Integer>): List<Peringkat>` | public | Mengambil poin seluruh anggota aktif suatu kelas, terurut dari poin tertinggi. Lihat Algo-033. |
+
+Tabel 5.22.2. Atribut Kelas MotivasiBelajar
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idPelajar` | private | `Integer` |
+| `streak` | private | `Integer` |
+| `poin` | private | `Integer` |
+| `tanggalAktifTerakhir` | private | `Date?` |
+| `daftarBadge` | private | `List<String>` |
+
+### 5.22.1 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `perbaruiStreak(tanggal: Date): void`  
+**ID Algoritma:** Algo-028
+
+```text
+// Dipanggil dari Algo-026, yaitu hanya setelah latihan berstatus berhasil
+FUNCTION perbaruiStreak(tanggal: Date): void
+  IF this.tanggalAktifTerakhir = tanggal THEN RETURN          // sudah dihitung hari ini
+  IF this.tanggalAktifTerakhir = tanggal − 1 hari THEN
+    this.streak ← this.streak + 1
+  ELSE
+    this.streak ← 1                                          // ada hari yang terlewat, atau aktivitas pertama
+  this.tanggalAktifTerakhir ← tanggal
+  jalankan Q-028
+```
+
+Tabel 5.22.3. Query Operasi perbaruiStreak
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-028 | `UPDATE motivasi_belajar SET streak = :streak, tanggal_aktif_terakhir = :tanggal WHERE id_pelajar = :id_pelajar;` | Menyimpan streak dan tanggal aktivitas terbaru. |
+
+### 5.22.2 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `tambahPoin(idAktivitas: Integer, nilai: Integer): HasilOperasi`  
+**ID Algoritma:** Algo-029
+
+```text
+FUNCTION tambahPoin(idAktivitas: Integer, nilai: Integer): HasilOperasi
+  IF nilai ≤ 0 THEN
+    RETURN HasilOperasi.gagal("NILAI_TIDAK_VALID", "Poin harus lebih dari 0")
+  baris ← jalankan Q-029
+  IF baris = 0 THEN
+    RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Data motivasi pelajar tidak ditemukan")
+  this.poin ← this.poin + nilai
+  RETURN HasilOperasi.sukses(poin = this.poin, idAktivitas = idAktivitas)
+  // pencegahan poin ganda dijaga pemanggil (Algo-026) melalui RiwayatLatihan.cekPernahSelesai()
+```
+
+Tabel 5.22.4. Query Operasi tambahPoin
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-029 | `UPDATE motivasi_belajar SET poin = poin + :nilai WHERE id_pelajar = :id_pelajar;` | Menambah poin secara atomik di basis data. |
+
+### 5.22.3 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `berikanBadge(kode: String): HasilOperasi`  
+**ID Algoritma:** Algo-030
+
+```text
+FUNCTION berikanBadge(kode: String): HasilOperasi
+  IF kode IN this.daftarBadge THEN
+    RETURN HasilOperasi.sukses(baru = false)
+  this.daftarBadge.tambah(kode)
+  jalankan Q-030 dengan daftar_badge = JSON(this.daftarBadge)
+  RETURN HasilOperasi.sukses(baru = true)
+```
+
+Tabel 5.22.5. Query Operasi berikanBadge
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-030 | `UPDATE motivasi_belajar SET daftar_badge = :daftar_badge WHERE id_pelajar = :id_pelajar;` | Menyimpan daftar badge terbaru dalam format JSON. |
+
+### 5.22.4 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `susunScoreboard(anggotaAktif: List<Profil>): List<Peringkat>`  
+**ID Algoritma:** Algo-031
+
+Papan peringkat hanya untuk satu kelas, memakai nama tampilan, dan hanya disusun bila Pengajar mengaktifkannya (SKPL 2.4 butir 5). Pemeriksaan status aktif dilakukan pemanggil, yaitu `ProgresController.ambilScoreboard()`.
+
+```text
+FUNCTION susunScoreboard(anggotaAktif: List<Profil>): List<Peringkat>
+  IF anggotaAktif kosong THEN RETURN list kosong
+  nama ← peta idPelajar → namaTampilan dari anggotaAktif
+  baris ← ambilPoinKelas(daftar idPelajar dari anggotaAktif)        // Algo-033, sudah urut poin menurun
+  hasil ← list kosong;  peringkat ← 0;  poinSebelumnya ← tak hingga;  urutan ← 0
+  FOR EACH b IN baris DO
+    urutan ← urutan + 1
+    IF b.poin < poinSebelumnya THEN peringkat ← urutan      // poin sama = peringkat sama
+    hasil.tambah(Peringkat(peringkat, nama[b.idPelajar], b.poin))
+    poinSebelumnya ← b.poin
+  RETURN hasil                                    // tanpa email atau data pribadi lain
+```
+
+### 5.22.5 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `ambilMotivasi(idPelajar: Integer): Data`  
+**ID Algoritma:** Algo-032
+
+```text
+FUNCTION ambilMotivasi(idPelajar: Integer): Data
+  baris ← jalankan Q-032
+  IF baris kosong THEN
+    RETURN Data(streak = 0, poin = 0, tanggalAktifTerakhir = null, daftarBadge = [])   // Pelajar baru
+  IF baris.tanggal_aktif_terakhir < hari ini − 1 hari THEN
+    baris.streak ← 0                              // streak terputus, ditampilkan 0 sampai latihan berikutnya
+  RETURN Data(baris.streak, baris.poin, baris.tanggal_aktif_terakhir, baca JSON baris.daftar_badge)
+```
+
+Tabel 5.22.6. Query Operasi ambilMotivasi
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-032 | `SELECT streak, poin, tanggal_aktif_terakhir, daftar_badge FROM motivasi_belajar WHERE id_pelajar = :id_pelajar;` | Mengambil indikator motivasi satu Pelajar. |
+
+### 5.22.6 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `ambilPoinKelas(anggotaAktif: List<Integer>): List<Peringkat>`  
+**ID Algoritma:** Algo-033
+
+Tabel 5.22.7. Query Operasi ambilPoinKelas
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-033 | `SELECT id_pelajar, poin FROM motivasi_belajar WHERE id_pelajar IN (:daftar_id) ORDER BY poin DESC, id_pelajar ASC;` | Mengambil poin anggota aktif satu kelas, terurut dari poin tertinggi. Anggota yang belum punya baris dianggap berpoin 0. |
 
 ## 5.23 Kelas KelasBelajar
 **Nama Kelas:** KelasBelajar
@@ -2852,7 +3249,7 @@ Tabel 6.1. Spesifikasi Objek Antarmuka [ID Layar]
 **Nama Layar:** Daftar Materi
 
 <p align="center">
-<img alt="Rancangan Antarmuka I-04 Daftar Materi" src="./assets/diagram/I-04 Daftar Materi.png" width="70%">
+<img alt="Rancangan Antarmuka I-04 Daftar Materi" src="./assets/diagram/I-04 Daftar Materi (tag).png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 6.4. Rancangan Antarmuka I-04 - Daftar Materi</i>
@@ -2860,20 +3257,13 @@ Tabel 6.1. Spesifikasi Objek Antarmuka [ID Layar]
 
 Tabel 6.4. Spesifikasi Objek Antarmuka I-04
 
-| Id_Objek | Jenis                   | Konten                                         | Keterangan                                                                                                       |
-| :------- | :---------------------- | :--------------------------------------------- | :--------------------------------------------------------------------------------------------------------------- |
-| I-04-01  | Card (header halaman)   | Judul "Daftar Materi" dan deskripsi singkat    | Menampilkan judul halaman untuk Pelajar; tidak interaktif.                                                       |
-| I-04-02  | Button (pilihan, aktif) | "Aksara Jawa"                                  | Memilih jenis aksara Jawa (terpilih awal), memuat ulang daftar dengan filter jenis = Jawa (Algo-049 → Algo-040). |
-| I-04-03  | Button (pilihan)        | "Aksara Sunda"                                 | Memilih jenis aksara Sunda dan memuat ulang daftar (Algo-049 → Algo-040).                                        |
-| I-04-04  | Button (pilihan, aktif) | "Dasar"                                        | Memfilter tingkat kesulitan 1 (Algo-049 → Algo-040).                                                             |
-| I-04-05  | Button (pilihan)        | "Menengah"                                     | Memfilter tingkat kesulitan 2 (Algo-049 → Algo-040).                                                             |
-| I-04-06  | Button (pilihan)        | "Lanjut"                                       | Memfilter tingkat kesulitan 3 (Algo-049 → Algo-040).                                                             |
-| I-04-07  | Label (heading)         | "Materi tersedia"                              | Judul bagian daftar hasil filter.                                                                                |
-| I-04-08  | Chip                    | "3 materi" (jumlah materi hasil filter)        | Diperbarui setiap filter berubah.                                                                                |
-| I-04-09  | Card (item materi)      | Nama materi, jenis aksara, dan tingkat         | Satu kartu per materi `TERBIT`; data dari `ambilMetadata()` (Algo-049).                                          |
-| I-04-10  | Chip (status)           | "Lulus" / "Belum tuntas" / "Belum dimulai"     | Status progres pelajar per materi dari `RiwayatLatihan.ambilStatusProgres` (Algo-049).                           |
-| I-04-11  | Button (utama)          | "Pelajari"                                     | Membuka I-05 Detail Materi untuk materi tersebut; menjalankan `pilihMateri` (Algo-050).                          |
-| I-04-12  | Alert (galat)           | "Materi belum tersedia untuk kombinasi ini..." | Tampil hanya bila daftar kosong (alternatif 1 UC-02); bukan galat sistem (Algo-040).                             |
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-04-01 | Segmented Button | Label "Jenis aksara": "Jawa" (terpilih), "Sunda" | Mengganti jenis aksara dan memuat ulang daftar dengan filter jenis (Algo-049, Algo-040). |
+| I-04-02 | Segmented Button | Label "Tingkat kesulitan": "Tingkat 1" (terpilih), "Tingkat 2", "Tingkat 3" | Mengganti tingkat kesulitan dan memuat ulang daftar (Algo-049, Algo-040). |
+| I-04-03 | Card (item materi) | Ikon aksara, nama materi (mis. "Nglegena: ha na ca ra ka"), chip status ("Selesai" / "Sedang" / "Belum"), teks "Aksara Jawa · Tingkat 1 · 5 aksara", progress bar dan persentase (mis. 100%, 40%, 0%) | Satu kartu per materi terbit. Status dan persentase berasal dari `RiwayatLatihan.ambilStatusProgres` yang digabung pada Algo-049. |
+| I-04-04 | Button | "Pelajari" (utama); pada materi berstatus Selesai tombolnya "Ulangi" | Membuka I-05 Detail Materi untuk materi tersebut (`pilihMateri`, Algo-050). "Ulangi" menjalankan aksi yang sama. |
+| I-04-05 | Alert (info) | "Belum ada materi untuk pilihan ini" dan "Coba jenis aksara atau tingkat kesulitan lain." | Tampil hanya bila daftar kosong. Algo-040 mengembalikan daftar kosong, bukan galat. |
 
 ## 6.5 Rancangan Antarmuka I-05
 
@@ -2881,7 +3271,7 @@ Tabel 6.4. Spesifikasi Objek Antarmuka I-04
 **Nama Layar:** Detail Materi
 
 <p align="center">
-<img alt="Rancangan Antarmuka I-05 Detail Materi" src="./assets/diagram/I-05 Detail Materi.png" width="70%">
+<img alt="Rancangan Antarmuka I-05 Detail Materi" src="./assets/diagram/I-05 Detail Materi (tag).png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 6.5. Rancangan Antarmuka I-05 - Detail Materi</i>
@@ -2889,32 +3279,162 @@ Tabel 6.4. Spesifikasi Objek Antarmuka I-04
 
 Tabel 6.5. Spesifikasi Objek Antarmuka I-05
 
-| Id_Objek | Jenis                 | Konten                                            | Keterangan                                                                                     |
-| :------- | :-------------------- | :------------------------------------------------ | :--------------------------------------------------------------------------------------------- |
-| I-05-01  | Card (header halaman) | Nama materi, jenis aksara, tingkat, breadcrumb    | Data dari `PaketMateri` (Algo-047, Algo-050).                                                  |
-| I-05-02  | Chip (status)         | "Belum tuntas" / "Lulus"                          | Status progres pelajar untuk materi ini (Algo-050).                                            |
-| I-05-03  | Card (tile aksara)    | Bentuk aksara materi (mis. ꦲ ꦤ ꦕ ꦫ ꦏ)             | Diisi dari `bentukAksara` (Algo-047).                                                          |
-| I-05-04  | Card (teks)           | Aturan penulisan                                  | Diisi dari `aturan` (Algo-047).                                                                |
-| I-05-05  | Card (teks)           | Contoh penggunaan                                 | Diisi dari `contoh` (Algo-047).                                                                |
-| I-05-06  | Card (audio)          | "Contoh bunyi pengucapan"                         | Tampil bersama tombol audio.                                                                   |
-| I-05-07  | Button (aksen)        | "Putar Pengucapan"                                | Memutar audio pengucapan (Algo-048 → Algo-051); nonaktif bila audio tidak tersedia (Algo-047). |
-| I-05-08  | Alert (galat)         | "Audio tidak dapat diputar."                      | Tampil bila audio gagal dimuat (alternatif 2 UC-02), konten lain tetap terbaca (Algo-048).     |
-| I-05-09  | Card                  | "Siap berlatih?"                                  | Ajakan berlatih.                                                                               |
-| I-05-10  | Button (utama)        | "Mulai Latihan"                                   | Membuka I-06 Pilih Mode untuk materi ini (UC-03).                                              |
-| I-05-11  | Button (sekunder)     | "Kembali ke Daftar Materi"                        | Kembali ke I-04.                                                                               |
-| I-05-12  | Alert (info)          | "Konten materi versi 1.0, sesuai versi aplikasi." | Menunjukkan `versiKonten` yang ditampilkan (Algo-056).                                         |
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-05-01 | Link | "Kembali ke daftar materi" | Kembali ke I-04 Daftar Materi. |
+| I-05-02 | Card (aksara terpilih) | Aksara besar (mis. ꦲ), label "AKSARA", nama aksara "ha", dan teks bunyi: "ha" seperti pada kata "hawa" | Menampilkan satu aksara dari materi yang sedang dibuka. Data dari `PaketMateri` (Algo-047, Algo-050). Pemilih aksara pada panel kanan mengganti isi kartu ini. |
+| I-05-03 | Button (ikon speaker) | "Dengarkan" | Memutar audio pengucapan (Algo-048, Algo-051). Nonaktif bila audio tidak tersedia (Algo-047). |
+| I-05-04 | Card (teks) | "Aturan penulisan": "Tulis dari kiri ke kanan tanpa spasi antarkata. Setiap aksara dasar mewakili satu suku kata yang berakhiran bunyi "a"." | Diisi dari `aturan` (Algo-047). |
+| I-05-05 | Card (contoh) | "Contoh": ꦲꦤ = "ana" (ada); ꦕꦫ = "cara" | Diisi dari `contoh` (Algo-047). |
+| I-05-06 | Alert (galat) | "Audio tidak dapat diputar" dan "Periksa koneksi lalu tekan Dengarkan sekali lagi." | Tampil bila audio gagal dimuat atau diputar (Algo-048). Isi materi lain tetap terbaca. |
+| I-05-07 | Button (utama, ikon pensil) | "Mulai latihan" | Membuka I-06 Pilih Mode untuk materi ini (UC-03). |
+| I-05-08 | Button (sekunder, ikon panah) | "Kembali" | Kembali ke I-04 Daftar Materi. |
 
 ## 6.6 Rancangan Antarmuka I-06
 
+**Antarmuka:** I-06  
+**Nama Layar:** Pilih Mode Latihan
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-06 Pilih Mode Latihan" src="./assets/ui/I-06 Pilih Mode.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.6. Rancangan Antarmuka I-06 - Pilih Mode Latihan</i>
+</p>
+
+Tabel 6.6. Spesifikasi Objek Antarmuka I-06
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-06-01 | Card (pilihan mode) dan Button | Ikon pensil, "Menulis", "Gambar aksara di kanvas dengan bantuan garis.", tombol "Mulai" | Menjalankan `pilihModeLatihan(MENULIS)` → `LatihanController.siapkanSoal()` (Algo-021), lalu membuka I-07. |
+| I-06-02 | Card (pilihan mode) dan Button | Ikon speaker, "Mencocokkan bunyi", "Dengarkan bunyi, pilih aksara yang sesuai.", tombol "Mulai" | Menjalankan `pilihModeLatihan(BUNYI)` → Algo-021, lalu membuka I-08. |
+| I-06-03 | Card (pilihan mode) dan Button | Ikon dokumen, "Merangkai aksara", "Susun aksara dan tanda baca menjadi kata.", tombol "Mulai" | Menjalankan `pilihModeLatihan(MERANGKAI)` → Algo-021, lalu membuka I-09. |
+| I-06-04 | Card (pilihan mode) dan Button | Ikon pensil, "Transliterasi", "Ubah aksara ke huruf Latin atau sebaliknya.", tombol "Mulai" | Mode transliterasi (KF23). Membuka panel transliterasi pada I-09-04. |
+| I-06-05 | Card (informasi) | Maskot, "Mau latihan apa?", "Semua mode memberi poin untuk soal yang baru pertama kali kamu selesaikan.", serta streak (mis. 5 hari), total poin (mis. 240), dan jumlah badge (mis. 3) | Angka diambil dari `MotivasiBelajar.ambilMotivasi()` (Algo-032). Aturan poin sesuai Algo-026. Tidak interaktif. |
+| I-06-06 | Button (teks) | "← Kembali ke materi" | Kembali ke I-05 untuk materi yang sama. |
+
+Jika materi belum memiliki soal untuk mode yang dipilih, Algo-021 menolak permintaan dan layar ini menampilkan pesan "Materi ini belum memiliki soal untuk mode yang dipilih" tanpa berpindah layar.
+
 ## 6.7 Rancangan Antarmuka I-07
+
+**Antarmuka:** I-07  
+**Nama Layar:** Latihan Menulis
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-07 Latihan Menulis" src="./assets/ui/I-07 Menulis.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.7. Rancangan Antarmuka I-07 - Latihan Menulis</i>
+</p>
+
+Tabel 6.7. Spesifikasi Objek Antarmuka I-07
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-07-01 | Progress bar | Bar kemajuan latihan dan ikon pelita dengan angka streak (mis. 5) | Bagian terisi bertambah setiap aksara target pada materi ini berhasil diselesaikan dalam sesi latihan. Angka di kanan adalah streak Pelajar dari `MotivasiBelajar`. |
+| I-07-02 | Label (soal) | "LATIHAN MENULIS", "Tulis aksara "ha"", dan "Ikuti garis bantu, lalu tekan Periksa." | Diisi `tampilkanSoal(soal)` dari `SoalLatihan.targetSoal` (Algo-021). Kartu "Contoh" di sebelah kanan menampilkan bentuk aksara target dan cara membacanya. |
+| I-07-03 | Canvas | Area menggambar dengan outline aksara target | Menangkap Pointer Events melalui `rekamGoresan()` (Algo-020). Goresan digambar di browser tanpa menunggu server (KNF04). Outline berasal dari `SoalLatihan.templat`. |
+| I-07-04 | Toggle | "Tampilkan outline" | Menjalankan `aturOutline(aktif)` untuk menyalakan atau mematikan outline tanpa menghapus goresan (KF10). |
+| I-07-05 | Button (sekunder) | "× Bersihkan" | Menjalankan `ulangiLatihan()`: goresan dihapus, soal dan outline tetap. |
+| I-07-06 | Button (utama) | "Periksa" | Menjalankan `kirimJawaban(jawaban)` → `LatihanController.nilaiJawaban()` (Algo-022, Algo-023). Nonaktif selama kanvas kosong. Setelah hasil `berhasil`, tombol ini menjalankan `selesaikanLatihan()` → `simpanHasil()` (Algo-026) lalu membuka I-10. |
+| I-07-07 | Alert (hasil) | "Belum tepat" dan "Akurasi 62%. Tulis lebih dekat ke garis bantu.", tombol "Ulangi" | Diisi `tampilkanHasil(hasil)`. Untuk status `perlu_diulang` (akurasi di bawah 70), percobaan dicatat tanpa menambah streak atau poin, dan tombol "Ulangi" menjalankan `ulangiLatihan()` pada aksara yang sama (Skenario Alternatif 3). Untuk status `berhasil`, alert berwarna hijau. |
+| I-07-08 | Button (ikon) | "×" | Keluar dari latihan dan kembali ke I-06 tanpa menyimpan soal yang belum dikirim. |
 
 ## 6.8 Rancangan Antarmuka I-08
 
+**Antarmuka:** I-08  
+**Nama Layar:** Latihan Mencocokkan Bunyi
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-08 Latihan Mencocokkan Bunyi" src="./assets/ui/I-08 Bunyi.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.8. Rancangan Antarmuka I-08 - Latihan Mencocokkan Bunyi</i>
+</p>
+
+Tabel 6.8. Spesifikasi Objek Antarmuka I-08
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-08-01 | Progress bar | Bar kemajuan latihan dan angka streak | Sama seperti I-07-01. |
+| I-08-02 | Label (soal) | "LATIHAN MENCOCOKKAN BUNYI" dan "Pilih aksara yang sesuai bunyi" | Diisi `tampilkanSoal(soal)` (Algo-021). |
+| I-08-03 | Button (ikon audio) | Tombol speaker, maskot, dan "Dengarkan baik-baik, lalu pilih satu aksara." | Menjalankan `putarAudio()` untuk `SoalLatihan.audio` dari `ambilAudioPengucapan()` (Algo-021). Boleh diputar berulang. Suara hanya diputar setelah Pelajar menekan tombol (Skenario Alternatif 1). |
+| I-08-04 | Button (pilihan, 4 buah) | Empat aksara beserta label "pilihan 1" s.d. "pilihan 4" | Berisi `SoalLatihan.pilihan`. Mengklik satu kartu menandainya sebagai pilihan (garis tepi berwarna) dan menyimpannya ke `jawabanInput.pilihan`. |
+| I-08-05 | Button (utama) | "Periksa" | Menjalankan `kirimJawaban(jawaban)` → `LatihanController.nilaiJawaban()` (Algo-022, Algo-024). Nonaktif sebelum ada pilihan. Setelah hasil `berhasil`, tombol ini menjalankan `selesaikanLatihan()` → `simpanHasil()` (Algo-026) lalu membuka I-10. |
+| I-08-06 | Alert (hasil) | "Benar!" dan "Bunyi yang diputar adalah "na"." | Diisi `tampilkanHasil(hasil)`. Jawaban salah ditampilkan dengan alert merah yang menyebut aksara yang benar. |
+| I-08-07 | Button (ikon) | "×" | Sama seperti I-07-08. |
+
 ## 6.9 Rancangan Antarmuka I-09
+
+**Antarmuka:** I-09  
+**Nama Layar:** Latihan Merangkai Aksara
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-09 Latihan Merangkai Aksara" src="./assets/ui/I-09 Merangkai.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.9. Rancangan Antarmuka I-09 - Latihan Merangkai Aksara</i>
+</p>
+
+Tabel 6.9. Spesifikasi Objek Antarmuka I-09
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-09-01 | Progress bar | Bar kemajuan latihan dan angka streak | Sama seperti I-07-01. |
+| I-09-02 | Label (soal) | "LATIHAN MERANGKAI AKSARA" dan "Susun kata "cara"" | Diisi `tampilkanSoal(soal)` dari `SoalLatihan.targetSoal` (Algo-021). |
+| I-09-03 | Card (area susunan dan palet) | "SUSUNANMU" berisi komponen yang sudah dipilih, dan "KOMPONEN TERSEDIA" berisi aksara serta sandhangan | Palet berisi `SoalLatihan.komponen`. Mengklik komponen memindahkannya ke susunan (komponen di palet menjadi pudar), dan mengklik komponen di susunan mengembalikannya. Urutan disimpan sebagai `jawabanInput.urutan` dan diproses di browser. |
+| I-09-04 | Card (panel transliterasi) | "Mode transliterasi", aksara soal, input "Tulis dalam huruf Latin", pilihan arah "Aksara → Latin" / "Latin → Aksara" | Hanya tampil bila mode Transliterasi dipilih pada I-06 (I-06-04). |
+| I-09-05 | Button (utama) | "Periksa" | Menjalankan `kirimJawaban(jawaban)` → `LatihanController.nilaiJawaban()` (Algo-022, Algo-025). Nonaktif selama susunan kosong. Setelah hasil `berhasil`, tombol ini menjalankan `selesaikanLatihan()` → `simpanHasil()` (Algo-026) lalu membuka I-10. |
+| I-09-06 | Alert (hasil) | "Susunan benar" dan "ꦕ + ꦫ dibaca "cara"." | Diisi `tampilkanHasil(hasil)`. Bila susunan salah, komponen pada `posisiSalah` diberi garis merah. |
+| I-09-07 | Button (ikon) | "×" | Sama seperti I-07-08. |
 
 ## 6.10 Rancangan Antarmuka I-10
 
+**Antarmuka:** I-10  
+**Nama Layar:** Hasil Latihan
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-10 Hasil Latihan" src="./assets/ui/I-10 Hasil Latihan.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.10. Rancangan Antarmuka I-10 - Hasil Latihan</i>
+</p>
+
+Tabel 6.10. Spesifikasi Objek Antarmuka I-10
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-10-01 | Label (judul hasil) | Maskot, "Latihan rampung!", dan "Apik tenan! Kamu menyelesaikan latihan menulis "ha na ca ra ka"." | Ditampilkan `tampilkanRingkasan(ringkasan)` setelah `simpanHasil()` berhasil (Algo-026). |
+| I-10-02 | Card (statistik) | "POIN" dan "+10" | Dari `RingkasanMotivasi.poinBertambah`, hasil `tambahPoin()` (Algo-029). Menjadi "+0" bila soal sudah pernah diselesaikan (`cekPernahSelesai()`, SKPL 2.4 butir 6). |
+| I-10-03 | Card (statistik) | "AKURASI" dan "88%" | Skor dari `HasilPenilaian` latihan yang baru diselesaikan. |
+| I-10-04 | Card (statistik) | "STREAK" dan "6 hari" | Dari `RingkasanMotivasi.streak`, hasil `perbaruiStreak()` (Algo-028). |
+| I-10-05 | Card (badge baru) | "BADGE BARU", "Pemula Aksara", dan "Menyelesaikan latihan pertama." | Dari `RingkasanMotivasi.badgeBaru` (Algo-027, Algo-030). Disembunyikan bila tidak ada badge baru. |
+| I-10-06 | Button (sekunder) | "Ulangi latihan" | Mengulang latihan pada mode yang sama (`pilihModeLatihan(mode)`, Algo-021). Poin tidak bertambah untuk soal yang sudah pernah diselesaikan. |
+| I-10-07 | Button (utama) | "→ Lanjut" | Membuka soal berikutnya pada mode yang sama (Algo-021). Bila semua aksara target pada materi sudah berhasil, Pelajar kembali ke I-05. |
+
 ## 6.11 Rancangan Antarmuka I-11
+**Antarmuka:** I-11  
+**Nama Layar:** Progres Pelajar  
+**Kelas View:** `HalamanProgres`  
+**Use Case:** UC-04
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-11 - Progres Pelajar" src="./assets/diagram/I-11 Progres Pelajar.png" width="100%">
+</p>
+<p align="center"><i>Gambar 53. Rancangan Antarmuka I-11 - Progres Pelajar</i></p>
+
+Tabel 6.11. Spesifikasi Objek Antarmuka I-11
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-11.1 | Drop-down list | Periode riwayat | Menjalankan pilihPeriode(periode). Riwayat diambil dengan ProgresController.ambilRiwayat(idPelajar, periode). |
+| I-11.2 | Diagram batang | Penguasaan per materi | Ditampilkan oleh tampilkanProgres(data) dari ProgresController.hitungProgres() (Algo-100). |
+| I-11.3 | Tabel | Riwayat latihan | Tanggal, materi, mode, skor, dan status dari RiwayatLatihan. |
+| I-11.4 | Kartu | Streak, poin, dan hari aktif pekan ini | Dari MotivasiBelajar.ambilMotivasi(). |
+| I-11.5 | Kartu | Badge | Badge yang sudah diperoleh tampil penuh, yang belum tampil pudar. |
+| I-11.6 | Kartu + button | Rekomendasi materi | Dari ProgresController.siapkanRekomendasi() (Algo-101). Tombol membuka I-05. |
+| I-11.7 | Tabel peringkat | Papan peringkat kelas | Ditampilkan oleh tampilkanScoreboard(data) dari ProgresController.ambilScoreboard(). Hanya tampil bila Pengajar mengaktifkannya (UC-04 alternatif 2). |
+| I-11.8 | Pesan informasi | Belum ada riwayat | Muncul bila riwayat kosong (UC-04 alternatif 1). |
 
 ## 6.12 Rancangan Antarmuka I-12
 
@@ -2927,6 +3447,28 @@ Tabel 6.5. Spesifikasi Objek Antarmuka I-05
 ## 6.16 Rancangan Antarmuka I-16
 
 ## 6.17 Rancangan Antarmuka I-17
+**Antarmuka:** I-17  
+**Nama Layar:** Pantau Progres Anggota  
+**Kelas View:** `HalamanKelolaKelas`  
+**Use Case:** UC-08
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-17 - Pantau Progres Anggota" src="./assets/diagram/I-17 Pantau Progres Anggota.png" width="100%">
+</p>
+<p align="center"><i>Gambar 59. Rancangan Antarmuka I-17 - Pantau Progres Anggota</i></p>
+
+Tabel 6.17. Spesifikasi Objek Antarmuka I-17
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-17.1 | Kartu ringkasan | Jumlah anggota aktif, rata-rata penguasaan, tugas terkumpul | Dari ProgresController.agregasiProgres(anggotaAktif, periode) (Algo-102). |
+| I-17.2 | Tabel | Progres tiap anggota aktif | Ditampilkan oleh tampilkanProgres(data). Anggota yang sudah keluar tidak ditampilkan. |
+| I-17.3 | Button | Detail | Menjalankan pilihAnggota(idPelajar), lalu KelasController.ambilProgresAnggota() (KF13). |
+| I-17.4 | Daftar | Aksara yang sering salah | Dari ProgresController.hitungPolaKesalahan(). |
+| I-17.5 | Panel | Detail anggota terpilih | Riwayat latihan anggota terpilih. |
+| I-17.6 | Text area + button | Umpan balik untuk anggota | Menjalankan kirimUmpanBalik(data), lalu KelasController.kirimUmpanBalik(idKelas, data). |
+| I-17.7 | Pesan informasi | Belum ada riwayat | Muncul bila anggota belum berlatih (UC-08 alternatif 1). |
+| I-17.8 | Pesan kesalahan | Bukan anggota aktif | Muncul bila Pengajar membuka progres pengguna yang bukan anggota aktif (UC-08 alternatif 2). |
 
 ## 6.18 Rancangan Antarmuka I-18
 
@@ -2934,7 +3476,7 @@ Tabel 6.5. Spesifikasi Objek Antarmuka I-05
 **Nama Layar:** Kelola Materi
 
 <p align="center">
-<img alt="Rancangan Antarmuka I-18 Kelola Materi" src="./assets/diagram/I-18 Kelola Materi.png" width="70%">
+<img alt="Rancangan Antarmuka I-18 Kelola Materi" src="./assets/diagram/I-18 Kelola Materi (tag).png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 6.18. Rancangan Antarmuka I-18 - Kelola Materi</i>
@@ -2942,18 +3484,13 @@ Tabel 6.5. Spesifikasi Objek Antarmuka I-05
 
 Tabel 6.18. Spesifikasi Objek Antarmuka I-18
 
-| Id_Objek | Jenis                 | Konten                                                         | Keterangan                                                            |
-| :------- | :-------------------- | :------------------------------------------------------------- | :-------------------------------------------------------------------- |
-| I-18-01  | Card (header halaman) | "Kelola Materi" dan deskripsi                                  | Hanya untuk Tim Materi (`verifikasiHakAkses("kelola_materi")`).       |
-| I-18-02  | Button (aksen)        | "Tambah Materi"                                                | Membuka I-19 Unggah Materi.                                           |
-| I-18-03  | Alert (sukses)        | "Materi berhasil ditambahkan."                                 | Tampil setelah operasi sukses (`tampilkanStatus`, Algo-045/046).      |
-| I-18-04  | Button (filter)       | "Semua"                                                        | Menampilkan semua materi, termasuk draf (Algo-049 → Algo-040).        |
-| I-18-05  | Button (filter)       | "Aksara Jawa"                                                  | Memfilter jenis Jawa (Algo-049 → Algo-040).                           |
-| I-18-06  | Button (filter)       | "Aksara Sunda"                                                 | Memfilter jenis Sunda (Algo-049 → Algo-040).                          |
-| I-18-07  | Table (dalam Card)    | Nama materi, jenis aksara, tingkat, status, versi konten, aksi | Diisi oleh `tampilkanDaftarMateri` (Algo-049).                        |
-| I-18-08  | Chip (status)         | "Terbit" / "Draf"                                              | Nilai `statusPublikasi`.                                              |
-| I-18-09  | Button (teks)         | "Sunting"                                                      | Membuka form sunting dengan data materi terisi (Algo-046 → Algo-054). |
-| I-18-10  | Button (teks, bahaya) | "Hapus"                                                        | Meminta konfirmasi, lalu menghapus lunak materi (Algo-055).           |
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-18-01 | Table (dalam Card) | Kolom "MATERI", "JENIS", "TINGKAT", "STATUS" (chip "Terbit" / "Draf"), "VERSI", "AKSI" | Diisi oleh `tampilkanDaftarMateri` dari hasil Algo-049 (Algo-040). Tim Materi melihat materi draf dan terbit. |
+| I-18-02 | Button (utama, ikon plus) | "Tambah materi" | Membuka I-19 Unggah Materi. |
+| I-18-03 | Button (sekunder, ikon pensil) | "Sunting" (satu per baris) | Membuka form sunting materi terpilih (`suntingMateri`, Algo-046, Algo-054). |
+| I-18-04 | Button (aksi baris, terpotong pada desain) | Aksi arsip/hapus materi per baris | Menghapus materi secara lunak sehingga tidak tampil lagi bagi Pelajar (`hapusMateri`, Algo-055). Label tombol perlu dipastikan pada desain. |
+| I-18-05 | Alert (sukses) | "Materi berhasil disimpan sebagai draf" | Notifikasi hasil operasi (`tampilkanStatus`, Algo-045, Algo-046). |
 
 ## 6.19 Rancangan Antarmuka I-19
 
@@ -2961,7 +3498,7 @@ Tabel 6.18. Spesifikasi Objek Antarmuka I-18
 **Nama Layar:** Unggah Materi
 
 <p align="center">
-<img alt="Rancangan Antarmuka I-19 Unggah Materi" src="./assets/diagram/I-19 Unggah Materi.png" width="70%">
+<img alt="Rancangan Antarmuka I-19 Unggah Materi" src="./assets/diagram/I-19 Unggah Materi (tag).png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 6.19. Rancangan Antarmuka I-19 - Unggah Materi</i>
@@ -2969,26 +3506,14 @@ Tabel 6.18. Spesifikasi Objek Antarmuka I-18
 
 Tabel 6.19. Spesifikasi Objek Antarmuka I-19
 
-| Id_Objek | Jenis                 | Konten                                                                      | Keterangan                                                        |
-| :------- | :-------------------- | :-------------------------------------------------------------------------- | :---------------------------------------------------------------- |
-| I-19-01  | Card (header halaman) | "Unggah Materi" dan breadcrumb                                              | Kembali ke I-18 lewat breadcrumb.                                 |
-| I-19-02  | Text Input            | Label "Nama materi"                                                         | Wajib, maks. 100 karakter; divalidasi di Algo-043.                |
-| I-19-03  | Card (pilihan)        | "Aksara Jawa"                                                               | Memilih jenis aksara `JAWA`.                                      |
-| I-19-04  | Card (pilihan)        | "Aksara Sunda"                                                              | Memilih jenis aksara `SUNDA`.                                     |
-| I-19-05  | Button (pilihan)      | "Dasar"                                                                     | Tingkat kesulitan 1.                                              |
-| I-19-06  | Button (pilihan)      | "Menengah"                                                                  | Tingkat kesulitan 2.                                              |
-| I-19-07  | Button (pilihan)      | "Lanjut"                                                                    | Tingkat kesulitan 3.                                              |
-| I-19-08  | Toggle                | "Terbitkan setelah disimpan"                                                | Mati = status `DRAF`, hidup = `TERBIT` (Algo-043).                |
-| I-19-09  | Button (sekunder)     | "Batal"                                                                     | Membuang isian dan kembali ke I-18.                               |
-| I-19-10  | Button (utama)        | "Simpan Materi"                                                             | Menjalankan `unggahFileMateri` (Algo-045 → Algo-053).             |
-| I-19-11  | Card                  | "Berkas materi"                                                             | Pembungkus bagian unggah berkas.                                  |
-| I-19-12  | Dropzone              | "Seret berkas paket materi ke sini"                                         | Menerima berkas yang dijatuhkan.                                  |
-| I-19-13  | Button (sekunder)     | "Pilih Berkas"                                                              | Membuka pemilih berkas peramban.                                  |
-| I-19-14  | List item             | "aksara-nglegena-dasar.zip", "2,4 MB · berisi konten.json dan folder audio" | Berkas terpilih.                                                  |
-| I-19-15  | Chip (lulus)          | "Format valid"                                                              | Hasil pemeriksaan awal (ekstensi) di tampilan (Algo-045).         |
-| I-19-16  | Alert (galat)         | "Jenis berkas tidak didukung."                                              | Tampil bila berkas bukan .zip (alternatif 1 UC-06; Algo-045/052). |
-| I-19-17  | Alert (info)          | "Berkas diperiksa di server." (format, ukuran maks. 20 MB, isi paket)       | Pemeriksaan lengkap oleh server (Algo-052).                       |
-
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-19-01 | Text Input | Label "Nama materi"; contoh isi "Nglegena: ma ga ba tha nga" | Wajib diisi, maksimal 100 karakter (Algo-043). |
+| I-19-02 | Segmented Button (dua kelompok) | Label "Jenis aksara": "Jawa" (terpilih), "Sunda"; label "Tingkat kesulitan": "1" (terpilih), "2", "3" | Menentukan jenis aksara dan tingkat kesulitan materi (Algo-043). |
+| I-19-03 | Textarea | Label "Aturan penulisan dan contoh"; contoh isi "Tulis dari kiri ke kanan. Contoh: ꦩꦒ = "maga"." | Isi aturan dan contoh materi, disimpan sebagai konten (Algo-053, Algo-057). |
+| I-19-04 | Dropzone + Button | "Seret berkas ke sini atau pilih berkas"; "Format: json, mp3, png, svg. Maksimal 10 MB."; tombol "Pilih berkas" | Menerima berkas materi dan memeriksa format serta ukurannya (Algo-045, Algo-052). |
+| I-19-05 | Button (utama) | "Simpan sebagai draf" | Menjalankan `unggahFileMateri` (Algo-045, Algo-053). Materi baru tersimpan berstatus Draf, lalu kembali ke I-18. Tombol "Batal" di sebelahnya membuang isian dan kembali ke I-18. |
+| I-19-06 | Alert (galat) | "Jenis berkas tidak didukung" dan "Pilih berkas lain. Materi tidak berubah." | Tampil bila format berkas tidak sesuai (Algo-045, Algo-052). Data materi tidak disimpan. |
 ## 6.20 Rancangan Antarmuka I-20
 
 ## 6.X Rancangan Antarmuka [ID Layar X]
@@ -3006,22 +3531,22 @@ Tabel 6.Y. Rancangan Antarmuka Keseluruhan
 | I-01 | <img src="./assets/diagram/contoh-design.png" alt="Contoh Desain" width="400">      |
 | I-02 | ...                                                                                 |
 | I-03 | ...                                                                                 |
-| I-04 | <img src="./assets/diagram/I-04 Daftar Materi.png" alt="Contoh Desain" width="400"> |
-| I-05 | <img src="./assets/diagram/I-05 Detail Materi.png" alt="Contoh Desain" width="400"> |
-| I-06 | ...                                                                                 |
-| I-07 | ...                                                                                 |
-| I-08 | ...                                                                                 |
-| I-09 | ...                                                                                 |
-| I-10 | ...                                                                                 |
-| I-11 | ...                                                                                 |
+| I-04 Daftar Materi | <img src="./assets/diagram/I-04 Daftar Materi.png" alt="Contoh Desain" width="400"> |
+| I-05 Detail Materi | <img src="./assets/diagram/I-05 Detail Materi.png" alt="Contoh Desain" width="400"> |
+| I-06 Pilih Mode Latihan | <img src="./assets/ui/I-06 Pilih Mode.png" alt="I-06 Pilih Mode Latihan" width="400"> |
+| I-07 Latihan Menulis | <img src="./assets/ui/I-07 Menulis.png" alt="I-07 Latihan Menulis" width="400"> |
+| I-08 Latihan Mencocokkan Bunyi | <img src="./assets/ui/I-08 Bunyi.png" alt="I-08 Latihan Mencocokkan Bunyi" width="400"> |
+| I-09 Latihan Merangkai Aksara | <img src="./assets/ui/I-09 Merangkai.png" alt="I-09 Latihan Merangkai Aksara" width="400"> |
+| I-10 Hasil Latihan | <img src="./assets/ui/I-10 Hasil Latihan.png" alt="I-10 Hasil Latihan" width="400"> |
+|I-11 Progres Pelajar | <img src="./assets/diagram/I-11 Progres Pelajar.png" alt="I-11 Progres Pelajar" width="400"> |
 | I-12 | ...                                                                                 |
 | I-13 | ...                                                                                 |
 | I-14 | ...                                                                                 |
 | I-15 | ...                                                                                 |
 | I-16 | ...                                                                                 |
-| I-17 | ...                                                                                 |
-| I-18 | <img src="./assets/diagram/I-18 Kelola Materi.png" alt="Contoh Desain" width="400"> |
-| I-19 | <img src="./assets/diagram/I-19 Unggah Materi.png" alt="Contoh Desain" width="400"> |
+|I-17 Pantau Progres Anggota | <img src="./assets/diagram/I-17 Pantau Progres Anggota.png" alt="I-17 Pantau Progres Anggota" width="400">|
+| I-18 Kelola Materi | <img src="./assets/diagram/I-18 Kelola Materi.png" alt="Contoh Desain" width="400"> |
+| I-19 Unggah Materi | <img src="./assets/diagram/I-19 Unggah Materi.png" alt="Contoh Desain" width="400"> |
 | I-20 | ...                                                                                 |
 
 <br>
