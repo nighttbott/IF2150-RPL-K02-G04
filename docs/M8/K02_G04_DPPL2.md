@@ -1078,6 +1078,28 @@ Tabel 5.3.2. Atribut Kelas RiwayatLatihan
 | `modeAktivitas` | private | `String` |
 | `waktuSelesai` | private | `DateTime?` |
 
+### 5.3.1 Algoritma/Query: simpanHasil
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `simpanHasil(hasil: HasilLatihan): HasilOperasi`
+
+Tabel 5.3.3. Query Operasi simpanHasil
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-008 | `INSERT INTO riwayat_latihan (id_pelajar, id_materi, target_soal, mode, skor,   tanggal_pengerjaan, status, mode_aktivitas) VALUES (:id_pelajar, :id_materi, :target_soal, :mode, :skor, NOW(), :status, 'latihan');` | Menyimpan hasil satu latihan. |
+
+### 5.3.2 Algoritma/Query: catatAktivitas
+
+**Nama Kelas:** RiwayatLatihan  
+**Nama Operasi:** `catatAktivitas(aktivitas: AktivitasBelajar): HasilOperasi`
+
+Tabel 5.3.4. Query Operasi catatAktivitas
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-016 | `INSERT INTO riwayat_latihan (id_pelajar, id_materi, tanggal_pengerjaan, status,   id_tugas, id_komponen, mode_aktivitas, waktu_selesai) VALUES (:id_pelajar, :id_materi, NOW(), :status, :id_tugas, :id_komponen, :mode_aktivitas, :waktu_selesai);` | Mencatat aktivitas belajar selain latihan. |
+
 ## 5.4 Kelas DataFeedback
 
 ## 5.5 Kelas HalamanPendaftaran
