@@ -30,6 +30,7 @@
 * [Milestone 5](#milestone-5)
 * [Milestone 6](#milestone-6)
 * [Milestone 7](#milestone-7)
+* [Milestone 7](#milestone-8)
 * Notes: Copy bagian Daftar Isi seperti Milestone 1 untuk Milestone berikutnya, contoh ``* [Milestone 2](#milestone-2)``. Ketika Daftar isi diklik maka akan langsung diarahkan ke bagian bawah sesuai dengan Milestone tujuan.
 
 
@@ -145,6 +146,24 @@
 | 21-10-2026 | Marvel | M7 Bab 3.7, Bab 2.4 | 5 | Done | - |
 | 21-10-2026 | Diandra | M7 Bab 2.3, Bab 3.2, Bab 3.6 | 6 | Done | - |
 **Catatan/Evaluasi Milestone 7:**
+* *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
+
+### Milestone 8
+**Periode:** 21-10-2026 - 28-10-2026
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 25-10-2026 | Natan | M8 5.1 | 1 | Done | - |
+| 25-10-2026 | Abduh | Menyesuaikan daftar perubahan  | 1 | Done | - |
+| 27-10-2026 | Aria | M8 5.2, 5.9, 5.13, 5.17, 5.21 | 2 | Done | - |
+| 28-10-2026 | Aria | M8 I-04, I-05, I-18, I-19 | 2 | Done | - |
+| 28-10-2026 | Naufal | M8 5.8, 5.16, 5.22, I-06, I-07, I-08, I09, I10 | 2 | Done | - |
+| 28-10-2026 | Marvel | M8 5.12, 5.20, 5.23, I-14, I-15, I-16 | 2 | Done | - |
+| 28-10-2026 | Abduh | M8 5.11, 5.24, 5.25, 5.26, I-12, I-13 | 2 | Done | - |
+| 28-10-2026 | Ryuza | M8 5.1, 5.4, 5.5, 5.6, 5.7, 5.10, 5.14, 5.18, I01, I02, I03, I20 | 2 | Done | - |
+| 28-10-2026 | Natan | M8 5.3, 5.14, 5.19, I-11, I-17, Logbook | 2 | Done | - |
+
+**Catatan/Evaluasi Milestone 8:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
 ---
