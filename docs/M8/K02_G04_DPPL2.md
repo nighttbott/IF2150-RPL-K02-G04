@@ -3800,20 +3800,15 @@ Tabel 6.1. Spesifikasi Objek Antarmuka I-01
  
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
-| I-01-01 | Card (header halaman) | "Daftar Akun Ngaksara" dan deskripsi singkat | Judul halaman; tidak interaktif. |
-| I-01-02 | Button (pilihan) | "Pelajar" | Memilih peran `PELAJAR` (`tampilkanOpsiPeran`, KF01). |
-| I-01-03 | Button (pilihan) | "Pengajar" | Memilih peran `PENGAJAR` (KF01). Akun Tim Materi tidak dapat didaftarkan dari layar ini. |
-| I-01-04 | Text Input | Label "Email" | Wajib; format email diperiksa di server (Algo-009). |
-| I-01-05 | Text Input | Label "Username" | Wajib, 3–30 karakter huruf, angka, atau garis bawah (Algo-009). |
-| I-01-06 | Text Input | Label "Nama tampilan" | Opsional; jika kosong, username dipakai sebagai nama tampilan (Algo-001). |
-| I-01-07 | Password Input | Label "Kata sandi" | Wajib, minimal 8 karakter dengan huruf dan angka (Algo-009). Dikosongkan setiap kali pengiriman selesai. |
-| I-01-08 | Password Input | Label "Konfirmasi kata sandi" | Harus sama dengan I-01-07 (Algo-009). |
-| I-01-09 | Link | "Baca Terms & Conditions" | Membuka dokumen T&C (`tampilkanTnC`, KF06). |
-| I-01-10 | Checkbox | "Saya telah membaca dan menyetujui Terms & Conditions" | Mengubah `statusPersetujuan`. Pendaftaran ditolak bila belum dicentang (KF07). |
-| I-01-11 | Button (utama) | "Daftar" | Menjalankan `kirimPendaftaran` (Algo-005 → Algo-009 → Algo-011 → Algo-001). Nonaktif selama permintaan diproses. |
-| I-01-12 | Teks galat (per isian) | Misalnya "Format email tidak valid" | Tampil di bawah isian yang tidak valid (UC-01 Skenario Alternatif 1; Algo-009). |
-| I-01-13 | Alert (galat) | "Email atau username sudah digunakan." | Tampil bila akun ganda ditolak (UC-01 Skenario Alternatif 1; Algo-001). |
-| I-01-14 | Link | "Sudah punya akun? Masuk" | Membuka I-02 Login. |
+| I-01-01 | Card (pilihan peran) | Label "Daftar sebagai": "Pelajar" (Belajar dan berlatih aksara), "Pengajar" (Membuat kelas dan memantau) | Menentukan peran `PELAJAR` atau `PENGAJAR` (`tampilkanOpsiPeran`, KF01). Kartu terpilih diberi bingkai biru. Akun Tim Materi tidak dibuat dari layar ini. |
+| I-01-02 | Text Input | Label "Email", placeholder "nama@contoh.com" | Wajib. Format diperiksa di server (Algo-009). |
+| I-01-03 | Text Input | Label "Username", placeholder "sari_belajar" | Wajib, 3–30 karakter huruf, angka, atau garis bawah (Algo-009). Juga dipakai sebagai nama tampilan awal (Algo-001). |
+| I-01-04 | Password Input | Label "Kata sandi", placeholder "Minimal 8 karakter" | Wajib, minimal 8 karakter dengan huruf dan angka (Algo-009). Dikosongkan setiap kali pengiriman selesai (Algo-005). |
+| I-01-05 | Text Box (baca saja) | "Syarat & Ketentuan" berisi tiga butir: data yang disimpan, akses Pengajar ke riwayat belajar, dan kata sandi disimpan dalam bentuk hash | Ditampilkan oleh `tampilkanTnC` (KF06). |
+| I-01-06 | Checkbox | "Saya sudah membaca dan menyetujui Syarat & Ketentuan" | Mengubah `statusPersetujuan`. Pendaftaran ditolak bila belum dicentang (KF07, Algo-005, Algo-009). |
+| I-01-07 | Button (utama) | "Daftar" | Menjalankan `kirimPendaftaran` (Algo-005 → Algo-009 → Algo-011 → Algo-001). Nonaktif selama permintaan diproses. Bila berhasil, membuka I-02 Login. |
+| I-01-08 | Link | "Sudah punya akun? Masuk" | Membuka I-02 Login. |
+| I-01-09 | Alert (galat) | "Email sudah terdaftar" dan "Gunakan email lain atau masuk dengan akun yang ada." | Tampil bila email atau username sudah dipakai (UC-01 Skenario Alternatif 1, Algo-001). Galat format per isian tampil di bawah isian terkait (Algo-009). |
  
 ## 6.2 Rancangan Antarmuka I-02
  
@@ -3832,19 +3827,16 @@ Tabel 6.2. Spesifikasi Objek Antarmuka I-02
  
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
-| I-02-01 | Card (header halaman) | "Masuk ke Ngaksara" | Judul halaman; tidak interaktif. |
-| I-02-02 | Alert (sukses) | "Akun berhasil dibuat. Silakan masuk." | Tampil hanya setelah pendaftaran berhasil dari I-01 (Algo-005). |
-| I-02-03 | Text Input | Label "Email" | Wajib. Isian tetap terisi bila login gagal (`emailInput`, Algo-006). |
-| I-02-04 | Password Input | Label "Kata sandi" | Wajib. Dikosongkan setelah setiap percobaan (Algo-006). |
-| I-02-05 | Button (utama) | "Masuk" | Menjalankan `kirimKredensial` (Algo-006 → Algo-012). Bila berhasil, membuka I-03 sesuai peran akun. |
-| I-02-06 | Alert (galat) | "Email atau kata sandi salah." | Pesan umum tanpa menyebut isian mana yang salah (`tampilkanStatusLogin`, Algo-012). |
-| I-02-07 | Alert (peringatan) | "Terlalu banyak percobaan. Coba lagi dalam N detik." | Tampil setelah 5 percobaan gagal dalam satu menit; tombol I-02-05 nonaktif sampai waktu tunggu habis (Algo-012). |
-| I-02-08 | Link | "Belum punya akun? Daftar" | Membuka I-01 Pendaftaran. |
+| I-02-01 | Text Input | Label "Email", placeholder "nama@contoh.com" | Wajib. Isian tetap terisi bila login gagal (`emailInput`, Algo-006). |
+| I-02-02 | Password Input | Label "Kata sandi" | Wajib. Dikosongkan setelah setiap percobaan (Algo-006). |
+| I-02-03 | Button (utama) | "Masuk" | Menjalankan `kirimKredensial` (Algo-006 → Algo-012). Bila berhasil, membuka I-03 Halaman Utama sesuai peran akun. |
+| I-02-04 | Link | "Belum punya akun? Daftar" | Membuka I-01 Pendaftaran. |
+| I-02-05 | Alert (galat) | "Email atau kata sandi salah" | Pesan umum tanpa menyebut isian mana yang salah (`tampilkanStatusLogin`, Algo-012). Area yang sama menampilkan "Coba lagi dalam N detik" setelah 5 percobaan gagal dalam satu menit, dan tombol I-02-03 nonaktif sampai waktu tunggu habis. |
  
 ## 6.3 Rancangan Antarmuka I-03
  
 **Antarmuka:** I-03  
-**Nama Layar:** Halaman Utama  
+**Nama Layar:** Halaman Utama (Beranda)  
 **Kelas View:** `HalamanUtama`  
 **Use Case:** UC-02–UC-09 (navigasi)
  
@@ -3858,17 +3850,14 @@ Tabel 6.3. Spesifikasi Objek Antarmuka I-03
  
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
-| I-03-01 | Header | Logo Ngaksara dan nama tampilan pengguna | Nama diambil dari `profil` (`AkunPengguna.getProfil()`). |
-| I-03-02 | Sidebar (menu) | Daftar menu sesuai peran | Diisi oleh `tampilkanMenu(peran)` (Algo-007). Menu yang tidak sesuai peran tidak ditampilkan. |
-| I-03-03 | Menu item | "Materi" | Pelajar. Membuka I-04 Daftar Materi (UC-02); menjadi halaman awal Pelajar (KF09). |
-| I-03-04 | Menu item | "Latihan" | Pelajar. Membuka `HalamanLatihan` (UC-03). |
-| I-03-05 | Menu item | "Progres" | Pelajar. Membuka I-11 Progres Pelajar (UC-04). |
-| I-03-06 | Menu item | "Kelas" | Pelajar. Membuka `HalamanKelasPelajar` (UC-05). |
-| I-03-07 | Menu item | "Kelola Kelas" | Pengajar. Membuka `HalamanKelolaKelas` (UC-07, UC-08); menjadi halaman awal Pengajar. |
-| I-03-08 | Menu item | "Kelola Materi" | Tim Materi. Membuka I-18 Kelola Materi (UC-06); menjadi halaman awal Tim Materi. |
-| I-03-09 | Menu item | "Feedback" | Pelajar dan Pengajar. Membuka I-20 Feedback (UC-09). |
-| I-03-10 | Area konten | Halaman tujuan menu aktif | Diisi oleh `pilihMenu(kode)` (Algo-007). Butir menu yang sedang dibuka ditandai aktif. |
-
+| I-03-01 | Sidebar (menu) | "Beranda", "Materi", "Latihan", "Progres", "Kelas", "Feedback" | Disusun oleh `tampilkanMenu(peran)` dan dibuka dengan `pilihMenu(kode)` (Algo-007). Gambar menampilkan menu Pelajar: Materi membuka I-04, Latihan membuka I-06, Progres membuka I-11, Kelas membuka `HalamanKelasPelajar`, dan Feedback membuka I-20. Menu yang sedang dibuka ditandai aktif. |
+| I-03-02 | Card (profil) | Inisial, nama tampilan ("Sari"), peran ("Pelajar"), ikon keluar | Nama dan peran dari `AkunPengguna.getProfil()`. Ikon keluar mengakhiri sesi lalu membuka I-02 (KF04). |
+| I-03-03 | Card (sapaan) | "Sugeng enjang", "Halo, Sari!", dan saran materi hari ini | Salam mengikuti waktu server. Saran materi diambil dari materi rekomendasi teratas (`ProgresController.siapkanRekomendasi`, Algo-101). |
+| I-03-04 | Card + Button | "Lanjutkan belajar": nama materi terakhir, progress bar dan persentase (mis. 40%), tombol "Lanjut" | Materi terakhir berstatus sedang dari `RiwayatLatihan.ambilStatusProgres`. Tombol membuka I-05 Detail Materi untuk materi tersebut. |
+| I-03-05 | Card (peta belajar) | Judul bagian (mis. "Bagian 1 · Aksara Nglegena"), tombol "Panduan", dan simpul materi berurutan | Daftar materi dari `MateriController.ambilDaftarMateri` (Algo-049). Simpul bercentang = selesai, simpul bintang dengan label "MULAI" = materi berikutnya, simpul bergembok = belum terbuka. Simpul yang terbuka membuka I-05. |
+| I-03-06 | Card (ringkasan motivasi) | Streak (mis. 5 hari), poin (mis. 240), jumlah badge (mis. 3) | Dari `MotivasiBelajar.ambilMotivasi` (KF24). |
+| I-03-07 | Card (target harian) | "Target hari ini": "2 dari 3 latihan" dan progress bar | Jumlah latihan tuntas hari ini dari `RiwayatLatihan`, dibandingkan dengan target harian. |
+ 
 ## 6.4 Rancangan Antarmuka I-04
 
 **Antarmuka:** I-04  
@@ -4144,7 +4133,7 @@ Tabel 6.19. Spesifikasi Objek Antarmuka I-19
 ## 6.20 Rancangan Antarmuka I-20
  
 **Antarmuka:** I-20  
-**Nama Layar:** Feedback  
+**Nama Layar:** Kirim Feedback  
 **Kelas View:** `HalamanFeedback`  
 **Use Case:** UC-09
  
@@ -4152,32 +4141,23 @@ Tabel 6.19. Spesifikasi Objek Antarmuka I-19
 <img alt="Rancangan Antarmuka I-20 Feedback" src="./assets/diagram/I-20 Feedback.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 6.20. Rancangan Antarmuka I-20 - Feedback</i>
+<i>Gambar 6.20. Rancangan Antarmuka I-20 - Kirim Feedback</i>
 </p>
 Tabel 6.20. Spesifikasi Objek Antarmuka I-20
  
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
-| I-20-01 | Card (header halaman) | "Feedback" dan deskripsi singkat | Ditampilkan oleh `tampilkanFormFeedback` (KF18). Hanya untuk Pelajar dan Pengajar (Algo-013). |
-| I-20-02 | Button (pilihan) | "Performa" | Kategori `PERFORMA` (pertanyaan tertutup). |
-| I-20-03 | Button (pilihan) | "Tampilan" | Kategori `TAMPILAN`. |
-| I-20-04 | Button (pilihan) | "Fitur" | Kategori `FITUR`. |
-| I-20-05 | Button (pilihan) | "Materi" | Kategori `MATERI`. |
-| I-20-06 | Text Area | Label "Tuliskan masukan Anda" dan penghitung karakter | Pertanyaan terbuka, 10–1.000 karakter (Algo-013). |
-| I-20-07 | Button (utama) | "Kirim Feedback" | Menjalankan `kirimFeedback` (Algo-008 → Algo-013 → Algo-014 → Algo-003). Nonaktif selama status `MENGIRIM`. |
-| I-20-08 | Teks galat (per isian) | Misalnya "Pilih kategori feedback" | Tampil bila validasi gagal (Algo-013). |
-| I-20-09 | Alert (sukses) | "Feedback berhasil terkirim. Terima kasih atas masukan Anda." | Tampil bila penyimpanan berhasil; form dikosongkan (`tampilkanKonfirmasi`, KF20). |
-| I-20-10 | Alert (galat) | "Feedback gagal terkirim. Silakan coba lagi." | Tampil bila server gagal menyimpan atau koneksi terputus (UC-09 Skenario Alternatif 1, KNF05). Isi form dipertahankan agar dapat dikirim ulang (Algo-008). |
+| I-20-01 | Segmented Button | Label "Kategori": "Performa", "Tampilan" (terpilih), "Fitur", "Materi" | Pertanyaan tertutup. Menentukan `kategoriFeedback` (KF18). Wajib dipilih (Algo-013). |
+| I-20-02 | Text Area | Label "Pesan" | Pertanyaan terbuka, 10–1.000 karakter (Algo-013). |
+| I-20-03 | Button (utama) | Ikon surat dan "Kirim" | Menjalankan `kirimFeedback` (Algo-008 → Algo-013 → Algo-014 → Algo-003). Nonaktif selama status `MENGIRIM`. |
+| I-20-04 | Alert (sukses) | "Feedback terkirim. Matur nuwun!" | Tampil bila penyimpanan berhasil, lalu form dikosongkan (`tampilkanKonfirmasi`, KF20). |
+| I-20-05 | Alert (galat) | "Feedback gagal terkirim" dan "Periksa koneksi lalu coba lagi. Isi pesanmu tidak hilang." | Tampil bila server gagal menyimpan atau koneksi terputus (UC-09 Skenario Alternatif 1, KNF05). Kategori dan pesan tetap terisi agar dapat dikirim ulang (Algo-008). |
 
-## 6.21 Rancangan Antarmuka [ID Layar X]
-
-_[Ulangi pola 6.1 untuk layar berikutnya sampai semua layar teridentifikasi]_
-
-## 6.22 Rancangan Antarmuka Keseluruhan
+## 6.21 Rancangan Antarmuka Keseluruhan
 
 Tuliskan daftar gambar seluruh antarmuka. Berikan ID unik untuk setiap tampilan dan gunakan ID yang sama pada subbab perancangan antarmuka masing-masing.
 
-Tabel 6.22. Rancangan Antarmuka Keseluruhan
+Tabel 6.21. Rancangan Antarmuka Keseluruhan
 
 | No   | Tampilan Antarmuka                                                                  |
 | :--- | :---------------------------------------------------------------------------------- |
