@@ -29,6 +29,8 @@
 * [Milestone 4](#milestone-4)
 * [Milestone 5](#milestone-5)
 * [Milestone 6](#milestone-6)
+* [Milestone 6](#milestone-7)
+* [Milestone 6](#milestone-8)
 
 ---
 
@@ -80,10 +82,20 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Claude | Memahami hubungan Logical View dan pola MVC (yang digunakan di PL ini) | Bagaimana hubungan antara Logical View dan MVC? | - |
 
 
+### Milestone 7
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| | | | | 
+
+### Milestone 8
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| Claude | Membantu membuat algoritma dari operasi dalam suatu kelas | Menggunakan pseudocode, buatkan contoh algoritma untuk operasi berikut dari kelas tersebut. | Memvalidasi pseudocode yang dibuat dan mengoreksi jika ada kekeliruan | 
+
 ### Milestone X
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
-| | | | | |
+| | | | | 
 
 ---
 ### Pernyataan Integritas dan Persetujuan
