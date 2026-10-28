@@ -4780,7 +4780,7 @@ Tabel 6.15. Spesifikasi Objek Antarmuka I-15
 **Nama Layar:** Kelola Anggota dan Papan Peringkat
 
 <p align="center">
-<img alt="Rancangan Antarmuka I-16 Kelola Anggota dan Papan Peringkat" src="./assets/ui/I16.png" width="70%">
+<img alt="Rancangan Antarmuka I-16 Kelola Anggota dan Papan Peringkat" src="./assets/ui/I-16.png" width="70%">
 </p>
 
 <p align="center">
