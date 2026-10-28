@@ -1403,6 +1403,36 @@ PROCEDURE putarAudioPengucapan(sumber: ReferensiBerkas)
 ```
 
 ## 5.14 Kelas HalamanProgres
+**Nama Kelas:** HalamanProgres  
+**ID Kelas:** C14  
+**Jenis:** View
+
+Menampilkan riwayat, progres, rekomendasi materi, dan indikator motivasi belajar Pelajar.
+
+Tabel 5.14.1. Operasi Kelas HalamanProgres
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `bukaHalamanProgres(): void` | public | Meminta ringkasan progres Pelajar. |
+| `pilihPeriode(periode: Periode): void` | public | Mengubah periode riwayat yang ditampilkan. |
+| `tampilkanProgres(data: RingkasanProgres): void` | public | Menampilkan penguasaan per materi dan riwayat. |
+| `tampilkanKeadaanKosong(data: List<MetadataMateri>): void` | public | Menampilkan keadaan belum ada riwayat beserta materi awal yang disarankan. |
+| `pilihMateriRiwayat(idMateri: Integer): void` | public | Meminta detail hasil pada satu materi. |
+| `tampilkanDetailHasil(data: List<RiwayatLatihan>): void` | public | Menampilkan hasil latihan pada materi terpilih. |
+| `tampilkanRekomendasi(data: List<MetadataMateri>): void` | public | Menampilkan materi yang direkomendasikan. |
+| `bukaRekomendasi(idMateri: Integer): void` | public | Membuka halaman materi dari rekomendasi. |
+| `lihatIndikatorMotivasi(): void` | public | Meminta data streak, poin, dan badge. |
+| `tampilkanMotivasi(data: Data): void` | public | Menampilkan streak, poin, dan badge. |
+| `bukaPapanPeringkat(idKelas: Integer): void` | public | Meminta papan peringkat kelas. |
+| `tampilkanScoreboard(data: List<Peringkat>): void` | public | Menampilkan papan peringkat bila diaktifkan Pengajar. |
+
+Tabel 5.14.2. Atribut Kelas HalamanProgres
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `filterPeriode` | private | `Periode` |
+| `dataTampilan` | private | `RingkasanProgres?` |
+| `idKelasTerpilih` | private | `Integer?` |
 
 ## 5.15 Kelas OtentikasiController
 
