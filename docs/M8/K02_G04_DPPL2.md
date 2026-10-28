@@ -794,7 +794,7 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 
 # BAB 5: Perancangan Rinci Kelas
 
-Bagian ini diisi dengan daftar seluruh kelas dalam tabel berikut:
+Tabel 5.1 memuat daftar seluruh kelas perancangan beserta kelas analisis terkait. Subbab berikutnya menjabarkan operasi, atribut, serta algoritma dan query yang penting untuk setiap kelas.
 
 Tabel 5.1. Daftar Kelas Perancangan dan Kelas Analisis Terkait
 
@@ -826,8 +826,6 @@ Tabel 5.1. Daftar Kelas Perancangan dan Kelas Analisis Terkait
 | 24  | `KeanggotaanKelas` (C24)     | KeanggotaanKelas (C24)      |
 | 25  | `TugasKelas` (C25)           | TugasKelas (C25)            |
 | 26  | `PenyelesaianTugas` (C26)    | PenyelesaianTugas (C26)     |
-
-Untuk **setiap kelas**, identifikasi operasi berdasarkan tanggung jawab kelas beserta _visibility_-nya, serta atribut beserta _visibility_ dan tipenya. Buat subbab tersendiri untuk setiap kelas.
 
 ## 5.1 Kelas AkunPengguna
 
@@ -869,9 +867,11 @@ Tabel 5.1.2. Atribut Kelas AkunPengguna
 FUNCTION buatAkunBaru(data: DataPendaftaran): HasilOperasi
   // data.passwordHash sudah di-hash oleh OtentikasiController.hashPassword()
   email ← huruf kecil(trim(data.email))
-  jumlah ← jalankan Q-001.1
-  IF jumlah > 0 THEN
-    RETURN HasilOperasi.gagal("AKUN_SUDAH_ADA", "Email atau username sudah digunakan")
+  cek ← jalankan Q-001.1
+  IF cek.email_dipakai > 0 THEN
+    RETURN HasilOperasi.gagal("EMAIL_TERDAFTAR", "Email sudah terdaftar")
+  IF cek.username_dipakai > 0 THEN
+    RETURN HasilOperasi.gagal("USERNAME_TERPAKAI", "Username sudah digunakan")
 
   TRY
     idBaru ← jalankan Q-001.2
@@ -889,7 +889,7 @@ Tabel 5.1.3. Query Operasi buatAkunBaru
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-001.1 | `SELECT COUNT(*) FROM akun_pengguna WHERE email = :email OR username = :username;` | Mencegah email atau username ganda sebelum menyimpan. |
+| Q-001.1 | `SELECT COALESCE(SUM(email = :email), 0) AS email_dipakai, COALESCE(SUM(username = :username), 0) AS username_dipakai FROM akun_pengguna WHERE email = :email OR username = :username;` | Memeriksa apakah email atau username sudah dipakai, agar pesan galat dapat menyebut isian yang bermasalah. |
 | Q-001.2 | `INSERT INTO akun_pengguna (email, username, password_hash, peran, nama_tampilan, created_at) VALUES (:email, :username, :password_hash, :peran, :nama_tampilan, NOW());` | Menyimpan akun baru. Kolom `email` dan `username` diberi indeks `UNIQUE` sebagai pengaman terakhir. |
 
 ### 5.1.2 Algoritma/Query
@@ -904,13 +904,20 @@ Hak akses diturunkan dari aktor setiap use case pada SKPL. Satu tabel ini juga d
 FUNCTION verifikasiHakAkses(aksi: String): Boolean
   HAK ← {
     PELAJAR:    {MEMPELAJARI_MATERI, MENGERJAKAN_LATIHAN, MELIHAT_PROGRES,
-                 MENGIKUTI_KELAS, KIRIM_FEEDBACK},                       // UC-02–UC-05, UC-09
-    PENGAJAR:   {KELOLA_KELAS, PANTAU_PROGRES, KIRIM_FEEDBACK},           // UC-07–UC-09
-    TIM_MATERI: {KELOLA_MATERI}                                          // UC-06
+                 MENGIKUTI_KELAS, KIRIM_FEEDBACK},                        // UC-02–UC-05, UC-09
+    PENGAJAR:   {KELOLA_KELAS, BUAT_KELAS, BUAT_TUGAS, TERBITKAN_TUGAS,
+                 GANTI_KODE, KELOLA_ANGGOTA, LIHAT_ANGGOTA, ATUR_SCOREBOARD,
+                 PANTAU_PROGRES, KIRIM_FEEDBACK},                         // UC-07–UC-09
+    TIM_MATERI: {KELOLA_MATERI}                                           // UC-06
   }
   IF this.idAkun = null OR this.peran NOT IN HAK THEN
     RETURN false
-  RETURN huruf besar(aksi) IN HAK[this.peran]
+  kode ← normalisasi(aksi)      // "kelola_materi", "kelolaMateri", "KELOLA_MATERI" → "KELOLA_MATERI"
+  RETURN kode IN HAK[this.peran]
+
+FUNCTION normalisasi(aksi: String): String
+  sisipkan "_" sebelum setiap huruf besar yang didahului huruf kecil   // camelCase → snake_case
+  RETURN huruf besar(hasil)
 ```
 
 ### 5.1.3 Algoritma/Query
@@ -1357,7 +1364,7 @@ PROCEDURE kirimPendaftaran(data: DataPendaftaran)
     kosongkan isian kata sandi
     arahkan ke I-02 dengan pesan "Akun berhasil dibuat. Silakan masuk."
   ELSE
-    tampilkan pesan hasil.pesan ("Email atau username sudah digunakan")
+    tampilkan alert galat hasil.pesan        // I-01-09
     kosongkan isian kata sandi;  aktifkan tombol "Daftar"
 ```
 
@@ -1443,6 +1450,7 @@ Daftar menu mengikuti hak akses pada Algo-002. Menyembunyikan menu hanya memudah
 
 ```text
 TUJUAN ← {
+  BERANDA:      HalamanUtama        (I-03),   // ringkasan belajar
   MATERI:       HalamanMateri       (I-04),   // UC-02
   LATIHAN:      HalamanLatihan,               // UC-03
   PROGRES:      HalamanProgres,               // UC-04
@@ -1452,7 +1460,7 @@ TUJUAN ← {
   FEEDBACK:     HalamanFeedback     (I-20)    // UC-09
 }
 MENU_PERAN ← {
-  PELAJAR:    [MATERI, LATIHAN, PROGRES, KELAS, FEEDBACK],
+  PELAJAR:    [BERANDA, MATERI, LATIHAN, PROGRES, KELAS, FEEDBACK],
   PENGAJAR:   [KELOLA_KELAS, FEEDBACK],
   TIM_MATERI: [KELOLA_MATERI]
 }
@@ -1461,7 +1469,7 @@ PROCEDURE tampilkanMenu(peran: Peran)
   menuTersedia ← MENU_PERAN[peran] ?? list kosong
   render nama tampilan ← profil.namaTampilan
   render setiap kode dalam menuTersedia sebagai butir menu samping
-  pilihMenu(menuTersedia[0])          // halaman awal: menu pertama, misalnya daftar materi untuk Pelajar (KF09)
+  pilihMenu(menuTersedia[0])          // halaman awal: menu pertama, yaitu Beranda untuk Pelajar
 
 PROCEDURE pilihMenu(kode: String)
   IF kode NOT IN menuTersedia THEN RETURN
@@ -1654,7 +1662,7 @@ PROCEDURE kirimFeedback(data: MasukanFeedback)
     konfirmasi ← FeedbackController.kirimKonfirmasi(hasil)
   CATCH galat jaringan atau batas waktu habis
     konfirmasi ← Konfirmasi(berhasil = false,
-                            pesan = "Feedback gagal terkirim. Periksa koneksi lalu coba lagi.")
+                            pesan = "Feedback gagal terkirim. Periksa koneksi lalu coba lagi. Isi pesanmu tidak hilang.")
 
   tampilkanKonfirmasi(konfirmasi)
 
@@ -1669,6 +1677,143 @@ PROCEDURE tampilkanKonfirmasi(konfirmasi: Konfirmasi)
 ```
 
 ## 5.11 Kelas HalamanKelasPelajar
+
+**Nama Kelas:** `HalamanKelasPelajar`  
+**ID Kelas:** C11
+
+Tabel 5.11.1. Operasi Kelas HalamanKelasPelajar
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `kirimKodeBergabung(kode: String): void` | public | Mengirim kode ke C20 dan menampilkan hasil validasi/keanggotaan. |
+| `bukaTugas(idKelas: Integer, idTugas: Integer): void` | public | Meminta detail tugas melalui C20; memperbarui state hanya bila akses berhasil. |
+| `kerjakanTugas(idKelas: Integer, idTugas: Integer): void` | public | Mengarahkan pengerjaan komponen ke UC-02/UC-03 dengan konteks tugas dan komponen. |
+| `finalisasiTugas(idKelas: Integer, idTugas: Integer): HasilOperasi` | private | Memanggil C20.simpanPengumpulan dan mengembalikan hasil server tanpa menentukan status sendiri. |
+| `bukaKelas(idKelas: Integer): void` | public | Meminta daftar tugas dan status melalui C20, termasuk tampilan daftar kosong. |
+| `tampilkanPesan(pesan: String): void` | private | Menampilkan pesan dengan escaping sesuai konteks HTML. |
+| `tampilkanTugas(data: Data): void` | private | Menampilkan daftar tugas, tenggat, status, atau keadaan kosong. |
+| `tampilkanDetail(data: Data): void` | private | Menampilkan instruksi dan komponen; indikator lewat tenggat memakai waktuServer. |
+| `tampilkanHasil(data: Data): void` | private | Menampilkan status serta waktu penyelesaian yang telah dikonfirmasi server. |
+| `periksaPenyelesaian(idKelas: Integer, idTugas: Integer): void` | public | Meminta finalisasi ulang setelah aktivitas selesai atau pengiriman sebelumnya tidak terkonfirmasi. |
+
+Tabel 5.11.2. Atribut Kelas HalamanKelasPelajar
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `kodeKelasInput` | private | `string` |
+| `tugasAktif` | private | `?int` |
+| `detailTugas` | private | `?DetailTugas` |
+| `idKelasAktif` | private | `int` |
+
+### 5.11.1 Algoritma kirimKodeBergabung
+
+**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Operasi:** `kirimKodeBergabung(kode: String): void`  
+**ID Algoritma:** Algo-C11-01
+
+```text
+procedure kirimKodeBergabung (input kode: string)
+    kodeKelasInput ← trim(kode)
+    if kodeKelasInput = "" then
+        tampilkanPesan("Kode kelas wajib diisi")
+    else
+        hasil ← KelasController.validasiKodeBergabung(kodeKelasInput)
+        if hasil.kode = "belumTerkonfirmasi" then
+            tampilkanPesan("Hasil belum dapat dikonfirmasi. Silakan coba kembali.")
+        else
+            tampilkanPesan(hasil.pesan)
+```
+
+### 5.11.2 Algoritma bukaKelas
+
+**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Operasi:** `bukaKelas(idKelas: Integer): void`  
+**ID Algoritma:** Algo-C11-02
+
+```text
+procedure bukaKelas (input idKelas: integer)
+    hasil ← KelasController.ambilTugasAktif(idKelas)
+    if hasil.berhasil then
+        idKelasAktif ← idKelas
+        tugasAktif ← Nil
+        detailTugas ← Nil
+        tampilkanTugas(hasil.data)
+    else
+        kosongkanTampilanKelas()
+        tampilkanPesan(hasil.pesan)
+```
+
+### 5.11.3 Algoritma bukaTugas
+
+**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Operasi:** `bukaTugas(idKelas: Integer, idTugas: Integer): void`  
+**ID Algoritma:** Algo-C11-03
+
+```text
+procedure bukaTugas (input idKelas: integer, idTugas: integer)
+    tugasAktif ← Nil
+    detailTugas ← Nil
+    hasil ← KelasController.bukaTugas(idKelas, idTugas)
+    if hasil.berhasil then
+        idKelasAktif ← idKelas
+        tugasAktif ← idTugas
+        detailTugas ← hasil.data.detailTugas
+        tampilkanDetail(hasil.data)
+    else
+        kosongkanTampilanDetail()
+        tampilkanPesan(hasil.pesan)
+```
+
+### 5.11.4 Algoritma kerjakanTugas
+
+**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Operasi:** `kerjakanTugas(idKelas: Integer, idTugas: Integer): void`  
+**ID Algoritma:** Algo-C11-04
+
+```text
+procedure kerjakanTugas (input idKelas: integer, idTugas: integer)
+    bukaTugas(idKelas, idTugas)
+    if tugasAktif = idTugas then
+        komponen ← ambilKomponenWajibBelumSelesai(detailTugas)
+        i ← 1
+        lanjut ← true
+        while (i ≤ komponen.Neff) and lanjut do
+            if komponen.Tab[i].jenis = "materi" then
+                hasil ← jalankanUC02(idKelas, idTugas, komponen.Tab[i].idKomponen)
+            else
+                hasil ← jalankanUC03(idKelas, idTugas, komponen.Tab[i].idKomponen)
+            lanjut ← hasil.berhasil
+            i ← i + 1
+        if lanjut then
+            periksaPenyelesaian(idKelas, idTugas)
+```
+
+### 5.11.5 Algoritma finalisasiTugas
+
+**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Operasi:** `finalisasiTugas(idKelas: Integer, idTugas: Integer): HasilOperasi`  
+**ID Algoritma:** Algo-C11-05
+
+```text
+function finalisasiTugas (idKelas: integer, idTugas: integer) → HasilOperasi
+    hasil ← KelasController.simpanPengumpulan(idKelas, idTugas)
+    → hasil
+```
+
+### 5.11.6 Algoritma periksaPenyelesaian
+
+**Nama Kelas:** `HalamanKelasPelajar`  
+**Nama Operasi:** `periksaPenyelesaian(idKelas: Integer, idTugas: Integer): void`  
+**ID Algoritma:** Algo-C11-06
+
+```text
+procedure periksaPenyelesaian (input idKelas: integer, idTugas: integer)
+    hasil ← finalisasiTugas(idKelas, idTugas)
+    if hasil.berhasil then
+        tampilkanHasil(hasil.data)
+    else
+        tampilkanPesan(hasil.pesan)
+```
 
 ## 5.12 Kelas HalamanKelolaKelas
 **Nama Kelas:** HalamanKelolaKelas
@@ -2130,8 +2275,6 @@ FUNCTION verifikasiFormatData(data: DataPendaftaran): HasilValidasi
     galat["username"] ← "Username 3–30 karakter: huruf, angka, atau garis bawah"
   IF panjang(data.password) < 8 OR tidak memuat huruf OR tidak memuat angka THEN
     galat["password"] ← "Kata sandi minimal 8 karakter dan memuat huruf serta angka"
-  IF data.password <> data.konfirmasiPassword THEN
-    galat["konfirmasiPassword"] ← "Konfirmasi kata sandi tidak sama"
   IF data.persetujuanTnC <> true THEN
     galat["persetujuanTnC"] ← "Terms & Conditions belum disetujui"       // KF07
 
@@ -2169,7 +2312,7 @@ FUNCTION simpanAkun(data: DataPendaftaran): HasilOperasi
   dataSimpan ← DataPendaftaran(
     email = data.email, username = data.username, peran = data.peran,
     namaTampilan = data.namaTampilan, passwordHash = hashPassword(data.password))
-  hapus data.password dan data.konfirmasiPassword dari memori permintaan
+  hapus data.password dari memori permintaan
 
   TRY
     hasil ← new AkunPengguna().buatAkunBaru(dataSimpan)        // Algo-001
@@ -2707,8 +2850,8 @@ FUNCTION simpanFeedback(data: MasukanFeedback): HasilOperasi
 
 FUNCTION kirimKonfirmasi(hasil: HasilOperasi): Konfirmasi
   IF hasil.berhasil THEN
-    RETURN Konfirmasi(berhasil = true, pesan = "Feedback berhasil terkirim. Terima kasih atas masukan Anda.")
-  RETURN Konfirmasi(berhasil = false, pesan = "Feedback gagal terkirim. Silakan coba lagi.")
+    RETURN Konfirmasi(berhasil = true, pesan = "Feedback terkirim. Matur nuwun!")
+  RETURN Konfirmasi(berhasil = false, pesan = "Feedback gagal terkirim. Periksa koneksi lalu coba lagi. Isi pesanmu tidak hilang.")
 ```
 
 ## 5.19 Kelas ProgresController
@@ -2743,12 +2886,14 @@ Tabel 5.19.2. Atribut Kelas ProgresController
 **Nama Operasi:** `hitungProgres(idPelajar: Integer): RingkasanProgres`  
 **ID Algoritma:** Algo-100
 
-**Algo-100.** Alasan: penguasaan dihitung dari riwayat setiap kali dibutuhkan, tidak disimpan (lihat keputusan data pada subbab 5.27).
+**Algo-100.** Alasan: penguasaan dihitung dari riwayat setiap kali dibutuhkan, tidak disimpan (lihat `hitungPenguasaan` pada subbab 5.3.6).
 
 ```text
-penguasaan <- RiwayatLatihan.hitungPenguasaan(idPelajar)       // Q-010
-riwayat <- RiwayatLatihan.ambilRiwayat(idPelajar, periode)     // Q-011
-kembalikan RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), polaKesalahan = hitungPolaKesalahan(idPelajar))
+FUNCTION hitungProgres(idPelajar: Integer): RingkasanProgres
+  penguasaan ← RiwayatLatihan.hitungPenguasaan(idPelajar)       // Q-010
+  riwayat ← RiwayatLatihan.ambilRiwayat(idPelajar, periode)     // Q-011
+  RETURN RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat),
+                          polaKesalahan = hitungPolaKesalahan(idPelajar))
 ```
 
 ### 5.19.2 Algoritma/Query: siapkanRekomendasi
@@ -2760,11 +2905,14 @@ kembalikan RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), polaKes
 **Algo-101.** Alasan: Pelajar yang belum punya riwayat tetap mendapat saran materi awal (UC-04 alternatif 1).
 
 ```text
-penguasaan <- RiwayatLatihan.hitungPenguasaan(idPelajar)
-JIKA penguasaan kosong MAKA kembalikan MateriAksara.ambilMateriRekomendasi(kosong)
-urut <- urutkan materi pada penguasaan dari nilai terendah ke tertinggi
-JIKA nilai terendah >= 90 MAKA kembalikan materi terbit berikutnya yang belum pernah dikerjakan
-kembalikan MateriAksara.ambilMateriRekomendasi(3 materi dengan nilai terendah)
+FUNCTION siapkanRekomendasi(idPelajar: Integer): List<MetadataMateri>
+  penguasaan ← RiwayatLatihan.hitungPenguasaan(idPelajar)
+  IF penguasaan kosong THEN
+    RETURN MateriAksara.ambilMateriRekomendasi(kosong)
+  urut ← urutkan materi pada penguasaan dari nilai terendah ke tertinggi
+  IF nilai terendah ≥ 90 THEN
+    RETURN materi terbit berikutnya yang belum pernah dikerjakan
+  RETURN MateriAksara.ambilMateriRekomendasi(3 materi dengan nilai terendah)
 ```
 
 ### 5.19.3 Algoritma/Query: agregasiProgres
@@ -2776,14 +2924,17 @@ kembalikan MateriAksara.ambilMateriRekomendasi(3 materi dengan nilai terendah)
 **Algo-102.** Alasan: Pengajar melihat ringkasan seluruh anggota aktif, bukan data anggota yang sudah keluar (aturan SKPL nomor 3).
 
 ```text
-JIKA anggotaAktif kosong MAKA kembalikan RingkasanProgres kosong
-riwayat <- daftar kosong
-UNTUK SETIAP id DALAM anggotaAktif
-    tambahkan RiwayatLatihan.ambilRiwayatPelajar(id) ke riwayat        // Q-014
-JIKA riwayat kosong MAKA kembalikan RingkasanProgres kosong (halaman menampilkan keadaan kosong)
-penguasaan <- rata-rata skor per materi dari riwayat
-pola <- jumlahkan hasil RiwayatLatihan.hitungPolaKesalahan(id) untuk setiap id, ambil lima terbanyak     // Q-013
-kembalikan RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), pola)
+FUNCTION agregasiProgres(anggotaAktif: List<Integer>, periode: Periode): RingkasanProgres
+  IF anggotaAktif kosong THEN
+    RETURN RingkasanProgres.kosong()
+  riwayat ← list kosong
+  FOR EACH id IN anggotaAktif DO
+    riwayat.tambahSemua(RiwayatLatihan.ambilRiwayatPelajar(id))        // Q-014
+  IF riwayat kosong THEN
+    RETURN RingkasanProgres.kosong()          // halaman menampilkan keadaan kosong
+  penguasaan ← rata-rata skor per materi dari riwayat
+  pola ← gabungkan RiwayatLatihan.hitungPolaKesalahan(id) untuk setiap id, ambil lima terbanyak   // Q-013
+  RETURN RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), pola)
 ```
 
 ## 5.20 Kelas KelasController
@@ -3775,9 +3926,489 @@ FUNCTION finalisasiTugas(idPelajar: Integer, idTugas: Integer, bukti: BuktiPenye
 ```
 ## 5.24 Kelas KeanggotaanKelas
 
+**Nama Kelas:** `KeanggotaanKelas`  
+**ID Kelas:** C24
+
+Tabel 5.24.1. Operasi Kelas KeanggotaanKelas
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `simpanKeanggotaan(idPelajar: Integer, idKelas: Integer): HasilOperasi` | public | Menyimpan anggota baru secara atomik; anggota aktif yang sudah ada tidak diduplikasi. |
+| `periksaAkses(idPelajar: Integer, idKelas: Integer): Boolean` | public | Mengembalikan true hanya jika pasangan Pelajar–kelas mempunyai status aktif. |
+| `daftarAnggotaAktif(idKelas: Integer): List<KeanggotaanKelas>` | public | Mengambil anggota aktif untuk pemantauan dan papan peringkat. |
+| `ubahStatus(status: String): HasilOperasi` | public | Mengubah status objek keanggotaan yang telah dimuat setelah otorisasi Pengajar. |
+| `simpanAtomik(): HasilOperasi` | private | Menyimpan perubahan keanggotaan dalam transaksi; mengembalikan hasil setelah commit. |
+| `daftarAnggota(idKelas: Integer): List<KeanggotaanKelas>` | public | Mengambil seluruh anggota kelas beserta statusnya untuk pengelolaan Pengajar. |
+
+Tabel 5.24.2. Atribut Kelas KeanggotaanKelas
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idKeanggotaan` | private | `int` |
+| `idKelas` | private | `int` |
+| `idPelajar` | private | `int` |
+| `status` | private | `string` |
+
+### 5.24.1 Algoritma simpanKeanggotaan
+
+**Nama Kelas:** `KeanggotaanKelas`  
+**Nama Operasi:** `simpanKeanggotaan(idPelajar: Integer, idKelas: Integer): HasilOperasi`  
+**ID Algoritma:** Algo-C24-01
+
+```text
+function simpanKeanggotaan (idPelajar: integer, idKelas: integer) → HasilOperasi
+    hasil ← gagal("gagalSimpan")
+    mulaiTransaksi(tx)
+    if not tx.gagal then
+        kelas ← kunciKelas(idKelas, tx)
+        if not tx.gagal then
+            if kelas.aktif then
+                anggota ← cariKeanggotaan(idPelajar, idKelas, tx)
+                if not tx.gagal then
+                    if anggota = Nil then
+                        sisipkanKeanggotaan(idPelajar, idKelas, "aktif", tx)
+                        kodeHasil ← "berhasilBergabung"
+                    else
+                        if anggota.status = "aktif" then
+                            kodeHasil ← "sudahAnggota"
+                        else
+                            kodeHasil ← "anggotaNonaktif"
+                    if not tx.gagal then
+                        if kodeHasil = "anggotaNonaktif" then
+                            batalkanTransaksi(tx)
+                            hasil ← gagal(kodeHasil)
+                        else
+                            commit(tx)
+                            if tx.terkonfirmasi then
+                                hasil ← berhasil(kodeHasil)
+            else
+                batalkanTransaksi(tx)
+                hasil ← gagal("kelasTidakAktif")
+    if tx.konflikUnik then
+        batalkanTransaksi(tx)
+        anggota ← bacaUlangKeanggotaan(idPelajar, idKelas)
+        if anggota = Nil then
+            hasil ← gagal("gagalSimpan")
+        else
+            if anggota.status = "aktif" then
+                hasil ← berhasil("sudahAnggota")
+            else
+                hasil ← gagal("anggotaNonaktif")
+    else
+        if tx.tidakPasti then
+            hasil ← gagal("belumTerkonfirmasi")
+        else
+            if tx.gagal then
+                batalkanTransaksi(tx)
+                catatError(tx)
+    → hasil
+```
+
+### 5.24.2 Algoritma periksaAkses
+
+**Nama Kelas:** `KeanggotaanKelas`  
+**Nama Operasi:** `periksaAkses(idPelajar: Integer, idKelas: Integer): Boolean`  
+**ID Algoritma:** Algo-C24-02
+
+```text
+function periksaAkses (idPelajar: integer, idKelas: integer) → boolean
+    anggota ← bacaKeanggotaan(idPelajar, idKelas)
+    if anggota = Nil then
+        → false
+    else
+        → (anggota.status = "aktif")
+```
+
+### 5.24.3 Algoritma ubahStatus
+
+**Nama Kelas:** `KeanggotaanKelas`  
+**Nama Operasi:** `ubahStatus(status: String): HasilOperasi`  
+**ID Algoritma:** Algo-C24-03
+
+```text
+function ubahStatus (status: string) → HasilOperasi
+    hasil ← gagal("statusTidakValid")
+    if (status = "aktif") or (status = "nonaktif") then
+        hasil ← gagal("gagalSimpan")
+        mulaiTransaksi(tx)
+        if not tx.gagal then
+            anggota ← kunciKeanggotaan(idKeanggotaan, idKelas, tx)
+            if not tx.gagal then
+                if anggota = Nil then
+                    batalkanTransaksi(tx)
+                    hasil ← gagal("tidakDitemukan")
+                else
+                    perbaruiStatusKeanggotaan(idKeanggotaan, status, tx)
+                    if not tx.gagal then
+                        commit(tx)
+                        if tx.terkonfirmasi then
+                            muatUlangObjekKeanggotaan(idKeanggotaan)
+                            hasil ← berhasil("statusDiperbarui")
+        if tx.tidakPasti then
+            hasil ← gagal("belumTerkonfirmasi")
+        else
+            if tx.gagal then
+                batalkanTransaksi(tx)
+                catatError(tx)
+    → hasil
+```
+
+### 5.24.4 Algoritma daftarAnggotaAktif
+
+**Nama Kelas:** `KeanggotaanKelas`  
+**Nama Operasi:** `daftarAnggotaAktif(idKelas: Integer): List<KeanggotaanKelas>`  
+**ID Algoritma:** Algo-C24-04
+
+```text
+function daftarAnggotaAktif (idKelas: integer) → List<KeanggotaanKelas>
+    anggota ← bacaDaftarAnggota(idKelas, "aktif")
+    → anggota
+```
+
+#### Query Pendukung Kelas C24
+
+Tabel 5.24.3. Query Pendukung
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C24-01 | `SELECT EXISTS(SELECT 1 FROM keanggotaan_kelas WHERE id_pelajar = :idPelajar AND id_kelas = :idKelas AND status = 'aktif') AS akses;` | Pemeriksaan anggota aktif. |
+| Q-C24-02 | `SELECT * FROM keanggotaan_kelas WHERE id_kelas = :idKelas AND id_pelajar = :idPelajar FOR UPDATE;` | Pembacaan pasangan dalam transaksi; constraint unik menangani pasangan baru yang bersaing. |
+| Q-C24-03 | `INSERT INTO keanggotaan_kelas (id_kelas, id_pelajar, status) VALUES (:idKelas, :idPelajar, 'aktif');` | Keanggotaan baru; idKeanggotaan dibangkitkan basis data. |
+| Q-C24-04 | `UPDATE keanggotaan_kelas SET status = :status WHERE id_keanggotaan = :idKeanggotaan AND id_kelas = :idKelas;` | Pembaruan setelah objek terkunci dan otorisasi pemilik. |
+| Q-C24-05 | `SELECT * FROM keanggotaan_kelas WHERE id_kelas = :idKelas AND status = 'aktif' ORDER BY id_keanggotaan;` | daftarAnggotaAktif; hapus filter status untuk daftarAnggota. |
+
+
 ## 5.25 Kelas TugasKelas
 
+**Nama Kelas:** `TugasKelas`  
+**ID Kelas:** C25
+
+Tabel 5.25.1. Operasi Kelas TugasKelas
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `ambilTugasAktif(idKelas: Integer): List` | public | Mengambil tugas terbit milik kelas, termasuk yang tenggatnya sudah lewat. |
+| `terbitkan(): HasilOperasi` | public | Memvalidasi draf dan mengubah status menjadi terbit. |
+| `verifikasiDanSimpan(idKelas: Integer, idTugas: Integer, idPelajar: Integer, bukti: BuktiPenyelesaian): HasilOperasi` | public | Memastikan tugas sesuai kelas dan bukti lengkap, lalu mendelegasikan penyimpanan ke C26. |
+| `ambilStatus(idPelajar: Integer, daftarTugas: List): List` | public | Mendelegasikan pembacaan status per Pelajar kepada C26. |
+| `ambilDetail(idKelas: Integer, idTugas: Integer): Data?` | public | Mengambil detail tugas terbit yang cocok dengan idKelas dan idTugas; null jika tidak ditemukan. |
+| `periksaKomponenWajib(bukti: BuktiPenyelesaian): HasilVerifikasi` | private | Memeriksa bukti tiap komponen wajib dan menghitung saat semua komponen pertama kali lengkap. |
+| `simpan(data: DataTugas): HasilOperasi` | public | Menyimpan paket tugas sebagai draf secara atomik; instruksi, tenggat, dan komponen divalidasi. |
+
+Tabel 5.25.2. Atribut Kelas TugasKelas
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idTugas` | private | `int` |
+| `idKelas` | private | `int` |
+| `instruksi` | private | `string` |
+| `tenggat` | private | `DateTimeImmutable` |
+| `status` | private | `StatusTugas` |
+| `komponenTugas` | private | `array (elemen KomponenTugas)` |
+
+### 5.25.1 Algoritma simpan
+
+**Nama Kelas:** `TugasKelas`  
+**Nama Operasi:** `simpan(data: DataTugas): HasilOperasi`  
+**ID Algoritma:** Algo-C25-01
+
+```text
+function simpan (data: DataTugas) → HasilOperasi
+    if not dataTugasValid(data) then
+        hasil ← gagal("dataTidakValid")
+    else
+        hasil ← gagal("gagalSimpan")
+        mulaiTransaksi(tx)
+        if not tx.gagal then
+            bolehSimpan ← periksaDrafUntukDisimpan(data, tx)
+            if not tx.gagal then
+                if bolehSimpan then
+                    idTugasTersimpan ← simpanMetadataDraf(data, tx)
+                    if not tx.gagal then
+                        simpanKomponenTugas(idTugasTersimpan, data.komponenTugas, tx)
+                    if not tx.gagal then
+                        commit(tx)
+                        if tx.terkonfirmasi then
+                            hasil ← berhasil(idTugasTersimpan)
+                else
+                    batalkanTransaksi(tx)
+                    hasil ← gagal("tugasTidakDapatDiubah")
+        if tx.tidakPasti then
+            hasil ← gagal("belumTerkonfirmasi")
+        else
+            if tx.gagal then
+                batalkanTransaksi(tx)
+                catatError(tx)
+    → hasil
+```
+
+### 5.25.2 Algoritma terbitkan
+
+**Nama Kelas:** `TugasKelas`  
+**Nama Operasi:** `terbitkan(): HasilOperasi`  
+**ID Algoritma:** Algo-C25-02
+
+```text
+function terbitkan () → HasilOperasi
+    hasil ← gagal("gagalSimpan")
+    mulaiTransaksi(tx)
+    if not tx.gagal then
+        tugas ← kunciTugasBesertaKomponen(idKelas, idTugas, tx)
+        if not tx.gagal then
+            if tugas = Nil then
+                batalkanTransaksi(tx)
+                hasil ← gagal("tugasTidakDitemukan")
+            else
+                if tugas.status = "terbit" then
+                    commit(tx)
+                    if tx.terkonfirmasi then
+                        hasil ← berhasil("sudahTerbit")
+                else
+                    if dataTugasValid(tugas) then
+                        perbaruiStatusTugas(idTugas, "terbit", tx)
+                        if not tx.gagal then
+                            commit(tx)
+                            if tx.terkonfirmasi then
+                                hasil ← berhasil("tugasDiterbitkan")
+                    else
+                        batalkanTransaksi(tx)
+                        hasil ← gagal("dataTidakValid")
+    if tx.tidakPasti then
+        hasil ← gagal("belumTerkonfirmasi")
+    else
+        if tx.gagal then
+            batalkanTransaksi(tx)
+            catatError(tx)
+    → hasil
+```
+
+### 5.25.3 Algoritma verifikasiDanSimpan
+
+**Nama Kelas:** `TugasKelas`  
+**Nama Operasi:** `verifikasiDanSimpan(idKelas: Integer, idTugas: Integer, idPelajar: Integer, bukti: BuktiPenyelesaian): HasilOperasi`  
+**ID Algoritma:** Algo-C25-03
+
+```text
+function verifikasiDanSimpan (idKelas: integer, idTugas: integer, idPelajar: integer, bukti: BuktiPenyelesaian) → HasilOperasi
+    tugas ← ambilDetail(idKelas, idTugas)
+    if tugas = Nil then
+        hasil ← gagal("tugasTidakDitemukan")
+    else
+        if (bukti.idPelajar ≠ idPelajar) or (bukti.idTugas ≠ idTugas) then
+            hasil ← gagal("buktiTidakValid")
+        else
+            muatAtributTugas(tugas)
+            verifikasi ← periksaKomponenWajib(bukti)
+            if verifikasi.valid then
+                hasil ← PenyelesaianTugas.simpanPengumpulan(idPelajar, idTugas,
+                    verifikasi.waktuSelesai, tugas.tenggat)
+            else
+                hasil ← gagal(verifikasi.alasan)
+                hasil.data ← verifikasi.komponenBelumSelesai
+    → hasil
+```
+
+### 5.25.4 Algoritma periksaKomponenWajib
+
+**Nama Kelas:** `TugasKelas`  
+**Nama Operasi:** `periksaKomponenWajib(bukti: BuktiPenyelesaian): HasilVerifikasi`  
+**ID Algoritma:** Algo-C25-04
+
+```text
+function periksaKomponenWajib (bukti: BuktiPenyelesaian) → HasilVerifikasi
+    jumlahWajib ← 0
+    hasil.komponenBelumSelesai.Neff ← 0
+    akhirSemua ← Nil
+    i ← 1
+    while i ≤ komponenTugas.Neff do
+        komponen ← komponenTugas.Tab[i]
+        if komponen.wajib then
+            jumlahWajib ← jumlahWajib + 1
+            ditemukan ← false
+            awalKomponen ← Nil
+            j ← 1
+            while j ≤ bukti.catatan.Neff do
+                catatan ← bukti.catatan.Tab[j]
+                if buktiCocokDanSelesai(catatan, komponen, bukti) then
+                    if not ditemukan then
+                        awalKomponen ← catatan.waktuSelesai
+                        ditemukan ← true
+                    else
+                        if catatan.waktuSelesai < awalKomponen then
+                            awalKomponen ← catatan.waktuSelesai
+                j ← j + 1
+            if ditemukan then
+                if akhirSemua = Nil then
+                    akhirSemua ← awalKomponen
+                else
+                    if awalKomponen > akhirSemua then
+                        akhirSemua ← awalKomponen
+            else
+                tambahID(hasil.komponenBelumSelesai, komponen.idKomponen)
+        i ← i + 1
+    hasil.valid ← (jumlahWajib > 0) and (hasil.komponenBelumSelesai.Neff = 0)
+    hasil.waktuSelesai ← Nil
+    if hasil.valid then
+        hasil.waktuSelesai ← akhirSemua
+        hasil.alasan ← "Seluruh komponen wajib selesai"
+    else
+        if jumlahWajib = 0 then
+            hasil.alasan ← "komponenWajibKosong"
+        else
+            hasil.alasan ← "komponenBelumLengkap"
+    → hasil
+```
+
+### 5.25.5 Algoritma ambilTugasAktif
+
+**Nama Kelas:** `TugasKelas`  
+**Nama Operasi:** `ambilTugasAktif(idKelas: Integer): List`  
+**ID Algoritma:** Algo-C25-05
+
+```text
+function ambilTugasAktif (idKelas: integer) → List
+    daftarTugas ← bacaTugasTerbit(idKelas)
+    → daftarTugas
+```
+
+#### Query Pendukung Kelas C25
+
+Tabel 5.25.3. Query Pendukung
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C25-01 | `SELECT * FROM tugas_kelas WHERE id_kelas = :idKelas AND status = 'terbit' ORDER BY tenggat, id_tugas;` | Daftar tugas terbit, termasuk yang lewat tenggat. |
+| Q-C25-02 | `SELECT * FROM tugas_kelas WHERE id_kelas = :idKelas AND id_tugas = :idTugas AND status = 'terbit';` | Detail tugas terbatas kelas. |
+| Q-C25-03 | `SELECT * FROM komponen_tugas WHERE id_tugas = :idTugas ORDER BY id_komponen;` | Memuat seluruh komponen tugas. |
+| Q-C25-04 | `INSERT INTO tugas_kelas (id_kelas, instruksi, tenggat, status) VALUES (:idKelas, :instruksi, :tenggat, 'draf');` | Metadata draf; insert komponen pada transaksi yang sama. |
+| Q-C25-05 | `INSERT INTO komponen_tugas (id_tugas, id_komponen, jenis, id_materi, mode, wajib) VALUES (:idTugas, :idKomponen, :jenis, :idMateri, :mode, :wajib);` | Dilakukan untuk tiap komponen tervalidasi. |
+| Q-C25-06 | `UPDATE tugas_kelas SET status = 'terbit' WHERE id_tugas = :idTugas AND id_kelas = :idKelas AND status = 'draf';` | Penerbitan setelah validasi dan penguncian draf. |
+
+
 ## 5.26 Kelas PenyelesaianTugas
+
+**Nama Kelas:** `PenyelesaianTugas`  
+**ID Kelas:** C26
+
+Tabel 5.26.1. Operasi Kelas PenyelesaianTugas
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `simpanPengumpulan(idPelajar: Integer, idTugas: Integer, waktuSelesai: DateTime, tenggat: DateTime): HasilOperasi` | public | Menyiapkan waktu/status dari bukti terverifikasi dan menyimpan pengumpulan satu kali. |
+| `tentukanStatusKetepatan(waktuSelesai: DateTime, tenggat: DateTime): String` | private | Mengembalikan tepatWaktu bila waktuSelesai <= tenggat; selain itu terlambat. |
+| `ambilStatus(idPelajar: Integer, daftarTugas: List): List` | public | Mengembalikan status untuk setiap tugas; tanpa baris pengumpulan berarti belumSelesai. |
+| `simpanAtomik(): HasilOperasi` | private | Menjalankan transaksi penyimpanan yang tahan permintaan ulang dan mencegah duplikasi. |
+| `batalkanTransaksi(): void` | private | Melakukan rollback transaksi penyimpanan milik operasi ini apabila masih aktif. |
+
+Tabel 5.26.2. Atribut Kelas PenyelesaianTugas
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idPenyelesaian` | private | `int` |
+| `idTugas` | private | `int` |
+| `idPelajar` | private | `int` |
+| `waktuKumpul` | private | `DateTimeImmutable` |
+| `status` | private | `string` |
+
+### 5.26.1 Algoritma simpanPengumpulan
+
+**Nama Kelas:** `PenyelesaianTugas`  
+**Nama Operasi:** `simpanPengumpulan(idPelajar: Integer, idTugas: Integer, waktuSelesai: DateTime, tenggat: DateTime): HasilOperasi`  
+**ID Algoritma:** Algo-C26-01
+
+```text
+function simpanPengumpulan (idPelajar: integer, idTugas: integer, waktuSelesai: DateTime, tenggat: DateTime) → HasilOperasi
+    siapkanObjekPenyelesaian(idPelajar, idTugas, waktuSelesai,
+        tentukanStatusKetepatan(waktuSelesai, tenggat))
+    hasil ← simpanAtomik()
+    → hasil
+```
+
+### 5.26.2 Algoritma tentukanStatusKetepatan
+
+**Nama Kelas:** `PenyelesaianTugas`  
+**Nama Operasi:** `tentukanStatusKetepatan(waktuSelesai: DateTime, tenggat: DateTime): String`  
+**ID Algoritma:** Algo-C26-02
+
+```text
+function tentukanStatusKetepatan (waktuSelesai: DateTime, tenggat: DateTime) → string
+    if waktuSelesai ≤ tenggat then
+        → "tepatWaktu"
+    else
+        → "terlambat"
+```
+
+### 5.26.3 Algoritma simpanAtomik
+
+**Nama Kelas:** `PenyelesaianTugas`  
+**Nama Operasi:** `simpanAtomik(): HasilOperasi`  
+**ID Algoritma:** Algo-C26-03
+
+```text
+function simpanAtomik () → HasilOperasi
+    hasil ← gagal("gagalSimpan")
+    mulaiTransaksi(tx)
+    if not tx.gagal then
+        sah ← kunciTugasDanPeriksaKeanggotaan(idTugas, idPelajar, tx)
+        if not tx.gagal then
+            if sah then
+                lama ← cariPengumpulan(idTugas, idPelajar, tx)
+                if not tx.gagal then
+                    if lama = Nil then
+                        sisipkanPenyelesaian(idTugas, idPelajar, waktuKumpul, status, tx)
+                    if not tx.gagal then
+                        commit(tx)
+                        if tx.terkonfirmasi then
+                            if lama = Nil then
+                                hasil ← berhasil(dataObjekPenyelesaian())
+                            else
+                                hasil ← berhasil(lama)
+            else
+                batalkanTransaksi(tx)
+                hasil ← gagal("aksesDitolak")
+    if tx.tidakPasti then
+        hasil ← gagal("belumTerkonfirmasi")
+    else
+        if tx.gagal then
+            batalkanTransaksi(tx)
+            catatError(tx)
+    → hasil
+```
+
+### 5.26.4 Algoritma ambilStatus
+
+**Nama Kelas:** `PenyelesaianTugas`  
+**Nama Operasi:** `ambilStatus(idPelajar: Integer, daftarTugas: List): List`  
+**ID Algoritma:** Algo-C26-04
+
+```text
+function ambilStatus (idPelajar: integer, daftarTugas: List) → List
+    hasil.Neff ← daftarTugas.Neff
+    if daftarTugas.Neff > 0 then
+        tersimpan ← bacaPengumpulan(idPelajar, daftarTugas)
+        i ← 1
+        while i ≤ daftarTugas.Neff do
+            statusLama ← cariStatus(tersimpan, daftarTugas.Tab[i].idTugas)
+            if statusLama = Nil then
+                hasil.Tab[i].idTugas ← daftarTugas.Tab[i].idTugas
+                hasil.Tab[i].status ← "belumSelesai"
+                hasil.Tab[i].waktuKumpul ← Nil
+            else
+                hasil.Tab[i] ← statusLama
+            i ← i + 1
+    → hasil
+```
+
+#### Query Pendukung Kelas C26
+
+Tabel 5.26.3. Query Pendukung
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C26-01 | `SELECT * FROM tugas_kelas WHERE id_tugas = :idTugas FOR UPDATE;` | Mengunci tugas; dilanjutkan penguncian keanggotaan dengan Q-C24-02. |
+| Q-C26-02 | `SELECT * FROM penyelesaian_tugas WHERE id_tugas = :idTugas AND id_pelajar = :idPelajar FOR UPDATE;` | Memeriksa pengumpulan yang sudah tersimpan. |
+| Q-C26-03 | `INSERT INTO penyelesaian_tugas (id_tugas, id_pelajar, waktu_kumpul, status) VALUES (:idTugas, :idPelajar, :waktuSelesai, :status);` | Menyimpan hasil verifikasi; tidak menimpa hasil pertama. |
+| Q-C26-04 | `SELECT id_tugas, status, waktu_kumpul FROM penyelesaian_tugas WHERE id_pelajar = :idPelajar AND id_tugas IN (:idTugas1, ..., :idTugasN);` | Pseudotemplate daftar parameter; daftar kosong ditangani sebelum query. |
 
 ---
 
@@ -4053,7 +4684,46 @@ Tabel 6.11. Spesifikasi Objek Antarmuka I-11
 
 ## 6.12 Rancangan Antarmuka I-12
 
+**Antarmuka:** I-12  
+**Nama Layar:** Kelas Saya & Daftar Tugas  
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-12 - Kelas Saya & Daftar Tugas" src="./assets/ui/I-12-Tags.png" width="100%">
+</p>
+<p align="center"><i>Gambar 54. Rancangan Antarmuka I-12 - Kelas Saya & Daftar Tugas</i></p>
+
+Tabel 6.12. Spesifikasi Objek Antarmuka I-12
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-12.1 | Text box | Kode bergabung | Kode kelas dari Pengajar. |
+| I-12.2 | Button | Gabung | Menjalankan kirimKodeBergabung(kode), lalu KelasController.validasiKodeBergabung() (Algo-081). |
+| I-12.3 | Pesan | Hasil bergabung | Ditampilkan oleh tampilkanPesan(pesan): berhasil, sudah menjadi anggota (UC-05 alternatif 1), atau kode tidak valid (UC-05 alternatif 3). |
+| I-12.4 | Tab | Kelas yang diikuti | Memilih kelas menjalankan bukaKelas(idKelas). |
+| I-12.5 | Daftar | Tugas aktif, tenggat, status | Ditampilkan oleh tampilkanTugas(data) dari KelasController.ambilTugasAktif(). |
+| I-12.6 | Button | Buka | Menjalankan bukaTugas(idKelas, idTugas), lalu membuka I-13. |
+
 ## 6.13 Rancangan Antarmuka I-13
+
+**Antarmuka:** I-13  
+**Nama Layar:** Pengerjaan Tugas  
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-13 - Pengerjaan Tugas" src="./assets/ui/I-13-Tags.png" width="100%">
+</p>
+<p align="center"><i>Gambar 55. Rancangan Antarmuka I-13 - Pengerjaan Tugas</i></p>
+
+Tabel 6.13. Spesifikasi Objek Antarmuka I-13
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-13.1 | Panel | Instruksi, tenggat, penanda terlambat | Ditampilkan oleh tampilkanDetail(data). Penanda muncul bila tenggat sudah lewat (UC-05 alternatif 2). |
+| I-13.2 | Daftar | Komponen tugas dan kemajuan | Status dari RiwayatLatihan.ambilBuktiPenyelesaian(). |
+| I-13.3 | Button | Kerjakan | Menjalankan kerjakanTugas(idKelas, idTugas) lalu membuka I-05 atau I-06. |
+| I-13.4 | Button | Kumpulkan tugas | Menjalankan periksaPenyelesaian(), lalu finalisasiTugas() dan KelasController.simpanPengumpulan() (Algo-082). Aktif bila semua komponen wajib selesai. |
+| I-13.5 | Pesan | Status pengumpulan | Ditampilkan oleh tampilkanHasil(data): tepat waktu atau terlambat (Algo-064). |
+| I-13.6 | Pesan kesalahan | Pengumpulan gagal | Muncul bila penyimpanan gagal. Semua perubahan dibatalkan (UC-05 eksepsi). |
+| I-13.7 | Link | Kembali ke Kelas Saya | Kembali ke I-12. |
 
 ## 6.14 Rancangan Antarmuka I-14
 
@@ -4238,12 +4908,12 @@ Tabel 6.21. Rancangan Antarmuka Keseluruhan
 | I-08 Latihan Mencocokkan Bunyi | <img src="./assets/ui/I-08 Bunyi.png" alt="I-08 Latihan Mencocokkan Bunyi" width="400"> |
 | I-09 Latihan Merangkai Aksara | <img src="./assets/ui/I-09 Merangkai.png" alt="I-09 Latihan Merangkai Aksara" width="400"> |
 | I-10 Hasil Latihan | <img src="./assets/ui/I-10 Hasil Latihan.png" alt="I-10 Hasil Latihan" width="400"> |
-|I-11 Progres Pelajar | <img src="./assets/diagram/I-11 Progres Pelajar.png" alt="I-11 Progres Pelajar" width="400"> |
-| I-12 | ...                                                                                 |
-| I-13 | ...                                                                                 |
-| I-14 Kelola Kelas| <img src="./assets/diagram/I14.png" alt="I-14 Kelola Kelas" width="400"> |
-| I-15 Terbitkan Tugas| <img src="./assets/diagram/I15.png" alt="I-15 Terbitkan Tugas" width="400"> |
-| I-16 Kelola Anggota dan Papan Peringkat| <img src="./assets/diagram/I16.png" alt="I-16 Kelola Anggota dan Papan Peringkat" width="400"> |
+| I-11 Progres Pelajar | <img src="./assets/diagram/I-11 Progres Pelajar.png" alt="I-11 Progres Pelajar" width="400"> |
+| I-12 Kelas Saya & Daftar Tugas | <img src="./assets/ui/I-12-Polos.png" alt="I-12 Kelas Saya & Daftar Tugas" width="400"> |
+| I-13 Pengerjaan Tugas | <img src="./assets/ui/I-13-Polos.png" alt="I-13 Pengerjaan Tugas" width="400"> |
+| I-14 Kelola Kelas| <img src="./assets/diagram/I14.png" alt="I-11 Progres Pelajar" width="400"> |
+| I-15 Terbitkan Tugas| <img src="./assets/diagram/I15.png" alt="I-11 Progres Pelajar" width="400"> |
+| I-16 Kelola Anggota dan Papan Peringkat| <img src="./assets/diagram/I16.png" alt="I-11 Progres Pelajar" width="400"> |
 |I-17 Pantau Progres Anggota | <img src="./assets/diagram/I-17 Pantau Progres Anggota.png" alt="I-17 Pantau Progres Anggota" width="400">|
 | I-18 Kelola Materi | <img src="./assets/diagram/I-18 Kelola Materi.png" alt="Contoh Desain" width="400"> |
 | I-19 Unggah Materi | <img src="./assets/diagram/I-19 Unggah Materi.png" alt="Contoh Desain" width="400"> |
