@@ -830,100 +830,49 @@ Tabel 5.1. Daftar Kelas Perancangan dan Kelas Analisis Terkait
 Untuk **setiap kelas**, identifikasi operasi berdasarkan tanggung jawab kelas beserta _visibility_-nya, serta atribut beserta _visibility_ dan tipenya. Buat subbab tersendiri untuk setiap kelas.
 
 ## 5.1 Kelas AkunPengguna
- 
-**Nama Kelas:** AkunPengguna  
-**ID Kelas:** C01  
-**Jenis:** Model
- 
-Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi, serta menjadi acuan hak akses seluruh fitur.
- 
-Tabel 5.1.1. Operasi Kelas AkunPengguna
- 
-| Nama Operasi | Visibility (private, public) | Keterangan |
-| :--- | :--- | :--- |
-| `buatAkunBaru(data: DataPendaftaran): HasilOperasi` | public | Menyimpan akun baru dari email, username, `passwordHash`, peran, dan nama tampilan. Menolak email atau username yang sudah dipakai (UC-01 Skenario Alternatif 1). Lihat Algo-001. |
-| `cariBerdasarkanEmail(email: String): AkunPengguna?` | public | Mengambil akun berdasarkan email untuk proses login. Mengembalikan `null` jika tidak ada. |
-| `cocokkanPassword(password: String): Boolean` | public | Memeriksa kata sandi terhadap `passwordHash` tanpa mengeluarkan nilai hash dari objek. |
-| `getProfil(): Data` | public | Mengembalikan `idAkun`, `username`, `namaTampilan`, dan `peran`. Dipakai `HalamanUtama` dan `FeedbackController`. Tidak memuat email dan `passwordHash`. |
-| `getDetailAkun(): Data` | public | Mengembalikan profil beserta email untuk halaman akun milik pengguna sendiri. Tidak memuat `passwordHash`. |
-| `verifikasiHakAkses(aksi: String): Boolean` | public | Memeriksa apakah peran akun boleh menjalankan aksi tertentu (KF02). Lihat Algo-002. |
- 
-Tabel 5.1.2. Atribut Kelas AkunPengguna
- 
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| `idAkun` | private | Integer |
-| `email` | private | String |
-| `username` | private | String |
-| `passwordHash` | private | String |
-| `peran` | private | String (`PELAJAR`, `PENGAJAR`, atau `TIM_MATERI`) |
-| `namaTampilan` | private | String |
- 
+
+**Nama Kelas:** _[Nama kelas]_  
+**ID Kelas:** _[ID kelas]_
+
+Tabel 5.1.1. Operasi Kelas [Nama Kelas 1]
+
+| Nama Operasi                                                 | Visibility (private, public) | Keterangan                 |
+| :----------------------------------------------------------- | :--------------------------- | :------------------------- |
+| _[Signature operasi, termasuk parameter dan tipe kembalian]_ | _[Visibility]_               | _[Tanggung jawab operasi]_ |
+| _..._                                                        | _..._                        | _..._                      |
+
+Tabel 5.1.2. Atribut Kelas [Nama Kelas 1]
+
+| Nama Atribut     | Visibility (private, public) | Tipe                                              |
+| :--------------- | :--------------------------- | :------------------------------------------------ |
+| _[Nama atribut]_ | _[Visibility]_               | _[Tipe sesuai bahasa pemrograman yang digunakan]_ |
+| _..._            | _..._                        | _..._                                             |
+
 ### 5.1.1 Algoritma/Query
- 
-**Nama Kelas:** AkunPengguna  
-**Nama Operasi:** `buatAkunBaru(data: DataPendaftaran): HasilOperasi`  
-**ID Algoritma:** Algo-001
- 
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai _pseudocode_. Implementasi _skeleton code_ juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** _[Nama kelas]_  
+**Nama Operasi:** _[Signature operasi]_  
+**ID Algoritma:** _[Algo-001]_
+
 ```text
-FUNCTION buatAkunBaru(data: DataPendaftaran): HasilOperasi
-  // data.passwordHash sudah di-hash oleh OtentikasiController.hashPassword()
-  email ← huruf kecil(trim(data.email))
-  jumlah ← jalankan Q-001.1
-  IF jumlah > 0 THEN
-    RETURN HasilOperasi.gagal("AKUN_SUDAH_ADA", "Email atau username sudah digunakan")
- 
-  TRY
-    idBaru ← jalankan Q-001.2
-  CATCH pelanggaran indeks unik          // dua pendaftaran bersamaan dengan data sama
-    RETURN HasilOperasi.gagal("AKUN_SUDAH_ADA", "Email atau username sudah digunakan")
- 
-  this.idAkun ← idBaru
-  this.email ← email;  this.username ← data.username
-  this.passwordHash ← data.passwordHash;  this.peran ← data.peran
-  this.namaTampilan ← data.namaTampilan ?? data.username
-  RETURN HasilOperasi.sukses(idAkun = idBaru)
+[Tuliskan pseudocode algoritma operasi di sini.]
 ```
- 
-Tabel 5.1.3. Query Operasi buatAkunBaru
- 
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| Q-001.1 | `SELECT COUNT(*) FROM akun_pengguna WHERE email = :email OR username = :username;` | Mencegah email atau username ganda sebelum menyimpan. |
-| Q-001.2 | `INSERT INTO akun_pengguna (email, username, password_hash, peran, nama_tampilan, created_at) VALUES (:email, :username, :password_hash, :peran, :nama_tampilan, NOW());` | Menyimpan akun baru. Kolom `email` dan `username` diberi indeks `UNIQUE` sebagai pengaman terakhir. |
- 
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut.
+
+Tabel 5.1.1. Query Operasi [Nama Operasi]
+
+| No Query  | Query              | Keterangan       |
+| :-------- | :----------------- | :--------------- |
+| _[Q-001]_ | _[Tuliskan query]_ | _[Fungsi query]_ |
+| _..._     | _..._              | _..._            |
+
 ### 5.1.2 Algoritma/Query
- 
-**Nama Kelas:** AkunPengguna  
-**Nama Operasi:** `verifikasiHakAkses(aksi: String): Boolean`  
-**ID Algoritma:** Algo-002
- 
-Hak akses diturunkan dari aktor setiap use case pada SKPL. Satu tabel ini juga dipakai `HalamanUtama` untuk menentukan menu yang tampil.
- 
-```text
-FUNCTION verifikasiHakAkses(aksi: String): Boolean
-  HAK ← {
-    PELAJAR:    {MEMPELAJARI_MATERI, MENGERJAKAN_LATIHAN, MELIHAT_PROGRES,
-                 MENGIKUTI_KELAS, KIRIM_FEEDBACK},                       // UC-02–UC-05, UC-09
-    PENGAJAR:   {KELOLA_KELAS, PANTAU_PROGRES, KIRIM_FEEDBACK},           // UC-07–UC-09
-    TIM_MATERI: {KELOLA_MATERI}                                          // UC-06
-  }
-  IF this.idAkun = null OR this.peran NOT IN HAK THEN
-    RETURN false
-  RETURN huruf besar(aksi) IN HAK[this.peran]
-```
- 
-### 5.1.3 Algoritma/Query
- 
-**Nama Kelas:** AkunPengguna  
-**Nama Operasi:** `cariBerdasarkanEmail(email: String): AkunPengguna?`
- 
-Tabel 5.1.4. Query Operasi cariBerdasarkanEmail
- 
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| Q-002 | `SELECT id_akun, email, username, password_hash, peran, nama_tampilan FROM akun_pengguna WHERE email = :email LIMIT 1;` | Mengambil akun untuk proses login. Email dibandingkan dalam huruf kecil. |
- 
+
+_[Ulangi pola 5.1.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]_
+
 ## 5.2 Kelas MateriAksara
 
 **Nama Kelas:** MateriAksara  
@@ -1306,200 +1255,45 @@ Tabel 5.4.4. Query Operasi perbaruiStatus
 | Q-004 | `UPDATE data_feedback SET status = :status_baru WHERE id_feedback = :id_feedback AND status = :status_lama;` | Memperbarui status hanya jika status di basis data masih sama dengan yang dibaca. |
  
 ## 5.5 Kelas HalamanPendaftaran
- 
-**Nama Kelas:** HalamanPendaftaran  
-**ID Kelas:** C05  
-**Jenis:** View
- 
-Menampilkan form pendaftaran, pemilihan peran, dan persetujuan Terms & Conditions pada layar I-01.
- 
-Tabel 5.5.1. Operasi Kelas HalamanPendaftaran
- 
-| Nama Operasi | Visibility (private, public) | Keterangan |
-| :--- | :--- | :--- |
-| `tampilkanOpsiPeran(): void` | public | Menampilkan pilihan jenis akun Pelajar dan Pengajar (KF01). Akun Tim Materi tidak dibuat melalui halaman ini. |
-| `tampilkanTnC(): void` | public | Menampilkan dokumen Terms & Conditions dan kotak centang persetujuan. Mencentang kotak mengubah `statusPersetujuan` (KF06). |
-| `kirimPendaftaran(data: DataPendaftaran): void` | public | Memeriksa isian wajib di browser, meneruskan data ke `OtentikasiController`, lalu menampilkan pesan berhasil atau pesan galat per isian. Lihat Algo-005. |
- 
-Tabel 5.5.2. Atribut Kelas HalamanPendaftaran
- 
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| `formInputData` | private | DataPendaftaran |
-| `statusPersetujuan` | private | Boolean (nilai awal `false`) |
- 
-### 5.5.1 Algoritma/Query
- 
-**Nama Kelas:** HalamanPendaftaran  
-**Nama Operasi:** `kirimPendaftaran(data: DataPendaftaran): void`  
-**ID Algoritma:** Algo-005
- 
-```text
-PROCEDURE kirimPendaftaran(data: DataPendaftaran)
-  // pemeriksaan cepat di browser; pemeriksaan sebenarnya tetap di server (Algo-009)
-  IF NOT statusPersetujuan THEN
-    tandai kotak T&C: "Setujui Terms & Conditions untuk melanjutkan"      // KF07
-    RETURN
-  IF ada isian wajib yang kosong THEN
-    tandai isian kosong;  RETURN
- 
-  nonaktifkan tombol "Daftar"                 // mencegah pengiriman ganda
-  formInputData ← data
-  formInputData.persetujuanTnC ← statusPersetujuan
- 
-  validasi ← OtentikasiController.verifikasiFormatData(formInputData)
-  IF validasi.valid = false THEN
-    tampilkan pesan galat di bawah setiap isian dari validasi.galat       // UC-01 Alternatif 1
-    aktifkan tombol "Daftar";  RETURN
- 
-  hasil ← OtentikasiController.simpanAkun(formInputData)
-  IF hasil.berhasil THEN
-    kosongkan isian kata sandi
-    arahkan ke I-02 dengan pesan "Akun berhasil dibuat. Silakan masuk."
-  ELSE
-    tampilkan pesan hasil.pesan ("Email atau username sudah digunakan")
-    kosongkan isian kata sandi;  aktifkan tombol "Daftar"
-```
- 
+
 ## 5.6 Kelas HalamanLogin
- 
-**Nama Kelas:** HalamanLogin  
-**ID Kelas:** C06  
-**Jenis:** View
- 
-Menampilkan form login pada layar I-02. Kata sandi tidak disimpan sebagai atribut halaman.
- 
-Tabel 5.6.1. Operasi Kelas HalamanLogin
- 
-| Nama Operasi | Visibility (private, public) | Keterangan |
-| :--- | :--- | :--- |
-| `kirimKredensial(email: String, password: String): void` | public | Mengirim email dan kata sandi ke `OtentikasiController.validasiLogin()`, lalu meneruskan hasilnya ke `tampilkanStatusLogin()`. Lihat Algo-006. |
-| `tampilkanStatusLogin(hasil: HasilOperasi): void` | public | Jika berhasil, membuka I-03 Halaman Utama. Jika gagal, menampilkan pesan umum tanpa menyebut isian mana yang salah. |
- 
-Tabel 5.6.2. Atribut Kelas HalamanLogin
- 
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| `emailInput` | private | String |
-| `statusTampilan` | private | String (`SIAP`, `MEMPROSES`, `GAGAL`, `TERKUNCI`) |
- 
-### 5.6.1 Algoritma/Query
- 
-**Nama Kelas:** HalamanLogin  
-**Nama Operasi:** `kirimKredensial(email: String, password: String): void`  
-**ID Algoritma:** Algo-006
- 
-```text
-PROCEDURE kirimKredensial(email: String, password: String)
-  IF kosong(email) OR kosong(password) THEN
-    tandai isian kosong;  RETURN
- 
-  emailInput ← email                  // email tetap terisi bila login gagal
-  statusTampilan ← "MEMPROSES";  nonaktifkan tombol "Masuk"
-  hasil ← OtentikasiController.validasiLogin(email, password)
-  tampilkanStatusLogin(hasil)
- 
-PROCEDURE tampilkanStatusLogin(hasil: HasilOperasi)
-  kosongkan isian kata sandi
-  IF hasil.berhasil THEN
-    arahkan ke I-03 Halaman Utama
-  ELSE IF hasil.kode = "TERLALU_BANYAK_PERCOBAAN" THEN
-    statusTampilan ← "TERKUNCI"
-    tampilkan pesan hasil.pesan ("Coba lagi dalam N detik");  aktifkan tombol setelah N detik
-  ELSE
-    statusTampilan ← "GAGAL"
-    tampilkan pesan "Email atau kata sandi salah";  aktifkan tombol "Masuk"
-```
- 
+
 ## 5.7 Kelas HalamanUtama
- 
-**Nama Kelas:** HalamanUtama  
-**ID Kelas:** C07  
-**Jenis:** View
- 
-Menampilkan navigasi utama (layar I-03) setelah pengguna masuk. Menu disesuaikan dengan peran pengguna.
- 
-Tabel 5.7.1. Operasi Kelas HalamanUtama
- 
-| Nama Operasi | Visibility (private, public) | Keterangan |
-| :--- | :--- | :--- |
-| `tampilkanMenu(peran: Peran): void` | public | Menyusun `menuTersedia` sesuai peran dan menampilkannya di menu samping beserta nama tampilan dari `profil`. Lihat Algo-007. |
-| `pilihMenu(kode: String): void` | public | Membuka halaman tujuan menu yang dipilih. Kode di luar `menuTersedia` diabaikan. Lihat Algo-007. |
- 
-Tabel 5.7.2. Atribut Kelas HalamanUtama
- 
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| `profil` | private | Profil |
-| `menuTersedia` | private | List<String> |
- 
-### 5.7.1 Algoritma/Query
- 
-**Nama Kelas:** HalamanUtama  
-**Nama Operasi:** `tampilkanMenu(peran: Peran): void` dan `pilihMenu(kode: String): void`  
-**ID Algoritma:** Algo-007
- 
-Daftar menu mengikuti hak akses pada Algo-002. Menyembunyikan menu hanya memudahkan pengguna. Setiap controller tetap memeriksa hak akses sendiri.
- 
-```text
-TUJUAN ← {
-  MATERI:       HalamanMateri       (I-04),   // UC-02
-  LATIHAN:      HalamanLatihan,               // UC-03
-  PROGRES:      HalamanProgres,               // UC-04
-  KELAS:        HalamanKelasPelajar,          // UC-05
-  KELOLA_KELAS: HalamanKelolaKelas,           // UC-07, UC-08
-  KELOLA_MATERI:HalamanKelolaMateri (I-18),   // UC-06
-  FEEDBACK:     HalamanFeedback     (I-20)    // UC-09
-}
-MENU_PERAN ← {
-  PELAJAR:    [MATERI, LATIHAN, PROGRES, KELAS, FEEDBACK],
-  PENGAJAR:   [KELOLA_KELAS, FEEDBACK],
-  TIM_MATERI: [KELOLA_MATERI]
-}
- 
-PROCEDURE tampilkanMenu(peran: Peran)
-  menuTersedia ← MENU_PERAN[peran] ?? list kosong
-  render nama tampilan ← profil.namaTampilan
-  render setiap kode dalam menuTersedia sebagai butir menu samping
-  pilihMenu(menuTersedia[0])          // halaman awal: menu pertama, misalnya daftar materi untuk Pelajar (KF09)
- 
-PROCEDURE pilihMenu(kode: String)
-  IF kode NOT IN menuTersedia THEN RETURN
-  tandai butir menu kode sebagai aktif
-  buka TUJUAN[kode]
-```
 
 ## 5.8 Kelas HalamanLatihan
 
 **Nama Kelas:** HalamanLatihan  
-**ID Kelas:** C08
+**ID Kelas:** C08  
+**Jenis:** View
+
+Menampilkan latihan aksara pada layar I-06 sampai I-10. Halaman dirender Blade di server, sedangkan interaksi langsung seperti menggambar di kanvas, menyalakan outline, memutar audio, dan menyusun komponen dijalankan JavaScript di browser tanpa menunggu server (KNF04).
 
 Tabel 5.8.1. Operasi Kelas HalamanLatihan
 
-| Nama Operasi                                  | Visibility (private, public) | Keterangan                                                                                                                                                                                                                                                                                                                               |
-| :-------------------------------------------- | :--------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pilihModeLatihan(mode: ModeLatihan): void`   | public                       | Mengirim mode yang dipilih bersama `idMateri` halaman ke `LatihanController.siapkanSoal()` (Algo-021), lalu menyiapkan tampilan sesuai mode: kanvas dengan outline yang bisa dinyalakan atau dimatikan (MENULIS, KF10), tombol putar audio dan pilihan aksara (BUNYI), atau palet komponen (MERANGKAI).                                  |
-| `rekamGoresan(titik: Titik): void`            | public                       | Menambahkan titik ke goresan aktif dan menggambarnya langsung di kanvas (KF11, KNF04). Lihat Algo-020.                                                                                                                                                                                                                                   |
-| `kirimJawaban(jawaban: JawabanLatihan): void` | public                       | Mengirim jawaban ke `LatihanController.nilaiJawaban()` (Algo-022). Untuk MENULIS berisi `goresan`, untuk BUNYI berisi `pilihan` yang diklik, dan untuk MERANGKAI berisi `urutan` komponen.                                                                                                                                               |
-| `tampilkanHasil(hasil: HasilPenilaian): void` | public                       | Menampilkan skor, status, umpan balik, dan posisi komponen yang salah. Jika status `LULUS`, tombol "Selesaikan Latihan" aktif dan membuka ringkasan streak, poin, dan badge (I-10) dari `hasil.motivasi`. Jika `BELUM_TUNTAS`, tombol "Ulangi" mengosongkan kanvas atau susunan di browser untuk soal yang sama (Skenario Alternatif 3). |
-|`tampilkanSoal(soal: SoalLatihan): void` | public | Menyiapkan tampilan sesuai mode: kanvas dan outline (MENULIS), tombol audio dan pilihan aksara (BUNYI), atau palet komponen (MERANGKAI). |
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `pilihModeLatihan(mode: ModeLatihan): void` | public | Mengirim mode yang dipilih bersama `idMateri` halaman ke `LatihanController.siapkanSoal()` (Algo-021), lalu meneruskan soal yang diterima ke `tampilkanSoal()`. |
+| `rekamGoresan(titik: Titik): void` | public | Menambahkan titik ke goresan aktif dan menggambarnya langsung di kanvas (KF11, KNF04). Lihat Algo-020. |
+| `kirimJawaban(jawaban: JawabanLatihan): void` | public | Mengirim jawaban ke `LatihanController.nilaiJawaban()` (Algo-022). Untuk MENULIS berisi `goresan`, untuk BUNYI berisi `pilihan` yang diklik, dan untuk MERANGKAI berisi `urutan` komponen. |
+| `tampilkanHasil(hasil: HasilPenilaian): void` | public | Menampilkan skor, status, umpan balik, dan posisi komponen yang salah. Jika status `berhasil`, tombol "Selesaikan Latihan" aktif. Jika `perlu_diulang`, tombol "Ulangi" ditampilkan. |
+| `tampilkanSoal(soal: SoalLatihan): void` | public | Menyiapkan tampilan sesuai mode: kanvas dan outline (MENULIS), tombol audio dan pilihan aksara (BUNYI), atau palet komponen (MERANGKAI). |
 | `aturOutline(aktif: Boolean): void` | public | Menampilkan atau menyembunyikan outline aksara pada kanvas tanpa menghapus goresan (KF10). Berjalan di browser saja. |
 | `putarAudio(): void` | public | Memutar audio pengucapan soal (`SoalLatihan.audio`) di browser setelah Pelajar menekan tombol putar (Skenario Alternatif 1). |
 | `ulangiLatihan(): void` | public | Mengosongkan goresan atau susunan dan menampilkan soal yang sama tanpa meminta soal baru ke server (Skenario Alternatif 3). |
-| `selesaikanLatihan(): void` | public | Mengirim hasil terakhir ke `LatihanController.simpanHasil()`, lalu membuka ringkasan motivasi (langkah 4 skenario normal). |
+| `selesaikanLatihan(): void` | public | Meminta `LatihanController.simpanHasil()` (Algo-026) menyimpan hasil yang sudah berhasil, lalu meneruskan ringkasannya ke `tampilkanRingkasan()` (langkah 4 skenario normal). |
 | `tampilkanRingkasan(ringkasan: RingkasanMotivasi): void` | public | Menampilkan streak, poin, badge baru, dan pesan jika poin tidak bertambah (layar I-10). |
 
 Tabel 5.8.2. Atribut Kelas HalamanLatihan
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| `modeLatihan` | private | ModeLatihan |
-| `jawabanInput` | private | JawabanLatihan |
-| `goresan` | private | List<Goresan> |
-| `hasilTampilan` | private | HasilPenilaian? |
-| `idMateri` | private | Integer |
-| `soalTampil` | private | SoalLatihan? |
-| outlineAktif` | private | Boolean |
+| `modeLatihan` | private | `ModeLatihan` |
+| `jawabanInput` | private | `JawabanLatihan` |
+| `goresan` | private | `List<Goresan>` |
+| `hasilTampilan` | private | `HasilPenilaian?` |
+| `idMateri` | private | `Integer` |
+| `soalTampil` | private | `SoalLatihan?` |
+| `outlineAktif` | private | `Boolean` |
 
 ### 5.8.1 Algoritma/Query
 
@@ -1604,71 +1398,319 @@ PROCEDURE suntingMateri(idMateri: Integer)
 ```
 
 ## 5.10 Kelas HalamanFeedback
- 
-**Nama Kelas:** HalamanFeedback  
-**ID Kelas:** C10  
-**Jenis:** View
- 
-Menampilkan form feedback (layar I-20) dan konfirmasi hasil pengiriman.
- 
-Tabel 5.10.1. Operasi Kelas HalamanFeedback
- 
-| Nama Operasi | Visibility (private, public) | Keterangan |
-| :--- | :--- | :--- |
-| `tampilkanFormFeedback(): void` | public | Menampilkan pilihan kategori (performa, tampilan, fitur, materi) sebagai pertanyaan tertutup dan isian pesan sebagai pertanyaan terbuka (KF18). |
-| `kirimFeedback(data: MasukanFeedback): void` | public | Mengirim feedback ke `FeedbackController`, menangani kegagalan server maupun jaringan, lalu menampilkan konfirmasi. Lihat Algo-008. |
-| `tampilkanKonfirmasi(konfirmasi: Konfirmasi): void` | public | Menampilkan pesan berhasil atau gagal terkirim (KF20, KNF05). Jika gagal, isi form tetap dipertahankan agar pengguna dapat mengirim ulang. |
- 
-Tabel 5.10.2. Atribut Kelas HalamanFeedback
- 
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| `kategoriFeedback` | private | KategoriFeedback |
-| `pesanFeedback` | private | String |
-| `statusKirim` | private | StatusKirim (`SIAP`, `MENGIRIM`, `TERKIRIM`, `GAGAL`) |
- 
-### 5.10.1 Algoritma/Query
- 
-**Nama Kelas:** HalamanFeedback  
-**Nama Operasi:** `kirimFeedback(data: MasukanFeedback): void`  
-**ID Algoritma:** Algo-008
- 
-Kedua cabang UC-09 Skenario Alternatif 1 ditangani di sini: server menerima permintaan tetapi gagal menyimpan, atau permintaan tidak sampai ke server.
- 
-```text
-PROCEDURE kirimFeedback(data: MasukanFeedback)
-  IF statusKirim = "MENGIRIM" THEN RETURN          // mencegah pengiriman ganda
-  kategoriFeedback ← data.kategori;  pesanFeedback ← data.pesan
-  statusKirim ← "MENGIRIM";  nonaktifkan tombol "Kirim"
- 
-  TRY (batas waktu 10 detik)
-    validasi ← FeedbackController.validasiFeedback(data)
-    IF validasi.valid = false THEN
-      statusKirim ← "SIAP"
-      tampilkan pesan galat di bawah isian dari validasi.galat
-      aktifkan tombol "Kirim";  RETURN
-    hasil ← FeedbackController.simpanFeedback(data)
-    konfirmasi ← FeedbackController.kirimKonfirmasi(hasil)
-  CATCH galat jaringan atau batas waktu habis
-    konfirmasi ← Konfirmasi(berhasil = false,
-                            pesan = "Feedback gagal terkirim. Periksa koneksi lalu coba lagi.")
- 
-  tampilkanKonfirmasi(konfirmasi)
- 
-PROCEDURE tampilkanKonfirmasi(konfirmasi: Konfirmasi)
-  IF konfirmasi.berhasil THEN
-    statusKirim ← "TERKIRIM"
-    kosongkan form;  tampilkan notifikasi berhasil konfirmasi.pesan
-  ELSE
-    statusKirim ← "GAGAL"
-    pertahankan kategoriFeedback dan pesanFeedback pada form
-    tampilkan notifikasi galat konfirmasi.pesan;  aktifkan tombol "Kirim"
-```
 
 ## 5.11 Kelas HalamanKelasPelajar
 
 ## 5.12 Kelas HalamanKelolaKelas
+**Nama Kelas:** HalamanKelolaKelas
 
+**ID Kelas:** C12
+
+Tabel 5.12.1. Operasi Kelas HalamanKelolaKelas
+
+| **Nama Operasi** | **Visibility (private, public)** | **Keterangan** |
+| :--- | :--- | :--- |
+| `buatKelas(data: DataKelas): void` | public | Menerima isian nama kelas dari form, memeriksa isian di sisi tampilan, lalu meneruskannya ke `KelasController.buatKelas()`. Hasil berupa `idKelas` dan `kodeBergabung` ditampilkan lewat `tampilkanHasil()`. Lihat Algo-060. |
+| `buatTugas(data: DataTugas): void` | public | Memastikan instruksi dan komponen tugas terisi, lalu meneruskan `data` beserta `idKelasTerpilih` ke `KelasController.buatTugas()`. Tugas tersimpan berstatus draf, `idTugas` dicatat pada `data`, dan paket tugas serta tenggat ditampilkan lewat `tampilkanHasil()`. Lihat Algo-066. |
+| `pilihAnggota(idPelajar: Integer): void` | public | Menyimpan anggota yang dipilih ke `idPelajarTerpilih`, meminta ringkasan progres anggota ke `KelasController.ambilProgresAnggota()`, lalu menampilkannya lewat `tampilkanProgres()` (UC-08). Bila anggota bukan anggota aktif, galat ditampilkan (UC-08 Alternatif 2). Pilihan yang sama dipakai `kirimUmpanBalik()`. Lihat Algo-061. |
+| `kirimUmpanBalik(data: DataUmpanBalik): void` | public | Meneruskan umpan balik Pengajar untuk anggota terpilih ke `KelasController.kirimUmpanBalik()` (UC-08). Lihat Algo-069. |
+| `kelolaAnggota(idKelas: Integer): void` | public | Menampilkan daftar anggota aktif kelas (Skenario Normal) atau, bila ada anggota yang sudah dikonfirmasi untuk dikeluarkan (`idAnggotaDikeluarkan` terisi), mengirim perubahan status `nonaktif` (Skenario Alternatif 2). Lihat Algo-062. |
+| `aturScoreboard(idKelas: Integer, aktif: Boolean): void` | public | Mengirim pilihan aktif atau nonaktif papan peringkat ke `KelasController.aturScoreboard()` lalu menampilkan hasilnya (Skenario Alternatif 3). Lihat Algo-063. |
+| `terbitkanTugas(idKelas: Integer, data: DataTugas): void` | public | Meneruskan permintaan penerbitan tugas draf ke `KelasController.terbitkanTugas()` dan menampilkan konfirmasi penerbitan. Lihat Algo-064. |
+| `gantiKodeKelas(idKelas: Integer): void` | public | Meneruskan permintaan penggantian kode bergabung ke `KelasController.gantiKodeKelas()` dan menampilkan kode baru lewat `tampilkanHasil()` (Skenario Alternatif 1). Lihat Algo-067. |
+| `tampilkanHasil(data: Data): void` | private | Merender hasil operasi sesuai jenisnya: kelas dan kode, paket tugas, kode baru, papan peringkat, konfirmasi terbit, umpan balik, atau pesan galat. Hanya dipanggil oleh kelas ini. Lihat Algo-065. |
+| `tampilkanAnggota(data: List<Profil>): void` | private | Mengisi `daftarAnggota` dan merender daftar nama tampilan anggota aktif beserta tombol "Keluarkan" (dialog konfirmasi pengeluaran, Skenario Alternatif 2) dan tombol "Lihat Progres" (memanggil `pilihAnggota()`). Lihat Algo-068. |
+| `tampilkanProgres(data: RingkasanProgres): void` | private | Mengisi `ringkasanProgres` dan merender ringkasan progres anggota terpilih (UC-08). Lihat Algo-070. |
+
+Tabel 5.12.2. Atribut Kelas HalamanKelolaKelas
+
+| **Nama Atribut** | **Visibility (private, public)** | **Tipe** |
+| :--- | :--- | :--- |
+| `idKelasTerpilih` | private | Integer? |
+| `daftarAnggota` | private | List |
+| `ringkasanProgres` | private | RingkasanProgres? |
+| `pesanInput` | private | String |
+| `idPelajarTerpilih` | private | Integer? |
+| `idAnggotaDikeluarkan` | private | Integer? |
+
+### 5.12.1 Algoritma/Query
+
+**Nama Kelas:** HalamanKelolaKelas
+
+**Nama Operasi:** `buatKelas(data: DataKelas): void`
+
+**ID Algoritma:** Algo-060
+
+```
+PROCEDURE buatKelas(data: DataKelas)
+  namaBersih ← trim(data.nama)
+  IF kosong(namaBersih) OR panjang(namaBersih) > 100 THEN
+    tampilkanHasil( Data.galat("Nama kelas wajib diisi (maks. 100 karakter)") )
+    RETURN
+
+  data.nama ← namaBersih
+  hasil ← KelasController.buatKelas(data)       // validasi hak akses dan penyimpanan di server
+
+  IF hasil.berhasil THEN
+    idKelasTerpilih ← hasil.data.idKelas
+  tampilkanHasil( Data.dari(hasil, "KELAS") )    // idKelas dan kodeBergabung, atau galat
+
+```
+
+### 5.12.2 Algoritma/Query
+
+**Nama Kelas:** HalamanKelolaKelas
+
+**Nama Operasi:** `pilihAnggota(idPelajar: Integer): void`
+
+**ID Algoritma:** Algo-061
+
+```
+PROCEDURE pilihAnggota(idPelajar: Integer)
+  anggota ← cari elemen pada daftarAnggota dengan idAkun = idPelajar
+  IF anggota = null THEN
+    tampilkanHasil( Data.galat("Anggota tidak ditemukan pada daftar kelas") )
+    RETURN
+  IF idKelasTerpilih = null THEN
+    tampilkanHasil( Data.galat("Pilih kelas terlebih dahulu") )
+    RETURN
+
+  idPelajarTerpilih ← idPelajar                  // dipakai juga oleh kirimUmpanBalik() (Algo-069)
+  TRY
+    hasil ← KelasController.ambilProgresAnggota(idKelasTerpilih, idPelajar)   // KF13
+  CATCH penolakan
+    tampilkanHasil( Data.galat(penolakan.pesan) )
+    RETURN
+
+  IF hasil.jenis = "GALAT" THEN
+    tampilkanHasil( Data.galat("Pengguna ini bukan anggota aktif kelas") )    // UC-08 Alternatif 2 (I-17.8)
+    RETURN
+
+  tampilkanProgres(hasil.ringkasanProgres)       // UC-08, I-17.2 s.d. I-17.5
+```
+
+### 5.12.3 Algoritma/Query
+
+**Nama Kelas:** HalamanKelolaKelas
+
+**Nama Operasi:** `kelolaAnggota(idKelas: Integer): void`
+
+**ID Algoritma:** Algo-062
+
+```
+PROCEDURE kelolaAnggota(idKelas: Integer)
+  idKelasTerpilih ← idKelas
+
+  IF idAnggotaDikeluarkan = null THEN
+    // Skenario Normal: hanya menampilkan daftar anggota aktif
+    TRY
+      daftar ← KelasController.ambilDaftarAnggota(idKelas)
+      tampilkanAnggota(daftar)
+    CATCH penolakan
+      tampilkanHasil( Data.galat(penolakan.pesan) )
+    RETURN
+
+  // Skenario Alternatif 2: pengeluaran anggota yang sudah dikonfirmasi (dialog pada Algo-068)
+  idKeluar ← idAnggotaDikeluarkan
+  hasil ← KelasController.kelolaAnggota(idKelas, idKeluar, "nonaktif")
+  idAnggotaDikeluarkan ← null                    // konfirmasi hanya berlaku satu kali
+
+  IF hasil.berhasil THEN
+    IF idPelajarTerpilih = idKeluar THEN
+      idPelajarTerpilih ← null;  ringkasanProgres ← null   // anggota yang dikeluarkan tidak lagi terpilih
+    tampilkanAnggota(hasil.data.daftarProfil)    // anggota yang dikeluarkan sudah tidak muncul
+  ELSE
+    tampilkanHasil( Data.dari(hasil, "KELAS") )  // jenis GALAT karena hasil gagal
+```
+
+### 5.12.4 Algoritma/Query
+
+**Nama Kelas:** HalamanKelolaKelas
+
+**Nama Operasi:** `aturScoreboard(idKelas: Integer, aktif: Boolean): void`
+
+**ID Algoritma:** Algo-063
+
+```
+PROCEDURE aturScoreboard(idKelas: Integer, aktif: Boolean)
+  idKelasTerpilih ← idKelas
+  hasil ← KelasController.aturScoreboard(idKelas, aktif)
+
+  IF hasil.berhasil = false THEN
+    kembalikan posisi tombol aktif/nonaktif ke nilai sebelumnya
+    tampilkanHasil( Data.dari(hasil, "SCOREBOARD") )     // jenis GALAT karena hasil gagal
+    RETURN
+
+  tampilkanHasil( Data.dari(hasil, "SCOREBOARD") )       // statusScoreboard dan papan peringkat
+
+```
+
+### 5.12.5 Algoritma/Query
+
+**Nama Kelas:** HalamanKelolaKelas
+
+**Nama Operasi:** `terbitkanTugas(idKelas: Integer, data: DataTugas): void`
+
+**ID Algoritma:** Algo-064
+
+```
+PROCEDURE terbitkanTugas(idKelas: Integer, data: DataTugas)
+  IF data.idTugas = null THEN
+    // tugas belum disimpan sebagai draf lewat buatTugas()
+    tampilkanHasil( Data.galat("Simpan tugas sebagai draf terlebih dahulu") )
+    RETURN
+
+  hasil ← KelasController.terbitkanTugas(idKelas, data)
+  tampilkanHasil( Data.dari(hasil, "TERBIT") )
+
+```
+
+### 5.12.6 Algoritma/Query
+
+**Nama Kelas:** HalamanKelolaKelas
+
+**Nama Operasi:** `tampilkanHasil(data: Data): void`
+
+**ID Algoritma:** Algo-065
+
+`Data` memuat `jenis` (`KELAS`, `PAKET_TUGAS`, `KODE_BARU`, `SCOREBOARD`, `TERBIT`, `UMPAN_BALIK`, atau `GALAT`) beserta isinya. `Data.dari(hasil, jenis)` membentuk `Data` dari `HasilOperasi` dan otomatis berjenis `GALAT` bila `hasil.berhasil = false`.
+
+```
+PROCEDURE tampilkanHasil(data: Data)
+  IF data.jenis = "GALAT" THEN
+    tampilkan alert galat data.pesan
+    RETURN
+
+  SWITCH data.jenis
+    CASE "KELAS":
+      render nama kelas dan kode bergabung data.kodeBergabung
+    CASE "PAKET_TUGAS":
+      render instruksi, komponen tugas, tenggat, dan status "Draf"
+      aktifkan tombol "Terbitkan"
+    CASE "KODE_BARU":
+      render kode bergabung baru
+      tampilkan info "Kode lama tidak berlaku lagi"
+    CASE "SCOREBOARD":
+      IF data.statusScoreboard = "aktif" THEN
+        FOR EACH p IN data.papanPeringkat DO render baris (peringkat, namaTampilan, poin)
+      ELSE
+        tampilkan info "Papan peringkat dinonaktifkan"
+    CASE "TERBIT":
+      render konfirmasi "Tugas diterbitkan untuk anggota kelas"
+      nonaktifkan tombol "Terbitkan"
+    CASE "UMPAN_BALIK":
+      render konfirmasi "Umpan balik berhasil dikirimkan ke anggota"
+      kosongkan isian umpan balik
+
+```
+
+### 5.12.7 Algoritma/Query
+
+**Nama Kelas:** HalamanKelolaKelas
+
+**Nama Operasi:** `buatTugas(data: DataTugas): void`
+
+**ID Algoritma:** Algo-066
+
+```
+PROCEDURE buatTugas(data: DataTugas)
+  IF idKelasTerpilih = null THEN
+    tampilkanHasil( Data.galat("Pilih kelas terlebih dahulu") )
+    RETURN
+  IF kosong(trim(data.instruksi)) OR kosong(data.komponenTugas) THEN
+    tampilkanHasil( Data.galat("Instruksi dan minimal satu komponen tugas wajib diisi") )
+    RETURN
+
+  hasil ← KelasController.buatTugas(idKelasTerpilih, data)
+
+  IF hasil.berhasil THEN
+    data.idTugas ← hasil.data.paketTugas.idTugas      // dipakai terbitkanTugas() (Algo-064)
+  tampilkanHasil( Data.dari(hasil, "PAKET_TUGAS") )    // paket tugas dan tenggat, atau galat
+
+```
+
+### 5.12.8 Algoritma/Query
+
+**Nama Kelas:** HalamanKelolaKelas
+
+**Nama Operasi:** `gantiKodeKelas(idKelas: Integer): void`
+
+**ID Algoritma:** Algo-067
+
+```
+PROCEDURE gantiKodeKelas(idKelas: Integer)
+  idKelasTerpilih ← idKelas
+  hasil ← KelasController.gantiKodeKelas(idKelas)
+  tampilkanHasil( Data.dari(hasil, "KODE_BARU") )      // kode baru aktif, kode lama tidak berlaku, atau galat
+
+```
+
+### 5.12.9 Algoritma/Query
+
+**Nama Kelas:** HalamanKelolaKelas
+
+**Nama Operasi:** `tampilkanAnggota(data: List<Profil>): void`
+
+**ID Algoritma:** Algo-068
+
+```
+PROCEDURE tampilkanAnggota(data: List<Profil>)
+  daftarAnggota ← data
+  IF kosong(data) THEN
+    tampilkan info "Belum ada anggota yang bergabung"
+    RETURN
+
+  FOR EACH p IN data DO
+    render baris (p.namaTampilan) beserta tombol "Keluarkan" dan tombol "Lihat Progres"
+
+  // tombol "Lihat Progres" → pilihAnggota(p.idAkun) (Algo-061)
+  // tombol "Keluarkan"     → idAnggotaDikeluarkan ← p.idAkun
+  //                          tampilkan dialog "Keluarkan " + p.namaTampilan + " dari kelas?"
+  //   tombol "Ya"    → kelolaAnggota(idKelasTerpilih) (Algo-062)
+  //   tombol "Batal" → idAnggotaDikeluarkan ← null, dialog ditutup
+```
+
+### 5.12.10 Algoritma/Query
+
+**Nama Kelas:** HalamanKelolaKelas
+
+**Nama Operasi:** `kirimUmpanBalik(data: DataUmpanBalik): void`
+
+**ID Algoritma:** Algo-069
+
+```
+PROCEDURE kirimUmpanBalik(data: DataUmpanBalik)
+  IF idPelajarTerpilih = null THEN
+    tampilkanHasil( Data.galat("Pilih anggota terlebih dahulu untuk mengirim umpan balik") )
+    RETURN
+  IF kosong(trim(data.pesan)) THEN
+    tampilkanHasil( Data.galat("Pesan umpan balik wajib diisi") )
+    RETURN
+
+  data.idPelajar ← idPelajarTerpilih
+  hasil ← KelasController.kirimUmpanBalik(idKelasTerpilih, data)
+  tampilkanHasil( Data.dari(hasil, "UMPAN_BALIK") )
+
+```
+
+### 5.12.11 Algoritma/Query
+
+**Nama Kelas:** HalamanKelolaKelas
+
+**Nama Operasi:** `tampilkanProgres(data: RingkasanProgres): void`
+
+**ID Algoritma:** Algo-070
+
+```
+PROCEDURE tampilkanProgres(data: RingkasanProgres)
+  ringkasanProgres ← data
+  IF data = null OR kosong(data.penguasaan) THEN
+    tampilkan info "Belum ada catatan progres untuk anggota ini"
+    RETURN
+
+  render ringkasan progres, grafik penguasaan materi, dan pola kesalahan anggota terpilih (UC-08)
+
+```
 ## 5.13 Kelas HalamanMateri
 
 **Nama Kelas:** HalamanMateri  
@@ -1746,176 +1788,34 @@ PROCEDURE putarAudioPengucapan(sumber: ReferensiBerkas)
 ```
 
 ## 5.14 Kelas HalamanProgres
-**Nama Kelas:** HalamanProgres  
-**ID Kelas:** C14  
-**Jenis:** View
-
-Menampilkan riwayat, progres, rekomendasi materi, dan indikator motivasi belajar Pelajar.
-
-Tabel 5.14.1. Operasi Kelas HalamanProgres
-
-| Nama Operasi | Visibility (private, public) | Keterangan |
-| :--- | :--- | :--- |
-| `tampilkanProgres(data: RingkasanProgres): void` | public | Menampilkan penguasaan per materi dan riwayat. |
-| `pilihPeriode(periode: Periode): void` | public | Mengubah periode riwayat yang ditampilkan. |
-| `tampilkanScoreboard(data: List<Peringkat>): void` | public | Menampilkan papan peringkat bila diaktifkan Pengajar. |
-| `bukaHalamanProgres(): void` | public | Meminta ringkasan progres Pelajar. |
-| `tampilkanKeadaanKosong(data: List<MetadataMateri>): void` | public | Menampilkan keadaan belum ada riwayat beserta materi awal yang disarankan. |
-| `pilihMateriRiwayat(idMateri: Integer): void` | public | Meminta detail hasil pada satu materi. |
-| `tampilkanDetailHasil(data: List<RiwayatLatihan>): void` | public | Menampilkan hasil latihan pada materi terpilih. |
-| `tampilkanRekomendasi(data: List<MetadataMateri>): void` | public | Menampilkan materi yang direkomendasikan. |
-| `bukaRekomendasi(idMateri: Integer): void` | public | Membuka halaman materi dari rekomendasi. |
-| `lihatIndikatorMotivasi(): void` | public | Meminta data streak, poin, dan badge. |
-| `tampilkanMotivasi(data: Data): void` | public | Menampilkan streak, poin, dan badge. |
-| `bukaPapanPeringkat(idKelas: Integer): void` | public | Meminta papan peringkat kelas. |
-
-Tabel 5.14.2. Atribut Kelas HalamanProgres
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| `filterPeriode` | private | `Periode` |
-| `dataTampilan` | private | `RingkasanProgres?` |
-| `idKelasTerpilih` | private | `Integer?` |
 
 ## 5.15 Kelas OtentikasiController
- 
-**Nama Kelas:** OtentikasiController  
-**ID Kelas:** C15  
-**Jenis:** Controller
- 
-Memvalidasi data pendaftaran dan login, mengamankan kata sandi, serta membuat sesi pengguna (KF01–KF07).
- 
-Tabel 5.15.1. Operasi Kelas OtentikasiController
- 
-| Nama Operasi | Visibility (private, public) | Keterangan |
-| :--- | :--- | :--- |
-| `verifikasiFormatData(data: DataPendaftaran): HasilValidasi` | public | Memeriksa peran, format email, username, kekuatan kata sandi, dan persetujuan T&C (KF04, KF07). Mengembalikan seluruh galat per isian sekaligus. Lihat Algo-009. |
-| `hashPassword(password: String): String` | private | Membuat hash adaptif bersalt dari kata sandi (KF05). Lihat Algo-010. |
-| `simpanAkun(data: DataPendaftaran): HasilOperasi` | public | Memvalidasi ulang data, membuat hash kata sandi, lalu memanggil `AkunPengguna.buatAkunBaru()`. Kegagalan dicatat ke `LogAplikasi` (KF17). Lihat Algo-011. |
-| `validasiLogin(email: String, password: String): HasilOperasi` | public | Memeriksa kredensial, membatasi percobaan gagal, dan membuat sesi jika berhasil (KF03–KF04). Lihat Algo-012. |
- 
-Tabel 5.15.2. Atribut Kelas OtentikasiController
- 
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| `konteks` | private | KonteksPermintaan |
-| `batasPercobaanLogin` | private | Integer (nilai awal 5 per menit) |
- 
-### 5.15.1 Algoritma/Query
- 
-**Nama Kelas:** OtentikasiController  
-**Nama Operasi:** `verifikasiFormatData(data: DataPendaftaran): HasilValidasi`  
-**ID Algoritma:** Algo-009
- 
-```text
-FUNCTION verifikasiFormatData(data: DataPendaftaran): HasilValidasi
-  galat ← map kosong                                   // nama isian → pesan
- 
-  IF data.peran NOT IN {PELAJAR, PENGAJAR} THEN
-    galat["peran"] ← "Pilih jenis akun Pelajar atau Pengajar"            // KF01
-  IF NOT formatEmailValid(data.email) OR panjang(data.email) > 255 THEN
-    galat["email"] ← "Format email tidak valid"
-  IF NOT cocok(data.username, ^[A-Za-z0-9_]{3,30}$) THEN
-    galat["username"] ← "Username 3–30 karakter: huruf, angka, atau garis bawah"
-  IF panjang(data.password) < 8 OR tidak memuat huruf OR tidak memuat angka THEN
-    galat["password"] ← "Kata sandi minimal 8 karakter dan memuat huruf serta angka"
-  IF data.password <> data.konfirmasiPassword THEN
-    galat["konfirmasiPassword"] ← "Konfirmasi kata sandi tidak sama"
-  IF data.persetujuanTnC <> true THEN
-    galat["persetujuanTnC"] ← "Terms & Conditions belum disetujui"       // KF07
- 
-  IF galat kosong THEN RETURN HasilValidasi.valid()
-  RETURN HasilValidasi.tidakValid(galat)
-```
- 
-### 5.15.2 Algoritma/Query
- 
-**Nama Kelas:** OtentikasiController  
-**Nama Operasi:** `hashPassword(password: String): String`  
-**ID Algoritma:** Algo-010
- 
-Kata sandi di-hash dengan fungsi satu arah, bukan dienkripsi, sehingga teks aslinya tidak dapat dikembalikan oleh siapa pun, termasuk pengelola basis data.
- 
-```text
-FUNCTION hashPassword(password: String): String
-  // Laravel Hash facade dengan bcrypt (cost 12); salt acak dibuat otomatis dan disimpan di dalam hash
-  RETURN Hash::make(password, ['rounds' => 12])
-  // kata sandi asli tidak pernah disimpan atau ditulis ke log
-```
- 
-### 5.15.3 Algoritma/Query
- 
-**Nama Kelas:** OtentikasiController  
-**Nama Operasi:** `simpanAkun(data: DataPendaftaran): HasilOperasi`  
-**ID Algoritma:** Algo-011
- 
-```text
-FUNCTION simpanAkun(data: DataPendaftaran): HasilOperasi
-  validasi ← verifikasiFormatData(data)      // server tidak mengandalkan pemeriksaan sebelumnya
-  IF validasi.valid = false THEN
-    RETURN HasilOperasi.gagal("DATA_TIDAK_VALID", validasi.galat)
- 
-  dataSimpan ← DataPendaftaran(
-    email = data.email, username = data.username, peran = data.peran,
-    namaTampilan = data.namaTampilan, passwordHash = hashPassword(data.password))
-  hapus data.password dan data.konfirmasiPassword dari memori permintaan
- 
-  TRY
-    hasil ← new AkunPengguna().buatAkunBaru(dataSimpan)        // Algo-001
-  CATCH galat
-    LogAplikasi.catat("ERROR", "Pendaftaran gagal", {username: data.username})   // KF17
-    RETURN HasilOperasi.gagal("SIMPAN_GAGAL", "Akun gagal dibuat, coba lagi")
- 
-  IF hasil.berhasil THEN
-    LogAplikasi.catat("INFO", "Akun baru dibuat", {idAkun: hasil.idAkun})
-  RETURN hasil
-```
- 
-### 5.15.4 Algoritma/Query
- 
-**Nama Kelas:** OtentikasiController  
-**Nama Operasi:** `validasiLogin(email: String, password: String): HasilOperasi`  
-**ID Algoritma:** Algo-012
- 
-```text
-FUNCTION validasiLogin(email: String, password: String): HasilOperasi
-  kunci ← "login:" + huruf kecil(trim(email)) + "|" + konteks.ip
-  IF RateLimiter.terlaluBanyak(kunci, batasPercobaanLogin) THEN
-    RETURN HasilOperasi.gagal("TERLALU_BANYAK_PERCOBAAN",
-                              "Coba lagi dalam " + RateLimiter.sisaDetik(kunci) + " detik")
- 
-  akun ← AkunPengguna.cariBerdasarkanEmail(huruf kecil(trim(email)))     // Q-002
-  IF akun = null THEN
-    Hash::check(password, HASH_DUMMY)       // waktu proses tetap sama walau email tidak terdaftar
-    cocok ← false
-  ELSE
-    cocok ← akun.cocokkanPassword(password)
- 
-  IF NOT cocok THEN
-    RateLimiter.tambah(kunci, kedaluwarsa = 60 detik)
-    LogAplikasi.catat("WARNING", "Login gagal", {ip: konteks.ip})          // KF17
-    RETURN HasilOperasi.gagal("KREDENSIAL_SALAH", "Email atau kata sandi salah")
- 
-  RateLimiter.hapus(kunci)
-  konteks.session.regenerasiId()           // mencegah session fixation
-  profil ← akun.getProfil()
-  konteks.session["idAkun"] ← profil.idAkun
-  konteks.session["peran"] ← profil.peran
-  RETURN HasilOperasi.sukses(profil = profil)
-```
 
 ## 5.16 Kelas LatihanController
 
 **Nama Kelas:** LatihanController  
-**ID Kelas:** C16
+**ID Kelas:** C16  
+**Jenis:** Controller
+
+Mengatur alur UC-03: menyiapkan soal, menilai jawaban, dan menyimpan hasil beserta motivasi belajar. Soal aktif beserta kuncinya dan hasil penilaian terakhir disimpan di session melalui `konteks`, karena satu latihan berlangsung dalam beberapa permintaan HTTP. Kunci jawaban tidak pernah dikirim ke browser.
+
+Struktur data yang dipakai kelas ini:
+
+| Tipe | Isi |
+| :--- | :--- |
+| `SoalLatihan` | `idSoal`, `idMateri`, `mode`, `targetSoal`, serta data tampilan sesuai mode: `templat` (MENULIS), `audio` dan `pilihan` (BUNYI), atau `komponen` (MERANGKAI) |
+| `JawabanLatihan` | `idSoal`, `mode`, dan salah satu dari `goresan`, `pilihan`, atau `urutan` |
+| `HasilLatihan` | `idPelajar`, `idMateri`, `idSoal`, `targetSoal`, `mode`, `skor`, dan `status` (`berhasil` atau `perlu_diulang`, sama dengan nilai status di subbab 5.3) |
+| `HasilPenilaian` | `skor` (0–100), `status`, `umpanBalik`, dan `posisiSalah` (khusus MERANGKAI) |
+| `RingkasanMotivasi` | `streak`, `poin`, `poinBertambah` (Boolean), dan `badgeBaru` (List<String>) |
 
 Tabel 5.16.1. Operasi Kelas LatihanController
 
-| Nama Operasi                                                     | Visibility (private, public) | Keterangan                                                                                                                                                                                                                                                                                         |
-| :--------------------------------------------------------------- | :--------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan` | public                       | Memeriksa hak akses Pelajar, mengambil target latihan (dan audio untuk mode BUNYI), lalu menyusun soal tanpa kunci jawaban. Lihat Algo-021.                                                                                                                                                        |
-| `nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian`          | public                       | Menilai jawaban sesuai mode (akurasi goresan, kecocokan bunyi, atau urutan komponen), lalu mencatat hasilnya melalui `simpanHasil()`. Lihat Algo-022.                                                                                                                                              |
-| `simpanHasil(hasil: HasilLatihan): HasilOperasi`                 | public                       | Mencatat hasil ke riwayat (KF14). Jika tuntas, memperbarui streak, menambah poin hanya untuk soal yang pertama kali dituntaskan, dan memberikan badge yang syaratnya baru terpenuhi. Dipanggil dari `nilaiJawaban()` dengan hasil yang disusun di server, bukan dari data browser. Lihat Algo-023. |
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan` | public | Memeriksa hak akses Pelajar, mengambil target latihan (dan audio untuk mode BUNYI), lalu menyusun soal tanpa kunci jawaban. Lihat Algo-021. |
+| `nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian` | public | Menilai jawaban dengan penilai yang sesuai mode. Percobaan yang perlu diulang langsung dicatat ke riwayat (KF14). Lihat Algo-022. |
+| `simpanHasil(hasil: HasilLatihan): HasilOperasi` | public | Menyimpan hasil yang berhasil, memperbarui streak, menambah poin hanya untuk soal yang pertama kali diselesaikan, dan memberikan badge. Mengembalikan `RingkasanMotivasi` di dalam `HasilOperasi`. Lihat Algo-026. |
 | `hitungAkurasiGoresan(goresan: List<Goresan>, templat: List<Titik>): Decimal` | private | Menghitung skor 0–100 dari kemiripan dan kelengkapan goresan terhadap templat (KF12). Lihat Algo-023. |
 | `cocokkanBunyi(pilihan: String, kunci: String): Boolean` | private | Mencocokkan aksara yang dipilih dengan aksara yang bunyinya diputar (KF21). Lihat Algo-024. |
 | `validasiRangkaian(urutan: List<String>, kunci: List<String>): List<Integer>` | private | Membandingkan susunan dengan urutan yang benar dan mengembalikan posisi yang salah (KF22). Lihat Algo-025. |
@@ -1925,8 +1825,8 @@ Tabel 5.16.2. Atribut Kelas LatihanController
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| `konteks` | private | KonteksPermintaan |
-| `ambangAkurasi` | private | Decimal (nilai awal 70) |
+| `konteks` | private | `KonteksPermintaan` |
+| `ambangAkurasi` | private | `Decimal` (nilai awal 70) |
 
 ### 5.16.1 Algoritma/Query
 
@@ -1959,6 +1859,7 @@ FUNCTION siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan
   konteks.session["soalAktif"] ← { soal, kunci }
   RETURN soal                                  // tanpa kunci jawaban
 ```
+
 ### 5.16.2 Algoritma/Query
 
 **Nama Kelas:** LatihanController  
@@ -1982,14 +1883,15 @@ FUNCTION nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian
     CASE MERANGKAI:
       posisiSalah ← validasiRangkaian(jawaban.urutan, aktif.kunci)
       lulus ← posisiSalah kosong
-      skor ← 100 × (panjang(aktif.kunci) − panjang(posisiSalah)) / panjang(aktif.kunci)
+      skor ← 100 × maks(0, panjang(aktif.kunci) − panjang(posisiSalah)) / panjang(aktif.kunci)
 
-  status ← IF lulus THEN LULUS ELSE BELUM_TUNTAS
-  hasil ← HasilLatihan(konteks.akun.idAkun, soal.idMateri, soal.idSoal, soal.targetSoal, soal.mode, skor, status)
-  IF status = BELUM_TUNTAS THEN
+  status ← IF lulus THEN "berhasil" ELSE "perlu_diulang"
+  hasil ← HasilLatihan(konteks.akun.idAkun, soal.idMateri, soal.idSoal, soal.targetSoal, soal.mode, bulatkan(skor, 1), status)
+  IF status = "perlu_diulang" THEN
     RiwayatLatihan.simpanHasil(hasil)          // percobaan tetap dicatat (KF14), MotivasiBelajar tidak dipanggil
   konteks.session["hasilTerakhir"] ← hasil
-  RETURN HasilPenilaian(skor = bulatkan(skor, 1), status, umpanBalik(soal, status, posisiSalah), posisiSalah)
+  RETURN HasilPenilaian(hasil.skor, status, umpanBalik(soal, status, posisiSalah), posisiSalah)
+  // umpanBalik BUNYI menyebut aksara yang benar beserta bacaannya, misalnya "ꦏ dibaca ka"
 ```
 
 ### 5.16.3 Algoritma/Query
@@ -2032,7 +1934,6 @@ FUNCTION normalisasi(titik)
 ```text
 FUNCTION cocokkanBunyi(pilihan: String, kunci: String): Boolean
   RETURN normalisasi Unicode NFC(pilihan) = normalisasi Unicode NFC(kunci)
-  // umpan balik Algo-022 menyebut aksara yang benar beserta bacaannya, misalnya "ꦏ dibaca ka"
 ```
 
 ### 5.16.5 Algoritma/Query
@@ -2056,24 +1957,24 @@ FUNCTION validasiRangkaian(urutan: List<String>, kunci: List<String>): List<Inte
 **Nama Operasi:** `simpanHasil(hasil: HasilLatihan): HasilOperasi`  
 **ID Algoritma:** Algo-026
 
-Operasi ini menjaga dua aturan SKPL 2.4 butir 6: aktivitas yang belum selesai tidak menambah streak atau poin, dan pengulangan soal yang sama tidak memberikan poin baru.
+Operasi ini menjaga dua aturan SKPL 2.4 butir 6: aktivitas yang belum selesai tidak menambah streak atau poin, dan pengulangan soal yang sama tidak memberikan poin baru. Pemeriksaan soal yang sudah pernah diselesaikan memakai `RiwayatLatihan.cekPernahSelesai()` (Q-009 pada subbab 5.3) dan dilakukan sebelum hasil baru disimpan.
 
 ```text
 FUNCTION simpanHasil(hasil: HasilLatihan): HasilOperasi
   POIN_PER_SOAL ← 10
   terakhir ← konteks.session["hasilTerakhir"]
-  IF terakhir = null OR terakhir.idSoal <> hasil.idSoal OR terakhir.status <> LULUS THEN
-    RETURN HasilOperasi.gagal("BELUM_TUNTAS", "Latihan belum tuntas")
+  IF terakhir = null OR terakhir.idSoal <> hasil.idSoal OR terakhir.status <> "berhasil" THEN
+    RETURN HasilOperasi.gagal("BELUM_BERHASIL", "Latihan belum berhasil diselesaikan")
   hasil ← terakhir                              // nilai dari session dipakai, bukan dari browser
-  hasil.status ← TUNTAS
 
   MULAI TRANSAKSI
-    catat ← RiwayatLatihan.simpanHasil(hasil)               // data.pertamaKaliTuntas, data.idRiwayat
+    pernah ← RiwayatLatihan.cekPernahSelesai(hasil.idPelajar, hasil.targetSoal, hasil.mode)
+    catat ← RiwayatLatihan.simpanHasil(hasil)                // catat.data = idRiwayat baru
     IF catat gagal THEN BATALKAN dan RETURN catat
     m ← MotivasiBelajar milik hasil.idPelajar (Q-026, baris dikunci)
     m.perbaruiStreak(hari ini)
-    IF catat.data.pertamaKaliTuntas THEN
-      m.tambahPoin(catat.data.idRiwayat, POIN_PER_SOAL)
+    IF NOT pernah THEN
+      m.tambahPoin(catat.data, POIN_PER_SOAL)
     badgeBaru ← periksaBadge(m.streak, m.poin, m.daftarBadge)
     FOR EACH kode IN badgeBaru DO m.berikanBadge(kode)
   SELESAI TRANSAKSI
@@ -2082,7 +1983,7 @@ FUNCTION simpanHasil(hasil: HasilLatihan): HasilOperasi
     RETURN HasilOperasi.gagal("GAGAL_SIMPAN", "Hasil belum tersimpan. Coba lagi.")
 
   hapus konteks.session["hasilTerakhir"]          // mencegah hasil yang sama disimpan dua kali
-  RETURN HasilOperasi.sukses(RingkasanMotivasi(m.streak, m.poin, catat.data.pertamaKaliTuntas, badgeBaru))
+  RETURN HasilOperasi.sukses(RingkasanMotivasi(m.streak, m.poin, NOT pernah, badgeBaru))
 ```
 
 Tabel 5.16.3. Query Operasi simpanHasil
@@ -2090,6 +1991,27 @@ Tabel 5.16.3. Query Operasi simpanHasil
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-026 | `SELECT id_pelajar, streak, poin, tanggal_aktif_terakhir, daftar_badge FROM motivasi_belajar WHERE id_pelajar = :id_pelajar FOR UPDATE;` | Mengambil data motivasi dan mengunci barisnya selama transaksi agar dua penyelesaian bersamaan tidak saling menimpa. |
+
+### 5.16.7 Algoritma/Query
+
+**Nama Kelas:** LatihanController  
+**Nama Operasi:** `periksaBadge(streak: Integer, poin: Integer, dimiliki: List<String>): List<String>`  
+**ID Algoritma:** Algo-027
+
+| Kode | Badge | Syarat |
+| :--- | :--- | :--- |
+| `PEMULA_AKSARA` | Pemula Aksara | Menyelesaikan latihan pertama (poin ≥ 10) |
+| `RAJIN_7_HARI` | Rajin 7 Hari | Streak ≥ 7 hari |
+| `SERATUS_POIN` | Seratus Poin | Poin ≥ 100 |
+
+```text
+FUNCTION periksaBadge(streak: Integer, poin: Integer, dimiliki: List<String>): List<String>
+  baru ← list kosong
+  IF poin ≥ 10  AND "PEMULA_AKSARA"   NOT IN dimiliki THEN baru.tambah("PEMULA_AKSARA")
+  IF streak ≥ 7 AND "RAJIN_7_HARI"    NOT IN dimiliki THEN baru.tambah("RAJIN_7_HARI")
+  IF poin ≥ 100 AND "SERATUS_POIN"    NOT IN dimiliki THEN baru.tambah("SERATUS_POIN")
+  RETURN baru
+```
 
 ## 5.17 Kelas MateriController
 
@@ -2294,157 +2216,432 @@ Tabel 5.17.3. Query Operasi hapusMateri
 | :------- | :--------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------- |
 | Q-055    | `UPDATE materi_aksara SET deleted_at = NOW(), status_publikasi = 'DRAF' WHERE id_materi = :id AND deleted_at IS NULL;` | Penghapusan lunak: materi hilang dari daftar tetapi `riwayat_latihan` pelajar tetap utuh. |
 
- 
 ## 5.18 Kelas FeedbackController
- 
-**Nama Kelas:** FeedbackController  
-**ID Kelas:** C18  
-**Jenis:** Controller
- 
-Memvalidasi feedback, menghubungkannya dengan akun pengirim, menyimpannya, dan menyiapkan konfirmasi (KF18–KF20).
- 
-Tabel 5.18.1. Operasi Kelas FeedbackController
- 
-| Nama Operasi | Visibility (private, public) | Keterangan |
-| :--- | :--- | :--- |
-| `validasiFeedback(data: MasukanFeedback): HasilValidasi` | public | Memeriksa hak akses pengirim, kategori, dan panjang pesan. Lihat Algo-013. |
-| `simpanFeedback(data: MasukanFeedback): HasilOperasi` | public | Mengambil `idAkun` dari `AkunPengguna.getProfil()`, lalu menyimpan feedback melalui `DataFeedback.simpan()`. Kegagalan dicatat ke `LogAplikasi`. Lihat Algo-014. |
-| `kirimKonfirmasi(hasil: HasilOperasi): Konfirmasi` | public | Menyusun pesan konfirmasi berhasil atau gagal terkirim untuk `HalamanFeedback` (KF20, KNF05). |
- 
-Tabel 5.18.2. Atribut Kelas FeedbackController
- 
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| `konteks` | private | KonteksPermintaan |
- 
-### 5.18.1 Algoritma/Query
- 
-**Nama Kelas:** FeedbackController  
-**Nama Operasi:** `validasiFeedback(data: MasukanFeedback): HasilValidasi`  
-**ID Algoritma:** Algo-013
- 
-```text
-FUNCTION validasiFeedback(data: MasukanFeedback): HasilValidasi
-  IF konteks.akun = null OR NOT konteks.akun.verifikasiHakAkses("KIRIM_FEEDBACK") THEN
-    tolak permintaan (403 "Fitur feedback khusus Pelajar dan Pengajar")
- 
-  galat ← map kosong
-  IF data.kategori NOT IN {PERFORMA, TAMPILAN, FITUR, MATERI} THEN
-    galat["kategori"] ← "Pilih kategori feedback"
-  pesan ← trim(data.pesan)
-  IF panjang(pesan) < 10 OR panjang(pesan) > 1000 THEN
-    galat["pesan"] ← "Feedback 10–1.000 karakter"
- 
-  IF galat kosong THEN RETURN HasilValidasi.valid()
-  RETURN HasilValidasi.tidakValid(galat)
-```
- 
-### 5.18.2 Algoritma/Query
- 
-**Nama Kelas:** FeedbackController  
-**Nama Operasi:** `simpanFeedback(data: MasukanFeedback): HasilOperasi`  
-**ID Algoritma:** Algo-014
- 
-```text
-FUNCTION simpanFeedback(data: MasukanFeedback): HasilOperasi
-  validasi ← validasiFeedback(data)         // server tidak mengandalkan pemeriksaan sebelumnya
-  IF validasi.valid = false THEN
-    RETURN HasilOperasi.gagal("DATA_TIDAK_VALID", validasi.galat)
- 
-  profil ← konteks.akun.getProfil()
-  data.idAkun ← profil.idAkun                // pengirim diambil dari sesi, bukan dari browser
-  data.pesan ← trim(data.pesan)              // Blade melakukan escape saat pesan ditampilkan
- 
-  hasil ← new DataFeedback().simpan(data)    // Algo-003
-  IF hasil.berhasil = false THEN
-    LogAplikasi.catat("ERROR", "Feedback gagal disimpan", {idAkun: profil.idAkun})   // KF17
-  RETURN hasil
- 
-FUNCTION kirimKonfirmasi(hasil: HasilOperasi): Konfirmasi
-  IF hasil.berhasil THEN
-    RETURN Konfirmasi(berhasil = true, pesan = "Feedback berhasil terkirim. Terima kasih atas masukan Anda.")
-  RETURN Konfirmasi(berhasil = false, pesan = "Feedback gagal terkirim. Silakan coba lagi.")
-```
 
 ## 5.19 Kelas ProgresController
-**Nama Kelas:** ProgresController  
-**ID Kelas:** C19  
-**Jenis:** Controller
-
-Mengolah riwayat dan progres belajar, menyiapkan rekomendasi materi serta papan peringkat.
-
-Tabel 5.19.1. Operasi Kelas ProgresController
-
-| Nama Operasi | Visibility (private, public) | Keterangan |
-| :--- | :--- | :--- |
-| `ambilRiwayat(idPelajar: Integer, periode: Periode): List<RiwayatLatihan>` | public | Mengambil riwayat Pelajar pada periode tertentu. |
-| `hitungProgres(idPelajar: Integer): RingkasanProgres` | public | Menghitung penguasaan per materi dan ringkasan riwayat. |
-| `siapkanRekomendasi(idPelajar: Integer): List<MetadataMateri>` | public | Menyusun materi rekomendasi dari penguasaan terendah. |
-| `ambilScoreboard(idKelas: Integer): HasilScoreboard` | public | Menyusun papan peringkat bila Pengajar mengaktifkannya. |
-| `agregasiProgres(anggotaAktif: List<Integer>, periode: Periode): RingkasanProgres` | public | Menggabungkan progres seluruh anggota aktif kelas. |
-| `hitungPolaKesalahan(idPelajar: Integer): Data` | public | Menghitung pola kesalahan satu Pelajar. |
-| `ambilDetailHasil(idPelajar: Integer, idMateri: Integer): List<RiwayatLatihan>` | public | Mengambil hasil latihan Pelajar pada satu materi. |
-| `ambilIndikatorMotivasi(idPelajar: Integer): Data` | public | Mengambil streak, poin, dan badge dari MotivasiBelajar. |
-
-Tabel 5.19.2. Atribut Kelas ProgresController
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| `konteks` | private | `KonteksPermintaan` |
-
-### 5.19.1 Algoritma/Query: hitungProgres
-
-**Nama Kelas:** ProgresController  
-**Nama Operasi:** `hitungProgres(idPelajar: Integer): RingkasanProgres`  
-**ID Algoritma:** Algo-100
-
-**Algo-100.** Alasan: penguasaan dihitung dari riwayat setiap kali dibutuhkan, tidak disimpan (lihat keputusan data pada subbab 5.27).
-
-```text
-penguasaan <- RiwayatLatihan.hitungPenguasaan(idPelajar)       // Q-010
-riwayat <- RiwayatLatihan.ambilRiwayat(idPelajar, periode)     // Q-011
-kembalikan RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), polaKesalahan = hitungPolaKesalahan(idPelajar))
-```
-
-### 5.19.2 Algoritma/Query: siapkanRekomendasi
-
-**Nama Kelas:** ProgresController  
-**Nama Operasi:** `siapkanRekomendasi(idPelajar: Integer): List<MetadataMateri>`  
-**ID Algoritma:** Algo-101
-
-**Algo-101.** Alasan: Pelajar yang belum punya riwayat tetap mendapat saran materi awal (UC-04 alternatif 1).
-
-```text
-penguasaan <- RiwayatLatihan.hitungPenguasaan(idPelajar)
-JIKA penguasaan kosong MAKA kembalikan MateriAksara.ambilMateriRekomendasi(kosong)
-urut <- urutkan materi pada penguasaan dari nilai terendah ke tertinggi
-JIKA nilai terendah >= 90 MAKA kembalikan materi terbit berikutnya yang belum pernah dikerjakan
-kembalikan MateriAksara.ambilMateriRekomendasi(3 materi dengan nilai terendah)
-```
-
-### 5.19.3 Algoritma/Query: agregasiProgres
-
-**Nama Kelas:** ProgresController  
-**Nama Operasi:** `agregasiProgres(anggotaAktif: List<Integer>, periode: Periode): RingkasanProgres`  
-**ID Algoritma:** Algo-102
-
-**Algo-102.** Alasan: Pengajar melihat ringkasan seluruh anggota aktif, bukan data anggota yang sudah keluar (aturan SKPL nomor 3).
-
-```text
-JIKA anggotaAktif kosong MAKA kembalikan RingkasanProgres kosong
-riwayat <- daftar kosong
-UNTUK SETIAP id DALAM anggotaAktif
-    tambahkan RiwayatLatihan.ambilRiwayatPelajar(id) ke riwayat        // Q-014
-JIKA riwayat kosong MAKA kembalikan RingkasanProgres kosong (halaman menampilkan keadaan kosong)
-penguasaan <- rata-rata skor per materi dari riwayat
-pola <- jumlahkan hasil RiwayatLatihan.hitungPolaKesalahan(id) untuk setiap id, ambil lima terbanyak     // Q-013
-kembalikan RingkasanProgres(penguasaan, jumlahLatihan = banyak(riwayat), pola)
-```
-
-
 
 ## 5.20 Kelas KelasController
+**Nama Kelas:** KelasController
 
+**ID Kelas:** C20
+
+Tabel 5.20.1. Operasi Kelas KelasController
+
+| **Nama Operasi** | **Visibility (private, public)** | **Keterangan** |
+| :--- | :--- | :--- |
+| `buatKelas(data: DataKelas): HasilOperasi` | public | Memeriksa hak akses Pengajar, menetapkan pemilik kelas, lalu meminta `KelasBelajar.simpan()` menyimpan kelas dan membangkitkan kode bergabung. Lihat Algo-071. |
+| `buatTugas(idKelas: Integer, data: DataTugas): HasilOperasi` | public | Memeriksa hak akses dan kepemilikan kelas, lalu meminta `TugasKelas.simpan()` menyimpan tugas berstatus draf. Lihat Algo-072. |
+| `terbitkanTugas(idKelas: Integer, data: DataTugas): HasilOperasi` | public | Memeriksa hak akses dan kepemilikan kelas, lalu meminta `TugasKelas.terbitkan()` menerbitkan tugas draf hanya untuk anggota kelas. Lihat Algo-073. |
+| `ambilDaftarAnggota(idKelas: Integer): List<Profil>` | public | Memeriksa hak akses dan kepemilikan kelas, mengambil anggota aktif dari `KeanggotaanKelas`, lalu mengambil profil tiap anggota dari `AkunPengguna`. Lihat Algo-074. |
+| `kelolaAnggota(idKelas: Integer, idPelajar: Integer, status: String): HasilOperasi` | public | Memeriksa hak akses dan kepemilikan kelas, mengubah status keanggotaan (misalnya `nonaktif` untuk mengeluarkan anggota), lalu mengembalikan daftar profil anggota aktif terbaru. Lihat Algo-075. |
+| `gantiKodeKelas(idKelas: Integer): HasilOperasi` | public | Memeriksa hak akses, lalu meminta `KelasBelajar.gantiKodeBergabung()` membuat kode baru dan menonaktifkan kode lama. Lihat Algo-076. |
+| `aturScoreboard(idKelas: Integer, aktif: Boolean): HasilOperasi` | public | Memeriksa hak akses dan kepemilikan kelas, mengubah status papan peringkat, dan bila aktif menyusun papan peringkat dari anggota aktif. Lihat Algo-077. |
+| `ambilKelasPengajar(): List<KelasBelajar>` | public | Mengambil kelas aktif milik Pengajar yang sedang masuk melalui `KelasBelajar.daftarKelasPengajar()`. Lihat Algo-078. |
+| `hasilkanKodeUnik(): String` | public | Membangkitkan string kode acak (6 karakter huruf besar dan angka). Keunikan kode diperiksa oleh `KelasBelajar.buatKodeBergabung()`. Lihat Algo-079. |
+| `kirimUmpanBalik(idKelas: Integer, data: DataUmpanBalik): HasilOperasi` | public | Menyimpan umpan balik Pengajar untuk anggota kelas (UC-08). Lihat Algo-080. |
+| `ambilProgresAnggota(idKelas: Integer, idPelajar: Integer): Data` | public | Mengambil ringkasan progres seorang anggota kelas untuk Pengajar (UC-08). Lihat Algo-081. |
+| `validasiKodeBergabung(kode: String): HasilOperasi` | public | Memeriksa kode bergabung yang dimasukkan Pelajar terhadap kelas aktif (UC-05). Lihat Algo-082. |
+| `gabungkanPelajar(idKelas: Integer): HasilOperasi` | public | Mendaftarkan Pelajar yang sedang masuk sebagai anggota kelas (UC-05). Lihat Algo-083. |
+| `ambilTugasAktif(idKelas: Integer): HasilOperasi` | public | Mengambil daftar tugas aktif kelas beserta status pengerjaan Pelajar (UC-05). Lihat Algo-084. |
+| `bukaTugas(idKelas: Integer, idTugas: Integer): HasilOperasi` | public | Membuka detail tugas bagi anggota aktif kelas (UC-05). Lihat Algo-085. |
+| `simpanPengumpulan(idKelas: Integer, idTugas: Integer): HasilOperasi` | public | Menyimpan penyelesaian tugas oleh Pelajar setelah bukti penyelesaian diperiksa (UC-05). Lihat Algo-086. |
+
+Tabel 5.20.2. Atribut Kelas KelasController
+
+| **Nama Atribut** | **Visibility (private, public)** | **Tipe** |
+| :--- | :--- | :--- |
+| `konteks` | private | KonteksPermintaan |
+| `idPelajar` | private | Integer |
+| `idKelas` | private | Integer |
+
+Catatan: `find(id)` pada `KelasBelajar`, `TugasKelas`, dan `AkunPengguna` adalah pencarian satu baris berdasarkan kunci utama (method bawaan model/ORM) dan tidak dicantumkan pada diagram kelas.
+
+### 5.20.1 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `buatKelas(data: DataKelas): HasilOperasi`
+
+**ID Algoritma:** Algo-071
+
+```
+FUNCTION buatKelas(data: DataKelas): HasilOperasi
+  IF NOT konteks.akun.verifikasiHakAkses("buatKelas") THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Hanya Pengajar yang dapat membuat kelas")
+
+  data.pemilikId ← konteks.akun.idAkun
+  hasil ← new KelasBelajar().simpan(data)          // membangkitkan kode bergabung (Algo-087, Algo-088)
+
+  IF hasil.berhasil = false THEN
+    IF hasil.kode = "GAGAL_SIMPAN" THEN catat galat ke LogAplikasi (KF17)
+    RETURN hasil
+
+  RETURN HasilOperasi.sukses(idKelas = hasil.data.idKelas, kodeBergabung = hasil.data.kodeBergabung)
+
+```
+
+### 5.20.2 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `buatTugas(idKelas: Integer, data: DataTugas): HasilOperasi`
+
+**ID Algoritma:** Algo-072
+
+```
+FUNCTION buatTugas(idKelas: Integer, data: DataTugas): HasilOperasi
+  IF NOT konteks.akun.verifikasiHakAkses("buatTugas") THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Hanya Pengajar yang dapat membuat tugas")
+
+  kelas ← KelasBelajar.find(idKelas)
+  IF kelas = null THEN
+    RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Kelas tidak ditemukan")
+  IF NOT kelas.periksaPemilik(konteks.akun.idAkun) THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Anda bukan pemilik kelas ini")
+
+  data.idKelas ← idKelas
+  hasil ← new TugasKelas().simpan(data)             // status awal draf
+  IF hasil.berhasil = false THEN
+    RETURN hasil
+
+  paket ← { idTugas = hasil.data.idTugas, instruksi = data.instruksi,
+            komponenTugas = data.komponenTugas, status = "draf" }
+  RETURN HasilOperasi.sukses(paketTugas = paket, tenggat = data.tenggat)
+
+```
+
+### 5.20.3 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `terbitkanTugas(idKelas: Integer, data: DataTugas): HasilOperasi`
+
+**ID Algoritma:** Algo-073
+
+```
+FUNCTION terbitkanTugas(idKelas: Integer, data: DataTugas): HasilOperasi
+  IF NOT konteks.akun.verifikasiHakAkses("terbitkanTugas") THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Hanya Pengajar yang dapat menerbitkan tugas")
+
+  kelas ← KelasBelajar.find(idKelas)
+  IF kelas = null THEN
+    RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Kelas tidak ditemukan")
+  IF NOT kelas.periksaPemilik(konteks.akun.idAkun) THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Anda bukan pemilik kelas ini")
+
+  tugas ← TugasKelas.find(data.idTugas)
+  IF tugas = null OR tugas.idKelas <> idKelas THEN
+    RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Tugas tidak ditemukan pada kelas ini")
+  IF tugas.status = TERBIT THEN
+    RETURN HasilOperasi.gagal("SUDAH_TERBIT", "Tugas sudah diterbitkan")
+
+  hasil ← tugas.terbitkan()                          // tugas hanya terlihat oleh anggota idKelas
+  IF hasil.berhasil = false THEN
+    catat galat ke LogAplikasi (KF17)
+  RETURN hasil
+
+```
+
+### 5.20.4 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `ambilDaftarAnggota(idKelas: Integer): List<Profil>`
+
+**ID Algoritma:** Algo-074
+
+```
+FUNCTION ambilDaftarAnggota(idKelas: Integer): List<Profil>
+  IF NOT konteks.akun.verifikasiHakAkses("lihatAnggota") THEN
+    tolak permintaan (403 "Halaman ini khusus Pengajar")
+
+  kelas ← KelasBelajar.find(idKelas)
+  IF kelas = null THEN
+    tolak permintaan (404 "Kelas tidak ditemukan")
+  IF NOT kelas.periksaPemilik(konteks.akun.idAkun) THEN
+    tolak permintaan (403 "Anda bukan pemilik kelas ini")
+
+  anggotaAktif ← KeanggotaanKelas.daftarAnggotaAktif(idKelas)
+  daftar ← list kosong
+  FOR EACH k IN anggotaAktif DO
+    daftar.tambah( AkunPengguna.find(k.idPelajar).getProfil() )
+  RETURN daftar                  // daftar kosong BUKAN galat; tampilan menampilkan "belum ada anggota"
+
+```
+
+### 5.20.5 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `kelolaAnggota(idKelas: Integer, idPelajar: Integer, status: String): HasilOperasi`
+
+**ID Algoritma:** Algo-075
+
+```
+FUNCTION kelolaAnggota(idKelas: Integer, idPelajar: Integer, status: String): HasilOperasi
+  IF status NOT IN {"aktif", "nonaktif"} THEN
+    RETURN HasilOperasi.gagal("STATUS_TIDAK_VALID", "Status keanggotaan tidak dikenal")
+  IF NOT konteks.akun.verifikasiHakAkses("kelolaAnggota") THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Hanya Pengajar yang dapat mengelola anggota")
+
+  kelas ← KelasBelajar.find(idKelas)
+  IF kelas = null THEN
+    RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Kelas tidak ditemukan")
+  IF NOT kelas.periksaPemilik(konteks.akun.idAkun) THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Anda bukan pemilik kelas ini")
+
+  keanggotaan ← cari KeanggotaanKelas dengan idKelas dan idPelajar
+  IF keanggotaan = null THEN
+    RETURN HasilOperasi.gagal("BUKAN_ANGGOTA", "Pelajar bukan anggota kelas ini")
+
+  hasilUbah ← keanggotaan.ubahStatus(status)         // "nonaktif": akses Pelajar ke kelas berakhir
+  IF hasilUbah.berhasil = false THEN
+    catat galat ke LogAplikasi (KF17)
+    RETURN hasilUbah
+
+  anggotaAktif ← KeanggotaanKelas.daftarAnggotaAktif(idKelas)
+  daftar ← list kosong
+  FOR EACH k IN anggotaAktif DO
+    daftar.tambah( AkunPengguna.find(k.idPelajar).getProfil() )
+
+  RETURN HasilOperasi.sukses(hasilPengeluaran = hasilUbah.data, daftarProfil = daftar)
+
+```
+
+### 5.20.6 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `gantiKodeKelas(idKelas: Integer): HasilOperasi`
+
+**ID Algoritma:** Algo-076
+
+```
+FUNCTION gantiKodeKelas(idKelas: Integer): HasilOperasi
+  IF NOT konteks.akun.verifikasiHakAkses("gantiKode") THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Hanya Pengajar yang dapat mengganti kode kelas")
+
+  kelas ← KelasBelajar.find(idKelas)
+  IF kelas = null THEN
+    RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Kelas tidak ditemukan")
+
+  hasil ← kelas.gantiKodeBergabung(konteks.akun.idAkun)    // pemeriksaan pemilik dilakukan di KelasBelajar
+  IF hasil.berhasil = false AND hasil.kode = "GAGAL_SIMPAN" THEN
+    catat galat ke LogAplikasi (KF17)
+  RETURN hasil                                              // data: kodeBergabung baru
+
+```
+
+### 5.20.7 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `aturScoreboard(idKelas: Integer, aktif: Boolean): HasilOperasi`
+
+**ID Algoritma:** Algo-077
+
+```
+FUNCTION aturScoreboard(idKelas: Integer, aktif: Boolean): HasilOperasi
+  IF NOT konteks.akun.verifikasiHakAkses("aturScoreboard") THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Hanya Pengajar yang dapat mengatur papan peringkat")
+
+  kelas ← KelasBelajar.find(idKelas)
+  IF kelas = null THEN
+    RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Kelas tidak ditemukan")
+  IF NOT kelas.periksaPemilik(konteks.akun.idAkun) THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Anda bukan pemilik kelas ini")
+
+  hasilStatus ← kelas.aturScoreboard(aktif)
+  IF hasilStatus.berhasil = false THEN
+    RETURN hasilStatus
+
+  IF aktif = false THEN
+    RETURN HasilOperasi.sukses(statusScoreboard = "nonaktif", papanPeringkat = list kosong)
+
+  anggotaAktif ← KeanggotaanKelas.daftarAnggotaAktif(idKelas)
+  profil ← list kosong
+  FOR EACH k IN anggotaAktif DO
+    profil.tambah( AkunPengguna.find(k.idPelajar).getProfil() )    // namaTampilan
+
+  papan ← MotivasiBelajar.susunScoreboard(profil)   // mengambil poin tiap anggota lewat ambilPoinKelas(), urut poin menurun, seri diurut namaTampilan
+  RETURN HasilOperasi.sukses(statusScoreboard = "aktif", papanPeringkat = papan)
+```
+
+### 5.20.8 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `ambilKelasPengajar(): List<KelasBelajar>`
+
+**ID Algoritma:** Algo-078
+
+```
+FUNCTION ambilKelasPengajar(): List<KelasBelajar>
+  IF NOT konteks.akun.verifikasiHakAkses("kelolaKelas") THEN
+    tolak permintaan (403 "Halaman ini khusus Pengajar")
+
+  RETURN new KelasBelajar().daftarKelasPengajar(konteks.akun.idAkun)
+
+```
+
+### 5.20.9 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `hasilkanKodeUnik(): String`
+
+**ID Algoritma:** Algo-079
+
+```
+FUNCTION hasilkanKodeUnik(): String
+  RETURN new KelasBelajar().buatKodeBergabung()
+
+```
+
+### 5.20.10 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `kirimUmpanBalik(idKelas: Integer, data: DataUmpanBalik): HasilOperasi`
+
+**ID Algoritma:** Algo-080
+
+```
+FUNCTION kirimUmpanBalik(idKelas: Integer, data: DataUmpanBalik): HasilOperasi
+  IF NOT konteks.akun.verifikasiHakAkses("kelolaAnggota") THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Hanya Pengajar yang dapat mengirim umpan balik")
+
+  kelas ← KelasBelajar.find(idKelas)
+  IF kelas = null OR NOT kelas.periksaPemilik(konteks.akun.idAkun) THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Kelas tidak ditemukan atau bukan milik Anda")
+
+  hasil ← DataFeedback.simpan(MasukanFeedback(idAkun = data.idPelajar, kategori = "MATERI", pesan = data.pesan))
+  RETURN hasil
+
+```
+
+### 5.20.11 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `ambilProgresAnggota(idKelas: Integer, idPelajar: Integer): Data`
+
+**ID Algoritma:** Algo-081
+
+```
+FUNCTION ambilProgresAnggota(idKelas: Integer, idPelajar: Integer): Data
+  IF NOT konteks.akun.verifikasiHakAkses("lihatAnggota") THEN
+    tolak permintaan (403 "Akses ditolak")
+
+  kelas ← KelasBelajar.find(idKelas)
+  IF kelas = null OR NOT kelas.periksaPemilik(konteks.akun.idAkun) THEN
+    tolak permintaan (403 "Bukan pemilik kelas")
+
+  keanggotaan ← cari KeanggotaanKelas dengan idKelas dan idPelajar dan status = "aktif"
+  IF keanggotaan = null THEN
+    RETURN Data.galat("BUKAN_ANGGOTA_AKTIF")
+
+  ringkasan ← new ProgresController().hitungProgres(idPelajar)
+  RETURN Data.sukses(ringkasanProgres = ringkasan)
+
+```
+
+### 5.20.12 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `validasiKodeBergabung(kode: String): HasilOperasi`
+
+**ID Algoritma:** Algo-082
+
+```
+FUNCTION validasiKodeBergabung(kode: String): HasilOperasi
+  IF NOT konteks.akun.verifikasiHakAkses("mengikutiKelas") THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Hanya Pelajar yang dapat bergabung ke kelas")
+
+  kelas ← new KelasBelajar().validasiKode(kode)
+  IF kelas = null THEN
+    RETURN HasilOperasi.gagal("KODE_TIDAK_VALID", "Kode bergabung tidak ditemukan atau kelas tidak aktif")
+
+  RETURN HasilOperasi.sukses(idKelas = kelas.idKelas, namaKelas = kelas.nama)
+
+```
+
+### 5.20.13 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `gabungkanPelajar(idKelas: Integer): HasilOperasi`
+
+**ID Algoritma:** Algo-083
+
+```
+FUNCTION gabungkanPelajar(idKelas: Integer): HasilOperasi
+  IF NOT konteks.akun.verifikasiHakAkses("mengikutiKelas") THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Hanya Pelajar yang dapat bergabung ke kelas")
+
+  kelas ← KelasBelajar.find(idKelas)
+  IF kelas = null THEN
+    RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Kelas tidak ditemukan")
+
+  RETURN kelas.gabungkanPelajar(konteks.akun.idAkun)
+
+```
+
+### 5.20.14 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `ambilTugasAktif(idKelas: Integer): HasilOperasi`
+
+**ID Algoritma:** Algo-084
+
+```
+FUNCTION ambilTugasAktif(idKelas: Integer): HasilOperasi
+  IF NOT KeanggotaanKelas.periksaAkses(konteks.akun.idAkun, idKelas) THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Anda bukan anggota aktif kelas ini")
+
+  kelas ← KelasBelajar.find(idKelas)
+  RETURN kelas.ambilDaftarTugas(konteks.akun.idAkun)
+
+```
+
+### 5.20.15 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `bukaTugas(idKelas: Integer, idTugas: Integer): HasilOperasi`
+
+**ID Algoritma:** Algo-085
+
+```
+FUNCTION bukaTugas(idKelas: Integer, idTugas: Integer): HasilOperasi
+  IF NOT KeanggotaanKelas.periksaAkses(konteks.akun.idAkun, idKelas) THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Anda bukan anggota aktif kelas ini")
+
+  kelas ← KelasBelajar.find(idKelas)
+  RETURN kelas.bukaTugas(konteks.akun.idAkun, idTugas)
+
+```
+
+### 5.20.16 Algoritma/Query
+
+**Nama Kelas:** KelasController
+
+**Nama Operasi:** `simpanPengumpulan(idKelas: Integer, idTugas: Integer): HasilOperasi`
+
+**ID Algoritma:** Algo-086
+
+```
+FUNCTION simpanPengumpulan(idKelas: Integer, idTugas: Integer): HasilOperasi
+  IF NOT KeanggotaanKelas.periksaAkses(konteks.akun.idAkun, idKelas) THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Anda bukan anggota aktif kelas ini")
+
+  bukti ← kumpulkan bukti penyelesaian komponen tugas dari request
+  kelas ← KelasBelajar.find(idKelas)
+  RETURN kelas.finalisasiTugas(konteks.akun.idAkun, idTugas, bukti)
+
+```
 ## 5.21 Kelas KontenMateri
 
 **Nama Kelas:** KontenMateri  
@@ -2577,12 +2774,439 @@ Tabel 5.21.6. Query Operasi arsipkanVersi
 ## 5.22 Kelas MotivasiBelajar
 
 **Nama Kelas:** MotivasiBelajar  
-**ID Kelas:** C22
+**ID Kelas:** C22  
+**Jenis:** Model
 
+Menyimpan streak, poin, dan badge satu Pelajar. Kelas ini diperbarui pada UC-03, ditampilkan pada UC-04, dan dipakai untuk papan peringkat kelas pada UC-04 dan UC-07.
 
+Tabel 5.22.1. Operasi Kelas MotivasiBelajar
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| `perbaruiStreak(tanggal: Date): void` | public | Menambah streak jika latihan berhasil terjadi sehari setelah aktivitas terakhir, mempertahankannya jika di hari yang sama, dan mengembalikannya ke 1 jika ada hari yang terlewat. Lihat Algo-028. |
+| `tambahPoin(idAktivitas: Integer, nilai: Integer): HasilOperasi` | public | Menambah poin untuk satu aktivitas (`idRiwayat`) dan mengembalikan total poin terbaru. Lihat Algo-029. |
+| `berikanBadge(kode: String): HasilOperasi` | public | Menyimpan badge jika belum dimiliki. Badge yang sudah dimiliki tidak disimpan ulang. Lihat Algo-030. |
+| `susunScoreboard(anggotaAktif: List<Profil>): List<Peringkat>` | public | Menyusun papan peringkat satu kelas dari poin anggota aktif dengan nama tampilan, tanpa data pribadi lain. Lihat Algo-031. |
+| `ambilMotivasi(idPelajar: Integer): Data` | public | Mengambil streak, poin, tanggal aktif terakhir, dan badge seorang Pelajar untuk halaman progres (I-11). Lihat Algo-032. |
+| `ambilPoinKelas(anggotaAktif: List<Integer>): List<Peringkat>` | public | Mengambil poin seluruh anggota aktif suatu kelas, terurut dari poin tertinggi. Lihat Algo-033. |
+
+Tabel 5.22.2. Atribut Kelas MotivasiBelajar
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| `idPelajar` | private | `Integer` |
+| `streak` | private | `Integer` |
+| `poin` | private | `Integer` |
+| `tanggalAktifTerakhir` | private | `Date?` |
+| `daftarBadge` | private | `List<String>` |
+
+### 5.22.1 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `perbaruiStreak(tanggal: Date): void`  
+**ID Algoritma:** Algo-028
+
+```text
+// Dipanggil dari Algo-026, yaitu hanya setelah latihan berstatus berhasil
+FUNCTION perbaruiStreak(tanggal: Date): void
+  IF this.tanggalAktifTerakhir = tanggal THEN RETURN          // sudah dihitung hari ini
+  IF this.tanggalAktifTerakhir = tanggal − 1 hari THEN
+    this.streak ← this.streak + 1
+  ELSE
+    this.streak ← 1                                          // ada hari yang terlewat, atau aktivitas pertama
+  this.tanggalAktifTerakhir ← tanggal
+  jalankan Q-028
+```
+
+Tabel 5.22.3. Query Operasi perbaruiStreak
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-028 | `UPDATE motivasi_belajar SET streak = :streak, tanggal_aktif_terakhir = :tanggal WHERE id_pelajar = :id_pelajar;` | Menyimpan streak dan tanggal aktivitas terbaru. |
+
+### 5.22.2 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `tambahPoin(idAktivitas: Integer, nilai: Integer): HasilOperasi`  
+**ID Algoritma:** Algo-029
+
+```text
+FUNCTION tambahPoin(idAktivitas: Integer, nilai: Integer): HasilOperasi
+  IF nilai ≤ 0 THEN
+    RETURN HasilOperasi.gagal("NILAI_TIDAK_VALID", "Poin harus lebih dari 0")
+  baris ← jalankan Q-029
+  IF baris = 0 THEN
+    RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Data motivasi pelajar tidak ditemukan")
+  this.poin ← this.poin + nilai
+  RETURN HasilOperasi.sukses(poin = this.poin, idAktivitas = idAktivitas)
+  // pencegahan poin ganda dijaga pemanggil (Algo-026) melalui RiwayatLatihan.cekPernahSelesai()
+```
+
+Tabel 5.22.4. Query Operasi tambahPoin
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-029 | `UPDATE motivasi_belajar SET poin = poin + :nilai WHERE id_pelajar = :id_pelajar;` | Menambah poin secara atomik di basis data. |
+
+### 5.22.3 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `berikanBadge(kode: String): HasilOperasi`  
+**ID Algoritma:** Algo-030
+
+```text
+FUNCTION berikanBadge(kode: String): HasilOperasi
+  IF kode IN this.daftarBadge THEN
+    RETURN HasilOperasi.sukses(baru = false)
+  this.daftarBadge.tambah(kode)
+  jalankan Q-030 dengan daftar_badge = JSON(this.daftarBadge)
+  RETURN HasilOperasi.sukses(baru = true)
+```
+
+Tabel 5.22.5. Query Operasi berikanBadge
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-030 | `UPDATE motivasi_belajar SET daftar_badge = :daftar_badge WHERE id_pelajar = :id_pelajar;` | Menyimpan daftar badge terbaru dalam format JSON. |
+
+### 5.22.4 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `susunScoreboard(anggotaAktif: List<Profil>): List<Peringkat>`  
+**ID Algoritma:** Algo-031
+
+Papan peringkat hanya untuk satu kelas, memakai nama tampilan, dan hanya disusun bila Pengajar mengaktifkannya (SKPL 2.4 butir 5). Pemeriksaan status aktif dilakukan pemanggil, yaitu `ProgresController.ambilScoreboard()`.
+
+```text
+FUNCTION susunScoreboard(anggotaAktif: List<Profil>): List<Peringkat>
+  IF anggotaAktif kosong THEN RETURN list kosong
+  nama ← peta idPelajar → namaTampilan dari anggotaAktif
+  baris ← ambilPoinKelas(daftar idPelajar dari anggotaAktif)        // Algo-033, sudah urut poin menurun
+  hasil ← list kosong;  peringkat ← 0;  poinSebelumnya ← tak hingga;  urutan ← 0
+  FOR EACH b IN baris DO
+    urutan ← urutan + 1
+    IF b.poin < poinSebelumnya THEN peringkat ← urutan      // poin sama = peringkat sama
+    hasil.tambah(Peringkat(peringkat, nama[b.idPelajar], b.poin))
+    poinSebelumnya ← b.poin
+  RETURN hasil                                    // tanpa email atau data pribadi lain
+```
+
+### 5.22.5 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `ambilMotivasi(idPelajar: Integer): Data`  
+**ID Algoritma:** Algo-032
+
+```text
+FUNCTION ambilMotivasi(idPelajar: Integer): Data
+  baris ← jalankan Q-032
+  IF baris kosong THEN
+    RETURN Data(streak = 0, poin = 0, tanggalAktifTerakhir = null, daftarBadge = [])   // Pelajar baru
+  IF baris.tanggal_aktif_terakhir < hari ini − 1 hari THEN
+    baris.streak ← 0                              // streak terputus, ditampilkan 0 sampai latihan berikutnya
+  RETURN Data(baris.streak, baris.poin, baris.tanggal_aktif_terakhir, baca JSON baris.daftar_badge)
+```
+
+Tabel 5.22.6. Query Operasi ambilMotivasi
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-032 | `SELECT streak, poin, tanggal_aktif_terakhir, daftar_badge FROM motivasi_belajar WHERE id_pelajar = :id_pelajar;` | Mengambil indikator motivasi satu Pelajar. |
+
+### 5.22.6 Algoritma/Query
+
+**Nama Kelas:** MotivasiBelajar  
+**Nama Operasi:** `ambilPoinKelas(anggotaAktif: List<Integer>): List<Peringkat>`  
+**ID Algoritma:** Algo-033
+
+Tabel 5.22.7. Query Operasi ambilPoinKelas
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-033 | `SELECT id_pelajar, poin FROM motivasi_belajar WHERE id_pelajar IN (:daftar_id) ORDER BY poin DESC, id_pelajar ASC;` | Mengambil poin anggota aktif satu kelas, terurut dari poin tertinggi. Anggota yang belum punya baris dianggap berpoin 0. |
 
 ## 5.23 Kelas KelasBelajar
+**Nama Kelas:** KelasBelajar
 
+**ID Kelas:** C23
+
+Tabel 5.23.1. Operasi Kelas KelasBelajar
+
+| **Nama Operasi** | **Visibility (private, public)** | **Keterangan** |
+| :--- | :--- | :--- |
+| `simpan(data: DataKelas): HasilOperasi` | public | Memvalidasi nama kelas, membangkitkan kode bergabung, lalu menyimpan kelas baru berstatus aktif dengan papan peringkat nonaktif. Mengembalikan `idKelas` dan `kodeBergabung`. Lihat Algo-087. |
+| `buatKodeBergabung(): String` | public | Membangkitkan kode acak 6 karakter yang belum dipakai kelas lain. Lihat Algo-088. |
+| `gantiKodeBergabung(idPengajar: Integer): HasilOperasi` | public | Memeriksa kepemilikan, lalu mengganti kode bergabung dengan kode baru sehingga kode lama tidak dapat dipakai lagi. Anggota yang sudah bergabung tidak terpengaruh. Lihat Algo-089. |
+| `periksaPemilik(idPengajar: Integer): Boolean` | public | Mengembalikan `true` bila `idPengajar` adalah pemilik kelas ini. Lihat Algo-090. |
+| `aturScoreboard(aktif: Boolean): HasilOperasi` | public | Mengaktifkan atau menonaktifkan papan peringkat kelas dengan mengubah `statusScoreboard`. Lihat Algo-091. |
+| `daftarKelasPengajar(idPengajar: Integer): List<KelasBelajar>` | public | Mengambil seluruh kelas aktif milik seorang Pengajar, diurutkan menurut nama. Lihat Algo-092. |
+| `validasiKode(kode: String): KelasBelajar?` | public | Mencari kelas aktif dengan kode bergabung yang sama; `null` bila tidak ada (UC-05). Lihat Algo-093. |
+| `gabungkanPelajar(idPelajar: Integer): HasilOperasi` | public | Mendaftarkan Pelajar sebagai anggota kelas melalui `KeanggotaanKelas` dan menolak bila sudah menjadi anggota (UC-05). Lihat Algo-094. |
+| `ambilDaftarTugas(idPelajar: Integer): HasilOperasi` | public | Mengambil tugas aktif kelas beserta status pengerjaan Pelajar (UC-05). Lihat Algo-095. |
+| `bukaTugas(idPelajar: Integer, idTugas: Integer): HasilOperasi` | public | Mengembalikan detail tugas bila Pelajar adalah anggota aktif kelas (UC-05). Lihat Algo-096. |
+| `finalisasiTugas(idPelajar: Integer, idTugas: Integer, bukti: BuktiPenyelesaian): HasilOperasi` | public | Memverifikasi akses dan bukti penyelesaian, lalu mencatat penyelesaian tugas oleh Pelajar (UC-05). Lihat Algo-097. |
+
+Tabel 5.23.2. Atribut Kelas KelasBelajar
+
+| **Nama Atribut** | **Visibility (private, public)** | **Tipe** |
+| :--- | :--- | :--- |
+| `idKelas` | private | Integer |
+| `nama` | private | String |
+| `pemilikId` | private | Integer |
+| `kodeBergabung` | private | String |
+| `status` | private | String |
+| `statusScoreboard` | private | Boolean |
+
+### 5.23.1 Algoritma/Query
+
+**Nama Kelas:** KelasBelajar
+
+**Nama Operasi:** `simpan(data: DataKelas): HasilOperasi`
+
+**ID Algoritma:** Algo-087
+
+```
+FUNCTION simpan(data: DataKelas): HasilOperasi
+  nama ← trim(data.nama)
+  IF kosong(nama) OR panjang(nama) > 100 THEN
+    RETURN HasilOperasi.gagal("NAMA_TIDAK_VALID", "Nama kelas wajib diisi (maks. 100 karakter)")
+  IF data.pemilikId = null THEN
+    RETURN HasilOperasi.gagal("PEMILIK_TIDAK_VALID", "Pemilik kelas tidak diketahui")
+
+  FOR percobaan ← 1 TO 3 DO
+    TRY
+      kode ← buatKodeBergabung()                              // Algo-088; KODE_TIDAK_TERSEDIA ditangkap sebagai galat lain
+      idBaru ← jalankan Q-087
+      this.idKelas ← idBaru;  this.nama ← nama;  this.pemilikId ← data.pemilikId
+      this.kodeBergabung ← kode;  this.status ← "AKTIF";  this.statusScoreboard ← false
+      RETURN HasilOperasi.sukses(idKelas = idBaru, kodeBergabung = kode)
+    CATCH pelanggaran indeks UNIQUE pada kode_bergabung
+      // kode yang sama terpakai bersamaan oleh permintaan lain, ulangi dengan kode baru
+    CATCH galat lain
+      RETURN HasilOperasi.gagal("GAGAL_SIMPAN", "Kelas gagal disimpan, coba lagi")
+
+  RETURN HasilOperasi.gagal("GAGAL_SIMPAN", "Kelas gagal disimpan, coba lagi")
+```
+
+Tabel 5.23.3. Query Operasi simpan
+
+| **No Query** | **Query** | **Keterangan** |
+| :--- | :--- | :--- |
+| Q-087 | `INSERT INTO kelas_belajar (nama, pemilik_id, kode_bergabung, status, status_scoreboard) VALUES (:nama, :pemilik_id, :kode, 'AKTIF', 0);` | Menyimpan kelas baru. Kolom `kode_bergabung` memiliki indeks `UNIQUE`. |
+
+### 5.23.2 Algoritma/Query
+
+**Nama Kelas:** KelasBelajar
+
+**Nama Operasi:** `buatKodeBergabung(): String`
+
+**ID Algoritma:** Algo-088
+
+```
+FUNCTION buatKodeBergabung(): String
+  ALFABET ← "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"      // tanpa I, O, 0, 1 agar tidak ambigu
+  FOR percobaan ← 1 TO 10 DO
+    kode ← rangkai 6 karakter acak dari ALFABET
+    jumlah ← jalankan Q-088 dengan kode
+    IF jumlah = 0 THEN
+      RETURN kode
+  lempar galat "KODE_TIDAK_TERSEDIA"                // ditangkap pemanggil (CATCH galat lain) sebagai GAGAL_SIMPAN
+
+```
+
+Tabel 5.23.4. Query Operasi buatKodeBergabung
+
+| **No Query** | **Query** | **Keterangan** |
+| :--- | :--- | :--- |
+| Q-088 | `SELECT COUNT(*) FROM kelas_belajar WHERE kode_bergabung = :kode;` | Memastikan kode belum dipakai. Indeks `UNIQUE` pada Q-087 dan Q-089 menjadi pengaman terakhir. |
+
+### 5.23.3 Algoritma/Query
+
+**Nama Kelas:** KelasBelajar
+
+**Nama Operasi:** `gantiKodeBergabung(idPengajar: Integer): HasilOperasi`
+
+**ID Algoritma:** Algo-089
+
+```
+FUNCTION gantiKodeBergabung(idPengajar: Integer): HasilOperasi
+  IF periksaPemilik(idPengajar) = false THEN
+    RETURN HasilOperasi.gagal("AKSES_DITOLAK", "Anda bukan pemilik kelas ini")
+
+  FOR percobaan ← 1 TO 3 DO
+    TRY
+      kodeBaru ← buatKodeBergabung()                        // Algo-088; KODE_TIDAK_TERSEDIA ditangkap sebagai galat lain
+      baris ← jalankan Q-089
+      IF baris = 0 THEN
+        RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Kelas tidak ditemukan atau tidak aktif")
+      this.kodeBergabung ← kodeBaru                         // kode lama langsung tidak berlaku
+      RETURN HasilOperasi.sukses(kodeBergabung = kodeBaru)
+    CATCH pelanggaran indeks UNIQUE pada kode_bergabung
+      // ulangi dengan kode baru
+    CATCH galat lain
+      RETURN HasilOperasi.gagal("GAGAL_SIMPAN", "Kode gagal diganti, coba lagi")
+
+  RETURN HasilOperasi.gagal("GAGAL_SIMPAN", "Kode gagal diganti, coba lagi")
+```
+
+Tabel 5.23.5. Query Operasi gantiKodeBergabung
+
+| **No Query** | **Query** | **Keterangan** |
+| :--- | :--- | :--- |
+| Q-089 | `UPDATE kelas_belajar SET kode_bergabung = :kode_baru WHERE id_kelas = :id_kelas AND pemilik_id = :id_pengajar AND status = 'AKTIF';` | Menimpa kode lama. Setelah ini `validasiKode()` tidak lagi menemukan kelas dengan kode lama. |
+
+### 5.23.4 Algoritma/Query
+
+**Nama Kelas:** KelasBelajar
+
+**Nama Operasi:** `periksaPemilik(idPengajar: Integer): Boolean`
+
+**ID Algoritma:** Algo-090
+
+```
+FUNCTION periksaPemilik(idPengajar: Integer): Boolean
+  RETURN idPengajar <> null AND this.pemilikId = idPengajar
+  // dipanggil KelasController sebelum setiap aksi Pengajar
+
+```
+
+### 5.23.5 Algoritma/Query
+
+**Nama Kelas:** KelasBelajar
+
+**Nama Operasi:** `aturScoreboard(aktif: Boolean): HasilOperasi`
+
+**ID Algoritma:** Algo-091
+
+```
+FUNCTION aturScoreboard(aktif: Boolean): HasilOperasi
+  TRY
+    jalankan Q-091 dengan aktif                // tanpa memeriksa jumlah baris: nilai yang sama tidak mengubah baris
+  CATCH galat
+    RETURN HasilOperasi.gagal("GAGAL_SIMPAN", "Pengaturan papan peringkat gagal disimpan")
+
+  this.statusScoreboard ← aktif
+  RETURN HasilOperasi.sukses(statusScoreboard = IF aktif THEN "aktif" ELSE "nonaktif")
+
+```
+
+Tabel 5.23.6. Query Operasi aturScoreboard
+
+| **No Query** | **Query** | **Keterangan** |
+| :--- | :--- | :--- |
+| Q-091 | `UPDATE kelas_belajar SET status_scoreboard = :aktif WHERE id_kelas = :id_kelas;` | Mengubah status papan peringkat milik kelas ini. |
+
+### 5.23.6 Algoritma/Query
+
+**Nama Kelas:** KelasBelajar
+
+**Nama Operasi:** `daftarKelasPengajar(idPengajar: Integer): List<KelasBelajar>`
+
+**ID Algoritma:** Algo-092
+
+```
+FUNCTION daftarKelasPengajar(idPengajar: Integer): List<KelasBelajar>
+  baris ← jalankan Q-092 dengan idPengajar
+  daftar ← list kosong
+  FOR EACH b IN baris DO
+    daftar.tambah( bentuk KelasBelajar dari b )
+  RETURN daftar            // daftar kosong BUKAN galat; tampilan menampilkan "belum ada kelas"
+
+```
+
+Tabel 5.23.7. Query Operasi daftarKelasPengajar
+
+| **No Query** | **Query** | **Keterangan** |
+| :--- | :--- | :--- |
+| Q-092 | `SELECT id_kelas, nama, pemilik_id, kode_bergabung, status, status_scoreboard FROM kelas_belajar WHERE pemilik_id = :id_pengajar AND status = 'AKTIF' ORDER BY nama;` | Mengambil kelas aktif milik Pengajar, urut nama. |
+
+### 5.23.7 Algoritma/Query
+
+**Nama Kelas:** KelasBelajar
+
+**Nama Operasi:** `validasiKode(kode: String): KelasBelajar?`
+
+**ID Algoritma:** Algo-093
+
+```
+FUNCTION validasiKode(kode: String): KelasBelajar?
+  baris ← jalankan Q-093 dengan kode
+  IF baris = null THEN RETURN null
+  RETURN bentuk KelasBelajar dari baris
+
+```
+
+Tabel 5.23.8. Query Operasi validasiKode
+
+| **No Query** | **Query** | **Keterangan** |
+| :--- | :--- | :--- |
+| Q-093 | `SELECT id_kelas, nama, pemilik_id, kode_bergabung, status, status_scoreboard FROM kelas_belajar WHERE kode_bergabung = :kode AND status = 'AKTIF';` | Mencari kelas aktif berdasarkan kode bergabung unik untuk validasi Pelajar (UC-05). |
+
+### 5.23.8 Algoritma/Query
+
+**Nama Kelas:** KelasBelajar
+
+**Nama Operasi:** `gabungkanPelajar(idPelajar: Integer): HasilOperasi`
+
+**ID Algoritma:** Algo-094
+
+```
+FUNCTION gabungkanPelajar(idPelajar: Integer): HasilOperasi
+  hasilSimpan ← new KeanggotaanKelas().simpanKeanggotaan(idPelajar, this.idKelas)
+  RETURN hasilSimpan
+
+```
+
+### 5.23.9 Algoritma/Query
+
+**Nama Kelas:** KelasBelajar
+
+**Nama Operasi:** `ambilDaftarTugas(idPelajar: Integer): HasilOperasi`
+
+**ID Algoritma:** Algo-095
+
+```
+FUNCTION ambilDaftarTugas(idPelajar: Integer): HasilOperasi
+  daftarTugas ← TugasKelas.ambilTugasAktif(this.idKelas)
+  statusTugas ← new PenyelesaianTugas().ambilStatus(idPelajar, daftarTugas)
+  RETURN HasilOperasi.sukses(tugas = daftarTugas, status = statusTugas)
+
+```
+
+### 5.23.10 Algoritma/Query
+
+**Nama Kelas:** KelasBelajar
+
+**Nama Operasi:** `bukaTugas(idPelajar: Integer, idTugas: Integer): HasilOperasi`
+
+**ID Algoritma:** Algo-096
+
+```
+FUNCTION bukaTugas(idPelajar: Integer, idTugas: Integer): HasilOperasi
+  detail ← new TugasKelas().ambilDetail(this.idKelas, idTugas)
+  IF detail = null THEN
+    RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Tugas tidak ditemukan")
+  RETURN HasilOperasi.sukses(detailTugas = detail)
+
+```
+
+### 5.23.11 Algoritma/Query
+
+**Nama Kelas:** KelasBelajar
+
+**Nama Operasi:** `finalisasiTugas(idPelajar: Integer, idTugas: Integer, bukti: BuktiPenyelesaian): HasilOperasi`
+
+**ID Algoritma:** Algo-097
+
+```
+FUNCTION finalisasiTugas(idPelajar: Integer, idTugas: Integer, bukti: BuktiPenyelesaian): HasilOperasi
+  tugas ← TugasKelas.find(idTugas)
+  IF tugas = null OR tugas.idKelas <> this.idKelas THEN
+    RETURN HasilOperasi.gagal("TIDAK_DITEMUKAN", "Tugas tidak ditemukan")
+
+  RETURN tugas.verifikasiDanSimpan(this.idKelas, idTugas, idPelajar, bukti)
+
+```
 ## 5.24 Kelas KeanggotaanKelas
 
 ## 5.25 Kelas TugasKelas
@@ -2728,13 +3352,125 @@ Tabel 6.5. Spesifikasi Objek Antarmuka I-05
 
 ## 6.6 Rancangan Antarmuka I-06
 
+**Antarmuka:** I-06  
+**Nama Layar:** Pilih Mode Latihan
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-06 Pilih Mode Latihan" src="./assets/ui/I-06 Pilih Mode.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.6. Rancangan Antarmuka I-06 - Pilih Mode Latihan</i>
+</p>
+
+Tabel 6.6. Spesifikasi Objek Antarmuka I-06
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-06-01 | Card (pilihan mode) dan Button | Ikon pensil, "Menulis", "Gambar aksara di kanvas dengan bantuan garis.", tombol "Mulai" | Menjalankan `pilihModeLatihan(MENULIS)` → `LatihanController.siapkanSoal()` (Algo-021), lalu membuka I-07. |
+| I-06-02 | Card (pilihan mode) dan Button | Ikon speaker, "Mencocokkan bunyi", "Dengarkan bunyi, pilih aksara yang sesuai.", tombol "Mulai" | Menjalankan `pilihModeLatihan(BUNYI)` → Algo-021, lalu membuka I-08. |
+| I-06-03 | Card (pilihan mode) dan Button | Ikon dokumen, "Merangkai aksara", "Susun aksara dan tanda baca menjadi kata.", tombol "Mulai" | Menjalankan `pilihModeLatihan(MERANGKAI)` → Algo-021, lalu membuka I-09. |
+| I-06-04 | Card (pilihan mode) dan Button | Ikon pensil, "Transliterasi", "Ubah aksara ke huruf Latin atau sebaliknya.", tombol "Mulai" | Mode transliterasi (KF23). Membuka panel transliterasi pada I-09-04. |
+| I-06-05 | Card (informasi) | Maskot, "Mau latihan apa?", "Semua mode memberi poin untuk soal yang baru pertama kali kamu selesaikan.", serta streak (mis. 5 hari), total poin (mis. 240), dan jumlah badge (mis. 3) | Angka diambil dari `MotivasiBelajar.ambilMotivasi()` (Algo-032). Aturan poin sesuai Algo-026. Tidak interaktif. |
+| I-06-06 | Button (teks) | "← Kembali ke materi" | Kembali ke I-05 untuk materi yang sama. |
+
+Jika materi belum memiliki soal untuk mode yang dipilih, Algo-021 menolak permintaan dan layar ini menampilkan pesan "Materi ini belum memiliki soal untuk mode yang dipilih" tanpa berpindah layar.
+
 ## 6.7 Rancangan Antarmuka I-07
+
+**Antarmuka:** I-07  
+**Nama Layar:** Latihan Menulis
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-07 Latihan Menulis" src="./assets/ui/I-07 Menulis.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.7. Rancangan Antarmuka I-07 - Latihan Menulis</i>
+</p>
+
+Tabel 6.7. Spesifikasi Objek Antarmuka I-07
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-07-01 | Progress bar | Bar kemajuan latihan dan ikon pelita dengan angka streak (mis. 5) | Bagian terisi bertambah setiap aksara target pada materi ini berhasil diselesaikan dalam sesi latihan. Angka di kanan adalah streak Pelajar dari `MotivasiBelajar`. |
+| I-07-02 | Label (soal) | "LATIHAN MENULIS", "Tulis aksara "ha"", dan "Ikuti garis bantu, lalu tekan Periksa." | Diisi `tampilkanSoal(soal)` dari `SoalLatihan.targetSoal` (Algo-021). Kartu "Contoh" di sebelah kanan menampilkan bentuk aksara target dan cara membacanya. |
+| I-07-03 | Canvas | Area menggambar dengan outline aksara target | Menangkap Pointer Events melalui `rekamGoresan()` (Algo-020). Goresan digambar di browser tanpa menunggu server (KNF04). Outline berasal dari `SoalLatihan.templat`. |
+| I-07-04 | Toggle | "Tampilkan outline" | Menjalankan `aturOutline(aktif)` untuk menyalakan atau mematikan outline tanpa menghapus goresan (KF10). |
+| I-07-05 | Button (sekunder) | "× Bersihkan" | Menjalankan `ulangiLatihan()`: goresan dihapus, soal dan outline tetap. |
+| I-07-06 | Button (utama) | "Periksa" | Menjalankan `kirimJawaban(jawaban)` → `LatihanController.nilaiJawaban()` (Algo-022, Algo-023). Nonaktif selama kanvas kosong. Setelah hasil `berhasil`, tombol ini menjalankan `selesaikanLatihan()` → `simpanHasil()` (Algo-026) lalu membuka I-10. |
+| I-07-07 | Alert (hasil) | "Belum tepat" dan "Akurasi 62%. Tulis lebih dekat ke garis bantu.", tombol "Ulangi" | Diisi `tampilkanHasil(hasil)`. Untuk status `perlu_diulang` (akurasi di bawah 70), percobaan dicatat tanpa menambah streak atau poin, dan tombol "Ulangi" menjalankan `ulangiLatihan()` pada aksara yang sama (Skenario Alternatif 3). Untuk status `berhasil`, alert berwarna hijau. |
+| I-07-08 | Button (ikon) | "×" | Keluar dari latihan dan kembali ke I-06 tanpa menyimpan soal yang belum dikirim. |
 
 ## 6.8 Rancangan Antarmuka I-08
 
+**Antarmuka:** I-08  
+**Nama Layar:** Latihan Mencocokkan Bunyi
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-08 Latihan Mencocokkan Bunyi" src="./assets/ui/I-08 Bunyi.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.8. Rancangan Antarmuka I-08 - Latihan Mencocokkan Bunyi</i>
+</p>
+
+Tabel 6.8. Spesifikasi Objek Antarmuka I-08
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-08-01 | Progress bar | Bar kemajuan latihan dan angka streak | Sama seperti I-07-01. |
+| I-08-02 | Label (soal) | "LATIHAN MENCOCOKKAN BUNYI" dan "Pilih aksara yang sesuai bunyi" | Diisi `tampilkanSoal(soal)` (Algo-021). |
+| I-08-03 | Button (ikon audio) | Tombol speaker, maskot, dan "Dengarkan baik-baik, lalu pilih satu aksara." | Menjalankan `putarAudio()` untuk `SoalLatihan.audio` dari `ambilAudioPengucapan()` (Algo-021). Boleh diputar berulang. Suara hanya diputar setelah Pelajar menekan tombol (Skenario Alternatif 1). |
+| I-08-04 | Button (pilihan, 4 buah) | Empat aksara beserta label "pilihan 1" s.d. "pilihan 4" | Berisi `SoalLatihan.pilihan`. Mengklik satu kartu menandainya sebagai pilihan (garis tepi berwarna) dan menyimpannya ke `jawabanInput.pilihan`. |
+| I-08-05 | Button (utama) | "Periksa" | Menjalankan `kirimJawaban(jawaban)` → `LatihanController.nilaiJawaban()` (Algo-022, Algo-024). Nonaktif sebelum ada pilihan. Setelah hasil `berhasil`, tombol ini menjalankan `selesaikanLatihan()` → `simpanHasil()` (Algo-026) lalu membuka I-10. |
+| I-08-06 | Alert (hasil) | "Benar!" dan "Bunyi yang diputar adalah "na"." | Diisi `tampilkanHasil(hasil)`. Jawaban salah ditampilkan dengan alert merah yang menyebut aksara yang benar. |
+| I-08-07 | Button (ikon) | "×" | Sama seperti I-07-08. |
+
 ## 6.9 Rancangan Antarmuka I-09
 
+**Antarmuka:** I-09  
+**Nama Layar:** Latihan Merangkai Aksara
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-09 Latihan Merangkai Aksara" src="./assets/ui/I-09 Merangkai.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.9. Rancangan Antarmuka I-09 - Latihan Merangkai Aksara</i>
+</p>
+
+Tabel 6.9. Spesifikasi Objek Antarmuka I-09
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-09-01 | Progress bar | Bar kemajuan latihan dan angka streak | Sama seperti I-07-01. |
+| I-09-02 | Label (soal) | "LATIHAN MERANGKAI AKSARA" dan "Susun kata "cara"" | Diisi `tampilkanSoal(soal)` dari `SoalLatihan.targetSoal` (Algo-021). |
+| I-09-03 | Card (area susunan dan palet) | "SUSUNANMU" berisi komponen yang sudah dipilih, dan "KOMPONEN TERSEDIA" berisi aksara serta sandhangan | Palet berisi `SoalLatihan.komponen`. Mengklik komponen memindahkannya ke susunan (komponen di palet menjadi pudar), dan mengklik komponen di susunan mengembalikannya. Urutan disimpan sebagai `jawabanInput.urutan` dan diproses di browser. |
+| I-09-04 | Card (panel transliterasi) | "Mode transliterasi", aksara soal, input "Tulis dalam huruf Latin", pilihan arah "Aksara → Latin" / "Latin → Aksara" | Hanya tampil bila mode Transliterasi dipilih pada I-06 (I-06-04). |
+| I-09-05 | Button (utama) | "Periksa" | Menjalankan `kirimJawaban(jawaban)` → `LatihanController.nilaiJawaban()` (Algo-022, Algo-025). Nonaktif selama susunan kosong. Setelah hasil `berhasil`, tombol ini menjalankan `selesaikanLatihan()` → `simpanHasil()` (Algo-026) lalu membuka I-10. |
+| I-09-06 | Alert (hasil) | "Susunan benar" dan "ꦕ + ꦫ dibaca "cara"." | Diisi `tampilkanHasil(hasil)`. Bila susunan salah, komponen pada `posisiSalah` diberi garis merah. |
+| I-09-07 | Button (ikon) | "×" | Sama seperti I-07-08. |
+
 ## 6.10 Rancangan Antarmuka I-10
+
+**Antarmuka:** I-10  
+**Nama Layar:** Hasil Latihan
+
+<p align="center">
+<img alt="Rancangan Antarmuka I-10 Hasil Latihan" src="./assets/ui/I-10 Hasil Latihan.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 6.10. Rancangan Antarmuka I-10 - Hasil Latihan</i>
+</p>
+
+Tabel 6.10. Spesifikasi Objek Antarmuka I-10
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| I-10-01 | Label (judul hasil) | Maskot, "Latihan rampung!", dan "Apik tenan! Kamu menyelesaikan latihan menulis "ha na ca ra ka"." | Ditampilkan `tampilkanRingkasan(ringkasan)` setelah `simpanHasil()` berhasil (Algo-026). |
+| I-10-02 | Card (statistik) | "POIN" dan "+10" | Dari `RingkasanMotivasi.poinBertambah`, hasil `tambahPoin()` (Algo-029). Menjadi "+0" bila soal sudah pernah diselesaikan (`cekPernahSelesai()`, SKPL 2.4 butir 6). |
+| I-10-03 | Card (statistik) | "AKURASI" dan "88%" | Skor dari `HasilPenilaian` latihan yang baru diselesaikan. |
+| I-10-04 | Card (statistik) | "STREAK" dan "6 hari" | Dari `RingkasanMotivasi.streak`, hasil `perbaruiStreak()` (Algo-028). |
+| I-10-05 | Card (badge baru) | "BADGE BARU", "Pemula Aksara", dan "Menyelesaikan latihan pertama." | Dari `RingkasanMotivasi.badgeBaru` (Algo-027, Algo-030). Disembunyikan bila tidak ada badge baru. |
+| I-10-06 | Button (sekunder) | "Ulangi latihan" | Mengulang latihan pada mode yang sama (`pilihModeLatihan(mode)`, Algo-021). Poin tidak bertambah untuk soal yang sudah pernah diselesaikan. |
+| I-10-07 | Button (utama) | "→ Lanjut" | Membuka soal berikutnya pada mode yang sama (Algo-021). Bila semua aksara target pada materi sudah berhasil, Pelajar kembali ke I-05. |
 
 ## 6.11 Rancangan Antarmuka I-11
 **Antarmuka:** I-11  
@@ -2884,11 +3620,11 @@ Tabel 6.22. Rancangan Antarmuka Keseluruhan
 | I-03 | <img src="./assets/diagram/I-03 Halaman Utama.png" alt="I-03 Halaman Utama" width="400"> |
 | I-04 Daftar Materi | <img src="./assets/diagram/I-04 Daftar Materi.png" alt="Contoh Desain" width="400"> |
 | I-05 Detail Materi | <img src="./assets/diagram/I-05 Detail Materi.png" alt="Contoh Desain" width="400"> |
-| I-06 | ...                                                                                 |
-| I-07 | ...                                                                                 |
-| I-08 | ...                                                                                 |
-| I-09 | ...                                                                                 |
-| I-10 | ...                                                                                 |
+| I-06 Pilih Mode Latihan | <img src="./assets/ui/I-06 Pilih Mode.png" alt="I-06 Pilih Mode Latihan" width="400"> |
+| I-07 Latihan Menulis | <img src="./assets/ui/I-07 Menulis.png" alt="I-07 Latihan Menulis" width="400"> |
+| I-08 Latihan Mencocokkan Bunyi | <img src="./assets/ui/I-08 Bunyi.png" alt="I-08 Latihan Mencocokkan Bunyi" width="400"> |
+| I-09 Latihan Merangkai Aksara | <img src="./assets/ui/I-09 Merangkai.png" alt="I-09 Latihan Merangkai Aksara" width="400"> |
+| I-10 Hasil Latihan | <img src="./assets/ui/I-10 Hasil Latihan.png" alt="I-10 Hasil Latihan" width="400"> |
 |I-11 Progres Pelajar | <img src="./assets/diagram/I-11 Progres Pelajar.png" alt="I-11 Progres Pelajar" width="400"> |
 | I-12 | ...                                                                                 |
 | I-13 | ...                                                                                 |
