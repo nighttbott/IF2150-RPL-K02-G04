@@ -2804,13 +2804,13 @@ Tabel 6.Y. Rancangan Antarmuka Keseluruhan
 | I-08 | ...                                                                                 |
 | I-09 | ...                                                                                 |
 | I-10 | ...                                                                                 |
-| I-11 | ...                                                                                 |
+|I-11 Progres Pelajar | <img src="./assets/diagram/I-11 Progres Pelajar.png" alt="I-11 Progres Pelajar" width="400"> |
 | I-12 | ...                                                                                 |
 | I-13 | ...                                                                                 |
 | I-14 | ...                                                                                 |
 | I-15 | ...                                                                                 |
 | I-16 | ...                                                                                 |
-| I-17 | ...                                                                                 |
+|I-17 Pantau Progres Anggota | <img src="./assets/diagram/I-17 pantau Progres Anggota.png" alt="I-17 Pantau Progres Anggota" width="400">|
 | I-18 | <img src="./assets/diagram/I-18 Kelola Materi.png" alt="Contoh Desain" width="400"> |
 | I-19 | <img src="./assets/diagram/I-19 Unggah Materi.png" alt="Contoh Desain" width="400"> |
 | I-20 | ...                                                                                 |
