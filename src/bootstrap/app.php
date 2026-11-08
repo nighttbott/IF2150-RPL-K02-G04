@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function () {
-            foreach (['auth', 'materi', 'latihan', 'kelas-pengajar', 'kelas-pelajar', 'progres'] as $modul) {
+            foreach (['auth', 'materi', 'latihan', 'kelas-pengajar', 'kelas-pelajar', 'progres', 'feedback'] as $modul) {
                 Route::middleware('web')->group(base_path("routes/{$modul}.php"));
             }
         },
