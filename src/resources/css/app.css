@@ -1,9 +1,89 @@
-@import 'tailwindcss';
+/* ==============================================================
+   Gaya dasar Ngaksara: Bootstrap 5.3 + token warna dari desain Figma.
+   Komponen visual lengkap (UI kit) dikerjakan Naufal; bagian ini
+   hanya fondasi agar semua halaman memakai warna dan huruf yang sama.
+   ============================================================== */
+@import 'bootstrap/dist/css/bootstrap.min.css';
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
+/* Font disimpan lokal di public/fonts agar tidak bergantung layanan luar */
+@font-face { font-family: 'Nunito'; src: url('/fonts/Nunito-Variable.ttf') format('truetype'); font-weight: 200 1000; font-display: swap; }
+@font-face { font-family: 'Baloo 2'; src: url('/fonts/Baloo2-Variable.ttf') format('truetype'); font-weight: 400 800; font-display: swap; }
+@font-face { font-family: 'Noto Sans Javanese'; src: url('/fonts/NotoSansJavanese-Regular.ttf') format('truetype'); font-display: swap; }
+@font-face { font-family: 'Noto Sans Sundanese'; src: url('/fonts/NotoSansSundanese-Regular.ttf') format('truetype'); font-display: swap; }
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+/* Token warna (sama dengan desain Figma) */
+:root {
+    --nk-latar: #FFF8EC;
+    --nk-permukaan: #FFFFFF;
+    --nk-garis: #EADFCB;
+    --nk-tinta: #2A1E16;
+    --nk-redup: #7C6A55;
+    --nk-indigo: #2D3F8A;
+    --nk-indigo-tua: #1E2B63;
+    --nk-indigo-muda: #E6E9F7;
+    --nk-emas: #E8A92A;
+    --nk-emas-tua: #B9801A;
+    --nk-emas-muda: #FFF0CC;
+    --nk-sogan: #B4642A;
+    --nk-hijau: #2F9E62;
+    --nk-hijau-tua: #1F7246;
+    --nk-hijau-muda: #E3F4E8;
+    --nk-merah: #D2543F;
+    --nk-merah-tua: #A53B2A;
+    --nk-merah-muda: #FBE3DD;
+    --nk-teal: #2A8C95;
+    --nk-teal-tua: #1C6168;
+    --nk-teal-muda: #DDF1F2;
+    --bs-body-bg: var(--nk-latar);
+    --bs-body-color: var(--nk-tinta);
+    --bs-body-font-family: 'Nunito', system-ui, sans-serif;
+    --bs-primary: var(--nk-indigo);
+    --bs-primary-rgb: 45, 63, 138;
 }
+
+body { font-weight: 500; }
+h1, h2, h3, h4, .judul { font-family: 'Baloo 2', 'Nunito', sans-serif; font-weight: 800; }
+.aksara { font-family: 'Noto Sans Javanese', 'Noto Sans Sundanese', sans-serif; }
+.teks-redup { color: var(--nk-redup); }
+.label-kecil { font-size: .75rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--nk-redup); }
+
+/* Kerangka halaman: sidebar kiri + konten */
+.nk-kerangka { display: flex; min-height: 100vh; }
+.nk-sidebar { width: 264px; flex: none; background: var(--nk-permukaan); border-right: 2px solid var(--nk-garis); padding: 28px 16px; display: flex; flex-direction: column; gap: 22px; }
+.nk-sidebar .merek { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.6rem; color: var(--nk-indigo); line-height: 1; }
+.nk-menu a { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 14px; color: var(--nk-redup); font-weight: 700; text-decoration: none; border: 2px solid transparent; }
+.nk-menu a.aktif { background: var(--nk-indigo-muda); border-color: var(--nk-indigo); color: var(--nk-indigo-tua); font-weight: 800; }
+.nk-konten { flex: 1; padding: 36px 44px; min-width: 0; }
+
+/* Kartu dan tombol bergaya "3D" seperti desain Figma */
+.kartu { background: var(--nk-permukaan); border: 2px solid var(--nk-garis); border-radius: 18px; box-shadow: 0 4px 0 var(--nk-garis); padding: 20px; }
+.kartu-emas { background: var(--nk-emas-muda); border-color: var(--nk-emas); box-shadow: 0 4px 0 var(--nk-emas); }
+.tombol { display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 14px; padding: 10px 20px; font-family: 'Baloo 2', sans-serif; font-weight: 700; text-decoration: none; }
+.tombol-utama { background: var(--nk-indigo); color: #fff; box-shadow: 0 4px 0 var(--nk-indigo-tua); }
+.tombol-emas { background: var(--nk-emas); color: #fff; box-shadow: 0 3px 0 var(--nk-emas-tua); }
+.tombol-teal { background: var(--nk-teal); color: #fff; box-shadow: 0 3px 0 var(--nk-teal-tua); }
+.tombol-sekunder { background: #fff; color: var(--nk-indigo); border: 2px solid var(--nk-garis); box-shadow: 0 3px 0 var(--nk-garis); }
+.tombol-kecil { padding: 6px 14px; font-size: .9rem; }
+
+/* Label status kecil */
+.label { display: inline-block; border-radius: 999px; padding: 3px 10px; font-size: .8rem; font-weight: 800; }
+.label-berhasil { background: var(--nk-hijau-muda); color: var(--nk-hijau-tua); }
+.label-gagal { background: var(--nk-merah-muda); color: var(--nk-merah-tua); }
+.label-netral { background: #F2ECE2; color: var(--nk-redup); }
+
+/* Bilah progres */
+.bilah { height: 14px; background: #F2ECE2; border-radius: 7px; overflow: hidden; }
+.bilah > span { display: block; height: 100%; background: var(--nk-indigo); border-radius: 7px; }
+.bilah > span.emas { background: var(--nk-emas); }
+
+/* Pesan */
+.pesan { border-radius: 14px; padding: 12px 16px; border: 2px solid; font-weight: 700; }
+.pesan-info { background: var(--nk-teal-muda); border-color: var(--nk-teal); color: var(--nk-teal-tua); }
+.pesan-gagal { background: var(--nk-merah-muda); border-color: var(--nk-merah); color: var(--nk-merah-tua); }
+.pesan-berhasil { background: var(--nk-hijau-muda); border-color: var(--nk-hijau); color: var(--nk-hijau-tua); }
+
+/* Tabel bergaya Ngaksara */
+.tabel-nk { width: 100%; border: 2px solid var(--nk-garis); border-radius: 16px; overflow: hidden; border-collapse: separate; border-spacing: 0; background: #fff; }
+.tabel-nk th { background: var(--nk-latar); font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: var(--nk-redup); padding: 12px 16px; }
+.tabel-nk td { padding: 12px 16px; border-top: 2px solid #F2ECE2; font-weight: 600; }
+.avatar { width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-family: 'Baloo 2', sans-serif; background: var(--nk-sogan); }
