@@ -7,7 +7,7 @@ use App\Enums\StatusPublikasi;
 use App\Http\Controllers\MateriController;
 use App\Models\KontenMateri;
 use App\Models\MateriAksara;
-use App\Models\User;
+use App\Models\AkunPengguna;
 use App\Support\Materi\DataKonten;
 use App\Support\Materi\FilterMateri;
 use App\Support\Materi\PengolahKonten;
@@ -20,7 +20,7 @@ use Tests\TestCase;
 
 /**
  * Pengujian modul materi (UC-02 Mempelajari Materi, UC-06 Memperbarui Materi).
- * Peran diberikan lewat atribut `peran` pada user (sementara, sampai AkunPengguna milik Ryuza tersedia).
+ * Pengguna uji dibuat sebagai AkunPengguna dengan kolom `peran` (pelajar atau tim_materi).
  */
 class MateriTest extends TestCase
 {
@@ -32,9 +32,9 @@ class MateriTest extends TestCase
         Storage::fake('local');
     }
 
-    private function pengguna(string $peran): User
+    private function pengguna(string $peran): AkunPengguna
     {
-        return User::factory()->create()->forceFill(['peran' => $peran]);
+        return AkunPengguna::factory()->create(['peran' => $peran]);
     }
 
     private function buatMateri(string $nama, JenisAksara $jenis, int $tingkat, StatusPublikasi $status): MateriAksara
