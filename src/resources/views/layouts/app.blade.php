@@ -29,6 +29,12 @@
             @else
                 <a href="{{ route('materi.index') }}" @class(['aktif' => request()->routeIs('materi.index', 'materi.show')])>Materi</a>
             @endif
+            @if ((auth()->user()->peran ?? null) === 'pelajar' && Route::has('progres.index'))
+                <a href="{{ route('progres.index') }}" @class(['aktif' => request()->routeIs('progres.*')])>Progres</a>
+            @endif
+            @if ((auth()->user()->peran ?? null) === 'pengajar' && Route::has('pemantauan.kelas'))
+                <a href="{{ route('pemantauan.kelas') }}" @class(['aktif' => request()->routeIs('pemantauan.*')])>Pantau Progres</a>
+            @endif
         </nav>
     </aside>
     <main class="nk-konten">

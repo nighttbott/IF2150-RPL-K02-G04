@@ -5,10 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
- * SEMENTARA (Diandra): tabel milik modul materi agar modul ini bisa dijalankan sendiri.
- * Bila migrasi Natan sudah memuat materi_aksara, konten_materi, dan konten_materi_arsip,
- * hapus berkas ini dan samakan nama kolom dengan yang dipakai app/Models/MateriAksara.php
- * dan app/Models/KontenMateri.php.
+ * Migrasi resmi tabel modul materi (Diandra): materi_aksara, konten_materi, konten_materi_arsip.
+ * Migrasi tabel lain (akun, kelas, tugas, riwayat, motivasi, feedback) ada di berkas
+ * 2026_11_10_* dan dijalankan setelah berkas ini karena merujuk ke materi_aksara.
  */
 return new class extends Migration
 {
