@@ -9,9 +9,9 @@ Pemakaian:
 Format keluaran (koordinat canvas: x ke kanan, y ke bawah, kotak 100 x 100,
 rasio gambar dipertahankan dan dipusatkan):
 {
-  "versi": 1, "kotak": 100, "jarakTitik": 2.0,
+  "versi": 2, "kotak": 100, "jarakTitik": 2.0,
   "aksara": [
-    {"kode": "ha", "jenis": "JAWA", "karakter": "ꦲ", "unicode": "U+A9B2",
+    {"kode": "ha", "jenis": "JAWA", "kategori": "aksara", "karakter": "ꦲ", "unicode": "U+A9B2",
      "goresan": [ [ {"x": 12.3, "y": 40.1}, ... ], ... ]}   # satu goresan = satu kontur
   ]
 }
@@ -36,6 +36,32 @@ SUNDA = {"ka": 0x1B8A, "ga": 0x1B8C, "nga": 0x1B8D, "ca": 0x1B8E, "ja": 0x1B8F,
          "nya": 0x1B91, "ta": 0x1B92, "da": 0x1B93, "na": 0x1B94, "pa": 0x1B95,
          "ba": 0x1B98, "ma": 0x1B99, "ya": 0x1B9A, "ra": 0x1B9B, "la": 0x1B9C,
          "wa": 0x1B9D, "sa": 0x1B9E, "ha": 0x1BA0}
+
+# Sandhangan Jawa: kode -> (nama glyph di font, kode Unicode karakter). Glyph diambil langsung
+# lewat nama (bukan cmap) agar tanda nirjarak dan bentuk pasangan bisa digambar sendirian.
+# Nama glyph "la.pas" / "wa.pas" adalah bentuk pasangan hasil shaping, "taling" + "tarung" digabung.
+SANDHANGAN_JAWA = {
+    "wulu": (["i.ns"], "\uA9B6"), "suku": (["u.ns"], "\uA9B8"),
+    "taling": (["taling"], "\uA9BA"), "taling_tarung": (["taling", "tarung"], "\uA9BA\uA9B4"),
+    "pepet": (["ae.ns"], "\uA9BC"), "layar": (["layar.ns"], "\uA982"),
+    "wignyan": (["wignyan"], "\uA983"), "cecak": (["cecak.ns"], "\uA981"),
+    "pangkon": (["pangkon"], "\uA9C0"), "pada_lingsa": (["uniA9C8"], "\uA9C8"),
+    "pada_lungsi": (["uniA9C9"], "\uA9C9"), "pada_pangkat": (["uniA9C7"], "\uA9C7"),
+    "cakra": (["cakra"], "\uA9BF"), "cakra_keret": (["keret.ns"], "\uA9BD"),
+    "pasangan_la": (["la.pas"], "\uA9C0\uA9AD"), "pasangan_wa": (["wa.pas"], "\uA9C0\uA9AE"),
+    "pengkal": (["pengkal"], "\uA9BE"), "pa_cerek": (["pacerek"], "\uA989"),
+    "nga_lelet": (["ngalelet"], "\uA98A"), "pada_adeg_adeg": (["uniA9CB"], "\uA9CB"),
+}
+
+SANDHANGAN_SUNDA = {
+    "panyecek": (["uni1B80"], "\u1B80"), "panglayar": (["uni1B81"], "\u1B81"),
+    "pangwisad": (["uni1B82"], "\u1B82"), "pamingkal": (["uni1BA1"], "\u1BA1"),
+    "panyakra": (["uni1BA2"], "\u1BA2"), "panyiku": (["uni1BA3"], "\u1BA3"),
+    "panghulu": (["uni1BA4"], "\u1BA4"), "panyuku": (["uni1BA5"], "\u1BA5"),
+    "panaelaeng": (["uni1BA6"], "\u1BA6"), "panolong": (["uni1BA7"], "\u1BA7"),
+    "pamepet": (["uni1BA8"], "\u1BA8"), "paneuleung": (["uni1BA9"], "\u1BA9"),
+    "pamaaeh": (["uni1BAA"], "\u1BAA"),
+}
 
 
 class PenKontur(BasePen):
@@ -134,8 +160,33 @@ def bangun(font, peta, jenis):
         for k in kontur:
             r = resample(k, JARAK)
             goresan.append([{"x": round(x, 2), "y": round(y, 2)} for x, y in r])
-        daftar.append({"kode": kode, "jenis": jenis, "karakter": chr(cp),
+        daftar.append({"kode": kode, "jenis": jenis, "kategori": "aksara", "karakter": chr(cp),
                        "unicode": "U+%04X" % cp, "goresan": goresan})
+    return daftar
+
+
+def ambil_glyph(font, daftar_nama):
+    """Gambar satu atau beberapa glyph berurutan (jarak antar glyph = lebar maju glyph sebelumnya)."""
+    from fontTools.pens.transformPen import TransformPen
+    gs = font.getGlyphSet()
+    pen = PenKontur(gs)
+    x = 0
+    for nama in daftar_nama:
+        gs[nama].draw(TransformPen(pen, (1, 0, 0, 1, x, 0)))
+        x += gs[nama].width
+    return pen.kontur
+
+
+def bangun_sandhangan(font, peta, jenis):
+    daftar = []
+    for kode, (glyph, teks) in peta.items():
+        kontur = normalisasi(ambil_glyph(font, glyph))
+        goresan = []
+        for k in kontur:
+            r = resample(k, JARAK)
+            goresan.append([{"x": round(x, 2), "y": round(y, 2)} for x, y in r])
+        daftar.append({"kode": kode, "jenis": jenis, "kategori": "sandhangan", "karakter": teks,
+                       "unicode": " ".join("U+%04X" % ord(c) for c in teks), "goresan": goresan})
     return daftar
 
 
@@ -143,8 +194,10 @@ def main():
     if len(sys.argv) != 4:
         sys.exit(__doc__)
     jawa, sunda, keluar = sys.argv[1:4]
-    data = {"versi": 1, "kotak": 100, "jarakTitik": JARAK, "aksara":
-            bangun(TTFont(jawa), JAWA, "JAWA") + bangun(TTFont(sunda), SUNDA, "SUNDA")}
+    font_jawa, font_sunda = TTFont(jawa), TTFont(sunda)
+    data = {"versi": 2, "kotak": 100, "jarakTitik": JARAK, "aksara":
+            bangun(font_jawa, JAWA, "JAWA") + bangun_sandhangan(font_jawa, SANDHANGAN_JAWA, "JAWA")
+            + bangun(font_sunda, SUNDA, "SUNDA") + bangun_sandhangan(font_sunda, SANDHANGAN_SUNDA, "SUNDA")}
     with open(keluar, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
     print("selesai:", len(data["aksara"]), "aksara ->", keluar)
