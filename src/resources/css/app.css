@@ -55,6 +55,29 @@ h1, h2, h3, h4, .judul { font-family: 'Baloo 2', 'Nunito', sans-serif; font-weig
 .nk-menu a.aktif { background: var(--nk-indigo-muda); border-color: var(--nk-indigo); color: var(--nk-indigo-tua); font-weight: 800; }
 .nk-konten { flex: 1; padding: 36px 44px; min-width: 0; }
 
+.nk-sidebar { position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.nk-merek { display: flex; align-items: center; gap: 10px; padding: 4px 6px; text-decoration: none; }
+.nk-merek > span { display: flex; flex-direction: column; }
+.nk-merek-aksara { color: var(--nk-sogan); font-size: 13px; line-height: 1.6; }
+
+.nk-sidebar-bawah { margin-top: auto; display: flex; flex-direction: column; gap: 22px; }
+
+/* Kartu profil (Figma: "Profil dan keluar") */
+.nk-profil { display: flex; align-items: center; gap: 10px; padding: 12px;
+             background: var(--nk-latar); border: 2px solid var(--nk-garis); border-radius: 14px; }
+.nk-profil .avatar { width: 40px; height: 40px; font-size: 16px; flex: none; }
+.nk-profil-teks { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.nk-profil-nama { font-size: 15px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nk-profil-peran { font-size: 13px; font-weight: 600; color: var(--nk-redup); }
+.nk-tombol-keluar { display: inline-flex; border: 0; background: none; color: var(--nk-tinta); padding: 4px; border-radius: 8px; }
+.nk-tombol-keluar:hover { color: var(--nk-merah-tua); }
+.nk-menu a:focus-visible, .nk-tombol-keluar:focus-visible { outline: 3px solid var(--nk-emas); outline-offset: 2px; }
+
+/* Kolom samping opsional (@section('samping')). Figma: kolom utama 716px, jarak 32px, kolom samping 340px */
+.nk-dua-kolom { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 32px; align-items: start; }
+.nk-kolom-samping { display: flex; flex-direction: column; gap: 16px; }
+@media (max-width: 1199.98px) { .nk-dua-kolom { grid-template-columns: 1fr; } }
+
 /* Kartu dan tombol bergaya "3D" seperti desain Figma */
 .kartu { background: var(--nk-permukaan); border: 2px solid var(--nk-garis); border-radius: 18px; box-shadow: 0 4px 0 var(--nk-garis); padding: 20px; }
 .kartu-emas { background: var(--nk-emas-muda); border-color: var(--nk-emas); box-shadow: 0 4px 0 var(--nk-emas); }
