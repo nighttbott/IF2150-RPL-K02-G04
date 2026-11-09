@@ -1,40 +1,27 @@
 {{--
-  SEMENTARA (Diandra): kerangka layout agar halaman materi bisa dibuka sendiri. Memakai kelas dari
-  resources/css/app.css (nk-kerangka, nk-sidebar, nk-menu, nk-konten). Ganti/hapus bila layout bersama
-  Ryuza sudah ada. Konvensi yang dipakai halaman materi: @section('judul'), @section('konten'),
-  @stack('gaya'), @stack('skrip').
+  Layout utama setelah login (I-03 s.d. I-06, I-10 s.d. I-20): sidebar + konten (+ kolom samping opsional).
+
+    @extends('layouts.app')
+    @section('judul', '... · Ngaksara')   judul tab browser
+    @section('konten') ... @endsection     isi halaman (judul h1 dan pesan sukses/galat diatur halaman sendiri)
+    @section('samping') ... @endsection    OPSIONAL: kolom kanan (motivasi, kartu Pak Aksa)
+    @push('gaya') / @push('skrip')         CSS/JS khusus halaman
 --}}
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('judul', config('app.name', 'Ngaksara'))</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @stack('gaya')
-</head>
-<body>
+@extends('layouts.base')
+
+@section('body')
 <div class="nk-kerangka">
-    <aside class="nk-sidebar d-none d-md-flex">
-        <a href="{{ route('beranda') }}" class="d-flex align-items-center gap-2 text-decoration-none">
-            <img src="{{ asset('img/logo-ngaksara.png') }}" alt="" width="40" height="40">
-            <span class="merek">Ngaksara</span>
-        </a>
-        <nav class="nk-menu d-flex flex-column gap-1">
-            <a href="{{ route('beranda') }}" @class(['aktif' => request()->routeIs('beranda')])>Beranda</a>
-            @if ((auth()->user()->peran ?? null) === 'tim_materi')
-                <a href="{{ route('materi.kelola') }}" @class(['aktif' => request()->routeIs('materi.kelola', 'materi.sunting')])>Kelola Materi</a>
-                <a href="{{ route('materi.buat') }}" @class(['aktif' => request()->routeIs('materi.buat')])>Unggah Materi</a>
-            @else
-                <a href="{{ route('materi.index') }}" @class(['aktif' => request()->routeIs('materi.index', 'materi.show')])>Materi</a>
-            @endif
-        </nav>
-    </aside>
+    @include('layouts.sidebar')
+
     <main class="nk-konten">
-        @yield('konten')
+        @hasSection('samping')
+            <div class="nk-dua-kolom">
+                <div class="nk-kolom-utama">@yield('konten')</div>
+                <aside class="nk-kolom-samping">@yield('samping')</aside>
+            </div>
+        @else
+            @yield('konten')
+        @endif
     </main>
 </div>
-@stack('skrip')
-</body>
-</html>
+@endsection
