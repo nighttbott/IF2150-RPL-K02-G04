@@ -92,6 +92,25 @@
 .lt-bilah-bawah[data-keadaan="berhasil"] { background: var(--nk-hijau-muda); border-top-color: var(--nk-hijau); color: var(--nk-hijau-tua); }
 .lt-bilah-bawah[data-keadaan="berhasil"] .lt-lingkaran { background: var(--nk-hijau); }
 
+/* ---------- I-10 Hasil Latihan ---------- */
+.lt-isi-hasil { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 40px 0; text-align: center; }
+.lt-isi-hasil h1 { margin: 0; font-size: 44px; line-height: 52px; color: var(--nk-emas-tua); }
+.lt-isi-hasil > p { margin: 0; font-size: 17px; line-height: 23px; font-weight: 600; }
+.lt-kartu-statistik { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+.lt-stat { width: 220px; background: var(--nk-permukaan); border: 3px solid var(--lt-warna); border-radius: 18px; box-shadow: 0 4px 0 var(--lt-warna); overflow: hidden; }
+.lt-stat-emas { --lt-warna: var(--nk-emas); }
+.lt-stat-indigo { --lt-warna: var(--nk-indigo); }
+.lt-stat-sogan { --lt-warna: var(--nk-sogan); }
+.lt-pita { display: block; padding: 6px 0; background: var(--lt-warna); color: #fff; font-size: 13px; line-height: 18px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase; }
+.lt-stat > div { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 16px 0; font: 800 30px/36px 'Baloo 2', sans-serif; color: var(--lt-warna); }
+.lt-keterangan { margin: -8px 0 0; font-size: 14px; line-height: 19px; color: var(--nk-redup); }
+.lt-badge { display: flex; align-items: center; gap: 14px; padding: 14px 22px; text-align: left; background: var(--nk-indigo-muda); border: 2px solid var(--nk-indigo); border-radius: 18px; box-shadow: 0 4px 0 var(--nk-indigo); }
+.lt-badge > div { display: flex; flex-direction: column; gap: 2px; }
+.lt-badge .lt-label { color: var(--nk-indigo-tua); }
+.lt-badge strong { font: 700 18px/24px 'Baloo 2', sans-serif; }
+.lt-badge span:last-child { font-size: 14px; line-height: 19px; color: var(--nk-redup); }
+.lt-tombol-lanjut { width: 200px; }
+
 /* Lebar Figma 1440 px; padding dipersempit untuk 1280 px dan tablet landscape. */
 @media (max-width: 1280px) {
     .lt-bilah-atas { padding: 24px 48px; }
