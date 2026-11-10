@@ -9,8 +9,8 @@ use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
 /**
- * C26 tahap pertama: pemetaan data, ketepatan, dan pembacaan status.
- * Penyimpanan pengumpulan menunggu integrasi verifikasi bukti RiwayatLatihan.
+ * C26: pemetaan data, ketepatan, dan pembacaan status.
+ * Penyimpanan atomik beserta verifikasi bukti ditangani layanan PengumpulanTugas.
  */
 class PenyelesaianTugas extends Model
 {

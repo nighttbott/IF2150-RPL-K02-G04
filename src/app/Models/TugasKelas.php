@@ -71,15 +71,20 @@ class TugasKelas extends Model
                         ->setTimezone(config('app.timezone')),
                     'status' => 'draf',
                 ]);
-                $tugas->saveOrFail();
+                if (! $tugas->saveOrFail()) {
+                    throw new \RuntimeException('Penyimpanan draf dibatalkan.');
+                }
                 $tugas->komponen()->delete();
                 foreach ($data['komponen_tugas'] as $komponen) {
-                    $tugas->komponen()->create([
+                    $tersimpan = $tugas->komponen()->create([
                         'jenis' => $komponen['jenis'],
                         'id_materi' => (int) $komponen['id_materi'],
                         'mode' => $komponen['mode'] ?? null,
                         'wajib' => (bool) $komponen['wajib'],
                     ]);
+                    if (! $tersimpan->exists) {
+                        throw new \RuntimeException('Penyimpanan komponen dibatalkan.');
+                    }
                 }
 
                 return HasilOperasi::sukses('drafDisimpan', 'Draf tugas berhasil disimpan.', ['id_tugas' => $tugas->getKey()]);
@@ -131,7 +136,9 @@ class TugasKelas extends Model
                     ]);
                 }
                 $tugas->status = 'terbit';
-                $tugas->saveOrFail();
+                if (! $tugas->saveOrFail()) {
+                    throw new \RuntimeException('Penerbitan tugas dibatalkan.');
+                }
 
                 return HasilOperasi::sukses('tugasDiterbitkan', 'Tugas berhasil diterbitkan.', ['id_tugas' => $tugas->getKey()]);
             }, 3);
