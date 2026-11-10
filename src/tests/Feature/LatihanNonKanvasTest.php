@@ -38,8 +38,8 @@ class LatihanNonKanvasTest extends TestCase
     private function soalBunyi(): array
     {
         return [
-            ['id' => 's0', 'target' => 'ꦲ', 'opsi' => [['id' => 'a', 'teks' => 'na'], ['id' => 'b', 'teks' => 'ha']], 'kunci' => 'b'],
-            ['id' => 's1', 'target' => 'ꦤ', 'opsi' => [['id' => 'a', 'teks' => 'na'], ['id' => 'b', 'teks' => 'ha']], 'kunci' => 'a'],
+            ['id' => 's0', 'target' => 'ꦲ', 'bunyi' => 'ha', 'opsi' => [['id' => 'a', 'teks' => 'ꦤ'], ['id' => 'b', 'teks' => 'ꦲ']], 'kunci' => 'b'],
+            ['id' => 's1', 'target' => 'ꦤ', 'bunyi' => 'na', 'opsi' => [['id' => 'a', 'teks' => 'ꦤ'], ['id' => 'b', 'teks' => 'ꦲ']], 'kunci' => 'a'],
         ];
     }
 
@@ -55,7 +55,51 @@ class LatihanNonKanvasTest extends TestCase
                 $this->assertArrayNotHasKey('kunci', $s);
             }
         }
-        $this->assertArrayNotHasKey('target', PenyusunSoal::publik($penyusun->susun($materi, \App\Enums\ModeLatihan::Merangkai, 5))[0]);
+        foreach ([\App\Enums\ModeLatihan::Merangkai, \App\Enums\ModeLatihan::Bunyi] as $mode) {
+            $this->assertArrayNotHasKey('target', PenyusunSoal::publik($penyusun->susun($materi, $mode, 5))[0], $mode->value);
+        }
+    }
+
+    /** I-08 dan DPPL (Algo-021): soal berupa audio/bacaan, pilihan berupa aksara, kunci = aksara yang benar. */
+    public function test_soal_bunyi_menawarkan_aksara_sebagai_pilihan(): void
+    {
+        $soal = (new PenyusunSoal)->susun($this->materiBerKonten(), \App\Enums\ModeLatihan::Bunyi, 5);
+
+        $this->assertNotEmpty($soal);
+        foreach ($soal as $s) {
+            $this->assertNotSame('', $s['bunyi']);
+            $this->assertGreaterThanOrEqual(2, count($s['opsi']));
+            $this->assertLessThanOrEqual(4, count($s['opsi']));
+            foreach ($s['opsi'] as $o) {
+                $this->assertMatchesRegularExpression('/^\X$/u', $o['teks'], 'pilihan harus satu aksara, bukan teks latin');
+            }
+            $kunci = collect($s['opsi'])->firstWhere('id', $s['kunci']);
+            $this->assertSame($s['target'], $kunci['teks']);
+        }
+    }
+
+    public function test_halaman_bunyi_memuat_tombol_speaker_dan_tidak_membocorkan_jawaban(): void
+    {
+        $materi = $this->materiBerKonten();
+        $pelajar = $this->buatPelajar();
+
+        // Tanpa audio: tombol dinonaktifkan dan pelajar diberi tahu.
+        $this->actingAs($pelajar)->get("/latihan/soal/bunyi/{$materi->id_materi}")
+            ->assertOk()->assertSee('Putar suara')->assertSee('Audio pengucapan belum tersedia');
+
+        // Dengan audio: tombol membawa URL audio materi.
+        \Illuminate\Support\Facades\Storage::fake(config('ngaksara.materi.disk'));
+        \Illuminate\Support\Facades\Storage::disk(config('ngaksara.materi.disk'))->put('materi/a.mp3', 'x');
+        $materi->konten()->update(['path_audio' => 'materi/a.mp3']);
+        $respons = $this->actingAs($pelajar)->get("/latihan/soal/bunyi/{$materi->id_materi}")->assertOk();
+        $respons->assertSee(route('materi.audio', $materi->id_materi), false)->assertDontSee('Audio pengucapan belum tersedia');
+
+        // Aksara jawaban benar hanya ada di sesi server; di HTML ia hanya muncul sebagai salah satu pilihan.
+        $sesi = collect(session('latihan_non_kanvas'))->first();
+        $respons->assertDontSee('name="kunci"', false)->assertDontSee('name="target"', false);
+        foreach ($sesi['soal'] as $s) {
+            $this->assertNotEmpty($s['kunci']);
+        }
     }
 
     public function test_soal_bunyi_punya_pilihan_unik_dan_kunci_ada_di_pilihan(): void

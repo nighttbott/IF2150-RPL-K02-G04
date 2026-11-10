@@ -19,11 +19,12 @@ use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 /**
- * Bagian C12 LatihanController untuk mode non-kanvas (Marvel): bunyi (I-08), merangkai (I-09),
- * dan transliterasi. Mode menulis (kanvas) ada di berkas milik Naufal; catat pemecahan C12 di B.1.
+ * Bagian dari C16 LatihanController untuk mode non-kanvas (Marvel): bunyi (I-08), merangkai (I-09),
+ * dan transliterasi. Mode menulis (kanvas) ada di berkas milik Naufal; catat pemecahan C16 di B.1.
  *
- * Alur: mulai() menyusun soal dan menyimpan kuncinya di sesi server; kirim() menilai jawaban di
- * server (Algo-020), menyimpan hasil lewat SelesaikanLatihan (Algo-022), lalu mengalihkan ke hasil().
+ * Alur: mulai() = siapkanSoal (Algo-021): menyusun soal dan menyimpan kuncinya di sesi server.
+ * kirim() = nilaiJawaban (Algo-022; cocokkanBunyi Algo-024, validasiRangkaian Algo-025) dan
+ * simpanHasil (Algo-026) lewat SelesaikanLatihan, lalu mengalihkan ke hasil() (I-10).
  * Sesi soal hanya bisa dipakai sekali sehingga kirim ulang tidak menggandakan poin.
  */
 class LatihanNonKanvasController extends Controller
@@ -72,10 +73,14 @@ class LatihanNonKanvasController extends Controller
             'materi' => $materi,
             'token' => $token,
             'soal' => PenyusunSoal::publik($soal),
+            // I-08: audio pengucapan materi (Algo-021 cabang BUNYI); null bila belum diunggah Tim Materi.
+            'audio' => $modeLatihan === ModeLatihan::Bunyi && $materi->konten?->ambilAudio()->berhasil
+                ? route('materi.audio', $idMateri)
+                : null,
         ]);
     }
 
-    /** Algo-020 nilaiJawaban + Algo-022 selesaikanLatihan. */
+    /** Algo-022 nilaiJawaban + Algo-026 simpanHasil. */
     public function kirim(Request $request, string $mode): RedirectResponse
     {
         $modeLatihan = $this->modeNonKanvas($mode);
@@ -136,6 +141,7 @@ class LatihanNonKanvasController extends Controller
             'id_materi' => $sesi['id_materi'],
             'rincian' => array_map(fn ($r) => [
                 'target' => $r['target'],
+                'bunyi' => $r['bunyi'] ?? null,
                 'jawaban' => $r['jawaban'],
                 'kunci' => $r['kunci'],
                 'benar' => $r['penilaian']->benar,
@@ -164,7 +170,7 @@ class LatihanNonKanvasController extends Controller
     }
 
     /**
-     * @return array{target: string, jawaban: string, kunci: string, penilaian: \App\Services\Latihan\HasilPenilaian}
+     * @return array{target: string, bunyi?: ?string, jawaban: string, kunci: string, penilaian: \App\Services\Latihan\HasilPenilaian}
      */
     private function nilai(ModeLatihan $mode, array $soal, Request $request): array
     {
@@ -175,7 +181,7 @@ class LatihanNonKanvasController extends Controller
             $teks = collect($soal['opsi'])->firstWhere('id', $pilihan)['teks'] ?? '';
             $teksKunci = collect($soal['opsi'])->firstWhere('id', $soal['kunci'])['teks'] ?? '';
 
-            return ['target' => $soal['target'], 'jawaban' => $teks, 'kunci' => $teksKunci, 'penilaian' => PenilaiJawaban::bunyi($pilihan, $soal['kunci'])];
+            return ['target' => $soal['target'], 'bunyi' => $soal['bunyi'] ?? null, 'jawaban' => $teks, 'kunci' => $teksKunci, 'penilaian' => PenilaiJawaban::bunyi($pilihan, $soal['kunci'])];
         }
 
         if ($mode === ModeLatihan::Merangkai) {

@@ -7,17 +7,16 @@ use App\Models\MateriAksara;
 
 /**
  * Menyusun soal latihan non-kanvas dari konten materi (bahan: MateriAksara::ambilTargetLatihan).
- * Setiap soal berisi kunci; hanya bagian publik (lihat publik()) yang boleh dikirim ke browser.
+ * Bagian dari C16 LatihanController.siapkanSoal (Algo-021). Setiap soal berisi kunci; hanya bagian
+ * publik (lihat publik()) yang boleh dikirim ke browser.
  *
  * Bentuk soal:
- *  - bunyi         : id, target (aksara), opsi [{id, teks}], kunci (id opsi)
+ *  - bunyi         : id, target (aksara jawaban benar), bunyi (bacaan latin, penanda soal), opsi [{id, teks = aksara}], kunci (id opsi)
  *  - merangkai     : id, target (kata), bunyi, ubin [{id, teks}], kunci (list teks ubin berurutan)
  *  - transliterasi : id, target (aksara/kata), kunci (teks latin)
  */
 final class PenyusunSoal
 {
-    private const PENGECOH = ['ha', 'na', 'ca', 'ra', 'ka', 'da', 'ta', 'sa', 'wa', 'la', 'pa', 'dha', 'ja', 'ya', 'nya', 'ma', 'ga', 'ba', 'tha', 'nga'];
-
     /**
      * @return list<array<string, mixed>>  kosong bila materi belum punya bahan untuk mode ini
      */
@@ -46,46 +45,47 @@ final class PenyusunSoal
      */
     public static function publik(array $soal): array
     {
-        // Pada mode merangkai, target adalah kata yang benar sehingga ikut disembunyikan.
+        // Pada mode bunyi dan merangkai, target adalah jawaban yang benar sehingga ikut disembunyikan.
         return array_map(function ($s) {
-            $sembunyi = ['kunci' => true] + (isset($s['ubin']) ? ['target' => true] : []);
+            $sembunyi = ['kunci' => true] + (isset($s['ubin']) || isset($s['opsi']) ? ['target' => true] : []);
 
             return array_diff_key($s, $sembunyi);
         }, $soal);
     }
 
+    /**
+     * I-08: Pelajar mendengar audio pengucapan lalu memilih aksara yang sesuai (Algo-021, cabang BUNYI).
+     * Pilihan = aksara yang benar + sampai 3 aksara lain dari butir materi yang sama.
+     */
     private function soalBunyi(MateriAksara $materi, int $jumlah): array
     {
         $butir = array_values(array_filter(
             $materi->ambilTargetLatihan('bunyi')->butir,
-            fn ($b) => ($b['bunyi'] ?? null) !== null && $b['bunyi'] !== '',
+            fn ($b) => ($b['karakter'] ?? '') !== '' && ($b['bunyi'] ?? null) !== null && $b['bunyi'] !== '',
         ));
+        $semuaAksara = array_values(array_unique(array_column($butir, 'karakter')));
+        if (count($semuaAksara) < 2) {
+            return []; // satu aksara saja tidak bisa dijadikan pilihan ganda
+        }
         shuffle($butir);
 
-        $semuaBunyi = array_values(array_unique(array_column($butir, 'bunyi')));
         $soal = [];
         foreach (array_slice($butir, 0, $jumlah) as $b) {
-            $pengecoh = array_values(array_diff($semuaBunyi, [$b['bunyi']]));
+            $pengecoh = array_values(array_diff($semuaAksara, [$b['karakter']]));
             shuffle($pengecoh);
-            $pengecoh = array_slice($pengecoh, 0, 3);
-            if (count($pengecoh) < 3) {
-                $cadangan = array_values(array_diff(self::PENGECOH, [$b['bunyi']], $pengecoh));
-                shuffle($cadangan);
-                $pengecoh = array_merge($pengecoh, array_slice($cadangan, 0, 3 - count($pengecoh)));
-            }
-
-            $teks = array_merge([$b['bunyi']], $pengecoh);
+            $teks = array_merge([$b['karakter']], array_slice($pengecoh, 0, 3));
             shuffle($teks);
+
             $opsi = [];
             $kunci = '';
             foreach ($teks as $n => $t) {
                 $id = chr(97 + $n); // a, b, c, d
                 $opsi[] = ['id' => $id, 'teks' => $t];
-                if ($t === $b['bunyi']) {
+                if ($t === $b['karakter']) {
                     $kunci = $id;
                 }
             }
-            $soal[] = ['target' => $b['karakter'], 'opsi' => $opsi, 'kunci' => $kunci];
+            $soal[] = ['target' => $b['karakter'], 'bunyi' => $b['bunyi'], 'opsi' => $opsi, 'kunci' => $kunci];
         }
 
         return $soal;

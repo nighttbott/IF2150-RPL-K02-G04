@@ -3,7 +3,9 @@
 namespace App\Services\Latihan;
 
 /**
- * Algo-020 nilaiJawaban untuk mode non-kanvas (Marvel): bunyi, merangkai, transliterasi.
+ * Penilaian mode non-kanvas (Marvel), bagian dari C16 LatihanController.nilaiJawaban (Algo-022):
+ * bunyi = cocokkanBunyi (Algo-024), merangkai = validasiRangkaian (Algo-025). Transliterasi tidak ada di
+ * DPPL (tambahan KF23, dicatat di B.1).
  * Fungsi murni tanpa basis data. Skor selalu dihitung di server; kunci tidak pernah dikirim ke browser.
  */
 final class PenilaiJawaban

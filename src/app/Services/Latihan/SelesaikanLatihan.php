@@ -10,11 +10,12 @@ use RuntimeException;
 use Throwable;
 
 /**
- * Algo-022 selesaikanLatihan untuk satu sesi soal: dalam satu DB::transaction simpan hasil tiap
- * soal, perbarui streak, tambah poin hanya untuk soal yang baru pertama kali berhasil, dan beri badge.
+ * Bagian dari C16 LatihanController.simpanHasil (Algo-026) untuk satu sesi soal: dalam satu DB::transaction
+ * simpan hasil tiap soal (RiwayatLatihan.simpanHasil), perbarui streak (Algo-028), tambah poin hanya untuk
+ * soal yang baru pertama kali berhasil (Algo-029), dan beri badge (Algo-030, syaratnya periksaBadge Algo-027).
  * Hasil perlu_diulang tidak mengubah streak dan poin.
  *
- * Dibuat Marvel agar mode non-kanvas bisa menyimpan hasil tanpa menunggu LatihanController (Naufal).
+ * Dibuat Marvel agar mode non-kanvas bisa menyimpan hasil tanpa menunggu simpanHasil milik Naufal.
  * Bila Naufal sudah punya operasi setara, controller cukup memanggil operasi itu.
  */
 final class SelesaikanLatihan

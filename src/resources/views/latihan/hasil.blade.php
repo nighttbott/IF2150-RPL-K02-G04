@@ -23,9 +23,15 @@
         <tbody>
         @foreach ($hasil['rincian'] as $r)
             <tr>
-                <td class="aksara fs-4">{{ $r['target'] }}</td>
-                <td>{{ $r['jawaban'] !== '' ? $r['jawaban'] : '(kosong)' }}</td>
-                <td>{{ $r['kunci'] }}</td>
+                @if ($hasil['mode'] === 'bunyi')
+                    <td>🔊 {{ $r['bunyi'] }}</td>
+                    <td class="aksara fs-4">{{ $r['jawaban'] !== '' ? $r['jawaban'] : '(kosong)' }}</td>
+                    <td class="aksara fs-4">{{ $r['kunci'] }}</td>
+                @else
+                    <td class="aksara fs-4">{{ $r['target'] }}</td>
+                    <td>{{ $r['jawaban'] !== '' ? $r['jawaban'] : '(kosong)' }}</td>
+                    <td>{{ $r['kunci'] }}</td>
+                @endif
                 <td>
                     <span class="label {{ $r['benar'] ? 'label-berhasil' : 'label-gagal' }}">{{ $r['benar'] ? 'Benar' : 'Salah' }}</span>
                     @if (! $r['benar'] && $r['posisi_salah'])
