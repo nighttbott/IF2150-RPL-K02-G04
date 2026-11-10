@@ -30,7 +30,7 @@ class DaftarRequest extends FormRequest
             'email'           => ['required', 'string', 'email', 'max:255'],
             'username'        => ['required', 'string', 'regex:/^[A-Za-z0-9_]{3,30}$/'],
             'password'        => ['required', 'string', 'min:8', 'regex:/\p{L}/u', 'regex:/\d/'],
-            'persetujuan_tnc' => ['accepted'],
+            'setuju_tnc' => ['accepted'],
         ];
     }
 
@@ -39,7 +39,7 @@ class DaftarRequest extends FormRequest
         $pesan = [
             'peran.required'           => 'Pilih jenis akun Pelajar atau Pengajar',
             'peran.in'                 => 'Pilih jenis akun Pelajar atau Pengajar',
-            'persetujuan_tnc.accepted' => 'Terms & Conditions belum disetujui',
+            'setuju_tnc.accepted' => 'Terms & Conditions belum disetujui',
         ];
 
         foreach (['required', 'string', 'email', 'max'] as $aturan) {
