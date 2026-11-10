@@ -2,142 +2,263 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ModeLatihan;
-use App\Enums\StatusPublikasi;
-use App\Http\Requests\SimpanTugasRequest;
+use App\Enums\StatusKeanggotaan;
+use App\Enums\StatusKelas;
+use App\Models\AkunPengguna;
+use App\Models\KeanggotaanKelas;
 use App\Models\KelasBelajar;
 use App\Models\MateriAksara;
-use App\Services\Kelas\TugasKelasLayanan;
+use App\Models\MotivasiBelajar;
+use App\Models\TugasKelas;
+use App\Support\HakAkses;
+use App\Support\Materi\FilterMateri;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 /**
- * Bagian C20 KelasController untuk pengelolaan kelas oleh Pengajar (UC-07), pemilik modul: Marvel.
- * Halaman: I-14 Kelola Kelas, I-15 Terbitkan Tugas, I-16 Kelola Anggota.
- * C20 dipecah tiga berkas (lihat PemantauanKelasController); catat di B.1 dan B.5.
+ * C20 KelasController, bagian pengelolaan Pengajar (UC-07): buatKelas (Algo-071), buatTugas (Algo-072),
+ * terbitkanTugas (Algo-073), ambilDaftarAnggota (Algo-074), kelolaAnggota (Algo-075),
+ * gantiKodeKelas (Algo-076), aturScoreboard (Algo-077), ambilKelasPengajar (Algo-078).
+ * Method aksi HTTP di sini menghubungkan route -> operasi -> view C12 HalamanKelolaKelas
+ * (resources/views/kelas-pengajar). Urutan di setiap aksi mengikuti DPPL: hak akses -> kepemilikan -> aksi.
  */
 class KelasPengajarController extends Controller
 {
-    public function __construct(private readonly TugasKelasLayanan $tugas) {}
+    private const JENIS = [
+        'materi' => 'Materi',
+        'menulis' => 'Latihan menulis',
+        'bunyi' => 'Latihan bunyi',
+        'merangkai' => 'Latihan merangkai',
+        'transliterasi' => 'Latihan transliterasi',
+    ];
 
-    /** I-14: daftar kelas milik Pengajar dan form kelas baru. */
+    /** I-14. Algo-078 ambilKelasPengajar */
     public function index(Request $request): View
     {
-        return view('kelas-pengajar.index', [
-            'daftarKelas' => KelasBelajar::milikPengajar((int) $request->user()->id_akun),
-        ]);
+        $this->izinkan($request, 'buatKelas');
+
+        $daftarKelas = KelasBelajar::daftarKelasPengajar($request->user()->getKey())
+            ->each(function (KelasBelajar $kelas) {
+                $kelas->jumlah_anggota = KeanggotaanKelas::daftarAnggotaAktif($kelas->id_kelas)->count();
+                $kelas->jumlah_tugas = count(TugasKelas::ambilTugasAktif($kelas->id_kelas));
+            });
+
+        return view('kelas-pengajar.index', ['daftarKelas' => $daftarKelas]);
     }
 
-    /** buatKelas + buatKodeBergabung. */
-    public function simpan(Request $request): RedirectResponse
+    /** I-14-02. Algo-071 buatKelas */
+    public function buat(Request $request): RedirectResponse
     {
-        $data = $request->validate(['nama' => ['required', 'string', 'max:100']], [
-            'nama.required' => 'Nama kelas wajib diisi.',
-            'nama.max' => 'Nama kelas paling banyak 100 karakter.',
+        $this->izinkan($request, 'buatKelas');
+
+        $request->validate(
+            ['nama' => ['required', 'string', 'max:100']],
+            [
+                'nama.required' => 'Nama kelas wajib diisi.',
+                'nama.max' => 'Nama kelas maksimal 100 karakter.',
+            ],
+        );
+
+        $hasil = (new KelasBelajar)->simpan([
+            'nama' => $request->input('nama'),
+            'pemilik_id' => $request->user()->getKey(),
         ]);
 
-        $hasil = KelasBelajar::buatKelas((int) $request->user()->id_akun, $data['nama']);
         if (! $hasil->berhasil) {
+            if ($hasil->kode === 'GAGAL_SIMPAN') {
+                Log::error('Gagal membuat kelas', ['pemilik_id' => $request->user()->getKey()]);
+            }
+
             return back()->withInput()->withErrors(['nama' => $hasil->pesan]);
         }
 
-        return redirect()->route('kelas.pengajar.tampil', $hasil->ambil('idKelas'))
-            ->with('status', 'Kelas dibuat. Bagikan kode '.$hasil->ambil('kodeBergabung').' kepada Pelajar.');
+        return redirect()->route('pengajar.kelas.index')->with('sukses', [
+            'judul' => 'Kelas "'.$request->input('nama').'" berhasil dibuat',
+            'isi' => 'Bagikan kode bergabung kepada Pelajar.',
+        ]);
     }
 
-    /** Detail kelas: kode, scoreboard, tugas. */
-    public function tampilkan(int $idKelas): View
+    /** I-14-04. Algo-076 gantiKodeKelas */
+    public function gantiKode(Request $request, int $idKelas): RedirectResponse
     {
-        $kelas = $this->kelasDikelola($idKelas);
+        // Kepemilikan diperiksa lagi di KelasBelajar::gantiKodeBergabung() (pertahanan berlapis).
+        $kelas = $this->kelasMilikku($request, $idKelas, 'gantiKode');
 
-        return view('kelas-pengajar.tampil', [
+        $hasil = $kelas->gantiKodeBergabung($request->user()->getKey());
+
+        if (! $hasil->berhasil) {
+            if ($hasil->kode === 'GAGAL_SIMPAN') {
+                Log::error('Gagal mengganti kode kelas', ['id_kelas' => $idKelas]);
+            }
+
+            return back()->withErrors(['kode' => $hasil->pesan]);
+        }
+
+        return redirect()->route('pengajar.kelas.index')->with('sukses', [
+            'judul' => 'Kode baru untuk "'.$kelas->nama.'": '.$hasil->data['kodeBergabung'],
+            'isi' => 'Kode lama tidak berlaku lagi. Bagikan kode baru kepada Pelajar.',
+        ]);
+    }
+
+    /** I-16. Algo-074 ambilDaftarAnggota + papan peringkat */
+    public function anggota(Request $request, int $idKelas): View
+    {
+        $kelas = $this->kelasMilikku($request, $idKelas, 'lihatAnggota');
+        $anggota = $this->profilAnggota($idKelas);
+        $papan = $kelas->status_scoreboard
+            ? MotivasiBelajar::susunScoreboard(array_column($anggota, 'namaTampilan', 'idAkun')) // Algo-031
+            : [];
+
+        return view('kelas-pengajar.anggota', compact('kelas', 'anggota', 'papan'));
+    }
+
+    /** I-16-02/03. Algo-075 kelolaAnggota (status nonaktif; riwayat tidak dihapus) */
+    public function keluarkan(Request $request, int $idKelas, int $idPelajar): RedirectResponse
+    {
+        $this->kelasMilikku($request, $idKelas, 'kelolaAnggota');
+
+        $keanggotaan = KeanggotaanKelas::cari($idKelas, $idPelajar);
+        if ($keanggotaan === null || $keanggotaan->status !== StatusKeanggotaan::Aktif->value) {
+            return back()->withErrors(['anggota' => 'Pelajar bukan anggota kelas ini.']);
+        }
+
+        $hasil = $keanggotaan->ubahStatus('nonaktif');
+        if (! $hasil->berhasil) {
+            Log::error('Gagal mengubah status keanggotaan', ['id_kelas' => $idKelas, 'id_pelajar' => $idPelajar]);
+
+            return back()->withErrors(['anggota' => $hasil->pesan ?? 'Anggota gagal dikeluarkan.']);
+        }
+
+        return redirect()->route('pengajar.kelas.anggota', $idKelas)->with('sukses', [
+            'judul' => 'Anggota dikeluarkan',
+            'isi' => 'Akses ke kelas berakhir. Riwayat belajar tidak dihapus.',
+        ]);
+    }
+
+    /** I-16-05. Algo-077 aturScoreboard */
+    public function scoreboard(Request $request, int $idKelas): RedirectResponse
+    {
+        $kelas = $this->kelasMilikku($request, $idKelas, 'aturScoreboard');
+        $request->validate(['aktif' => ['required', 'boolean']]);
+
+        $hasil = $kelas->aturScoreboard($request->boolean('aktif'));
+        if (! $hasil->berhasil) {
+            return back()->withErrors(['scoreboard' => $hasil->pesan]);
+        }
+
+        return redirect()->route('pengajar.kelas.anggota', $idKelas);
+    }
+
+    /** I-15 */
+    public function formTugas(Request $request, int $idKelas): View
+    {
+        $kelas = $this->kelasMilikku($request, $idKelas, 'buatTugas');
+
+        return view('kelas-pengajar.tugas', [
             'kelas' => $kelas,
-            'jumlahAnggota' => count($kelas->anggotaAktif()),
-            'daftarTugas' => $kelas->daftarTugas(),
-            'scoreboard' => $kelas->ambilScoreboard(),
+            'daftarMateri' => $this->daftarMateri(),
+            'jenis' => self::JENIS,
         ]);
     }
 
-    public function gantiKode(int $idKelas): RedirectResponse
+    /**
+     * I-15-05. Algo-072 buatTugas lalu Algo-073 terbitkanTugas.
+     * Desain layar hanya punya satu tombol "Terbitkan", jadi draf disimpan lalu langsung diterbitkan.
+     */
+    public function terbitkan(Request $request, int $idKelas): RedirectResponse
     {
-        $hasil = $this->kelasDikelola($idKelas)->gantiKode();
+        $kelas = $this->kelasMilikku($request, $idKelas, 'buatTugas');
 
-        return $this->kembaliKeKelas($idKelas, $hasil);
-    }
+        $data = $request->validate([
+            'instruksi' => ['required', 'string', 'max:2000'],
+            'tenggat' => ['required', 'date', 'after:now'],
+            'komponen' => ['required', 'array', 'min:1'],
+            'komponen.*.materi' => ['required', Rule::in(array_column($this->daftarMateri(), 'id'))],
+            'komponen.*.jenis' => ['required', Rule::in(array_keys(self::JENIS))],
+            'komponen.*.wajib' => ['required', 'boolean'],
+            'komponen.*.materi_label' => ['nullable', 'string', 'max:100'],
+            'komponen.*.jenis_label' => ['nullable', 'string', 'max:100'],
+        ], [
+            'instruksi.required' => 'Instruksi tugas wajib diisi.',
+            'tenggat.required' => 'Tenggat wajib diisi.',
+            'tenggat.after' => 'Tenggat harus lebih akhir dari sekarang.',
+            'komponen.required' => 'Tambahkan minimal satu komponen tugas.',
+            'komponen.min' => 'Tambahkan minimal satu komponen tugas.',
+        ]);
 
-    public function ubahScoreboard(Request $request, int $idKelas): RedirectResponse
-    {
-        $hasil = $this->kelasDikelola($idKelas)->ubahScoreboard($request->boolean('aktif'));
-
-        return $this->kembaliKeKelas($idKelas, $hasil);
-    }
-
-    /** I-16: daftar anggota. */
-    public function anggota(int $idKelas): View
-    {
-        $kelas = $this->kelasDikelola($idKelas);
-
-        return view('kelas-pengajar.anggota', ['kelas' => $kelas, 'anggota' => $kelas->daftarAnggota()]);
-    }
-
-    /** Algo-083 kelolaAnggota: status menjadi keluar, riwayat tidak dihapus. */
-    public function keluarkanAnggota(int $idKelas, int $idPelajar): RedirectResponse
-    {
-        $hasil = $this->kelasDikelola($idKelas)->keluarkanAnggota($idPelajar);
-        if (! $hasil->berhasil) {
-            Log::warning('Pengeluaran anggota ditolak', ['id_kelas' => $idKelas, 'id_pelajar' => $idPelajar, 'kode' => $hasil->kode]);
+        $draf = (new TugasKelas)->simpan([
+            'id_kelas' => $kelas->id_kelas,
+            'instruksi' => $data['instruksi'],
+            'tenggat' => $data['tenggat'],
+            'komponen' => $data['komponen'],
+        ]);
+        if (! $draf->berhasil) {
+            return back()->withInput()->withErrors(['tugas' => $draf->pesan ?? 'Tugas gagal disimpan.']);
         }
 
-        return redirect()->route('kelas.pengajar.anggota', $idKelas)
-            ->with($hasil->berhasil ? 'status' : 'galat', $hasil->pesan);
-    }
+        $this->izinkan($request, 'terbitkanTugas');
+        $tugas = TugasKelas::find($draf->data['idTugas']);
+        $hasil = $tugas?->terbitkan();
+        if ($hasil === null || ! $hasil->berhasil) {
+            Log::error('Gagal menerbitkan tugas', ['id_kelas' => $idKelas]);
 
-    /** I-15: form tugas baru. */
-    public function formTugas(int $idKelas): View
-    {
-        return view('kelas-pengajar.tugas-form', [
-            'kelas' => $this->kelasDikelola($idKelas),
-            'daftarMateri' => MateriAksara::query()->where('status_publikasi', StatusPublikasi::Terbit->value)
-                ->orderBy('jenis_aksara')->orderBy('tingkat_kesulitan')->orderBy('nama_materi')->get(['id_materi', 'nama_materi']),
-            'daftarMode' => ModeLatihan::cases(),
+            return back()->withInput()->withErrors(['tugas' => $hasil?->pesan ?? 'Tugas gagal diterbitkan.']);
+        }
+
+        $jumlah = count($this->profilAnggota($idKelas));
+
+        return redirect()->route('pengajar.kelas.index')->with('sukses', [
+            'judul' => "Tugas diterbitkan untuk {$jumlah} anggota aktif",
+            'isi' => 'Tugas hanya terlihat oleh anggota aktif kelas "'.$kelas->nama.'".',
         ]);
     }
 
-    public function simpanTugas(SimpanTugasRequest $request, int $idKelas): RedirectResponse
+    // ------------------------------------------------------------------ pembantu
+
+    private function izinkan(Request $request, string $aksi): void
     {
-        $kelas = $this->kelasDikelola($idKelas);
-        $data = $request->validated();
-
-        $hasil = $this->tugas->buatTugas($kelas, $data['instruksi'], $data['tenggat'], $data['komponen'], $data['aksi'] === 'terbitkan');
-        if (! $hasil->berhasil) {
-            return back()->withInput()->withErrors(['umum' => $hasil->pesan]);
-        }
-
-        return $this->kembaliKeKelas($idKelas, $hasil);
+        abort_unless(HakAkses::izinkan($request->user(), $aksi), 403, 'Halaman ini khusus Pengajar.');
     }
 
-    public function terbitkanTugas(int $idKelas, int $idTugas): RedirectResponse
+    private function kelasMilikku(Request $request, int $idKelas, string $aksi): KelasBelajar
     {
-        $hasil = $this->tugas->terbitkan($this->kelasDikelola($idKelas), $idTugas);
+        $this->izinkan($request, $aksi);
 
-        return $this->kembaliKeKelas($idKelas, $hasil);
-    }
-
-    /** 404 bila kelas tidak ada, 403 bila bukan milik Pengajar yang masuk. */
-    private function kelasDikelola(int $idKelas): KelasBelajar
-    {
-        $kelas = KelasBelajar::query()->findOrFail($idKelas);
-        Gate::authorize('kelola', $kelas);
+        $kelas = KelasBelajar::find($idKelas);
+        abort_if($kelas === null || $kelas->status !== StatusKelas::Aktif->value, 404, 'Kelas tidak ditemukan.');
+        abort_unless($kelas->periksaPemilik($request->user()->getKey()), 403, 'Anda bukan pemilik kelas ini.');
 
         return $kelas;
     }
 
-    private function kembaliKeKelas(int $idKelas, \App\Support\Progres\HasilOperasi $hasil): RedirectResponse
+    /**
+     * Profil anggota aktif untuk I-16. Hanya id_akun dan nama_tampilan yang diambil dari akun_pengguna
+     * (DPPL: AkunPengguna.getProfil tidak memuat email maupun hash kata sandi), sehingga data pribadi
+     * lain tidak pernah sampai ke Pengajar.
+     *
+     * @return list<array{idAkun:int, namaTampilan:string}>
+     */
+    private function profilAnggota(int $idKelas): array
     {
-        return redirect()->route('kelas.pengajar.tampil', $idKelas)
-            ->with($hasil->berhasil ? 'status' : 'galat', $hasil->pesan);
+        $idPelajar = KeanggotaanKelas::daftarAnggotaAktif($idKelas)->pluck('id_pelajar')->all();
+
+        return AkunPengguna::query()
+            ->whereIn('id_akun', $idPelajar)
+            ->orderBy('nama_tampilan')
+            ->get(['id_akun', 'nama_tampilan'])
+            ->map(fn (AkunPengguna $a) => ['idAkun' => (int) $a->id_akun, 'namaTampilan' => $a->nama_tampilan])
+            ->all();
+    }
+
+    /** Materi terbit yang dapat dijadikan komponen tugas (MateriAksara.ambilDaftarMateri, Algo-040). */
+    private function daftarMateri(): array
+    {
+        return array_map(
+            fn (MateriAksara $m) => ['id' => (int) $m->id_materi, 'nama' => $m->nama_materi],
+            MateriAksara::ambilDaftarMateri(new FilterMateri),
+        );
     }
 }

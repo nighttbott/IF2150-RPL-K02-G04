@@ -2,225 +2,261 @@
 
 namespace Tests\Feature;
 
+use App\Models\KeanggotaanKelas;
 use App\Models\KelasBelajar;
+use App\Models\TugasKelas;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-/** Pengujian UC-07 Mengelola Kelas: kelas, kode bergabung, anggota, tugas, scoreboard. */
+/**
+ * Pengujian UC-07 Mengelola Kelas (Pengajar): KelasController (C20) bagian pengelolaan,
+ * KelasBelajar (C23), KeanggotaanKelas (C24), TugasKelas (C25).
+ */
 class KelasPengajarTest extends TestCase
 {
     use BantuanData, RefreshDatabase;
 
-    private function tenggat(int $hari = 3): string
+    private function kelasBaru($pemilik, string $nama = 'Aksara Jawa Dasar'): KelasBelajar
     {
-        return now()->addDays($hari)->format('Y-m-d\TH:i');
+        $kelas = new KelasBelajar;
+        $this->assertTrue($kelas->simpan(['nama' => $nama, 'pemilik_id' => $pemilik->id_akun])->berhasil);
+
+        return $kelas;
     }
 
-    private function dataTugas(array $ubah = []): array
+    private function dataTugas(array $ganti = []): array
     {
         $materi = $this->buatMateri();
 
-        return array_replace([
-            'instruksi' => 'Pelajari lalu berlatih.',
-            'tenggat' => $this->tenggat(),
-            'aksi' => 'draf',
+        return $ganti + [
+            'instruksi' => 'Pelajari materi nglegena.',
+            'tenggat' => now()->addDay()->format('Y-m-d\TH:i'),
             'komponen' => [
-                ['jenis' => 'materi', 'id_materi' => $materi->id_materi, 'mode' => '', 'wajib' => '1'],
-                ['jenis' => 'latihan', 'id_materi' => $materi->id_materi, 'mode' => 'bunyi', 'wajib' => '1'],
+                ['materi' => $materi->id_materi, 'jenis' => 'materi', 'wajib' => 1],
+                ['materi' => $materi->id_materi, 'jenis' => 'bunyi', 'wajib' => 0],
             ],
-        ], $ubah);
+        ];
     }
 
-    public function test_kode_bergabung_6_karakter_tanpa_huruf_membingungkan(): void
+    public function test_pengajar_membuat_kelas_dengan_kode_valid_dan_status_huruf_kecil(): void
     {
+        $pengajar = $this->buatPengajar();
+
+        $this->actingAs($pengajar)->post(route('pengajar.kelas.buat'), ['nama' => 'Aksara Jawa Dasar'])
+            ->assertRedirect(route('pengajar.kelas.index'))->assertSessionHas('sukses');
+
+        $kelas = KelasBelajar::firstOrFail();
+        $this->assertSame((int) $pengajar->id_akun, (int) $kelas->pemilik_id);
+        $this->assertSame('aktif', $kelas->status);
+        $this->assertFalse($kelas->status_scoreboard);
+        $this->assertMatchesRegularExpression('/^[ABCDEFGHJKLMNPQRSTUVWXYZ2-9]{6}$/', $kelas->kode_bergabung);
+    }
+
+    public function test_nama_kelas_kosong_atau_terlalu_panjang_ditolak(): void
+    {
+        $pengajar = $this->buatPengajar();
+
+        $this->actingAs($pengajar)->post(route('pengajar.kelas.buat'), ['nama' => ''])->assertSessionHasErrors('nama');
+        $this->actingAs($pengajar)->post(route('pengajar.kelas.buat'), ['nama' => str_repeat('a', 101)])->assertSessionHasErrors('nama');
+        $this->assertSame(0, KelasBelajar::count());
+    }
+
+    public function test_pelajar_tidak_boleh_membuat_atau_membuka_kelola_kelas(): void
+    {
+        $pelajar = $this->buatPelajar();
+
+        $this->actingAs($pelajar)->post(route('pengajar.kelas.buat'), ['nama' => 'Kelas Gelap'])->assertForbidden();
+        $this->actingAs($pelajar)->get(route('pengajar.kelas.index'))->assertForbidden();
+        $this->assertSame(0, KelasBelajar::count());
+    }
+
+    public function test_tamu_diarahkan_masuk(): void
+    {
+        $this->get(route('pengajar.kelas.index'))->assertRedirect();
+    }
+
+    public function test_kode_bergabung_tidak_ambigu_dan_hampir_selalu_unik(): void
+    {
+        $kelas = new KelasBelajar;
+        $dibuat = [];
         for ($i = 0; $i < 200; $i++) {
-            $this->assertMatchesRegularExpression('/^[A-HJ-NP-Z2-9]{6}$/', KelasBelajar::buatKodeBergabung());
+            $kode = $kelas->buatKodeBergabung();
+            $this->assertMatchesRegularExpression('/^[^OI01]{6}$/', $kode);
+            $dibuat[$kode] = true;
         }
+        $this->assertGreaterThan(190, count($dibuat));
     }
 
-    public function test_pengajar_membuat_kelas_dengan_kode_unik(): void
+    public function test_ganti_kode_membuat_kode_lama_tidak_berlaku(): void
     {
         $pengajar = $this->buatPengajar();
+        $kelas = $this->kelasBaru($pengajar);
+        $kodeLama = $kelas->kode_bergabung;
 
-        $this->actingAs($pengajar)->post('/kelola/kelas', ['nama' => 'Kelas A'])->assertRedirect();
-        $this->actingAs($pengajar)->post('/kelola/kelas', ['nama' => 'Kelas B'])->assertRedirect();
+        $this->actingAs($pengajar)->post(route('pengajar.kelas.ganti-kode', $kelas->id_kelas))
+            ->assertRedirect(route('pengajar.kelas.index'));
 
-        $this->assertSame(2, KelasBelajar::query()->where('pemilik_id', $pengajar->id_akun)->count());
-        $this->assertSame(2, KelasBelajar::query()->distinct()->count('kode_bergabung'));
+        $this->assertDatabaseMissing('kelas_belajar', ['kode_bergabung' => $kodeLama]);
     }
 
-    public function test_nama_kelas_wajib_diisi(): void
+    public function test_pengajar_lain_tidak_boleh_mengelola_kelas_bukan_miliknya(): void
     {
-        $this->actingAs($this->buatPengajar())->post('/kelola/kelas', ['nama' => '  '])->assertSessionHasErrors('nama');
+        $kelas = $this->kelasBaru($this->buatPengajar('Bu Rina'));
+        $kodeAsli = $kelas->kode_bergabung;
+        $penyusup = $this->buatPengajar('Pak Dimas');
+        $id = $kelas->id_kelas;
+
+        $this->actingAs($penyusup)->post(route('pengajar.kelas.ganti-kode', $id))->assertForbidden();
+        $this->actingAs($penyusup)->get(route('pengajar.kelas.anggota', $id))->assertForbidden();
+        $this->actingAs($penyusup)->post(route('pengajar.kelas.scoreboard', $id), ['aktif' => 1])->assertForbidden();
+        $this->actingAs($penyusup)->get(route('pengajar.kelas.tugas', $id))->assertForbidden();
+        $this->actingAs($penyusup)->post(route('pengajar.kelas.terbitkan', $id), $this->dataTugas())->assertForbidden();
+
+        $this->assertSame($kodeAsli, $kelas->fresh()->kode_bergabung);
+        $this->assertFalse($kelas->fresh()->status_scoreboard);
+        $this->assertSame(0, TugasKelas::count());
     }
 
-    public function test_pelajar_tidak_bisa_membuka_kelola_kelas(): void
-    {
-        $this->actingAs($this->buatPelajar())->get('/kelola/kelas')->assertForbidden();
-    }
-
-    public function test_pengajar_lain_tidak_bisa_mengelola_kelas_orang_lain(): void
-    {
-        $idKelas = $this->buatKelas($this->buatPengajar('Bu Rina'));
-        $lain = $this->buatPengajar('Pak Dimas');
-
-        $this->actingAs($lain)->get("/kelola/kelas/$idKelas")->assertForbidden();
-        $this->actingAs($lain)->post("/kelola/kelas/$idKelas/ganti-kode")->assertForbidden();
-        $this->actingAs($lain)->get("/kelola/kelas/$idKelas/anggota")->assertForbidden();
-        $this->actingAs($lain)->post("/kelola/kelas/$idKelas/tugas", $this->dataTugas())->assertForbidden();
-    }
-
-    public function test_ganti_kode_membuat_kode_lama_tidak_berlaku_tanpa_mengeluarkan_anggota(): void
+    public function test_kelas_tidak_ada_atau_nonaktif_mengembalikan_404(): void
     {
         $pengajar = $this->buatPengajar();
-        $idKelas = $this->buatKelas($pengajar);
-        $pelajar = $this->buatPelajar();
-        $this->gabung($idKelas, $pelajar);
-        $lama = KelasBelajar::find($idKelas)->kode_bergabung;
+        $this->actingAs($pengajar)->post(route('pengajar.kelas.ganti-kode', 9999))->assertNotFound();
 
-        $this->actingAs($pengajar)->post("/kelola/kelas/$idKelas/ganti-kode")->assertRedirect();
-
-        $baru = KelasBelajar::find($idKelas)->kode_bergabung;
-        $this->assertNotSame($lama, $baru);
-        $this->assertFalse(KelasBelajar::query()->where('kode_bergabung', $lama)->exists());
-        $this->assertSame('aktif', DB::table('keanggotaan_kelas')->where('id_pelajar', $pelajar->id_akun)->value('status'));
+        $kelas = $this->kelasBaru($pengajar);
+        $kelas->update(['status' => 'nonaktif']);
+        $this->actingAs($pengajar)->get(route('pengajar.kelas.anggota', $kelas->id_kelas))->assertNotFound();
     }
 
-    public function test_keluarkan_anggota_mengubah_status_dan_riwayat_tetap_ada(): void
+    public function test_scoreboard_dapat_diaktifkan_dan_dimatikan(): void
     {
         $pengajar = $this->buatPengajar();
-        $idKelas = $this->buatKelas($pengajar);
-        $pelajar = $this->buatPelajar();
-        $this->gabung($idKelas, $pelajar);
-        $this->riwayat($pelajar, $this->buatMateri(), 80);
+        $kelas = $this->kelasBaru($pengajar);
 
-        $this->actingAs($pengajar)->delete("/kelola/kelas/$idKelas/anggota/{$pelajar->id_akun}")->assertRedirect();
-
-        $this->assertSame('keluar', DB::table('keanggotaan_kelas')->where('id_pelajar', $pelajar->id_akun)->value('status'));
-        $this->assertSame(1, DB::table('riwayat_latihan')->where('id_pelajar', $pelajar->id_akun)->count());
+        $this->actingAs($pengajar)->post(route('pengajar.kelas.scoreboard', $kelas->id_kelas), ['aktif' => 1]);
+        $this->assertTrue($kelas->fresh()->status_scoreboard);
+        $this->actingAs($pengajar)->post(route('pengajar.kelas.scoreboard', $kelas->id_kelas), ['aktif' => 0]);
+        $this->assertFalse($kelas->fresh()->status_scoreboard);
     }
 
-    public function test_keluarkan_bukan_anggota_aktif_ditolak(): void
+    public function test_halaman_kelola_kelas_hanya_menampilkan_kelas_milik_sendiri_dengan_tautan_pantau(): void
     {
-        $pengajar = $this->buatPengajar();
-        $kelas = KelasBelajar::find($this->buatKelas($pengajar));
+        $saya = $this->buatPengajar('Saya');
+        $kelas = $this->kelasBaru($saya, 'Kelas Saya');
+        $this->kelasBaru($this->buatPengajar('Lain'), 'Kelas Orang Lain');
 
-        $hasil = $kelas->keluarkanAnggota($this->buatPelajar()->id_akun);
-
-        $this->assertFalse($hasil->berhasil);
-        $this->assertSame('BUKAN_ANGGOTA_AKTIF', $hasil->kode);
+        $this->actingAs($saya)->get(route('pengajar.kelas.index'))->assertOk()
+            ->assertSee('Kelas Saya')->assertDontSee('Kelas Orang Lain')
+            ->assertSee(route('pemantauan.index', $kelas->id_kelas), false);
     }
 
-    public function test_scoreboard_bisa_dinyalakan_dan_dimatikan(): void
+    public function test_halaman_anggota_hanya_menampilkan_nama_dan_tidak_membocorkan_email(): void
     {
         $pengajar = $this->buatPengajar();
-        $idKelas = $this->buatKelas($pengajar, scoreboard: false);
+        $kelas = $this->kelasBaru($pengajar);
+        $sari = $this->buatPelajar('Sari');
+        $raka = $this->buatPelajar('Raka');
+        $this->gabung($kelas->id_kelas, $sari);
+        $this->gabung($kelas->id_kelas, $raka, 'keluar');
 
-        $this->actingAs($pengajar)->post("/kelola/kelas/$idKelas/scoreboard", ['aktif' => 1]);
-        $this->assertTrue(KelasBelajar::find($idKelas)->status_scoreboard);
-
-        $this->actingAs($pengajar)->post("/kelola/kelas/$idKelas/scoreboard", ['aktif' => 0]);
-        $this->assertFalse(KelasBelajar::find($idKelas)->status_scoreboard);
+        $this->actingAs($pengajar)->get(route('pengajar.kelas.anggota', $kelas->id_kelas))->assertOk()
+            ->assertSee('Sari')->assertDontSee('Raka')
+            ->assertDontSee($sari->email)->assertDontSee($sari->username)->assertDontSee('password');
     }
 
-    public function test_simpan_draf_lalu_terbitkan_tugas(): void
+    public function test_keluarkan_anggota_mengubah_status_nonaktif_tanpa_menghapus_riwayat(): void
     {
         $pengajar = $this->buatPengajar();
-        $idKelas = $this->buatKelas($pengajar);
+        $kelas = $this->kelasBaru($pengajar);
+        $sari = $this->buatPelajar('Sari');
+        $this->gabung($kelas->id_kelas, $sari);
+        $this->riwayat($sari, $this->buatMateri(), 80);
 
-        $this->actingAs($pengajar)->post("/kelola/kelas/$idKelas/tugas", $this->dataTugas())->assertRedirect();
-        $idTugas = (int) DB::table('tugas_kelas')->value('id_tugas');
-        $this->assertSame('draf', DB::table('tugas_kelas')->value('status'));
-        $this->assertSame(2, DB::table('komponen_tugas')->where('id_tugas', $idTugas)->count());
+        $this->actingAs($pengajar)->post(route('pengajar.kelas.keluarkan', [$kelas->id_kelas, $sari->id_akun]))
+            ->assertRedirect(route('pengajar.kelas.anggota', $kelas->id_kelas));
 
-        $this->actingAs($pengajar)->post("/kelola/kelas/$idKelas/tugas/$idTugas/terbitkan")->assertRedirect();
-        $this->assertSame('terbit', DB::table('tugas_kelas')->value('status'));
+        $this->assertSame('nonaktif', KeanggotaanKelas::cari($kelas->id_kelas, $sari->id_akun)->status);
+        $this->assertSame(1, DB::table('riwayat_latihan')->where('id_pelajar', $sari->id_akun)->count());
+        $this->assertCount(0, KeanggotaanKelas::daftarAnggotaAktif($kelas->id_kelas));
     }
 
-    public function test_tugas_langsung_terbit(): void
+    public function test_keluarkan_pelajar_yang_bukan_anggota_aktif_ditolak(): void
     {
         $pengajar = $this->buatPengajar();
-        $idKelas = $this->buatKelas($pengajar);
+        $kelas = $this->kelasBaru($pengajar);
+        $asing = $this->buatPelajar('Asing');
+        $sudahKeluar = $this->buatPelajar('Keluar');
+        $this->gabung($kelas->id_kelas, $sudahKeluar, 'keluar');
 
-        $this->actingAs($pengajar)->post("/kelola/kelas/$idKelas/tugas", $this->dataTugas(['aksi' => 'terbitkan']))->assertRedirect();
-
-        $this->assertSame('terbit', DB::table('tugas_kelas')->value('status'));
+        foreach ([$asing, $sudahKeluar] as $p) {
+            $this->actingAs($pengajar)->post(route('pengajar.kelas.keluarkan', [$kelas->id_kelas, $p->id_akun]))
+                ->assertSessionHasErrors('anggota');
+        }
+        $this->assertSame('keluar', KeanggotaanKelas::cari($kelas->id_kelas, $sudahKeluar->id_akun)->status);
     }
 
-    public function test_tenggat_harus_setelah_sekarang(): void
+    public function test_papan_peringkat_memakai_poin_asli_dan_peringkat_sama_untuk_poin_sama(): void
     {
         $pengajar = $this->buatPengajar();
-        $idKelas = $this->buatKelas($pengajar);
+        $kelas = $this->kelasBaru($pengajar);
+        $kelas->aturScoreboard(true);
+        foreach (['Sari' => 50, 'Budi' => 30, 'Wulan' => 30] as $nama => $poin) {
+            $p = $this->buatPelajar($nama);
+            $this->gabung($kelas->id_kelas, $p);
+            \App\Models\MotivasiBelajar::milikPelajar($p->id_akun)->tambahPoin(1, $poin);
+        }
 
-        $this->actingAs($pengajar)
-            ->post("/kelola/kelas/$idKelas/tugas", $this->dataTugas(['tenggat' => now()->subHour()->format('Y-m-d\TH:i')]))
+        $this->actingAs($pengajar)->get(route('pengajar.kelas.anggota', $kelas->id_kelas))->assertOk()
+            ->assertSeeInOrder(['1. Sari', '50', '2. Budi', '30', '2. Wulan', '30']);
+    }
+
+    public function test_tenggat_di_masa_lalu_dan_tugas_tanpa_komponen_ditolak(): void
+    {
+        $pengajar = $this->buatPengajar();
+        $kelas = $this->kelasBaru($pengajar);
+        $url = route('pengajar.kelas.terbitkan', $kelas->id_kelas);
+
+        $this->actingAs($pengajar)->post($url, $this->dataTugas(['tenggat' => now()->subDay()->format('Y-m-d\TH:i')]))
             ->assertSessionHasErrors('tenggat');
-        $this->assertSame(0, DB::table('tugas_kelas')->count());
+        $this->actingAs($pengajar)->post($url, ['instruksi' => 'x', 'tenggat' => now()->addDay()->format('Y-m-d\TH:i')])
+            ->assertSessionHasErrors('komponen');
+        $this->assertSame(0, TugasKelas::count());
     }
 
-    public function test_komponen_latihan_wajib_memilih_mode(): void
+    public function test_materi_yang_tidak_terbit_tidak_boleh_menjadi_komponen(): void
     {
         $pengajar = $this->buatPengajar();
-        $idKelas = $this->buatKelas($pengajar);
-        $materi = $this->buatMateri();
+        $kelas = $this->kelasBaru($pengajar);
+        $draf = $this->buatMateri('Draf', 'draf');
 
-        $this->actingAs($pengajar)->post("/kelola/kelas/$idKelas/tugas", $this->dataTugas([
-            'komponen' => [['jenis' => 'latihan', 'id_materi' => $materi->id_materi, 'mode' => '', 'wajib' => '1']],
-        ]))->assertSessionHasErrors('komponen.0.mode');
-        $this->assertSame(0, DB::table('tugas_kelas')->count());
+        $this->actingAs($pengajar)->post(route('pengajar.kelas.terbitkan', $kelas->id_kelas), $this->dataTugas([
+            'komponen' => [['materi' => $draf->id_materi, 'jenis' => 'materi', 'wajib' => 1]],
+        ]))->assertSessionHasErrors('komponen.0.materi');
     }
 
-    public function test_materi_draf_tidak_boleh_menjadi_komponen(): void
+    public function test_tugas_valid_diterbitkan_dengan_komponen_tersimpan(): void
     {
         $pengajar = $this->buatPengajar();
-        $idKelas = $this->buatKelas($pengajar);
-        $draf = $this->buatMateri('Materi Draf', 'draf');
+        $kelas = $this->kelasBaru($pengajar);
 
-        $this->actingAs($pengajar)->post("/kelola/kelas/$idKelas/tugas", $this->dataTugas([
-            'komponen' => [['jenis' => 'materi', 'id_materi' => $draf->id_materi, 'wajib' => '1']],
-        ]))->assertSessionHasErrors('umum');
-        $this->assertSame(0, DB::table('tugas_kelas')->count());
+        $this->actingAs($pengajar)->post(route('pengajar.kelas.terbitkan', $kelas->id_kelas), $this->dataTugas())
+            ->assertRedirect(route('pengajar.kelas.index'))->assertSessionHas('sukses');
+
+        $tugas = TugasKelas::firstOrFail();
+        $this->assertSame('terbit', $tugas->status);
+        $this->assertCount(1, TugasKelas::ambilTugasAktif($kelas->id_kelas));
+
+        $komponen = DB::table('komponen_tugas')->where('id_tugas', $tugas->id_tugas)->orderBy('id_komponen')->get();
+        $this->assertSame(['materi', null, 1], [$komponen[0]->jenis, $komponen[0]->mode, (int) $komponen[0]->wajib]);
+        $this->assertSame(['latihan', 'bunyi', 0], [$komponen[1]->jenis, $komponen[1]->mode, (int) $komponen[1]->wajib]);
     }
 
-    public function test_tugas_tanpa_komponen_wajib_ditolak(): void
+    public function test_tugas_tanpa_komponen_tidak_bisa_diterbitkan_di_model(): void
     {
-        $pengajar = $this->buatPengajar();
-        $idKelas = $this->buatKelas($pengajar);
-        $materi = $this->buatMateri();
+        $kelas = $this->kelasBaru($this->buatPengajar());
+        $tugas = TugasKelas::create(['id_kelas' => $kelas->id_kelas, 'instruksi' => 'x', 'tenggat' => now()->addDay(), 'status' => 'draf']);
 
-        $this->actingAs($pengajar)->post("/kelola/kelas/$idKelas/tugas", $this->dataTugas([
-            'komponen' => [['jenis' => 'materi', 'id_materi' => $materi->id_materi, 'wajib' => '0']],
-        ]))->assertSessionHasErrors('umum');
-    }
-
-    public function test_tidak_bisa_menerbitkan_tugas_kelas_lain(): void
-    {
-        $pengajar = $this->buatPengajar();
-        $kelasSaya = $this->buatKelas($pengajar, nama: 'Saya');
-        $kelasLain = $this->buatKelas($this->buatPengajar('Lain'), nama: 'Lain');
-
-        $this->actingAs($pengajar)->post("/kelola/kelas/$kelasLain/tugas", $this->dataTugas())->assertForbidden();
-
-        // tugas milik kelasLain tidak bisa diterbitkan lewat URL kelasSaya
-        $materi = $this->buatMateri('M2');
-        $idTugas = DB::table('tugas_kelas')->insertGetId(['id_kelas' => $kelasLain, 'instruksi' => 'x', 'tenggat' => now()->addDay()->format('Y-m-d H:i:s'), 'status' => 'draf'], 'id_tugas');
-        DB::table('komponen_tugas')->insert(['id_tugas' => $idTugas, 'jenis' => 'materi', 'id_materi' => $materi->id_materi, 'mode' => null, 'wajib' => true]);
-
-        $this->actingAs($pengajar)->post("/kelola/kelas/$kelasSaya/tugas/$idTugas/terbitkan");
-
-        $this->assertSame('draf', DB::table('tugas_kelas')->where('id_tugas', $idTugas)->value('status'));
-    }
-
-    public function test_halaman_kelas_dan_anggota_tampil(): void
-    {
-        $pengajar = $this->buatPengajar();
-        $idKelas = $this->buatKelas($pengajar, nama: 'Aksara Dasar');
-        $this->gabung($idKelas, $this->buatPelajar('Budi'));
-
-        $this->actingAs($pengajar)->get('/kelola/kelas')->assertOk()->assertSee('Aksara Dasar');
-        $this->actingAs($pengajar)->get("/kelola/kelas/$idKelas")->assertOk()->assertSee('Kode bergabung');
-        $this->actingAs($pengajar)->get("/kelola/kelas/$idKelas/anggota")->assertOk()->assertSee('Budi');
-        $this->actingAs($pengajar)->get("/kelola/kelas/$idKelas/tugas/baru")->assertOk();
+        $this->assertSame('KOMPONEN_KOSONG', $tugas->terbitkan()->kode);
+        $this->assertSame('draf', $tugas->fresh()->status);
     }
 }

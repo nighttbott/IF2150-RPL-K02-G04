@@ -3,24 +3,20 @@
 use App\Http\Controllers\KelasPengajarController;
 use Illuminate\Support\Facades\Route;
 
-/*
-| UC-07 Mengelola Kelas (pemilik: Marvel)
-|   I-14 Kelola Kelas, I-15 Terbitkan Tugas, I-16 Kelola Anggota
-*/
-Route::middleware(['auth', 'peran:pengajar'])->prefix('kelola/kelas')->group(function () {
-    Route::get('/', [KelasPengajarController::class, 'index'])->name('kelas.pengajar.index');
-    Route::post('/', [KelasPengajarController::class, 'simpan'])->name('kelas.pengajar.simpan');
-
-    Route::prefix('{idKelas}')->where(['idKelas' => '[0-9]+', 'idPelajar' => '[0-9]+', 'idTugas' => '[0-9]+'])->group(function () {
-        Route::get('/', [KelasPengajarController::class, 'tampilkan'])->name('kelas.pengajar.tampil');
-        Route::post('/ganti-kode', [KelasPengajarController::class, 'gantiKode'])->name('kelas.pengajar.ganti-kode');
-        Route::post('/scoreboard', [KelasPengajarController::class, 'ubahScoreboard'])->name('kelas.pengajar.scoreboard');
-
-        Route::get('/anggota', [KelasPengajarController::class, 'anggota'])->name('kelas.pengajar.anggota');
-        Route::delete('/anggota/{idPelajar}', [KelasPengajarController::class, 'keluarkanAnggota'])->name('kelas.pengajar.keluarkan');
-
-        Route::get('/tugas/baru', [KelasPengajarController::class, 'formTugas'])->name('kelas.pengajar.tugas-baru');
-        Route::post('/tugas', [KelasPengajarController::class, 'simpanTugas'])->name('kelas.pengajar.tugas-simpan');
-        Route::post('/tugas/{idTugas}/terbitkan', [KelasPengajarController::class, 'terbitkanTugas'])->name('kelas.pengajar.tugas-terbitkan');
+// UC-07 Mengelola Kelas (Pengajar). Pembatas peran memakai middleware 'peran' bawaan proyek;
+// kepemilikan kelas tetap diperiksa di KelasPengajarController.
+Route::middleware(['auth', 'peran:pengajar'])
+    ->prefix('pengajar/kelas')
+    ->name('pengajar.kelas.')
+    ->controller(KelasPengajarController::class)
+    ->where(['idKelas' => '[0-9]+', 'idPelajar' => '[0-9]+'])
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'buat')->name('buat');
+        Route::post('/{idKelas}/ganti-kode', 'gantiKode')->name('ganti-kode');
+        Route::get('/{idKelas}/anggota', 'anggota')->name('anggota');
+        Route::post('/{idKelas}/anggota/{idPelajar}/keluarkan', 'keluarkan')->name('keluarkan');
+        Route::post('/{idKelas}/scoreboard', 'scoreboard')->name('scoreboard');
+        Route::get('/{idKelas}/tugas', 'formTugas')->name('tugas');
+        Route::post('/{idKelas}/tugas', 'terbitkan')->name('terbitkan');
     });
-});
