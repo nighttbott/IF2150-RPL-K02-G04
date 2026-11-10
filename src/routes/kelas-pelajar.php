@@ -10,4 +10,5 @@ Route::prefix('pelajar/kelas')->name('kelas-pelajar.')->controller(KelasPelajarC
     Route::get('/{kelas}/tugas/{tugas}', 'detail')->whereNumber(['kelas', 'tugas'])->name('detail');
     Route::post('/{kelas}/tugas/{tugas}/kumpulkan', 'kumpulkan')->whereNumber(['kelas', 'tugas'])->name('kumpulkan');
     Route::get('/{kelas}/tugas/{tugas}/komponen/{komponen}', 'kerjakan')->whereNumber(['kelas', 'tugas', 'komponen'])->name('kerjakan');
+    Route::post('/{kelas}/tugas/{tugas}/komponen/{komponen}/selesai', 'selesaikanMateri')->whereNumber(['kelas', 'tugas', 'komponen'])->name('selesai-materi');
 });

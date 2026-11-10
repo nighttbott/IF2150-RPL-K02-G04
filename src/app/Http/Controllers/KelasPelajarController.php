@@ -6,6 +6,7 @@ use App\Models\KeanggotaanKelas;
 use App\Models\PenyelesaianTugas;
 use App\Models\TugasKelas;
 use App\Services\PengumpulanTugas;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -34,7 +35,8 @@ class KelasPelajarController extends Controller
         $daftar = DB::table('kelas_belajar as k')->join('keanggotaan_kelas as a', 'a.id_kelas', '=', 'k.id_kelas')->where('a.id_pelajar', $id)->where('a.status', 'aktif')->whereRaw('LOWER(k.status) = ?', ['aktif'])->select('k.*')->orderBy('k.nama')->get();
         if ($kelas !== null) {
             $this->akses($r, $kelas);
-        }$kelas ??= $daftar->first()?->id_kelas;
+        }
+        $kelas ??= $daftar->first()?->id_kelas;
         $tugas = $kelas ? TugasKelas::ambilTugasAktif($kelas) : collect();
         $status = PenyelesaianTugas::ambilStatus($id, $tugas->pluck('id_tugas')->all())->keyBy('id_tugas');
 
@@ -48,12 +50,13 @@ class KelasPelajarController extends Controller
         $kelas = DB::table('kelas_belajar')->where('kode_bergabung', strtoupper($data['kode']))->whereRaw('LOWER(status) = ?', ['aktif'])->first();
         if (! $kelas) {
             return back()->withErrors(['kode' => 'Kode tidak ditemukan atau kelas tidak aktif.'])->withInput();
-        }$hasil = (new KeanggotaanKelas)->simpanKeanggotaan($id, $kelas->id_kelas);
+        }
+        $hasil = (new KeanggotaanKelas)->simpanKeanggotaan($id, $kelas->id_kelas);
         if (! $hasil->berhasil) {
             return back()->withErrors(['kode' => $hasil->pesan])->withInput();
         }
 
-return redirect()->route('kelas-pelajar.kelas', $kelas->id_kelas)->with('sukses', $hasil->pesan);
+        return redirect()->route('kelas-pelajar.kelas', $kelas->id_kelas)->with('sukses', $hasil->pesan);
     }
 
     public function detail(Request $r, int $kelas, int $tugas, PengumpulanTugas $layanan)
@@ -83,11 +86,36 @@ return redirect()->route('kelas-pelajar.kelas', $kelas->id_kelas)->with('sukses'
         abort_unless($t, 404);
         $c = $t->komponen->firstWhere('id_komponen', $komponen);
         abort_unless($c, 404);
-        $name = $c->jenis === 'materi' ? 'materi.show' : 'latihan.pilih-mode';
+        if ($c->jenis === 'materi') {
+            $paket = app(MateriController::class)->muatPaketMateri($c->id_materi, (string) config('ngaksara.versi_aplikasi'));
+            abort_if($paket->galat === 'MATERI_TIDAK_TERSEDIA', 404);
+
+            return view('materi.show', [
+                'paket' => $paket,
+                'konteksTugas' => [
+                    'kembali' => route('kelas-pelajar.detail', [$kelas, $tugas]),
+                    'selesai' => route('kelas-pelajar.selesai-materi', [$kelas, $tugas, $komponen]),
+                ],
+            ]);
+        }
+        $name = 'latihan.pilih-mode';
         if (! Route::has($name)) {
             return back()->withErrors(['modul' => 'Modul pengerjaan belum terpasang. Hubungi pengelola kelas.']);
         }
 
-return redirect()->route($name,[$c->id_materi, 'id_tugas' => $tugas, 'id_komponen' => $komponen, 'mode' => $c->mode]);
+        return redirect()->route($name, [$c->id_materi, 'id_tugas' => $tugas, 'id_komponen' => $komponen, 'mode' => $c->mode]);
+    }
+
+    public function selesaikanMateri(Request $r, int $kelas, int $tugas, int $komponen, PengumpulanTugas $layanan): RedirectResponse
+    {
+        $id = $this->akses($r, $kelas);
+        $detail = TugasKelas::ambilDetail($kelas, $tugas);
+        abort_unless($detail, 404);
+        $item = $detail->komponen->firstWhere('id_komponen', $komponen);
+        abort_unless($item && $item->jenis === 'materi', 404);
+        $hasil = $layanan->simpanPenyelesaianMateri($kelas, $tugas, $komponen, $id);
+        $balasan = redirect()->route('kelas-pelajar.detail', [$kelas, $tugas]);
+
+        return $hasil->berhasil ? $balasan->with('sukses', $hasil->pesan) : $balasan->withErrors(['materi' => $hasil->pesan]);
     }
 }
