@@ -45,12 +45,19 @@
             @csrf
             <button class="lt-tombol lt-tombol-sekunder">Ulangi latihan</button>
         </form>
-        <form method="POST" action="{{ route('latihan.lanjut', [$idMateri, $mode]) }}">
-            @csrf
-            <button class="lt-tombol lt-tombol-utama lt-tombol-lanjut">
-                <img src="{{ asset('img/ikon-panah-putih.svg') }}" alt="" width="20" height="20">Lanjut
-            </button>
-        </form>
+        @if ($idTugas)
+            {{-- Sementara ke beranda, diganti route detail tugas I-13 milik Abduh. --}}
+            <a href="{{ route('beranda') }}" class="lt-tombol lt-tombol-utama">
+                <img src="{{ asset('img/ikon-panah-putih.svg') }}" alt="" width="20" height="20">Kembali ke tugas
+            </a>
+        @else
+            <form method="POST" action="{{ route('latihan.lanjut', [$idMateri, $mode]) }}">
+                @csrf
+                <button class="lt-tombol lt-tombol-utama lt-tombol-lanjut">
+                    <img src="{{ asset('img/ikon-panah-putih.svg') }}" alt="" width="20" height="20">Lanjut
+                </button>
+            </form>
+        @endif
     </footer>
 </div>
 @endsection
