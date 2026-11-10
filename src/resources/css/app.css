@@ -55,6 +55,70 @@ h1, h2, h3, h4, .judul { font-family: 'Baloo 2', 'Nunito', sans-serif; font-weig
 .nk-menu a.aktif { background: var(--nk-indigo-muda); border-color: var(--nk-indigo); color: var(--nk-indigo-tua); font-weight: 800; }
 .nk-konten { flex: 1; padding: 36px 44px; min-width: 0; }
 
+/* Layout Autentikasi (I-01 & I-02) */
+.nk-auth-kerangka {
+    display: flex;
+    min-height: 100vh;
+}
+.nk-auth-banner {
+    width: 42%;
+    background: var(--nk-indigo);
+    color: #fff;
+    min-height: 100vh;
+}
+.nk-auth-balon {
+    background: #fff;
+    color: var(--nk-tinta);
+    border-radius: 18px;
+    padding: 14px 20px;
+    display: inline-block;
+    max-width: 320px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    position: relative;
+}
+.nk-auth-balon::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px 10px 0;
+    border-style: solid;
+    border-color: #fff transparent;
+    display: block;
+    width: 0;
+}
+.nk-auth-konten {
+    flex: 1;
+    background: var(--nk-latar);
+}
+
+/* Layout Latihan (I-06 s.d. I-10) */
+.nk-latihan-kerangka {
+    background: var(--nk-latar);
+}
+.nk-latihan-topbar {
+    background: var(--nk-permukaan);
+    border-bottom: 2px solid var(--nk-garis);
+}
+.nk-latihan-tombol-tutup {
+    color: var(--nk-redup);
+    padding: 6px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color .15s ease, background .15s ease;
+}
+.nk-latihan-tombol-tutup:hover {
+    color: var(--nk-tinta);
+    background: var(--nk-latar);
+}
+.nk-latihan-bawah {
+    background: var(--nk-permukaan);
+    border-top: 2px solid var(--nk-garis);
+}
+
 /* Kartu dan tombol bergaya "3D" seperti desain Figma */
 .kartu { background: var(--nk-permukaan); border: 2px solid var(--nk-garis); border-radius: 18px; box-shadow: 0 4px 0 var(--nk-garis); padding: 20px; }
 .kartu-emas { background: var(--nk-emas-muda); border-color: var(--nk-emas); box-shadow: 0 4px 0 var(--nk-emas); }
