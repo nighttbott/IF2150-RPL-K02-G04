@@ -64,7 +64,7 @@
         </button>
 
         {{-- I-02-04 Tautan daftar --}}
-        <p class="nk-tautan-tamu">Belum punya akun? <a href="{{ route('masuk') }}">Daftar</a></p>
+        <p class="nk-tautan-tamu">Belum punya akun? <a href="{{ route('daftar') }}">Daftar</a></p>
     </form>
 </div>
 @endsection
