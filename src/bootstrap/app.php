@@ -30,7 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Tamu yang membuka halaman berlogin diarahkan ke route 'login' (modul autentikasi).
         // Selama route itu belum ada, tamu diarahkan ke halaman awal.
-        $middleware->redirectGuestsTo(fn () => Route::has('login') ? route('login') : route('beranda'));
+        $middleware->redirectGuestsTo(fn () => route('masuk'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
