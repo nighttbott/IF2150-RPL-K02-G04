@@ -126,11 +126,17 @@ class OtentikasiController extends Controller
     {
         $hasil = $this->simpanAkun($request->validated());
 
-        if (! $hasil->berhasil) {
-            return back()
-                ->withInput($request->except('password'))
-                ->with('galat_daftar', ['kode' => $hasil->kode, 'pesan' => $hasil->pesan]);
-        }
+    if (! $hasil->berhasil) {
+        $keterangan = [
+            'EMAIL_TERDAFTAR'   => 'Gunakan email lain atau masuk dengan akun yang ada.',
+            'USERNAME_TERPAKAI' => 'Gunakan username lain.',
+            'AKUN_SUDAH_ADA'    => 'Periksa kembali email dan username, lalu coba lagi.',
+        ][$hasil->kode] ?? 'Silakan coba lagi.';
+
+        return back()
+            ->withInput($request->except('password')) // password cleared (Algo-005)
+            ->withErrors(['akun' => $keterangan, 'akun_judul' => $hasil->pesan]);
+    }
 
         return redirect()->route('masuk')->with('sukses', 'Akun berhasil dibuat. Silakan masuk.');
     }
