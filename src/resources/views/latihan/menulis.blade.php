@@ -33,7 +33,8 @@
             <canvas id="kanvas" class="lt-kanvas" aria-label="Kanvas menulis aksara {{ $soal->latin }}"
                 data-id-soal="{{ $soal->idSoal }}"
                 data-aksara="{{ $soal->targetSoal }}"
-                data-url-nilai="{{ route('latihan.nilai') }}"></canvas>
+                data-url-nilai="{{ route('latihan.nilai') }}"
+                data-url-selesai="{{ route('latihan.selesai') }}"></canvas>
             <div class="lt-samping">
                 <div class="kartu lt-contoh">
                     <h2>Contoh</h2>

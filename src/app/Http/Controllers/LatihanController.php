@@ -5,20 +5,28 @@ namespace App\Http\Controllers;
 use App\Enums\ModeLatihan;
 use App\Enums\StatusPublikasi;
 use App\Http\Requests\Latihan\KirimJawabanRequest;
+use App\Http\Requests\Latihan\SelesaikanLatihanRequest;
 use App\Latihan\AkurasiGoresan;
 use App\Latihan\Data\HasilLatihan;
 use App\Latihan\Data\HasilPenilaian;
 use App\Latihan\Data\JawabanLatihan;
+use App\Latihan\Data\RingkasanMotivasi;
 use App\Latihan\Data\SoalLatihan;
 use App\Latihan\PemeriksaBadge;
 use App\Models\MateriAksara;
 use App\Models\MotivasiBelajar;
+use App\Models\RiwayatLatihan;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use LogicException;
+use RuntimeException;
+use Throwable;
 
 /**
  * C16 LatihanController (DPPL 5.16). Atribut `konteks` diwujudkan session Laravel.
@@ -71,6 +79,9 @@ class LatihanController extends Controller
         };
         $status = $skor >= config('latihan.ambang_akurasi') ? 'berhasil' : 'perlu_diulang';
         $hasil = new HasilLatihan($request->user()->getKey(), $soal->idMateri, $soal->idSoal, $soal->targetSoal, $soal->mode, $skor, $status);
+        if ($status === 'perlu_diulang') {
+            $this->simpanRiwayat($hasil);
+        }
         $request->session()->put('latihan.hasilTerakhir', $hasil->toArray());
 
         $akurasi = 'Akurasi '.str_replace('.', ',', (string) $skor).'%.';
@@ -80,6 +91,93 @@ class LatihanController extends Controller
             $status,
             $status === 'berhasil' ? $akurasi : "$akurasi Tulis lebih dekat ke garis bantu.",
         ));
+    }
+
+    /**
+     * Algo-026, DPPL 5.16.6. Hasil diambil dari session, bukan dari body request.
+     */
+    public function simpanHasil(SelesaikanLatihanRequest $request): JsonResponse
+    {
+        $hasil = $request->session()->get('latihan.hasilTerakhir');
+        $hasil = $hasil ? HasilLatihan::fromArray($hasil) : null;
+        if (! $hasil || $hasil->idSoal !== $request->input('idSoal') || $hasil->status !== 'berhasil') {
+            return $this->gagal('BELUM_BERHASIL', 'Latihan belum berhasil diselesaikan', 422);
+        }
+
+        try {
+            $ringkasan = DB::transaction(function () use ($hasil) {
+                // Dicek sebelum hasil baru disimpan; sesudahnya baris baru ini sendiri akan terhitung.
+                $pernah = RiwayatLatihan::cekPernahSelesai($hasil->idPelajar, $hasil->targetSoal, $hasil->mode);
+                $idRiwayat = $this->simpanRiwayat($hasil);
+                $m = MotivasiBelajar::milikPelajar($hasil->idPelajar, kunci: true);
+                $m->perbaruiStreak(today());
+                if (! $pernah) {
+                    $m->tambahPoin($idRiwayat, config('latihan.poin_per_soal'));
+                }
+                $badgeBaru = $this->periksaBadge($m->streak, $m->poin, $m->badge());
+                foreach ($badgeBaru as $kode) {
+                    $m->berikanBadge($kode);
+                }
+
+                return new RingkasanMotivasi($m->streak, $m->poin, ! $pernah, $badgeBaru);
+            });
+        } catch (Throwable $e) {
+            Log::error('Gagal menyimpan hasil latihan', ['id_pelajar' => $hasil->idPelajar, 'galat' => $e->getMessage()]);
+
+            return $this->gagal('GAGAL_SIMPAN', 'Hasil belum tersimpan. Coba lagi.', 500);
+        }
+
+        $sesi = $request->session()->get('latihan.sesi');
+        $sesi['selesai'] = array_values(array_unique([...$sesi['selesai'], $hasil->targetSoal]));
+        $request->session()->put('latihan.sesi', $sesi);
+        $request->session()->forget(['latihan.hasilTerakhir', 'latihan.soalAktif']);
+        $request->session()->put('latihan.ringkasanTerakhir', [
+            'ringkasan' => $ringkasan->toArray(),
+            'skor' => $hasil->skor,
+            'idMateri' => $hasil->idMateri,
+            'namaMateri' => $this->namaMateri($hasil->idMateri),
+            'mode' => $hasil->mode->value,
+        ]);
+
+        return response()->json(['ok' => true, 'redirect' => route('latihan.hasil')]);
+    }
+
+    /** I-10 Hasil Latihan. */
+    public function hasil(Request $request): View|RedirectResponse
+    {
+        $data = $request->session()->get('latihan.ringkasanTerakhir');
+
+        if (! $data) {
+            return redirect()->route('beranda');
+        }
+
+        return view('latihan.hasil', [
+            ...$data,
+            'ringkasan' => RingkasanMotivasi::fromArray($data['ringkasan']),
+            'mode' => ModeLatihan::from($data['mode']),
+        ]);
+    }
+
+    /** I-10-06: sesi diulang dari awal dengan soal baru pada mode yang sama. */
+    public function ulangi(Request $request, int $materi, ModeLatihan $mode): RedirectResponse
+    {
+        $request->session()->forget(['latihan.soalAktif', 'latihan.sesi']);
+
+        return redirect()->route('latihan.soal', [$materi, $mode]);
+    }
+
+    /** I-10-07: soal berikutnya, atau kembali bila semua butir sesi sudah selesai. */
+    public function lanjut(Request $request, int $materi, ModeLatihan $mode): RedirectResponse
+    {
+        $request->session()->forget('latihan.soalAktif');
+        $sesi = $request->session()->get('latihan.sesi');
+        if ($sesi && count($sesi['selesai']) >= $sesi['total']) {
+            $request->session()->forget('latihan.sesi');
+
+            return redirect()->route('materi.show', $materi);
+        }
+
+        return redirect()->route('latihan.soal', [$materi, $mode]);
     }
 
     /**
@@ -151,6 +249,22 @@ class LatihanController extends Controller
     private function periksaBadge(int $streak, int $poin, array $dimiliki): array
     {
         return (new PemeriksaBadge)->periksa($streak, $poin, $dimiliki);
+    }
+
+    /** RiwayatLatihan.simpanHasil (Q-008). Kegagalan dilempar agar transaksi pemanggil dibatalkan. */
+    private function simpanRiwayat(HasilLatihan $hasil): int
+    {
+        $catat = RiwayatLatihan::simpanHasil([
+            'id_pelajar' => $hasil->idPelajar,
+            'id_materi' => $hasil->idMateri,
+            'target_soal' => $hasil->targetSoal,
+            'mode' => $hasil->mode,
+            'skor' => $hasil->skor,
+            'status' => $hasil->status,
+        ]);
+        throw_unless($catat->berhasil, RuntimeException::class, $catat->pesan);
+
+        return $catat->ambil('idRiwayat');
     }
 
     /** Hanya materi terbit yang bisa dilatih; draf dan arsip dianggap tidak ada. */
