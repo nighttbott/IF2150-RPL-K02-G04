@@ -14,4 +14,12 @@ return [
         'ambang_tuntas' => 70,
         'maks_rekomendasi' => 3,
     ],
+
+    'latihan' => [
+        // Latihan non-kanvas (bunyi, merangkai, transliterasi): jumlah soal per sesi dan penilaian.
+        'jumlah_soal' => 5,
+        'ambang_berhasil' => 70,
+        'poin_per_soal' => 10,
+        'masa_berlaku_menit' => 60,
+    ],
 ];
