@@ -4,6 +4,7 @@
    hanya fondasi agar semua halaman memakai warna dan huruf yang sama.
    ============================================================== */
 @import 'bootstrap/dist/css/bootstrap.min.css';
+@import './latihan.css';
 
 /* Font disimpan lokal di public/fonts agar tidak bergantung layanan luar */
 @font-face { font-family: 'Nunito'; src: url('/fonts/Nunito-Variable.ttf') format('truetype'); font-weight: 200 1000; font-display: swap; }
