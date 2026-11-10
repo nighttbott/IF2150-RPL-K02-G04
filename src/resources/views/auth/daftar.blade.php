@@ -102,7 +102,7 @@
             <div class="nk-pesan-galat" role="alert">
                 <span class="ikon"><img src="{{ asset('img/ikon-silang.svg') }}" alt="" width="16" height="16"></span>
                 <div>
-                    <strong>Email sudah terdaftar</strong>
+                    <strong>{{ $errors->first('akun_judul') ?: 'Akun gagal dibuat' }}</strong>
                     <span>{{ $message }}</span>
                 </div>
             </div>
