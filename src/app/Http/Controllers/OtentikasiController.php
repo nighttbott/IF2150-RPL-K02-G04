@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use App\Enums\Peran;
+use App\Http\Requests\DaftarRequest;
+use App\Support\DataPendaftaran;
+use Illuminate\Support\Facades\DB;
 
 /** C15 OtentikasiController. */
 class OtentikasiController extends Controller
@@ -21,7 +25,7 @@ class OtentikasiController extends Controller
     private const JENDELA_DETIK = 60;
     private const PESAN_SALAH = 'Email atau kata sandi salah';
 
-    /** Hash palsu untuk email yang tidak terdaftar, supaya waktu respons sama (Algo-012). */
+    /** Hash palsu untuk email yang tidak terdaftar. */
     private static ?string $hashPalsu = null;
 
     public function tampilMasuk(): View
@@ -71,13 +75,12 @@ class OtentikasiController extends Controller
         return redirect()->route('masuk')->with('sukses', 'Anda sudah keluar.');
     }
 
-    /** Algo-012. Tidak pernah membedakan email salah dari sandi salah. */
     public function validasiLogin(string $email, string $password): HasilOperasi
     {
         $akun = AkunPengguna::cariBerdasarkanEmail($email);
 
         if ($akun === null) {
-            Hash::check($password, self::hashPalsu()); // samakan waktu respons
+            Hash::check($password, self::hashPalsu());
 
             return HasilOperasi::gagal('KREDENSIAL_SALAH', self::PESAN_SALAH);
         }
@@ -109,5 +112,72 @@ class OtentikasiController extends Controller
     private static function hashPalsu(): string
     {
         return self::$hashPalsu ??= Hash::make(Str::random(40));
+    }
+
+    // ----------------------------------------------------------daftar
+
+    public function tampilDaftar(): View
+    {
+        return view('auth.daftar');
+    }
+
+    /** Algo-005 (sisi server) -> Algo-009 (DaftarRequest) -> Algo-011 (simpanAkun). */
+    public function prosesDaftar(DaftarRequest $request): RedirectResponse
+    {
+        $hasil = $this->simpanAkun($request->validated());
+
+        if (! $hasil->berhasil) {
+            return back()
+                ->withInput($request->except('password'))
+                ->with('galat_daftar', ['kode' => $hasil->kode, 'pesan' => $hasil->pesan]);
+        }
+
+        return redirect()->route('masuk')->with('sukses', 'Akun berhasil dibuat. Silakan masuk.');
+    }
+
+    /**
+     * Algo-011. Data sudah divalidasi oleh DaftarRequest (Algo-009).
+     * Baris motivasi_belajar dibuat untuk Pelajar dalam transaksi yang sama.
+     *
+     * param  array{email:string, username:string, password:string, peran:string, nama_tampilan?:?string}  $data
+     */
+    public function simpanAkun(array $data): HasilOperasi
+    {
+        $dataSimpan = new DataPendaftaran(
+            email: $data['email'],
+            username: $data['username'],
+            passwordHash: $this->hashPassword($data['password']),
+            peran: Peran::from($data['peran']),
+            namaTampilan: $data['nama_tampilan'] ?? null,
+        );
+
+        try {
+            $hasil = DB::transaction(function () use ($dataSimpan) {
+                $akun = new AkunPengguna();
+                $hasil = $akun->buatAkunBaru($dataSimpan); // Algo-001
+
+                if ($hasil->berhasil && $dataSimpan->peran === Peran::Pelajar) {
+                    $akun->motivasi()->create([]); // baris awal motivasi_belajar
+                }
+
+                return $hasil;
+            });
+        } catch (\Throwable) {
+            Log::error('Pendaftaran gagal', ['username' => $data['username']]); // tanpa sandi dan email
+
+            return HasilOperasi::gagal('SIMPAN_GAGAL', 'Akun gagal dibuat, coba lagi');
+        }
+
+        if ($hasil->berhasil) {
+            Log::info('Akun baru dibuat', ['id_akun' => $hasil->data['id_akun']]);
+        }
+
+        return $hasil;
+    }
+
+    /** Algo-010. Hash bcrypt bersalt acak; sandi asli tidak pernah disimpan atau dicatat. */
+    private function hashPassword(string $password): string
+    {
+        return Hash::make($password, ['rounds' => 12]);
     }
 }
