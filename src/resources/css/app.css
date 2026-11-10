@@ -56,42 +56,85 @@ h1, h2, h3, h4, .judul { font-family: 'Baloo 2', 'Nunito', sans-serif; font-weig
 .nk-menu a.aktif { background: var(--nk-indigo-muda); border-color: var(--nk-indigo); color: var(--nk-indigo-tua); font-weight: 800; }
 .nk-konten { flex: 1; padding: 36px 44px; min-width: 0; }
 
-/* Layout Autentikasi (I-01 & I-02) */
-.nk-auth-kerangka {
-    display: flex;
-    min-height: 100vh;
-}
-.nk-auth-banner {
-    width: 42%;
-    background: var(--nk-indigo);
-    color: #fff;
-    min-height: 100vh;
-}
-.nk-auth-balon {
-    background: #fff;
-    color: var(--nk-tinta);
-    border-radius: 18px;
-    padding: 14px 20px;
-    display: inline-block;
-    max-width: 320px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    position: relative;
-}
-.nk-auth-balon::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 10px 10px 0;
-    border-style: solid;
-    border-color: #fff transparent;
-    display: block;
-    width: 0;
-}
-.nk-auth-konten {
-    flex: 1;
-    background: var(--nk-latar);
+/* Layout Autentikasi (I-01 & I-02): layouts/tamu, auth/daftar, auth/masuk.
+   Nilai dari Figma frame 83:441 dan 83:671. */
+
+/* Kerangka dua panel */
+.nk-tamu { display: flex; min-height: 100vh; }
+.nk-tamu-maskot { width: 672px; flex: none; background: var(--nk-indigo); padding: 48px 56px; flex-direction: column; justify-content: space-between; gap: 8px; }
+.nk-tamu-formulir { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 24px; }
+
+/* Merek di panel kiri */
+.nk-tamu-merek { display: inline-flex; align-items: center; gap: 14px; text-decoration: none; font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 34px; line-height: 40px; color: #fff; }
+.nk-tamu-merek .cincin-logo { background: #fff; border-radius: 20px; padding: 4px; display: inline-flex; }
+.nk-tamu-merek .cincin-logo img { border-radius: 16px; }
+.nk-tamu-aksara { color: var(--nk-emas-muda); font-size: 34px; line-height: 56px; margin-top: 8px; }
+.nk-tamu-merek-kecil { color: var(--nk-indigo); font-size: 26px; gap: 10px; margin-bottom: 20px; }
+
+/* Maskot dan gelembung ucapan */
+.nk-tamu-tengah { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.nk-gelembung { width: 320px; background: #fff; border: 2px solid var(--nk-garis); border-radius: 16px; padding: 12px 16px; font-weight: 700; font-size: 15px; line-height: 20px; color: var(--nk-tinta); }
+.nk-lingkaran-maskot { width: 330px; height: 330px; border-radius: 50%; background: var(--nk-emas-muda); display: flex; align-items: center; justify-content: center; }
+.nk-tamu-motif { width: 560px; max-width: 100%; height: 40px; }
+
+/* Kartu formulir */
+.nk-kartu-tamu { width: 100%; padding: 32px; display: flex; flex-direction: column; gap: 16px; }
+.nk-kartu-daftar { max-width: 560px; }
+.nk-kartu-masuk { max-width: 480px; }
+.nk-judul-tamu { font-size: 34px; line-height: 40px; margin: 0 0 2px; color: var(--nk-tinta); }
+.nk-kartu-tamu header .teks-redup { font-size: 16px; line-height: 22px; }
+.nk-form-tamu { display: flex; flex-direction: column; gap: 16px; }
+.nk-form-tamu fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+.nk-label { display: block; float: none; width: auto; margin: 0 0 6px; padding: 0; font-weight: 800; font-size: 14px; line-height: 20px; color: var(--nk-tinta); }
+
+/* Isian dengan ikon */
+.nk-isian { display: flex; align-items: center; gap: 10px; background: #fff; border: 2px solid var(--nk-garis); border-radius: 14px; padding: 0 16px; }
+.nk-isian > img { flex: none; }
+.nk-isian input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; padding: 12px 0; font-weight: 500; font-size: 15px; line-height: 20px; color: var(--nk-tinta); }
+.nk-isian input::placeholder { color: #B9AE9E; }
+.nk-isian:focus-within { border-color: var(--nk-indigo); }
+.nk-isian.galat { border-color: var(--nk-merah); background: var(--nk-merah-muda); }
+.nk-galat-isian { margin-top: 6px; font-size: 13px; font-weight: 700; color: var(--nk-merah-tua); }
+
+/* Pilihan peran (I-01-01) */
+.nk-pilihan-peran { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.nk-kartu-peran { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 14px; background: #fff; border: 2px solid var(--nk-garis); border-radius: 18px; box-shadow: 0 4px 0 var(--nk-garis); cursor: pointer; }
+.nk-kartu-peran input { position: absolute; opacity: 0; pointer-events: none; }
+.nk-kartu-peran .nama { font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 18px; line-height: 24px; color: var(--nk-tinta); }
+.nk-kartu-peran .ket { font-size: 13px; line-height: 18px; color: var(--nk-redup); }
+.nk-kartu-peran:has(input:checked) { background: var(--nk-indigo-muda); border-color: var(--nk-indigo); box-shadow: 0 4px 0 var(--nk-indigo); }
+.nk-kartu-peran:has(input:checked) .nama { color: var(--nk-indigo-tua); }
+.nk-kartu-peran:has(input:focus-visible) { outline: 3px solid var(--nk-emas); outline-offset: 2px; }
+
+/* Syarat & Ketentuan (I-01-05) */
+.nk-syarat { margin: 0; padding: 10px 14px 10px 32px; background: var(--nk-latar); border: 2px solid var(--nk-garis); border-radius: 12px; font-size: 13px; line-height: 18px; color: var(--nk-redup); display: flex; flex-direction: column; gap: 4px; }
+
+/* Kotak centang (I-01-06) */
+.nk-centang { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 700; font-size: 14px; line-height: 19px; color: var(--nk-tinta); }
+.nk-centang input { position: absolute; opacity: 0; pointer-events: none; }
+.nk-centang .kotak { width: 24px; height: 24px; flex: none; border-radius: 7px; border: 2px solid var(--nk-garis); background: #fff; display: inline-flex; align-items: center; justify-content: center; }
+.nk-centang .kotak img { visibility: hidden; }
+.nk-centang input:checked + .kotak { background: var(--nk-indigo); border-color: var(--nk-indigo); }
+.nk-centang input:checked + .kotak img { visibility: visible; }
+.nk-centang input:focus-visible + .kotak { outline: 3px solid var(--nk-emas); outline-offset: 2px; }
+
+/* Pesan galat dengan ikon (I-01-09, I-02-05) */
+.nk-pesan-galat { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--nk-merah-muda); border: 2px solid var(--nk-merah); border-radius: 14px; color: var(--nk-merah-tua); }
+.nk-pesan-galat .ikon { width: 28px; height: 28px; flex: none; border-radius: 50%; background: var(--nk-merah); display: inline-flex; align-items: center; justify-content: center; }
+.nk-pesan-galat strong { display: block; font-weight: 800; font-size: 15px; line-height: 20px; }
+.nk-pesan-galat span:not(.ikon) { display: block; font-size: 14px; line-height: 19px; font-weight: 500; }
+
+/* Tombol penuh dan tautan bawah */
+.nk-tombol-penuh { width: 100%; justify-content: center; padding: 14px 24px; font-size: 17px; line-height: 22px; }
+.nk-tombol-penuh:disabled { opacity: .6; cursor: not-allowed; }
+.nk-tautan-tamu { margin: 0; text-align: center; font-size: 14px; line-height: 19px; color: var(--nk-redup); }
+.nk-tautan-tamu a { margin-left: 4px; font-weight: 800; color: var(--nk-teal); text-decoration: none; }
+
+/* Layar sempit */
+@media (max-width: 575.98px) {
+    .nk-kartu-tamu { padding: 24px 20px; }
+    .nk-pilihan-peran { grid-template-columns: 1fr; }
+    .nk-judul-tamu { font-size: 28px; line-height: 34px; }
 }
 
 /* Layout Latihan (I-06 s.d. I-10) */
