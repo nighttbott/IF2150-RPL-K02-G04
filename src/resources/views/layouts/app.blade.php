@@ -32,6 +32,9 @@
             @if ((auth()->user()->peran ?? null) === 'pelajar' && Route::has('progres.index'))
                 <a href="{{ route('progres.index') }}" @class(['aktif' => request()->routeIs('progres.*')])>Progres</a>
             @endif
+            @if ((auth()->user()->peran ?? null) === 'pengajar' && Route::has('kelas.pengajar.index'))
+                <a href="{{ route('kelas.pengajar.index') }}" @class(['aktif' => request()->routeIs('kelas.pengajar.*')])>Kelola Kelas</a>
+            @endif
             @if ((auth()->user()->peran ?? null) === 'pengajar' && Route::has('pemantauan.kelas'))
                 <a href="{{ route('pemantauan.kelas') }}" @class(['aktif' => request()->routeIs('pemantauan.*')])>Pantau Progres</a>
             @endif
