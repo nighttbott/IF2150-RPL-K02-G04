@@ -44,10 +44,15 @@ class KeanggotaanKelas extends Model
                     $anggota = self::query()->create([
                         'id_kelas' => $idKelas, 'id_pelajar' => $idPelajar, 'status' => 'aktif',
                     ]);
+                    if (! $anggota->exists) {
+                        throw new \RuntimeException('Penyimpanan keanggotaan dibatalkan.');
+                    }
                     $kode = 'berhasilBergabung';
                 } elseif ($anggota->status !== 'aktif') {
                     $anggota->status = 'aktif';
-                    $anggota->saveOrFail();
+                    if (! $anggota->saveOrFail()) {
+                        throw new \RuntimeException('Aktivasi keanggotaan dibatalkan.');
+                    }
                     $kode = 'anggotaDiaktifkan';
                 }
 
@@ -101,7 +106,9 @@ class KeanggotaanKelas extends Model
                     return HasilOperasi::gagal('anggotaTidakDitemukan', 'Anggota tidak ditemukan.');
                 }
                 $anggota->status = $status;
-                $anggota->saveOrFail();
+                if (! $anggota->saveOrFail()) {
+                    throw new \RuntimeException('Perubahan status keanggotaan dibatalkan.');
+                }
 
                 return HasilOperasi::sukses('statusDiubah', 'Status keanggotaan diperbarui.');
             }, 3);
