@@ -6,13 +6,14 @@ use App\Latihan\Data\SoalLatihan;
 use App\Models\AkunPengguna;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use Tests\Support\AlurLatihan;
 use Database\Seeders\MateriSeeder;
 use Tests\Feature\BantuanData;
 use Tests\TestCase;
 
 class NilaiJawabanMenulisTest extends TestCase
 {
-    use BantuanData, RefreshDatabase;
+    use AlurLatihan, BantuanData, RefreshDatabase;
 
     private AkunPengguna $pelajar;
 
@@ -21,27 +22,6 @@ class NilaiJawabanMenulisTest extends TestCase
         parent::setUp();
         $this->seed(MateriSeeder::class);
         $this->pelajar = $this->buatPelajar();
-    }
-
-    /** Membuka I-07 dan mengembalikan soal aktif dari session. */
-    protected function bukaSoal(string $url = '/latihan/1/menulis'): object
-    {
-        $this->actingAs($this->pelajar)->get($url)->assertOk();
-        // Session memakai serialisasi JSON; isinya harus tetap sama setelah lewat JSON.
-        $this->assertEquals(json_decode(json_encode(session('latihan')), true), session('latihan'));
-
-        return SoalLatihan::fromArray(session('latihan.soalAktif')['soal']);
-    }
-
-    /** Goresan templat soal (kotak 0–100) dipindah ke satuan kanvas (dibagi tinggi kanvas, 0–1). */
-    protected function goresanBaik(SoalLatihan $soal): array
-    {
-        return array_map(fn ($g) => array_map(fn ($p) => ['x' => $p['x'] / 100, 'y' => $p['y'] / 100], $g), $soal->templat);
-    }
-
-    protected function goresanBuruk(): array
-    {
-        return [[['x' => 0.1, 'y' => 0.1], ['x' => 0.2, 'y' => 0.1]]];
     }
 
     public function test_html_soal_tidak_memuat_templat(): void
@@ -57,14 +37,14 @@ class NilaiJawabanMenulisTest extends TestCase
 
     public function test_refresh_memakai_soal_yang_sama(): void
     {
-        $soal = $this->bukaSoal();
+        $soal = $this->bukaSoal($this->pelajar);
 
-        $this->assertSame($soal->idSoal, $this->bukaSoal()->idSoal);
+        $this->assertSame($soal->idSoal, $this->bukaSoal($this->pelajar)->idSoal);
     }
 
     public function test_id_soal_salah_409(): void
     {
-        $this->bukaSoal();
+        $this->bukaSoal($this->pelajar);
 
         $this->postJson('/latihan/jawaban', ['idSoal' => 'lain', 'goresan' => $this->goresanBuruk()])
             ->assertStatus(409)->assertJson(['message' => 'Soal tidak ditemukan. Muat ulang latihan.']);
@@ -78,7 +58,7 @@ class NilaiJawabanMenulisTest extends TestCase
 
     public function test_payload_di_luar_batas_422(): void
     {
-        $soal = $this->bukaSoal();
+        $soal = $this->bukaSoal($this->pelajar);
         $kirim = fn ($goresan) => $this->postJson('/latihan/jawaban', ['idSoal' => $soal->idSoal, 'goresan' => $goresan]);
         $titik = ['x' => 0.5, 'y' => 0.5];
 
@@ -92,25 +72,29 @@ class NilaiJawabanMenulisTest extends TestCase
         $kirim([[['x' => -0.4, 'y' => 2.9, 't' => 12.5], $titik]])->assertOk();
     }
 
-    public function test_jawaban_buruk_perlu_diulang(): void
+    public function test_jawaban_buruk_perlu_diulang_dicatat_tanpa_motivasi(): void
     {
-        $soal = $this->bukaSoal();
+        $soal = $this->bukaSoal($this->pelajar);
 
         $this->postJson('/latihan/jawaban', ['idSoal' => $soal->idSoal, 'goresan' => $this->goresanBuruk()])
             ->assertOk()->assertJson(['status' => 'perlu_diulang'])
             ->assertJsonPath('umpanBalik', fn ($u) => str_ends_with($u, 'Tulis lebih dekat ke garis bantu.'));
+        $this->assertDatabaseHas('riwayat_latihan', [
+            'id_pelajar' => $this->pelajar->id_akun, 'target_soal' => $soal->targetSoal, 'mode' => 'menulis', 'status' => 'perlu_diulang',
+        ]);
+        $this->assertSame(1, DB::table('riwayat_latihan')->count());
         $this->assertSame(0, DB::table('motivasi_belajar')->count());
     }
 
     public function test_jawaban_baik_berhasil_tanpa_riwayat_dan_skor_body_diabaikan(): void
     {
-        $soal = $this->bukaSoal();
+        $soal = $this->bukaSoal($this->pelajar);
 
         $this->postJson('/latihan/jawaban', ['idSoal' => $soal->idSoal, 'goresan' => $this->goresanBaik($soal), 'skor' => 5])
             ->assertOk()->assertJson(['status' => 'berhasil'])
             ->assertJsonPath('skor', fn ($s) => $s >= 70);
+        $this->assertSame(0, DB::table('riwayat_latihan')->where('status', 'berhasil')->count());
         $this->postJson('/latihan/jawaban', ['idSoal' => $soal->idSoal, 'goresan' => $this->goresanBuruk(), 'skor' => 100])
             ->assertJson(['status' => 'perlu_diulang']);
-        $this->assertSame(0, DB::table('riwayat_latihan')->where('status', 'berhasil')->count());
     }
 }
