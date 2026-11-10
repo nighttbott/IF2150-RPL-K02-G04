@@ -48,11 +48,18 @@ class LatihanController extends Controller
     /** I-07: memakai ulang soal aktif bila materi dan mode sama, supaya refresh tidak mengganti soal. */
     public function soal(Request $request, int $materi, ModeLatihan $mode): View
     {
+        $request->validate([
+            'tugas' => ['nullable', 'integer', 'required_with:komponen'],
+            'komponen' => ['nullable', 'integer', 'required_with:tugas'],
+        ]);
+        $konteks = $request->filled('tugas')
+            ? ['idTugas' => $request->integer('tugas'), 'idKomponen' => $request->integer('komponen')]
+            : null;
         $aktif = $request->session()->get('latihan.soalAktif');
         $soal = $aktif ? SoalLatihan::fromArray($aktif['soal']) : null;
-        $soal = $soal && $soal->idMateri === $materi && $soal->mode === $mode
+        $soal = $soal && $soal->idMateri === $materi && $soal->mode === $mode && ($aktif['konteksTugas'] ?? null) === $konteks
             ? $soal
-            : $this->siapkanSoal($request, $materi, $mode);
+            : $this->siapkanSoal($request, $materi, $mode, $konteks);
         $sesi = $request->session()->get('latihan.sesi');
 
         return view("latihan.{$mode->value}", [
@@ -78,7 +85,10 @@ class LatihanController extends Controller
             default => throw new LogicException('Mode ini belum tersedia.'),
         };
         $status = $skor >= config('latihan.ambang_akurasi') ? 'berhasil' : 'perlu_diulang';
-        $hasil = new HasilLatihan($request->user()->getKey(), $soal->idMateri, $soal->idSoal, $soal->targetSoal, $soal->mode, $skor, $status);
+        $hasil = new HasilLatihan(
+            $request->user()->getKey(), $soal->idMateri, $soal->idSoal, $soal->targetSoal, $soal->mode, $skor, $status,
+            $aktif['konteksTugas']['idTugas'] ?? null, $aktif['konteksTugas']['idKomponen'] ?? null,
+        );
         if ($status === 'perlu_diulang') {
             $this->simpanRiwayat($hasil);
         }
@@ -137,6 +147,7 @@ class LatihanController extends Controller
             'idMateri' => $hasil->idMateri,
             'namaMateri' => $this->namaMateri($hasil->idMateri),
             'mode' => $hasil->mode->value,
+            'idTugas' => $hasil->idTugas,
         ]);
 
         return response()->json(['ok' => true, 'redirect' => route('latihan.hasil')]);
@@ -183,10 +194,13 @@ class LatihanController extends Controller
     /**
      * Algo-021, DPPL 5.16.1. Memilih acak dari butir yang belum diselesaikan di sesi ini.
      */
-    private function siapkanSoal(Request $request, int $idMateri, ModeLatihan $mode): SoalLatihan
+    private function siapkanSoal(Request $request, int $idMateri, ModeLatihan $mode, ?array $konteksTugas = null): SoalLatihan
     {
         if (! view()->exists("latihan.{$mode->value}")) {
             abort(422, 'Mode latihan tidak dikenal');
+        }
+        if ($konteksTugas) {
+            $this->validasiKonteksTugas($request->user()->getKey(), $konteksTugas, $idMateri, $mode);
         }
 
         $butirSah = $this->materi($idMateri)->ambilTargetLatihan($mode->value)->butir;
@@ -215,7 +229,7 @@ class LatihanController extends Controller
         };
 
         $request->session()->put('latihan.sesi', $sesi);
-        $request->session()->put('latihan.soalAktif', ['soal' => $soal->toArray(), 'kunci' => null]);
+        $request->session()->put('latihan.soalAktif', ['soal' => $soal->toArray(), 'kunci' => null, 'konteksTugas' => $konteksTugas]);
         $request->session()->forget('latihan.hasilTerakhir');
 
         return $soal;
@@ -251,6 +265,27 @@ class LatihanController extends Controller
         return (new PemeriksaBadge)->periksa($streak, $poin, $dimiliki);
     }
 
+    /**
+     * Pelajar harus anggota aktif kelas pemilik tugas terbit, dan komponen harus milik tugas itu
+     * dengan materi dan mode yang sama. Tenggat yang lewat tidak menolak (SKPL 2.4 butir 7).
+     * Sementara memakai query langsung, diganti validasi milik Abduh (TugasKelas, KeanggotaanKelas).
+     */
+    private function validasiKonteksTugas(int $idPelajar, array $konteks, int $idMateri, ModeLatihan $mode): void
+    {
+        $sah = DB::table('komponen_tugas as k')
+            ->join('tugas_kelas as t', 't.id_tugas', '=', 'k.id_tugas')
+            ->join('keanggotaan_kelas as a', 'a.id_kelas', '=', 't.id_kelas')
+            ->where('k.id_tugas', $konteks['idTugas'])
+            ->where('k.id_komponen', $konteks['idKomponen'])
+            ->where('k.id_materi', $idMateri)
+            ->where('k.mode', $mode->value)
+            ->where('t.status', 'terbit')
+            ->where('a.id_pelajar', $idPelajar)
+            ->where('a.status', 'aktif')
+            ->exists();
+        abort_unless($sah, 403, 'Kamu tidak memiliki akses ke tugas ini.');
+    }
+
     /** RiwayatLatihan.simpanHasil (Q-008). Kegagalan dilempar agar transaksi pemanggil dibatalkan. */
     private function simpanRiwayat(HasilLatihan $hasil): int
     {
@@ -261,6 +296,9 @@ class LatihanController extends Controller
             'mode' => $hasil->mode,
             'skor' => $hasil->skor,
             'status' => $hasil->status,
+            // Hanya hasil berhasil yang menjadi bukti penyelesaian komponen tugas (Q-015).
+            'id_tugas' => $hasil->status === 'berhasil' ? $hasil->idTugas : null,
+            'id_komponen' => $hasil->status === 'berhasil' ? $hasil->idKomponen : null,
         ]);
         throw_unless($catat->berhasil, RuntimeException::class, $catat->pesan);
 
