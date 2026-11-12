@@ -14,4 +14,7 @@ return [
         'ambang_tuntas' => 70,
         'maks_rekomendasi' => 3,
     ],
+
+    // Jumlah latihan berhasil per hari untuk kartu "Target hari ini" (I-03-07).
+    'target_harian' => 3,
 ];
