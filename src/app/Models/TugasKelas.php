@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StatusTugas;
 use App\Support\Kelas\HasilOperasi;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Collection;

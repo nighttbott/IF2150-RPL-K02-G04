@@ -87,6 +87,12 @@ class KeanggotaanKelas extends Model
         return self::query()->where('id_kelas', $idKelas)->orderBy('id_keanggotaan')->get();
     }
 
+    /** Pembantu pencarian satu keanggotaan (bukan operasi DPPL), dipakai KelasPengajarController. */
+    public static function cari(int $idKelas, int $idPelajar): ?self
+    {
+        return self::query()->where('id_kelas', $idKelas)->where('id_pelajar', $idPelajar)->first();
+    }
+
     /** Pemanggil wajib sudah mengotorisasi Pengajar pemilik kelas (Algo-111). */
     public function ubahStatus(string $status): HasilOperasi
     {

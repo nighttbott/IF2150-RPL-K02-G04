@@ -17,4 +17,11 @@ return [
 
     // Jumlah latihan berhasil per hari untuk kartu "Target hari ini" (I-03-07).
     'target_harian' => 3,
+    'latihan' => [
+        // Latihan non-kanvas (bunyi, merangkai, transliterasi): jumlah soal per sesi dan penilaian.
+        'jumlah_soal' => 5,
+        'ambang_berhasil' => 70,
+        'poin_per_soal' => 10,
+        'masa_berlaku_menit' => 60,
+    ],
 ];
