@@ -92,10 +92,10 @@
                                         <span class="nk-simpul" aria-hidden="true">
                                             <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
                                         </span>
-                                        <span class="nk-langkah-nama">{{ $langkah['nama'] }} <span class="visually-hidden">(belum terbuka)</span></span>
+                                        <span class="nk-langkah-nama">{{ \Illuminate\Support\Str::after($langkah['nama'], ': ') }} <span class="visually-hidden">(belum terbuka)</span></span>
                                     @else
                                         <a href="{{ route('materi.show', $langkah['id_materi']) }}" class="nk-simpul"
-                                        aria-label="{{ $langkah['nama'] }} ({{ ['selesai' => 'selesai', 'mulai' => 'materi berikutnya', 'terbuka' => 'terbuka'][$langkah['keadaan']] }})">
+                                        aria-label="{{ \Illuminate\Support\Str::after($langkah['nama'], ': ') }} ({{ ['selesai' => 'selesai', 'mulai' => 'materi berikutnya', 'terbuka' => 'terbuka'][$langkah['keadaan']] }})">
                                             @if ($langkah['keadaan'] === 'selesai')
                                                 <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>
                                             @elseif ($langkah['keadaan'] === 'mulai')
@@ -104,7 +104,7 @@
                                                 <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-2v14c3 0 6 .5 8 2 2-1.5 5-2 8-2V4c-3 0-6 .5-8 2Z"/><path d="M12 6v14"/></svg>
                                             @endif
                                         </a>
-                                        <span class="nk-langkah-nama" aria-hidden="true">{{ $langkah['nama'] }}</span>
+                                        <span class="nk-langkah-nama" aria-hidden="true">{{ \Illuminate\Support\Str::after($langkah['nama'], ': ') }}</span>
                                     @endif
                                 </li>
                             @endforeach
