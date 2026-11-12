@@ -4,15 +4,14 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Middleware pembatas akses berdasarkan peran (DPPL Algo-004 verifikasiHakAkses).
+ * Middleware pembatas akses berdasarkan peran (DPPL Algo-002 verifikasiHakAkses).
  *
  * Contoh pada route:  ->middleware(['auth', 'peran:pelajar'])  atau  'peran:pengajar,tim_materi'
- * Perbandingan tidak peka huruf besar/kecil. Disiapkan Natan sebagai fondasi; Ryuza (pemilik
- * autentikasi) boleh mengembangkannya.
+ * Perbandingan tidak peka huruf besar/kecil. Disiapkan Natan sebagai fondasi; dikembangkan
+ * Ryuza bersama pembatasan akses modul (Unit 5).
  */
 class CekPeran
 {
@@ -20,9 +19,11 @@ class CekPeran
     {
         $akun = $request->user();
 
-        // Belum masuk: arahkan ke halaman login bila sudah ada, selain itu tolak.
+        // Cadangan bila dipakai tanpa 'auth': permintaan JSON mendapat 401, selain itu ke halaman masuk.
         if (! $akun) {
-            return Route::has('login') ? redirect()->guest(route('login')) : abort(401, 'Silakan masuk terlebih dahulu.');
+            return $request->expectsJson()
+                ? abort(401, 'Silakan masuk terlebih dahulu.')
+                : redirect()->guest(route('masuk'));
         }
 
         $diizinkan = array_map('strtolower', $peran);

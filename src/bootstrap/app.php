@@ -12,8 +12,22 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function () {
-            foreach (['auth', 'materi', 'latihan', 'kelas-pengajar', 'kelas-pelajar', 'progres', 'feedback'] as $modul) {
-                Route::middleware('web')->group(base_path("routes/{$modul}.php"));
+            // Autentikasi: terbuka untuk tamu; route di dalamnya mengatur guest/auth sendiri.
+            Route::middleware('web')->group(base_path('routes/auth.php'));
+
+            // Peta peran per modul (Algo-002). Modul yang dipakai lebih dari satu peran
+            // memasang peran: sendiri per grup di dalam berkas route-nya (lihat Langkah 5).
+            $modul = [
+                'latihan'        => ['auth', 'peran:pelajar'],
+                'kelas-pelajar'  => ['auth', 'peran:pelajar'],
+                'kelas-pengajar' => ['auth', 'peran:pengajar'],
+                'feedback'       => ['auth', 'peran:pelajar,pengajar'],
+                'materi'         => ['auth'],   // pelajar dan tim_materi: lihat routes/materi.php
+                'progres'        => ['auth'],   // pelajar dan pengajar bila pemantauan di berkas ini
+            ];
+
+            foreach ($modul as $nama => $middleware) {
+                Route::middleware(['web', ...$middleware])->group(base_path("routes/{$nama}.php"));
             }
 
             // Route masuk sementara untuk pengembangan (hanya di lingkungan local)
