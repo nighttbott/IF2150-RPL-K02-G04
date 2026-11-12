@@ -14,6 +14,8 @@ final readonly class HasilLatihan
         public ModeLatihan $mode,
         public float $skor,
         public string $status,
+        public ?int $idTugas = null,
+        public ?int $idKomponen = null,
     ) {}
 
     /** Session memakai serialisasi JSON, jadi hasil disimpan sebagai array. */
