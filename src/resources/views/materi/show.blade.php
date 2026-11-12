@@ -10,6 +10,10 @@
     $urlDaftar = route('materi.index', ['jenis' => $jenis, 'tingkat' => $paket->tingkatKesulitan ?: 1]);
 @endphp
 
+@isset($konteksTugas)
+    <a href="{{ $konteksTugas['kembali'] }}" class="small text-decoration-none">← Kembali ke tugas</a>
+@endisset
+
 @if (! $paket->berhasil())
     <a href="{{ route('materi.index') }}" class="small text-decoration-none">← Kembali ke daftar materi</a>
     <div class="pesan pesan-gagal mt-3">
@@ -52,6 +56,13 @@
             <a href="{{ $urlLatihan }}" class="tombol tombol-utama">✎ Mulai latihan</a>{{-- I-05-07 --}}
             <a href="{{ $urlDaftar }}" class="tombol tombol-sekunder">← Kembali</a>{{-- I-05-08 --}}
         </div>
+        @isset($konteksTugas)
+            <form method="post" action="{{ $konteksTugas['selesai'] }}" class="mt-3">
+                @csrf
+                <p>Setelah selesai membaca materi ini, konfirmasikan untuk mencatat kemajuan tugasmu.</p>
+                <button type="submit" class="tombol tombol-utama">Selesai membaca</button>
+            </form>
+        @endisset
     </div>
 
     <div class="col-lg-4">

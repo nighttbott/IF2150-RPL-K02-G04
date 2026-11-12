@@ -1,0 +1,123 @@
+/* Gaya layar latihan I-06, I-07, I-10 (Figma "Ngaksara - Interface Demo", frame 84:763, 84:991, 88:876). */
+
+:root {
+    --lt-jalur: #F2ECE2;
+    --lt-outline: #E7DCCB;
+}
+
+.lt-label { font-size: 12px; line-height: 16px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase; color: var(--nk-sogan); }
+.lt-sogan { color: var(--nk-sogan); }
+.lt-emas { color: var(--nk-emas-tua); }
+.lt-indigo { color: var(--nk-indigo-tua); }
+
+/* Tombol bilah bawah dan Bersihkan */
+.lt-tombol { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 14px; padding: 14px 24px; font: 700 17px/22px 'Baloo 2', sans-serif; text-decoration: none; }
+.lt-tombol:disabled { opacity: .5; cursor: not-allowed; }
+.lt-tombol-utama { min-width: 180px; background: var(--nk-indigo); color: #fff; box-shadow: 0 4px 0 var(--nk-indigo-tua); }
+.lt-tombol-sekunder { background: var(--nk-permukaan); color: var(--nk-indigo); border: 2px solid var(--nk-garis); box-shadow: 0 4px 0 var(--nk-garis); }
+
+/* ---------- I-06 Pilih Mode ---------- */
+/* Padding 36px 44px dari .nk-konten di layout bersama. */
+.lt-pilih { display: flex; gap: 32px; }
+.lt-pilih-utama { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
+.lt-pilih-samping { width: 340px; flex: none; display: flex; flex-direction: column; gap: 20px; }
+.lt-judul { display: flex; flex-direction: column; gap: 4px; }
+.lt-judul h1 { margin: 0; font-size: 34px; line-height: 40px; }
+.lt-judul p { margin: 0; font-size: 16px; line-height: 22px; color: var(--nk-redup); }
+.lt-kembali { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; line-height: 20px; font-weight: 800; color: var(--nk-redup); text-decoration: none; }
+.lt-baris-mode { display: flex; gap: 18px; }
+.lt-kartu-mode { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.lt-kepala-mode { display: flex; gap: 18px; }
+.lt-kepala-mode h2 { margin: 0 0 4px; font-size: 24px; line-height: 30px; font-weight: 700; }
+.lt-kepala-mode p { margin: 0; font-size: 14px; line-height: 19px; color: var(--nk-redup); }
+.lt-kotak-ikon { width: 72px; height: 72px; flex: none; border-radius: 20px; display: flex; align-items: center; justify-content: center; background: var(--lt-warna); box-shadow: 0 5px 0 var(--lt-warna-tua); }
+.lt-tombol-mulai { display: block; padding: 9px 16px; border-radius: 12px; text-align: center; font: 700 14px/18px 'Baloo 2', sans-serif; color: #fff; text-decoration: none; background: var(--lt-warna); box-shadow: 0 3px 0 var(--lt-warna-tua); }
+.lt-tombol-mulai[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
+.lt-mode-indigo { --lt-warna: var(--nk-indigo); --lt-warna-tua: var(--nk-indigo-tua); }
+.lt-mode-teal { --lt-warna: var(--nk-teal); --lt-warna-tua: var(--nk-teal-tua); }
+.lt-mode-emas { --lt-warna: var(--nk-emas); --lt-warna-tua: var(--nk-emas-tua); }
+.lt-mode-merah { --lt-warna: var(--nk-merah); --lt-warna-tua: var(--nk-merah-tua); }
+.lt-info { display: flex; align-items: center; gap: 10px; }
+.lt-info h2 { margin: 0 0 4px; font-size: 18px; line-height: 24px; font-weight: 700; color: var(--nk-sogan); }
+.lt-info p { margin: 0; font-size: 14px; line-height: 19px; font-weight: 600; }
+.lt-statistik { display: flex; justify-content: space-between; padding: 14px 16px; }
+.lt-statistik > div { display: flex; align-items: center; gap: 8px; }
+.lt-statistik span { display: flex; flex-direction: column; font-size: 12px; line-height: 16px; font-weight: 700; color: var(--nk-redup); }
+.lt-statistik b { font: 800 20px/24px 'Baloo 2', sans-serif; }
+
+/* ---------- Layout fokus I-07 dan I-10 ---------- */
+.lt-fokus { min-height: 100vh; display: flex; flex-direction: column; }
+.lt-bilah-atas { display: flex; align-items: center; gap: 24px; padding: 28px 120px; }
+.lt-kemajuan { flex: 1; height: 18px; border-radius: 9px; background: var(--lt-jalur); overflow: hidden; }
+.lt-kemajuan > span { display: block; height: 100%; border-radius: 9px; background: var(--nk-indigo); }
+.lt-streak { display: inline-flex; align-items: center; gap: 4px; font: 800 18px/22px 'Baloo 2', sans-serif; color: var(--nk-sogan); }
+
+/* ---------- I-07 Menulis ---------- */
+.lt-isi { flex: 1; display: flex; flex-direction: column; gap: 24px; padding: 8px 240px; }
+.lt-instruksi { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; }
+.lt-instruksi > div { display: flex; flex-direction: column; gap: 4px; }
+.lt-instruksi h1 { margin: 0; font-size: 34px; line-height: 40px; }
+.lt-instruksi p { margin: 0; font-size: 16px; line-height: 22px; color: var(--nk-redup); }
+.lt-sakelar { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; line-height: 20px; font-weight: 800; cursor: pointer; }
+.lt-sakelar input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.lt-sakelar > span { width: 46px; height: 26px; padding: 3px; border-radius: 13px; background: var(--nk-garis); display: flex; transition: background .15s; }
+.lt-sakelar > span::after { content: ''; width: 20px; height: 20px; border-radius: 10px; background: #fff; transition: transform .15s; }
+.lt-sakelar input:checked + span { background: var(--nk-indigo); }
+.lt-sakelar input:checked + span::after { transform: translateX(20px); }
+.lt-sakelar input:focus-visible + span { outline: 3px solid var(--nk-indigo-muda); outline-offset: 2px; }
+.lt-area { display: flex; gap: 24px; }
+.lt-kanvas { flex: 1; min-width: 0; height: 360px; background: #fff; border: 3px solid var(--nk-indigo); border-radius: 22px; touch-action: none; cursor: crosshair; }
+.lt-samping { width: 240px; flex: none; display: flex; flex-direction: column; gap: 16px; }
+.lt-contoh { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 16px; text-align: center; }
+.lt-contoh h2 { margin: 0; font-size: 18px; line-height: 24px; font-weight: 700; }
+.lt-contoh .aksara { font-size: 64px; line-height: 1.4; color: var(--nk-indigo-tua); }
+.lt-contoh p { margin: 0; font-size: 14px; line-height: 19px; color: var(--nk-redup); }
+
+.lt-bilah-bawah { display: flex; justify-content: space-between; align-items: center; gap: 24px; min-height: 104px; padding: 24px 240px; background: var(--nk-permukaan); border-top: 2px solid var(--nk-garis); }
+.lt-hasil { display: flex; align-items: center; gap: 14px; }
+.lt-hasil strong { display: block; font: 800 20px/26px 'Baloo 2', sans-serif; }
+.lt-hasil span#hasil-pesan { font-size: 15px; line-height: 20px; font-weight: 700; }
+.lt-lingkaran { width: 56px; height: 56px; border-radius: 28px; display: flex; align-items: center; justify-content: center; }
+.lt-aksi { display: flex; gap: 12px; margin-left: auto; }
+.lt-bilah-bawah[data-keadaan="netral"] .lt-hasil,
+.lt-bilah-bawah:not([data-keadaan="perlu_diulang"]) #ulangi,
+.lt-bilah-bawah:not([data-keadaan="galat"]) #muat-ulang,
+.lt-bilah-bawah[data-keadaan="galat"] #periksa,
+.lt-bilah-bawah:not([data-keadaan="berhasil"]) [data-ikon="berhasil"],
+.lt-bilah-bawah[data-keadaan="berhasil"] [data-ikon="perlu_diulang"] { display: none; }
+.lt-bilah-bawah[data-keadaan="perlu_diulang"],
+.lt-bilah-bawah[data-keadaan="galat"] { background: var(--nk-merah-muda); border-top-color: var(--nk-merah); color: var(--nk-merah-tua); }
+.lt-bilah-bawah[data-keadaan="perlu_diulang"] .lt-lingkaran,
+.lt-bilah-bawah[data-keadaan="galat"] .lt-lingkaran { background: var(--nk-merah); }
+.lt-bilah-bawah[data-keadaan="berhasil"] { background: var(--nk-hijau-muda); border-top-color: var(--nk-hijau); color: var(--nk-hijau-tua); }
+.lt-bilah-bawah[data-keadaan="berhasil"] .lt-lingkaran { background: var(--nk-hijau); }
+
+/* ---------- I-10 Hasil Latihan ---------- */
+.lt-isi-hasil { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 40px 0; text-align: center; }
+.lt-isi-hasil h1 { margin: 0; font-size: 44px; line-height: 52px; color: var(--nk-emas-tua); }
+.lt-isi-hasil > p { margin: 0; font-size: 17px; line-height: 23px; font-weight: 600; }
+.lt-kartu-statistik { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+.lt-stat { width: 220px; background: var(--nk-permukaan); border: 3px solid var(--lt-warna); border-radius: 18px; box-shadow: 0 4px 0 var(--lt-warna); overflow: hidden; }
+.lt-stat-emas { --lt-warna: var(--nk-emas); }
+.lt-stat-indigo { --lt-warna: var(--nk-indigo); }
+.lt-stat-sogan { --lt-warna: var(--nk-sogan); }
+.lt-pita { display: block; padding: 6px 0; background: var(--lt-warna); color: #fff; font-size: 13px; line-height: 18px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase; }
+.lt-stat > div { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 16px 0; font: 800 30px/36px 'Baloo 2', sans-serif; color: var(--lt-warna); }
+.lt-keterangan { margin: -8px 0 0; font-size: 14px; line-height: 19px; color: var(--nk-redup); }
+.lt-badge { display: flex; align-items: center; gap: 14px; padding: 14px 22px; text-align: left; background: var(--nk-indigo-muda); border: 2px solid var(--nk-indigo); border-radius: 18px; box-shadow: 0 4px 0 var(--nk-indigo); }
+.lt-badge > div { display: flex; flex-direction: column; gap: 2px; }
+.lt-badge .lt-label { color: var(--nk-indigo-tua); }
+.lt-badge strong { font: 700 18px/24px 'Baloo 2', sans-serif; }
+.lt-badge span:last-child { font-size: 14px; line-height: 19px; color: var(--nk-redup); }
+.lt-tombol-lanjut { width: 200px; }
+
+/* Lebar Figma 1440 px; padding dipersempit untuk 1280 px dan tablet landscape. */
+@media (max-width: 1280px) {
+    .lt-bilah-atas { padding: 24px 48px; }
+    .lt-isi, .lt-bilah-bawah { padding-left: 64px; padding-right: 64px; }
+}
+@media (max-width: 1024px) {
+    .lt-pilih { flex-direction: column; }
+    .lt-pilih-samping { width: auto; }
+    .lt-isi, .lt-bilah-bawah { padding-left: 24px; padding-right: 24px; }
+}

@@ -1,52 +1,56 @@
-{{-- I-10 Hasil Latihan (mode non-kanvas, Marvel). Data: $hasil (array), $materi --}}
-@extends('layouts.app')
-@section('judul', 'Hasil Latihan · Ngaksara')
+{{-- I-10 Hasil Latihan (DPPL 6.10). --}}
+@extends('latihan.layout-fokus')
 
-@section('konten')
-<h1 class="mb-1">Hasil Latihan {{ ucfirst($hasil['mode']) }}</h1>
-@if ($materi)<p class="teks-redup">{{ $materi->nama_materi }}</p>@endif
+@section('judul', 'Latihan rampung')
 
-<div class="pesan {{ $hasil['lulus'] ? 'pesan-berhasil' : 'pesan-info' }} mb-3">
-    Skor rata-rata <strong>{{ rtrim(rtrim(number_format($hasil['rata_rata'], 2, ',', ''), '0'), ',') }}</strong>.
-    {{ $hasil['lulus'] ? 'Bagus, latihan ini berhasil.' : 'Belum mencapai batas berhasil. Coba ulangi.' }}
-    @if ($hasil['poin_didapat'] > 0) Anda mendapat <strong>+{{ $hasil['poin_didapat'] }} poin</strong>.@endif
-    @if ($hasil['dari_tugas'] && $hasil['lulus']) Komponen tugas ini tercatat selesai.@endif
-</div>
+@section('isi')
+<div class="lt-fokus">
+    <main class="lt-isi-hasil">
+        <img src="{{ asset('img/pak-aksa-jempol.svg') }}" alt="" width="220" height="242">
+        <h1>Latihan rampung!</h1>
+        <p>Apik tenan! Kamu menyelesaikan latihan {{ $mode->value }} "{{ $namaMateri }}".</p>
 
-@foreach ($hasil['badge_baru'] as $nama)
-    <div class="pesan pesan-berhasil mb-2">Badge baru: <strong>{{ $nama }}</strong></div>
-@endforeach
+        <div class="lt-kartu-statistik">
+            <div class="lt-stat lt-stat-emas">
+                <span class="lt-pita">Poin</span>
+                <div><img src="{{ asset('img/ikon-gobog.svg') }}" alt="" width="34" height="34">+{{ $ringkasan->poinBertambah ? config('latihan.poin_per_soal') : 0 }}</div>
+            </div>
+            <div class="lt-stat lt-stat-indigo">
+                <span class="lt-pita">Akurasi</span>
+                <div><img src="{{ asset('img/ikon-bintang.svg') }}" alt="" width="34" height="34">{{ str_replace('.', ',', (string) $skor) }}%</div>
+            </div>
+            <div class="lt-stat lt-stat-sogan">
+                <span class="lt-pita">Streak</span>
+                <div><img src="{{ asset('img/ikon-blencong.svg') }}" alt="" width="34" height="34">{{ $ringkasan->streak }} hari</div>
+            </div>
+        </div>
+        @unless ($ringkasan->poinBertambah)
+            <p class="lt-keterangan">Soal ini sudah pernah kamu selesaikan.</p>
+        @endunless
 
-<div class="table-responsive mb-3">
-    <table class="tabel-nk align-middle">
-        <thead><tr><th>Soal</th><th>Jawaban Anda</th><th>Kunci</th><th>Hasil</th></tr></thead>
-        <tbody>
-        @foreach ($hasil['rincian'] as $r)
-            <tr>
-                @if ($hasil['mode'] === 'bunyi')
-                    <td>🔊 {{ $r['bunyi'] }}</td>
-                    <td class="aksara fs-4">{{ $r['jawaban'] !== '' ? $r['jawaban'] : '(kosong)' }}</td>
-                    <td class="aksara fs-4">{{ $r['kunci'] }}</td>
-                @else
-                    <td class="aksara fs-4">{{ $r['target'] }}</td>
-                    <td>{{ $r['jawaban'] !== '' ? $r['jawaban'] : '(kosong)' }}</td>
-                    <td>{{ $r['kunci'] }}</td>
-                @endif
-                <td>
-                    <span class="label {{ $r['benar'] ? 'label-berhasil' : 'label-gagal' }}">{{ $r['benar'] ? 'Benar' : 'Salah' }}</span>
-                    @if (! $r['benar'] && $r['posisi_salah'])
-                        <div class="small teks-redup">Posisi salah: {{ implode(', ', array_map(fn ($p) => $p + 1, $r['posisi_salah'])) }}</div>
-                    @endif
-                </td>
-            </tr>
+        @foreach ($ringkasan->badgeBaru as $kode)
+            <div class="lt-badge">
+                <img src="{{ asset('img/ikon-gunungan.svg') }}" alt="" width="44" height="44">
+                <div>
+                    <span class="lt-label">Badge baru</span>
+                    <strong>{{ \App\Models\MotivasiBelajar::BADGE[$kode] }}</strong>
+                    <span>{{ \App\Latihan\PemeriksaBadge::DESKRIPSI[$kode] }}</span>
+                </div>
+            </div>
         @endforeach
-        </tbody>
-    </table>
-</div>
+    </main>
 
-<div class="d-flex gap-2 flex-wrap">
-    <a href="{{ route('latihan.soal.mulai', [$hasil['mode'], $hasil['id_materi']]) }}" class="tombol tombol-utama">Ulangi</a>
-    @if (Route::has('progres.index'))<a href="{{ route('progres.index') }}" class="tombol tombol-sekunder">Lihat progres</a>@endif
-    <a href="{{ route('materi.index') }}" class="tombol tombol-sekunder">Daftar materi</a>
+    <footer class="lt-bilah-bawah">
+        <form method="POST" action="{{ route('latihan.ulangi', [$idMateri, $mode]) }}">
+            @csrf
+            <button class="lt-tombol lt-tombol-sekunder">Ulangi latihan</button>
+        </form>
+        <form method="POST" action="{{ route('latihan.lanjut', [$idMateri, $mode]) }}">
+            @csrf
+            <button class="lt-tombol lt-tombol-utama lt-tombol-lanjut">
+                <img src="{{ asset('img/ikon-panah-putih.svg') }}" alt="" width="20" height="20">Lanjut
+            </button>
+        </form>
+    </footer>
 </div>
 @endsection
