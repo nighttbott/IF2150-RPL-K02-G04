@@ -96,10 +96,13 @@ class BerandaController extends Controller
         $saran = $rekomendasi[0]['materi'] ?? null;
         $statusProgres = RiwayatLatihan::ambilStatusProgres($idPelajar);
 
+        $penguasaan = RiwayatLatihan::hitungPenguasaan($idPelajar);
+
         return [
             'saran'     => $saran,
+            'saranBaru' => $saran !== null && ! isset($penguasaan[$saran->id_materi]),
             'lanjutkan' => $this->materiTerakhir($idPelajar, $statusProgres, $saran),
-            'jalur'     => $this->jalurBelajar($saran),
+            'jalur'     => $this->jalurBelajar($saran, $penguasaan),
             'target'    => $this->targetHarian($idPelajar),
             'kelas'     => $this->kelasDiikuti($idPelajar),
             'tips'      => self::TIPS[now()->dayOfYear % count(self::TIPS)],
@@ -132,38 +135,57 @@ class BerandaController extends Controller
     }
 
     /**
-     * I-03-05: simpul materi pada bagian yang memuat materi saran (Algo-049).
-     * Keadaan simpul: selesai, mulai (materi berikutnya), atau terkunci.
+     * I-03-05: peta belajar satu jenis aksara (jenis materi saran; bawaan Jawa),
+     * satu bagian per tingkat kesulitan. Gembok mengikuti Algo-041.
      */
-    private function jalurBelajar(?MateriAksara $saran): array
+    private function jalurBelajar(?MateriAksara $saran, array $penguasaan): array
     {
-        $jenis = $saran?->jenis_aksara?->value ?? 'jawa';
-        $tingkat = (int) ($saran?->tingkat_kesulitan ?? 1);
-
-        $daftar = app(MateriController::class)->ambilDaftarMateri(
-            FilterMateri::dariQuery(['jenis' => $jenis, 'tingkat' => $tingkat])
-        );
-
-        $idBerikutnya = $saran?->id_materi;
-        if ($idBerikutnya === null || ! collect($daftar)->contains(fn ($m) => $m->idMateri === $idBerikutnya)) {
-            $idBerikutnya = collect($daftar)->first(fn ($m) => $m->statusProgres !== 'selesai')?->idMateri;
-        }
-
-        $langkah = array_map(fn ($m) => [
-            'materi'  => $m,
-            'keadaan' => match (true) {
-                $m->statusProgres === 'selesai' => 'selesai',
-                $m->idMateri === $idBerikutnya  => 'mulai',
-                default                         => 'terkunci',
-            },
-        ], $daftar);
+        $jenis = $saran?->jenis_aksara ?? JenisAksara::from('jawa');
+        $semua = MateriAksara::ambilDaftarMateri(FilterMateri::dariQuery(['jenis' => $jenis->value]));
 
         return [
-            'jenis'   => $jenis,
-            'tingkat' => $tingkat,
-            'judul'   => JenisAksara::from($jenis)->label(), // bagian = tingkat_kesulitan; judul = jenis aksara
-            'langkah' => $langkah,
+            'jenis'  => $jenis->value,
+            'judul'  => $jenis->label(),
+            'bagian' => self::susunJalur($semua, $penguasaan),
         ];
+    }
+
+    /**
+     * Keadaan simpul: selesai (penguasaan ≥ ambang), terkunci (tingkat belum terbuka, Algo-041),
+     * mulai (materi pertama yang terbuka dan belum selesai), terbuka (sisanya).
+     * Urutan: tingkat, lalu id_materi (urutan hanacaraka), bukan nama.
+     *
+     * @param  iterable<MateriAksara>  $semua  materi satu jenis aksara
+     * @param  array<int, float>  $penguasaan  id_materi => 0..100
+     * @return list<array{tingkat:int, langkah:list<array{id_materi:int, nama:string, keadaan:string}>}>
+     */
+    public static function susunJalur(iterable $semua, array $penguasaan): array
+    {
+        $urut = collect($semua)
+            ->sortBy([['tingkat_kesulitan', 'asc'], ['id_materi', 'asc']])
+            ->values();
+
+        $adaMulai = false;
+        $bagian = [];
+
+        foreach ($urut as $m) {
+            $keadaan = match (true) {
+                MateriAksara::sudahTuntas($m, $penguasaan)             => 'selesai',
+                ! MateriAksara::tingkatTerbuka($m, $urut, $penguasaan) => 'terkunci',
+                ! $adaMulai                                            => 'mulai',
+                default                                                => 'terbuka',
+            };
+            $adaMulai = $adaMulai || $keadaan === 'mulai';
+
+            $bagian[$m->tingkat_kesulitan]['tingkat'] = (int) $m->tingkat_kesulitan;
+            $bagian[$m->tingkat_kesulitan]['langkah'][] = [
+                'id_materi' => (int) $m->id_materi,
+                'nama'      => $m->nama_materi,
+                'keadaan'   => $keadaan,
+            ];
+        }
+
+        return array_values($bagian);
     }
 
     /**

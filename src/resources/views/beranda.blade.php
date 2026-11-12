@@ -3,7 +3,7 @@
   Data dari BerandaController::tampilkan:
     $akun, $pelajar (bool), $salam (string), $motivasi {streak, poin, badge}
     Khusus Pelajar: $saran (MateriAksara|null), $lanjutkan {materi, persen}|null,
-    $jalur {jenis, tingkat, judul, langkah[{materi: MetadataMateri, keadaan}]},
+    $saranBaru (bool), $jalur {jenis, judul, bagian[{tingkat, langkah[{id_materi, nama, keadaan}]}]},
     $target {selesai, target}, $kelas [{id_kelas, nama, tugas_menunggu}], $tips (string)
 --}}
 @extends('layouts.app')
@@ -28,7 +28,7 @@
                     @if (! $pelajar)
                         Pilih menu di samping untuk mulai.
                     @elseif ($saran)
-                        Hari ini kita lanjutkan {{ $saran->nama_materi }}.
+                        {{ $saranBaru ? 'Hari ini coba' : 'Hari ini kita lanjutkan' }} {{ $saran->nama_materi }}.
                     @else
                         Semua materi sudah tuntas. Ulangi latihan supaya hafalanmu tetap terjaga.
                     @endif
@@ -62,53 +62,57 @@
                 </section>
             @endif
 
-            {{-- I-03-05 Peta belajar --}}
-            <section class="kartu">
-                <div class="nk-spanduk">
+            {{-- I-03-05 Peta belajar: satu bagian per tingkat kesulitan, gembok mengikuti Algo-041 --}}
+            <section class="kartu d-flex flex-column gap-4">
+                @forelse ($jalur['bagian'] as $bagian)
                     <div>
-                        <div class="nk-spanduk-bagian">Bagian {{ $jalur['tingkat'] }}</div>
-                        <h2 class="nk-spanduk-judul">{{ $jalur['judul'] }}</h2>
+                        <div class="nk-spanduk">
+                            <div>
+                                <div class="nk-spanduk-bagian">Bagian {{ $bagian['tingkat'] }}</div>
+                                <h2 class="nk-spanduk-judul">{{ $jalur['judul'] }}</h2>
+                            </div>
+                            @if (Route::has('materi.index'))
+                                <a href="{{ route('materi.index', ['jenis' => $jalur['jenis'], 'tingkat' => $bagian['tingkat']]) }}" class="nk-tombol-panduan">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M12 6c-2-1.5-5-2-8-2v14c3 0 6 .5 8 2 2-1.5 5-2 8-2V4c-3 0-6 .5-8 2Z"/><path d="M12 6v14"/>
+                                    </svg>
+                                    Panduan
+                                </a>
+                            @endif
+                        </div>
+
+                        <ol class="nk-jalur" aria-label="Jalur belajar {{ $jalur['judul'] }} bagian {{ $bagian['tingkat'] }}">
+                            @foreach ($bagian['langkah'] as $i => $langkah)
+                                <li class="nk-langkah nk-langkah-{{ $langkah['keadaan'] }}" style="--geser: {{ $geser[$i % count($geser)] }}px">
+                                    @if ($langkah['keadaan'] === 'mulai')
+                                        <span class="nk-penanda-mulai">Mulai</span>
+                                    @endif
+
+                                    @if ($langkah['keadaan'] === 'terkunci')
+                                        <span class="nk-simpul" aria-hidden="true">
+                                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                                        </span>
+                                        <span class="nk-langkah-nama">{{ $langkah['nama'] }} <span class="visually-hidden">(belum terbuka)</span></span>
+                                    @else
+                                        <a href="{{ route('materi.show', $langkah['id_materi']) }}" class="nk-simpul"
+                                        aria-label="{{ $langkah['nama'] }} ({{ ['selesai' => 'selesai', 'mulai' => 'materi berikutnya', 'terbuka' => 'terbuka'][$langkah['keadaan']] }})">
+                                            @if ($langkah['keadaan'] === 'selesai')
+                                                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>
+                                            @elseif ($langkah['keadaan'] === 'mulai')
+                                                <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>
+                                            @else
+                                                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-2v14c3 0 6 .5 8 2 2-1.5 5-2 8-2V4c-3 0-6 .5-8 2Z"/><path d="M12 6v14"/></svg>
+                                            @endif
+                                        </a>
+                                        <span class="nk-langkah-nama" aria-hidden="true">{{ $langkah['nama'] }}</span>
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ol>
                     </div>
-                    @if (Route::has('materi.index'))
-                        <a href="{{ route('materi.index', ['jenis' => $jalur['jenis'], 'tingkat' => $jalur['tingkat']]) }}" class="nk-tombol-panduan">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <path d="M12 6c-2-1.5-5-2-8-2v14c3 0 6 .5 8 2 2-1.5 5-2 8-2V4c-3 0-6 .5-8 2Z"/><path d="M12 6v14"/>
-                            </svg>
-                            Panduan
-                        </a>
-                    @endif
-                </div>
-
-                @if ($jalur['langkah'] === [])
-                    <div class="pesan pesan-info mt-3">Belum ada materi terbit pada bagian ini.</div>
-                @else
-                    <ol class="nk-jalur" aria-label="Jalur belajar {{ $jalur['judul'] }}">
-                        @foreach ($jalur['langkah'] as $i => ['materi' => $m, 'keadaan' => $keadaan])
-                            <li class="nk-langkah nk-langkah-{{ $keadaan }}" style="--geser: {{ $geser[$i % count($geser)] }}px">
-                                @if ($keadaan === 'mulai')
-                                    <span class="nk-penanda-mulai">Mulai</span>
-                                @endif
-
-                                @if ($keadaan === 'terkunci')
-                                    <span class="nk-simpul" aria-hidden="true">
-                                        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-                                    </span>
-                                    <span class="nk-langkah-nama">{{ $m->namaMateri }} <span class="visually-hidden">(belum terbuka)</span></span>
-                                @else
-                                    <a href="{{ route('materi.show', $m->idMateri) }}" class="nk-simpul"
-                                       aria-label="{{ $m->namaMateri }} ({{ $keadaan === 'selesai' ? 'selesai' : 'materi berikutnya' }})">
-                                        @if ($keadaan === 'selesai')
-                                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>
-                                        @else
-                                            <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>
-                                        @endif
-                                    </a>
-                                    <span class="nk-langkah-nama" aria-hidden="true">{{ $m->namaMateri }}</span>
-                                @endif
-                            </li>
-                        @endforeach
-                    </ol>
-                @endif
+                @empty
+                    <div class="pesan pesan-info">Belum ada materi terbit.</div>
+                @endforelse
             </section>
         @endif
     </div>
@@ -221,6 +225,7 @@
     .nk-langkah-mulai .nk-simpul { background: var(--nk-emas); box-shadow: 0 6px 0 var(--nk-emas-tua); }
     .nk-langkah-terkunci .nk-simpul { background: #EFE8DC; box-shadow: 0 6px 0 #C9BBA6; color: #B9AE9E; }
     .nk-langkah-terkunci .nk-langkah-nama { color: #B9AE9E; }
+    .nk-langkah-terbuka .nk-simpul { background: var(--nk-indigo-muda); box-shadow: 0 6px 0 #C7CDEB; color: var(--nk-indigo); }
     .nk-penanda-mulai { padding: 3px 10px; border: 2px solid var(--nk-emas); border-radius: 8px; background: #fff; font-size: .75rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--nk-emas-tua); }
     @media (max-width: 575.98px) {
         .nk-langkah { margin-left: calc(var(--geser) / 3); }
