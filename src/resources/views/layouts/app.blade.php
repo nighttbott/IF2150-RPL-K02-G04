@@ -51,7 +51,7 @@
             ['feedback.index',      'Feedback', ['feedback.*'],                  'surat'],
         ],
         'pengajar' => [
-            ['kelas-pengajar.index', 'Kelola Kelas',   ['kelas-pengajar.*'], 'joglo'],
+            ['pengajar.kelas.index', 'Kelola Kelas',   ['pengajar.kelas.*'], 'joglo'],
             ['pemantauan.kelas',     'Pantau Progres', ['pemantauan.*'],     'grafik'],
             ['feedback.index',       'Feedback',       ['feedback.*'],       'surat'],
         ],
