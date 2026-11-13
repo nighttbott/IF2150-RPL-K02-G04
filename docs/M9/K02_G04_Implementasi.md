@@ -19,7 +19,7 @@ Dipersiapkan oleh:
 | Informasi | Keterangan |
 | --- | --- |
 | Kelas | K2 |
-| Kelompok | 4 (0sks) |
+| Kelompok | 4 |
 
 | NIM      | Nama                           |
 | -------- | ------------------------------ |
@@ -29,10 +29,6 @@ Dipersiapkan oleh:
 | 13525107 | Nathaniel Marvelo              |
 | 13525113 | Diandra Aria Yufana            |
 | 13525143 | Natan Danuarta Ariel Wicaksana |
-
----
-
-Repositori: <https://github.com/nighttbott/IF2150-RPL-K02-G04>. Kode aplikasi ada di [`src/`](../../src), dan petunjuk menjalankan ada di [`src/README.md`](../../src/README.md).
 
 ---
 
@@ -96,36 +92,29 @@ Catatan: `EXPLAIN` agregasi tetap `type=index` karena kelas uji berisi seluruh 1
 
 ## B.3 Kendala dan Catatan Penting
 
-**Cara menjalankan untuk asisten**
+### Kendala selama implementasi
 
-1. Ikuti `src/README.md`: `docker compose up -d`, `composer install`, salin `.env.example` menjadi `.env`, `php artisan key:generate`, `php artisan migrate --seed`, `npm install`, `npm run build`, lalu `php artisan serve`.
-2. Akun uji (kata sandi semua `Rahasia123!`):
-   - Pelajar: `pelajar@ngaksara.test` (Sari)
-   - Pengajar: `pengajar@ngaksara.test` (Bu Rina, kode kelas `K7M2QX`)
-   - Tim Materi: `materi@ngaksara.test`
-3. Halaman latihan menulis membutuhkan aset Vite. Bila muncul `Unable to locate file in Vite manifest`, jalankan `npm run build`.
+| Kendala | Dampak saat integrasi | Penyelesaian dan bukti |
+| :--- | :--- | :--- |
+| Rute dan tampilan dari beberapa modul bertabrakan. | Rute pengelolaan materi mengambil alih Beranda. Pilihan latihan non-kanvas dan halaman hasilnya juga mengarah ke alur yang keliru. | Tim memulihkan awalan `kelola/materi`, mengarahkan pilihan mode ke rute masing-masing, dan memisahkan tampilan hasil latihan menulis dari hasil non-kanvas. [Perbaikan integrasi](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/b1448a545b50a29bd30474e0c6b20b05753955d4) · [Uji pilihan mode](../../src/tests/Feature/Latihan/PilihModeTest.php) |
+| Modul kelas dan latihan memakai nama data serta rute yang berbeda. | Saat Pengajar menerbitkan tugas, daftar komponen dan ID tugas tidak terbaca sesuai kontrak. Dari sisi Pelajar, tombol **Kerjakan** dan **Kembali ke tugas** dapat mengarah ke tujuan yang keliru. | Tim menyelaraskan kunci `komponen_tugas` dan `id_tugas` serta memperbaiki tujuan kedua tombol. [Perbaikan alur tugas](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/b1448a545b50a29bd30474e0c6b20b05753955d4) · [Uji kelas Pengajar](../../src/tests/Feature/KelasPengajarTest.php) · [Uji konteks tugas](../../src/tests/Feature/Latihan/KonteksTugasTest.php) |
+| Penilaian awal membandingkan goresan Pelajar dengan tepi huruf. | Pelajar yang mengikuti bagian tengah huruf tebal dapat memperoleh skor rendah meskipun bentuk tulisannya sesuai. | Penilaian menggunakan garis tengah dan toleransi ketebalan huruf. Hasil kalibrasi tercantum di B.1 butir 17. [Perubahan algoritma](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/d980f35199b56af0e303e40d372b0778e58ca597) |
 
-**Kendala selama pengerjaan**
+### Masalah yang masih terbuka
 
-- **Integrasi antarbranch.** Beberapa bagian bekerja di branch masing-masing tetapi rusak setelah digabung ke `develop`:
-  - prefix route `kelola/materi` hilang sehingga `/` milik Tim Materi menimpa Beranda;
-  - halaman hasil mode non-kanvas tertimpa berkas bernama sama dari mode menulis;
-  - tombol pilih mode, tombol "Kerjakan" komponen latihan pada tugas, dan penerbitan tugas memakai nama route/kunci data yang berbeda antarmodul;
-  - nama menu sidebar tidak cocok dengan nama route.
+| Fitur | Cara memeriksa | Perilaku dan dampak |
+| :--- | :--- | :--- |
+| Latihan bunyi (I-08) | Buka **Mencocokkan bunyi** pada materi dengan beberapa soal dan satu MP3. Bandingkan dua tombol **Putar suara**. Ulangi pada materi tanpa MP3. | Semua tombol memakai audio yang sama untuk satu materi. Jika MP3 tidak tersedia, tombol dinonaktifkan. Bacaan Latin tampil pada kedua kondisi sehingga Pelajar dapat menjawab tanpa membedakan bunyi. [Tampilan soal bunyi](../../src/resources/views/latihan/bunyi.blade.php) |
+| Gambar pendukung materi (I-19 dan I-05) | Sebagai Tim Materi, unggah materi dengan PNG atau SVG lalu terbitkan. Masuk sebagai Pelajar dan buka detail materi tersebut. | Berkas gambar tersimpan, tetapi halaman detail tidak menampilkan gambar unggahan. Pelajar tidak memperoleh ilustrasi yang disertakan Tim Materi. [Penyimpanan berkas](../../src/app/Http/Controllers/MateriController.php) · [Tampilan detail](../../src/resources/views/materi/show.blade.php) |
+| Umpan balik Pengajar (I-17) | Sebagai pemilik kelas, kirim pesan kepada anggota aktif dari **Pantau Progres**. Masuk sebagai Pelajar penerima dan periksa menu **Feedback**. | Pengajar memperoleh konfirmasi dan pesan tercatat di `data_feedback` dengan `id_akun` penerima. Menu Feedback Pelajar hanya menyediakan formulir pengiriman, sehingga penerima belum dapat membaca pesan melalui aplikasi. [Penyimpanan pesan](../../src/app/Http/Controllers/PemantauanKelasController.php) · [Formulir Feedback](../../src/app/Http/Controllers/FeedbackController.php) |
+| Menulis suku kata gabungan (I-06 dan I-07) | Pilih materi Jawa tingkat 2 **Sandhangan swara**, lalu pilih **Menulis**. | Butir seperti ꦲꦶ (*hi*) tidak memiliki templat untuk bentuk gabungannya. Pelajar kembali ke pilihan mode dengan pesan “Materi ini belum memiliki soal untuk mode yang dipilih”. [Data materi](../../src/database/seeders/MateriSeeder.php) · [Kasus uji khusus](../../src/tests/Feature/Latihan/PilihModeTest.php) |
+| Penilaian aksara yang mirip (I-07) | Pada soal Jawa *ha*, coba tulis *ka* dan amati skornya. Hasil bergantung pada bentuk goresan. | Bentuk yang mirip masih dapat mencapai ambang lulus 70. Tim mencatat 24% sampel aksara pembanding lulus dalam simulasi internal. Angka ini menggambarkan sampel simulasi, sehingga frekuensi kesalahan pada tulisan Pelajar sungguhan masih belum diketahui. [Parameter penilaian](../../src/config/latihan.php) |
 
-  Semua sudah diperbaiki dan dicakup test regresi (`LayoutTest`, `PilihModeTest`, `LatihanNonKanvasTest`, `KelasPengajarTest`).
-- **Template goresan aksara.** Template berasal dari font Noto Sans Javanese/Sundanese. Template untuk sandhangan belum ada, sehingga materi sandhangan hanya bisa dilatih dengan mode non-kanvas.
+### Catatan untuk asisten
 
-**Known issues**
-
-| No | Masalah | Langkah reproduksi | Dampak |
-| :--- | :--- | :--- | :--- |
-| 1 | Audio mode bunyi berlaku untuk satu materi, belum per aksara. Bila audio belum diunggah, bacaan Latin ditampilkan sebagai petunjuk. | Pelajar → Latihan → Mencocokkan bunyi pada materi tanpa berkas mp3. | Soal bunyi menjadi lebih mudah karena petunjuk terlihat. |
-| 2 | Berkas png/svg yang diunggah Tim Materi tersimpan, tetapi belum ditampilkan di detail materi. | Tim Materi → Unggah Materi dengan berkas png → buka materi sebagai Pelajar. | Gambar tambahan tidak terlihat; konten teks dan audio tetap tampil. |
-| 3 | Umpan balik Pengajar di I-17 tersimpan di `data_feedback` atas nama Pelajar, tetapi belum ada layar bagi Pelajar untuk membacanya. | Pengajar → Pantau Progres → Detail anggota → Kirim umpan balik. | Pesan hanya bisa dilihat dari basis data. |
-| 4 | Templat goresan sandhangan belum tersedia. | Pelajar → materi sandhangan → mode Menulis. | Muncul pesan bahwa materi belum memiliki soal untuk mode tersebut; mode lain tetap bisa dipakai. |
-| 5 | Aksara yang bentuknya sangat mirip (misalnya Jawa *ka* dan *ha*, Sunda *sa* dan *ka*) masih bisa saling lulus pada mode menulis. Pada simulasi, 24% tulisan aksara lain mendapat skor ≥ 70, hampir semuanya pasangan yang mirip. | Soal *ha* → tulis bentuk *ka* di kanvas. | Kecil dalam praktik, karena outline aksara yang benar selalu tampil sebagai panduan. |
-| 6 | Pada tahap integrasi akhir, kesesuaian visual dengan Figma diperiksa ulang hanya untuk sidebar, I-12, dan I-13; layar lain mengikuti hasil kerja tiap modul. | - | Mungkin ada selisih jarak atau warna kecil di layar lain. |
+1. **Menjalankan aplikasi.** Dari akar repositori, jalankan `docker compose up -d` untuk MySQL. Setelah itu masuk ke `src/` untuk instalasi dependensi, konfigurasi `.env`, migrasi beserta data contoh, pembangunan aset Vite, dan `php artisan serve`. Urutan perintah dan akun untuk ketiga peran tersedia di [panduan instalasi dan akun uji](../../src/README.md). Jika manifest Vite belum tersedia, jalankan `npm run build` dari `src/` setelah dependensi npm terpasang.
+2. **Memeriksa alur lintas peran.** Gunakan akun Pengajar Bu Rina untuk menerbitkan tugas berkomponen latihan di kelas contoh `K7M2QX`. Beralih ke akun Pelajar Sari, buka tugas dari kelas, kerjakan komponennya, lalu kembali ke tugas. Alur ini memeriksa sambungan antara penerbitan tugas, latihan, dan pencatatan penyelesaian komponen.
+3. **Membaca hasil pengujian.** Dari `src/`, jalankan `php artisan test` untuk pengujian otomatis dengan SQLite di memori. Pengukuran performa pada B.2.1 memakai MySQL 8.4 dan data profiling tersendiri. Pemeriksaan visual akhir terhadap Figma mencakup sidebar serta halaman daftar dan detail tugas Pelajar (I-12 dan I-13). Kesesuaian visual layar lain belum diperiksa ulang pada tahap integrasi akhir.
 
 ## B.4 Kontribusi Anggota
 
@@ -133,14 +122,13 @@ Tabel B.4. Kontribusi Anggota
 
 | NIM | Nama | Modul / Fitur yang Dikerjakan | Persentase Kontribusi |
 | :--- | :--- | :--- | :--- |
-| 13525026 | Ryuza Nadif Aldebaran | Proyek Laravel, `docker-compose.yml`, `.env.example`, layout Blade dan sidebar per peran, pendaftaran dan login (UC-01), middleware peran, Beranda (I-03), Feedback (UC-09), model AkunPengguna (C01) | 18% |
-| 13525029 | Muhammad Naufal Hilmi | Latihan menulis: kanvas (I-06, I-07), penilaian akurasi goresan (Algo-021/023), simpan hasil, streak, poin, badge (Algo-026), hasil latihan (I-10), latihan dari tugas kelas | 16% |
-| 13525077 | Muhammad Abduh | Kelas Pelajar (UC-05): keanggotaan, gabung dengan kode, daftar dan detail tugas (I-12, I-13), pengumpulan atomik dan status ketepatan (Algo-082/064), test kelas | 15% |
-| 13525107 | Nathaniel Marvelo | Kelola kelas Pengajar (UC-07, I-14 sampai I-16): kode bergabung, anggota, scoreboard, terbitkan tugas; mode latihan bunyi, merangkai, transliterasi (I-08, I-09) | 16% |
-| 13525113 | Diandra Aria Yufana | Materi (UC-02, UC-06): daftar dan detail materi (I-04, I-05), kelola dan unggah materi (I-18, I-19), versi konten, templat aksara Jawa dan Sunda, seeder materi | 16% |
-| 13525143 | Natan Danuarta Ariel Wicaksana | Seluruh migrasi dan seeder, RiwayatLatihan dan MotivasiBelajar (C03, C22), progres Pelajar (I-11), pemantauan (I-17), profiling B.2.1, integrasi akhir dan perbaikan bug lintas modul, review PR, laporan M9, logbook | 19% |
-
-Persentase di atas adalah usulan berdasarkan cakupan modul, jumlah commit, dan baris kode di `src/` sejak 1 November 2026. Nilai akhir disepakati bersama oleh kelompok.
+| 13525026 | Ryuza Nadif Aldebaran | Menyiapkan proyek Laravel dan konfigurasi Docker, membangun layout dan navigasi per peran, serta mengimplementasikan akun, autentikasi (UC-01), Beranda (I-03), dan Feedback (UC-09). [Uji akses per peran](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/ad518af772d48ea96b68b6d7432f8575bdfa3636) · [Beranda](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/363b40ca242ce91c2c5bf0155c10e2eb51f7d82d) · [Feedback](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/19cc0dc3114ea06f2ca95b096eb580e99158f9c7) | 18% |
+| 13525029 | Muhammad Naufal Hilmi | Mengimplementasikan latihan menulis (UC-03), dari pilihan mode dan kanvas hingga penilaian goresan, hasil, poin, streak, dan badge. Menghubungkan hasil latihan dengan komponen tugas kelas serta melengkapi dokumen M9. [Penilaian goresan awal](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/d85050a42cf892c002e7f5917921ec34c77ec9b6) · [Konteks tugas](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/4d939ba7f179b7ae4925bd590f2a63834e62447f) · [Dokumen M9](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/ef1d5b47e0fb1adb6fee7182d10083f9c75fe74f) | 16% |
+| 13525077 | Muhammad Abduh | Mengimplementasikan keanggotaan dan tugas dari sisi Pelajar (UC-05), termasuk bergabung dengan kode, membuka daftar dan detail tugas, memeriksa komponen wajib, serta mencatat pengumpulan dan ketepatan waktu dalam satu transaksi. [Pengumpulan tugas](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/c91b8ae447959d58a04461b364e1666016fc311d) · [Uji akses dan halaman Pelajar](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/7b427b8791ba10b71e8d82273fe5f5f292bd832c) | 15% |
+| 13525107 | Nathaniel Marvelo | Mengimplementasikan pengelolaan kelas Pengajar (UC-07), termasuk kode bergabung, anggota, papan skor, dan penerbitan tugas. Pada UC-03, mengerjakan mode bunyi, merangkai aksara, dan transliterasi. [Pengelolaan kelas](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/57d18355926d84f82c304fe10e772a7375cc8eb3) · [Tiga mode non-kanvas](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/bae9de5bc2521109f4a1cce55e53e5e27b910cee) | 16% |
+| 13525113 | Diandra Aria Yufana | Mengimplementasikan daftar dan detail materi Pelajar (UC-02), pengelolaan materi oleh Tim Materi (UC-06), unggahan dan versi konten, templat aksara Jawa dan Sunda, serta data awal materi. Melengkapi formulir asistensi M9. [Modul materi dan empat layar](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/36dbac32cbf543ad121ef6100b1d6f73adf8b3a7) · [Templat aksara](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/203816bbe23f32df40b24601f61a3daf59ae9ca8) · [Formulir asistensi](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/139b9fe995d8eb52ce75f1629614bcb06fbc3e35) | 16% |
+| 13525143 | Natan Danuarta Ariel Wicaksana | Menyiapkan migrasi dan data uji, model riwayat dan motivasi, progres Pelajar (UC-04), serta pemantauan kelas (UC-08). Menangani profiling dan indeks, integrasi lintas modul, kalibrasi akhir penilaian goresan, laporan M9, dan logbook. [Profiling](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/02ed23a14723107b63083be6557cf43acb56f14f) · [Integrasi](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/b1448a545b50a29bd30474e0c6b20b05753955d4) · [Kalibrasi](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/d980f35199b56af0e303e40d372b0778e58ca597) · [Laporan M9](https://github.com/nighttbott/IF2150-RPL-K02-G04/commit/afe8a5387db09dbe799265dac2d5743a25f24fee) | 19% |
+| | **Total** | | **100%** |
 
 ## B.5 Traceability Kelas Perancangan ke Implementasi
 
