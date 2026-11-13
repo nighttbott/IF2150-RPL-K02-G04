@@ -54,6 +54,21 @@ h1, h2, h3, h4, .judul { font-family: 'Baloo 2', 'Nunito', sans-serif; font-weig
 .nk-sidebar .merek { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.6rem; color: var(--nk-indigo); line-height: 1; }
 .nk-menu a { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 14px; color: var(--nk-redup); font-weight: 700; text-decoration: none; border: 2px solid transparent; }
 .nk-menu a.aktif { background: var(--nk-indigo-muda); border-color: var(--nk-indigo); color: var(--nk-indigo-tua); font-weight: 800; }
+.nk-menu a svg { flex: none; }
+.nk-menu a.aktif svg { color: var(--nk-indigo); }
+
+/* Sidebar: subtitel aksara, motif kawung, kartu profil */
+.nk-sidebar-merek { display: flex; align-items: center; gap: 10px; padding: 0 6px; }
+.nk-sidebar-aksara { font-size: 13px; line-height: 22px; color: var(--nk-sogan); }
+.nk-sidebar-motif { height: 40px; flex: none; background-repeat: repeat-x; background-position: left center; background-size: auto 100%; opacity: .7; }
+.nk-profil { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--nk-latar); border: 2px solid var(--nk-garis); border-radius: 16px; }
+.nk-profil .avatar { width: 40px; height: 40px; }
+.nk-profil-nama { font-weight: 800; font-size: 15px; line-height: 20px; color: var(--nk-tinta); }
+.nk-profil-peran { font-size: 13px; line-height: 18px; color: var(--nk-redup); }
+.nk-tombol-keluar { display: inline-flex; padding: 4px; border: 0; border-radius: 8px; background: transparent; color: var(--nk-redup); }
+.nk-tombol-keluar:hover { background: var(--nk-garis); color: var(--nk-tinta); }
+.nk-tombol-keluar:focus-visible { outline: 3px solid var(--nk-emas); outline-offset: 2px; }
+
 .nk-konten { flex: 1; padding: 36px 44px; min-width: 0; }
 
 /* Layout Autentikasi (I-01 & I-02): layouts/tamu, auth/daftar, auth/masuk.
