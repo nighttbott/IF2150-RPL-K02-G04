@@ -15,6 +15,8 @@ return [
         'maks_rekomendasi' => 3,
     ],
 
+    // Jumlah latihan berhasil per hari untuk kartu "Target hari ini" (I-03-07).
+    'target_harian' => 3,
     'latihan' => [
         // Latihan non-kanvas (bunyi, merangkai, transliterasi): jumlah soal per sesi dan penilaian.
         'jumlah_soal' => 5,

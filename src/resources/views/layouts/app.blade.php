@@ -39,7 +39,7 @@
     ];
 
     $menu = array_merge(
-        [['beranda', 'Beranda', ['beranda']]],
+        $peran === 'pelajar' ? [['beranda', 'Beranda', ['beranda']]] : [],
         $menuPeran[$peran] ?? [],
     );
 @endphp

@@ -149,24 +149,11 @@ class MateriAksara extends Model
      */
     public static function ambilMateriRekomendasi(array $penguasaan): array
     {
-        $ambang = config('ngaksara.materi.ambang_tuntas', 70);
         $semua = static::ambilDaftarMateri(new FilterMateri);
-
-        $tuntas = fn (MateriAksara $m) => ($penguasaan[$m->id_materi] ?? null) !== null && $penguasaan[$m->id_materi] >= $ambang;
 
         $kandidat = [];
         foreach ($semua as $m) {
-            if ($tuntas($m)) {
-                continue;
-            }
-            $terbuka = true;
-            foreach ($semua as $lain) {
-                if ($lain->jenis_aksara === $m->jenis_aksara && $lain->tingkat_kesulitan < $m->tingkat_kesulitan && ! $tuntas($lain)) {
-                    $terbuka = false;
-                    break;
-                }
-            }
-            if ($terbuka) {
+            if (! static::sudahTuntas($m, $penguasaan) && static::tingkatTerbuka($m, $semua, $penguasaan)) {
                 $kandidat[] = $m;
             }
         }
@@ -176,6 +163,27 @@ class MateriAksara extends Model
         return array_slice($kandidat, 0, (int) config('ngaksara.materi.maks_rekomendasi', 3));
     }
 
+    /** Algo-041: materi tuntas bila penguasaannya mencapai ambang. */
+    public static function sudahTuntas(MateriAksara $m, array $penguasaan): bool
+    {
+        $nilai = $penguasaan[$m->id_materi] ?? null;
+
+        return $nilai !== null && $nilai >= config('ngaksara.materi.ambang_tuntas', 70);
+    }
+
+    /** Algo-041: tingkat terbuka bila semua materi tingkat di bawahnya (jenis sama) sudah tuntas. */
+    public static function tingkatTerbuka(MateriAksara $m, iterable $semua, array $penguasaan): bool
+    {
+        foreach ($semua as $lain) {
+            if ($lain->jenis_aksara === $m->jenis_aksara
+                && $lain->tingkat_kesulitan < $m->tingkat_kesulitan
+                && ! static::sudahTuntas($lain, $penguasaan)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
     private static function validasi(MetadataMateri $data): ?HasilOperasi
     {
         $nama = trim($data->namaMateri);
