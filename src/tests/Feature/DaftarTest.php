@@ -20,7 +20,7 @@ class DaftarTest extends TestCase
             'email'           => 'sari@contoh.test',
             'username'        => 'sari_belajar',
             'password'        => 'Rahasia123',
-            'persetujuan_tnc' => '1',
+            'setuju_tnc' => '1',
         ], $ubah);
     }
 
@@ -139,14 +139,14 @@ class DaftarTest extends TestCase
             'sandi terlalu pendek'  => [['password' => 'Abc123'], 'password'],
             'sandi tanpa angka'     => [['password' => 'RahasiaSaja'], 'password'],
             'sandi tanpa huruf'     => [['password' => '12345678'], 'password'],
-            'tnc tidak dicentang'   => [['persetujuan_tnc' => null], 'persetujuan_tnc'],
+            'tnc tidak dicentang'   => [['setuju_tnc' => null], 'setuju_tnc'],
         ];
     }
 
     public function test_semua_galat_dikembalikan_sekaligus(): void
     {
         $this->post(route('daftar.proses'), [])
-            ->assertSessionHasErrors(['peran', 'email', 'username', 'password', 'persetujuan_tnc']);
+            ->assertSessionHasErrors(['peran', 'email', 'username', 'password', 'setuju_tnc']);
     }
 
     public function test_pesan_galat_sesuai(): void

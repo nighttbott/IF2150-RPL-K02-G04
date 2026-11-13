@@ -7,9 +7,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/**
- * Pengujian C22 MotivasiBelajar (Algo-028 sampai Algo-033).
- */
+/** Pengujian C22 MotivasiBelajar (Algo-028 sampai Algo-033). */
 class MotivasiBelajarTest extends TestCase
 {
     use BantuanData, RefreshDatabase;

@@ -9,9 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-/**
- * Pengujian I-17 Pantau Progres Anggota (UC-08) dan agregasi kelas (Algo-102).
- */
+/** Pengujian I-17 Pantau Progres Anggota (UC-08) dan agregasi kelas (Algo-102). */
 class PemantauanKelasTest extends TestCase
 {
     use BantuanData, RefreshDatabase;

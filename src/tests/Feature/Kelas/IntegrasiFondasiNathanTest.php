@@ -77,7 +77,7 @@ class IntegrasiFondasiNathanTest extends TestCase
         $c = $t->komponen->firstWhere('jenis', 'materi');
         $url = '/pelajar/kelas/'.$t->id_kelas.'/tugas/'.$t->id_tugas.'/komponen/'.$c->id_komponen.'/selesai';
         $jumlah = RiwayatLatihan::count();
-        $this->post($url)->assertUnauthorized();
+        $this->post($url)->assertRedirect(route('masuk'));
         $guru = AkunPengguna::where('peran', 'pengajar')->firstOrFail();
         $this->actingAs($guru)->post($url)->assertForbidden();
         DB::table('keanggotaan_kelas')->where('id_pelajar', $p->id_akun)->update(['status' => 'keluar']);

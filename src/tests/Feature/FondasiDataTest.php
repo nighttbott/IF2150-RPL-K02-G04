@@ -11,10 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
-/**
- * Pengujian fondasi data: seeder, kata sandi ter-hash, middleware peran, dan integrasi
- * dengan modul materi.
- */
+/** Pengujian fondasi data: seeder, kata sandi ter-hash, middleware peran, dan integrasi dengan modul materi. */
 class FondasiDataTest extends TestCase
 {
     use BantuanData, RefreshDatabase;
@@ -49,11 +46,11 @@ class FondasiDataTest extends TestCase
         $this->actingAs(AkunPengguna::factory()->create())->get('/uji-peran')->assertForbidden();
     }
 
-    public function test_tamu_diarahkan_ke_halaman_awal_selama_login_belum_ada(): void
+    public function test_tamu_diarahkan_ke_halaman_masuk(): void
     {
         Route::middleware(['web', 'auth'])->get('/uji-tamu', fn () => 'rahasia');
 
-        $this->get('/uji-tamu')->assertRedirect(route('beranda'));
+        $this->get('/uji-tamu')->assertRedirect(route('masuk'));
     }
 
     public function test_daftar_materi_menampilkan_status_progres_dari_riwayat(): void

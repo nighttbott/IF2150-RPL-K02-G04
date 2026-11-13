@@ -8,9 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-/**
- * Pengujian C03 RiwayatLatihan (Q-008 sampai Q-016).
- */
+/** Pengujian C03 RiwayatLatihan (Q-008 sampai Q-016). */
 class RiwayatLatihanTest extends TestCase
 {
     use BantuanData, RefreshDatabase;

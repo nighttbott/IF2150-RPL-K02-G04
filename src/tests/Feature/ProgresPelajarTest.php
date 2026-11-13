@@ -7,9 +7,7 @@ use App\Models\MotivasiBelajar;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/**
- * Pengujian halaman I-11 Progres Pelajar (UC-04, C14 dan C19).
- */
+/** Pengujian halaman I-11 Progres Pelajar (UC-04, C14 dan C19). */
 class ProgresPelajarTest extends TestCase
 {
     use BantuanData, RefreshDatabase;

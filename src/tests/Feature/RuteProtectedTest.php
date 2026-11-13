@@ -5,11 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
-/**
- * Audit proteksi route. Setiap route harus wajib login dan punya
- * aturan peran yang sesuai peta di bawah. Route baru yang belum masuk peta
- * akan gagal di sini, dan itu disengaja: tambahkan aturannya di peranDiharapkan().
- */
+/** Audit proteksi route. Setiap route harus wajib login dan punya aturan peran yang sesuai peta di bawah. */
 class RuteProtectedTest extends TestCase
 {
     /** Route publik atau bawaan framework, dikecualikan dari audit (berdasarkan URI). */
@@ -30,7 +26,7 @@ class RuteProtectedTest extends TestCase
             str_starts_with($nama, 'latihan.'),
             str_starts_with($nama, 'progres.'),
             str_starts_with($nama, 'kelas-pelajar.') => ['pelajar'],
-            str_starts_with($nama, 'kelas-pengajar.'),
+            str_starts_with($nama, 'pengajar.kelas.'),
             str_starts_with($nama, 'pemantauan.') => ['pengajar'],
             str_starts_with($nama, 'feedback.') => ['pelajar', 'pengajar'],
             default => null,

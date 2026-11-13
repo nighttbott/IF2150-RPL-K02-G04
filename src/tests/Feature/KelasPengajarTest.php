@@ -9,10 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-/**
- * Pengujian UC-07 Mengelola Kelas (Pengajar): KelasController (C20) bagian pengelolaan,
- * KelasBelajar (C23), KeanggotaanKelas (C24), TugasKelas (C25).
- */
+/** Pengujian UC-07 Mengelola Kelas (Pengajar): KelasController (C20) bagian pengelolaan, KelasBelajar (C23), KeanggotaanKelas (C24), TugasKelas (C25). */
 class KelasPengajarTest extends TestCase
 {
     use BantuanData, RefreshDatabase;

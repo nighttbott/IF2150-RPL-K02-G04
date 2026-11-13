@@ -19,9 +19,9 @@ class PilihModeTest extends TestCase
         $this->seed(MateriSeeder::class);
     }
 
-    public function test_tamu_diarahkan_ke_halaman_awal(): void
+    public function test_tamu_diarahkan_ke_halaman_masuk(): void
     {
-        $this->get('/latihan/1')->assertRedirect(route('beranda'));
+        $this->get('/latihan/1')->assertRedirect(route('masuk'));
     }
 
     public function test_tombol_mulai_latihan_di_detail_materi_menuju_i06(): void
@@ -50,7 +50,10 @@ class PilihModeTest extends TestCase
             ->assertSee('Materi: Nglegena: ha na ca ra ka')
             ->assertSee(route('materi.show', 1))
             ->assertSee(route('latihan.soal', [1, 'menulis']))
-            ->assertSee('Segera hadir')
+            ->assertSee(route('latihan.soal.mulai', ['bunyi', 1]))
+            ->assertSee(route('latihan.soal.mulai', ['merangkai', 1]))
+            ->assertSee(route('latihan.soal.mulai', ['transliterasi', 1]))
+            ->assertDontSee('Segera hadir')
             ->assertSeeInOrder(['5', 'hari', '240', 'poin', '3', 'badge']);
     }
 
@@ -70,10 +73,12 @@ class PilihModeTest extends TestCase
         $this->actingAs($this->buatPelajar())->get('/latihan/1/menggambar')->assertNotFound();
     }
 
-    public function test_mode_belum_tersedia_422(): void
+    public function test_mode_non_kanvas_dialihkan_ke_latihan_soal(): void
     {
         $this->actingAs($this->buatPelajar())->get('/latihan/1/transliterasi')
-            ->assertStatus(422)->assertSee('Mode latihan tidak dikenal');
+            ->assertRedirect(route('latihan.soal.mulai', ['transliterasi', 1]));
+        $this->actingAs($this->buatPelajar())->get('/latihan/1/bunyi?tugas=4&komponen=7')
+            ->assertRedirect(route('latihan.soal.mulai', ['bunyi', 1, 'tugas' => 4, 'komponen' => 7]));
     }
 
     public function test_materi_tanpa_konten_kembali_dengan_pesan(): void

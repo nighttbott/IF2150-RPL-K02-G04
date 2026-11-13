@@ -18,10 +18,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-/**
- * Pengujian modul materi (UC-02 Mempelajari Materi, UC-06 Memperbarui Materi).
- * Pengguna uji dibuat sebagai AkunPengguna dengan kolom `peran` (pelajar atau tim_materi).
- */
+/** Pengujian modul materi (UC-02 Mempelajari Materi, UC-06 Memperbarui Materi). Pengguna uji dibuat sebagai AkunPengguna dengan kolom `peran` (pelajar atau tim_materi). */
 class MateriTest extends TestCase
 {
     use RefreshDatabase;

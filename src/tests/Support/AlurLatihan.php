@@ -5,9 +5,7 @@ namespace Tests\Support;
 use App\Latihan\Data\SoalLatihan;
 use App\Models\AkunPengguna;
 
-/**
- * Langkah alur latihan menulis yang dipakai beberapa feature test.
- */
+/** Langkah alur latihan menulis yang dipakai beberapa feature test. */
 trait AlurLatihan
 {
     /** Membuka I-07 dan mengembalikan soal aktif dari session. */

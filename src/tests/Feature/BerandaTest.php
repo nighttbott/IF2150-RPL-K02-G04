@@ -14,13 +14,7 @@ use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
-/**
- * Pengujian C07 HalamanUtama / Beranda (I-03).
- *
- * Jalankan dari folder src:
- *   php artisan test --filter=BerandaTest --no-ansi
- *
- */
+/** Pengujian C07 HalamanUtama / Beranda (I-03); jalankan: php artisan test --filter=BerandaTest. */
 class BerandaTest extends TestCase
 {
     use RefreshDatabase;
@@ -348,6 +342,24 @@ class BerandaTest extends TestCase
     {
         $this->actingAs(AkunPengguna::factory()->create())->get('/')
             ->assertViewHas('kelas', []);
+    }
+
+    public function test_kartu_kelas_menghitung_tugas_yang_belum_dikumpulkan(): void
+    {
+        $pelajar = AkunPengguna::factory()->create();
+        $guru = AkunPengguna::factory()->pengajar()->create();
+        $kelas = \DB::table('kelas_belajar')->insertGetId(['nama' => 'Jawa Dasar', 'pemilik_id' => $guru->id_akun, 'kode_bergabung' => 'ABC234', 'status' => 'aktif', 'status_scoreboard' => false], 'id_kelas');
+        \DB::table('keanggotaan_kelas')->insert(['id_kelas' => $kelas, 'id_pelajar' => $pelajar->id_akun, 'status' => 'aktif']);
+        $tugas = fn (string $status) => \DB::table('tugas_kelas')->insertGetId(['id_kelas' => $kelas, 'instruksi' => 'x', 'tenggat' => now()->addDay(), 'status' => $status], 'id_tugas');
+        $sudah = $tugas('terbit');
+        $tugas('terbit');
+        $tugas('draf');
+        \DB::table('penyelesaian_tugas')->insert(['id_tugas' => $sudah, 'id_pelajar' => $pelajar->id_akun, 'waktu_kumpul' => now(), 'status' => 'tepat_waktu']);
+
+        $this->actingAs($pelajar)->get('/')
+            ->assertViewHas('kelas', [['id_kelas' => $kelas, 'nama' => 'Jawa Dasar', 'tugas_menunggu' => 1]])
+            ->assertSee('1 tugas menunggu')
+            ->assertSee(route('kelas-pelajar.kelas', $kelas), false);
     }
 
     public function test_tips_selalu_berisi(): void

@@ -7,10 +7,7 @@ use App\Models\MateriAksara;
 use App\Models\RiwayatLatihan;
 use Illuminate\Support\Facades\DB;
 
-/**
- * Fungsi pembantu untuk menyiapkan data uji modul riwayat, progres, dan pemantauan.
- * Data kelas ditulis lewat query langsung agar tidak bergantung pada model modul kelas.
- */
+/** Fungsi pembantu untuk menyiapkan data uji modul riwayat, progres, dan pemantauan. Data kelas ditulis lewat query langsung agar tidak bergantung pada model modul kelas. */
 trait BantuanData
 {
     protected function buatPelajar(string $nama = 'Sari'): AkunPengguna

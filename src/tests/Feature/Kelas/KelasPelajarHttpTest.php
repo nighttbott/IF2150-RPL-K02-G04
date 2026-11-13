@@ -10,7 +10,7 @@ class KelasPelajarHttpTest extends SkemaKelas
 {
     public function test_tamu_ditolak(): void
     {
-        $this->get('/pelajar/kelas')->assertUnauthorized();
+        $this->get('/pelajar/kelas')->assertRedirect(route('masuk'));
     }
 
     public function test_pengajar_ditolak(): void

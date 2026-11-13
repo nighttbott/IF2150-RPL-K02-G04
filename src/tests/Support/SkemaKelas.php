@@ -30,7 +30,15 @@ abstract class SkemaKelas extends TestCase
         });
         Schema::create('materi_aksara', function (Blueprint $table): void {
             $table->id('id_materi');
+            $table->string('nama_materi')->nullable();
             $table->string('status_publikasi')->default('terbit');
+        });
+        Schema::create('motivasi_belajar', function (Blueprint $table): void {
+            $table->unsignedBigInteger('id_pelajar')->primary();
+            $table->unsignedInteger('streak')->default(0);
+            $table->unsignedInteger('poin')->default(0);
+            $table->date('tanggal_aktif_terakhir')->nullable();
+            $table->json('daftar_badge')->nullable();
         });
         Schema::create('keanggotaan_kelas', function (Blueprint $table): void {
             $table->id('id_keanggotaan');
