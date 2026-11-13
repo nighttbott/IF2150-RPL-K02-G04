@@ -4956,4 +4956,4 @@ Tabel 7.1. Matriks Kerunutan Kelas terhadap Use Case
 
 # Referensi
 
-- Prototipe antarmuka Ngaksara: [https://www.figma.com/design/wRWy7TBjhXTELpAR6xHutU/Ngaksara?node-id=1-2](https://www.figma.com/design/wRWy7TBjhXTELpAR6xHutU/Ngaksara?node-id=1-2)
+- Prototipe antarmuka Ngaksara: https://www.figma.com/design/wRWy7TBjhXTELpAR6xHutU/Ngaksara---Interface-Demo?node-id=0-1&t=8ff2GFfmvMImCeKI-1
