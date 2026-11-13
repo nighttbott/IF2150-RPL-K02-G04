@@ -11,7 +11,7 @@
 
 @section('konten')
 @php
-    // Posisi horizontal simpul agar jalur berkelok (dari Figma 83:1018), berulang tiap lima simpul.
+    // Posisi horizontal simpul agar jalur berkelok, berulang tiap lima simpul.
     $geser = [86, 186, 123, 38, 122];
     $hurufAwal = ['jawa' => 'ꦲ', 'sunda' => 'ᮃ'];
 @endphp
