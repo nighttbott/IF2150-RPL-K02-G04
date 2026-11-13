@@ -6,33 +6,31 @@
 | --- | --- |
 | **Hari** | Senin |
 | **Tanggal** | 02/11/2026 |
-| **Kelas** | K02 |
-| **Nomor Kelompok** | 04  |
+| **Kelas** | K2 |
+| **Nomor Kelompok** | 4  |
 | **Nama Kelompok** | 0sks |
 | **Nama Perangkat Lunak** | Ngaksara  |
 | **Dokumen** | Implementasi  |
 
 ### Anggota Kelompok
 
-| NIM | Nama |
-| --- | --- |
-| *\[NIM 1\]* | *\[Nama Anggota 1\]* |
-| *\[NIM 2\]* | *\[Nama Anggota 2\]* |
-| *\[NIM 3\]* | *\[Nama Anggota 3\]* |
-| *\[NIM 4\]* | *\[Nama Anggota 4\]* |
-| *\[NIM 5\]* | *\[Nama Anggota 5\]* |
+| NIM      | Nama                           |
+| -------- | ------------------------------ |
+| 13525026 | Ryuza Nadif Aldebaran          |
+| 13525029 | Muhammad Naufal Hilmi          |
+| 13525077 | Muhammad Abduh                 |
+| 13525107 | Nathaniel Marvelo              |
+| 13525113 | Diandra Aria Yufana            |
+| 13525143 | Natan Danuarta Ariel Wicaksana |
 
 ### Catatan
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
-
-**Notes for this section:**  
-*Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
+| 1. Mencatat setiap perbedaan rancangan dan implementasi beserta alasannya. Kalau tidak ada, tulis "tidak ada perubahan". |
+| 2. Harus ada bukti branching, semantic commit, track task, PR dan review, serta pengujian. Profiling minimal untuk satu fitur berat yang terdiri dari temuan sebelum, perbaikan, dan hasil sesudah. |
+| 3. Ada kendala, known issuees, dan catatan untuk asisten |
+| 4. Setiap kelas DPPL harus bisa ditelusuri ke bentuk impelemntasi, lokasi file, dan cara perwujudannya. |
 
 ## Dokumentasi
 
