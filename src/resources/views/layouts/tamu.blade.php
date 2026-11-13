@@ -1,8 +1,4 @@
-{{--
-  Layout tamu (belum login) untuk I-01 Pendaftaran dan I-02 Login.
-  Konvensi sama dengan layouts/app: @section('judul'), @section('konten'), @stack('gaya'), @stack('skrip').
-  Tambahan: @section('ucapan') untuk gelembung ucapan Pak Aksa di panel kiri.
---}}
+{{-- Layout tamu (belum login) untuk I-01 Pendaftaran dan I-02 Login. Konvensi sama dengan layouts/app: @section('judul'), @section('konten'), @stack('gaya'), @stack('skrip'). --}}
 <!DOCTYPE html>
 <html lang="id">
 <head>

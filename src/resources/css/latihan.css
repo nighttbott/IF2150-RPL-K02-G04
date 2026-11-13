@@ -121,3 +121,8 @@
     .lt-pilih-samping { width: auto; }
     .lt-isi, .lt-bilah-bawah { padding-left: 24px; padding-right: 24px; }
 }
+
+/* Rincian jawaban pada hasil mode non-kanvas (hasil-soal.blade.php) */
+.lt-rincian { width: min(760px, 100%); padding: 0; overflow-x: auto; text-align: left; }
+.lt-rincian .tabel-nk { border: 0; }
+@media (max-width: 991.98px) { .lt-bilah-bawah { padding: 20px 16px; flex-wrap: wrap; } }

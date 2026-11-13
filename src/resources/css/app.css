@@ -1,10 +1,8 @@
-/* ==============================================================
-   Gaya dasar Ngaksara: Bootstrap 5.3 + token warna dari desain Figma.
-   Komponen visual lengkap (UI kit) dikerjakan Naufal; bagian ini
-   hanya fondasi agar semua halaman memakai warna dan huruf yang sama.
-   ============================================================== */
+/* Gaya dasar Ngaksara: Bootstrap 5.3 + token warna dari desain Figma. */
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import './latihan.css';
+@import './kelas-pelajar.css';
+@import './efek.css';
 
 /* Font disimpan lokal di public/fonts agar tidak bergantung layanan luar */
 @font-face { font-family: 'Nunito'; src: url('/fonts/Nunito-Variable.ttf') format('truetype'); font-weight: 200 1000; font-display: swap; }
@@ -51,13 +49,46 @@ h1, h2, h3, h4, .judul { font-family: 'Baloo 2', 'Nunito', sans-serif; font-weig
 /* Kerangka halaman: sidebar kiri + konten */
 .nk-kerangka { display: flex; min-height: 100vh; }
 .nk-sidebar { width: 264px; flex: none; background: var(--nk-permukaan); border-right: 2px solid var(--nk-garis); padding: 28px 16px; display: flex; flex-direction: column; gap: 22px; }
-.nk-sidebar .merek { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.6rem; color: var(--nk-indigo); line-height: 1; }
 .nk-menu a { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 14px; color: var(--nk-redup); font-weight: 700; text-decoration: none; border: 2px solid transparent; }
 .nk-menu a.aktif { background: var(--nk-indigo-muda); border-color: var(--nk-indigo); color: var(--nk-indigo-tua); font-weight: 800; }
 .nk-konten { flex: 1; padding: 36px 44px; min-width: 0; }
+.nk-menu a .nk-ikon { flex: none; }
+.nk-menu a:hover:not(.aktif) { background: var(--nk-latar); color: var(--nk-tinta); }
 
-/* Layout Autentikasi (I-01 & I-02): layouts/tamu, auth/daftar, auth/masuk.
-   Nilai dari Figma frame 83:441 dan 83:671. */
+/* Sidebar (port dari feat/akun-layout, Ryuza): merek beraksara, motif, kartu profil */
+.nk-sidebar { position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.nk-merek { display: flex; align-items: center; gap: 10px; padding: 4px 6px; text-decoration: none; }
+.nk-merek > span { display: flex; flex-direction: column; }
+.nk-merek .merek { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.6rem; color: var(--nk-indigo); line-height: 1; }
+.nk-merek-aksara { color: var(--nk-sogan); font-size: 13px; line-height: 1.6; }
+.nk-sidebar-bawah { margin-top: auto; display: flex; flex-direction: column; gap: 18px; }
+.nk-motif-sidebar { width: 100%; height: auto; opacity: .18; }
+.nk-profil { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--nk-latar); border: 2px solid var(--nk-garis); border-radius: 14px; }
+.nk-profil .avatar { width: 40px; height: 40px; font-size: 16px; flex: none; }
+.nk-profil-teks { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.nk-profil-nama { font-size: 15px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nk-profil-peran { font-size: 13px; font-weight: 600; color: var(--nk-redup); }
+.nk-tombol-keluar { display: inline-flex; border: 0; background: none; color: var(--nk-tinta); padding: 4px; border-radius: 8px; }
+.nk-tombol-keluar:hover { color: var(--nk-merah-tua); background: var(--nk-merah-muda); }
+.nk-menu a:focus-visible, .nk-tombol-keluar:focus-visible, .nk-tombol-menu:focus-visible { outline: 3px solid var(--nk-emas); outline-offset: 2px; }
+
+/* Kolom samping opsional @section('samping'): kolom utama fleksibel, jarak 32px, samping 340px (Figma) */
+.nk-dua-kolom { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 32px; align-items: start; }
+.nk-kolom-samping { display: flex; flex-direction: column; gap: 16px; }
+@media (max-width: 1199.98px) { .nk-dua-kolom { grid-template-columns: 1fr; } }
+
+/* Bilah atas dan menu geser untuk layar < 768px */
+.nk-bilah-mobile { position: sticky; top: 0; z-index: 1020; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--nk-permukaan); border-bottom: 2px solid var(--nk-garis); }
+.nk-bilah-mobile .merek { font-size: 1.3rem; }
+.nk-tombol-menu { display: inline-flex; border: 2px solid var(--nk-garis); background: #fff; color: var(--nk-indigo); border-radius: 12px; padding: 6px; }
+.nk-offcanvas { width: 280px !important; }
+.nk-offcanvas .nk-sidebar { position: static; height: 100%; width: 100%; border-right: 0; }
+@media (max-width: 767.98px) {
+    .nk-kerangka { flex-direction: column; }
+    .nk-konten { padding: 20px 16px; }
+}
+
+/* Layout Autentikasi (I-01 & I-02): layouts/tamu, auth/daftar, auth/masuk. Nilai dari Figma frame 83:441 dan 83:671. */
 
 /* Kerangka dua panel */
 .nk-tamu { display: flex; min-height: 100vh; }

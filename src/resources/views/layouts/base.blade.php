@@ -1,14 +1,4 @@
-{{--
-  Layout dasar utama (root) seluruh aplikasi Ngaksara.
-  Semua layout turunan (layouts.app, layouts.auth, layouts.latihan) mengekstensi berkas ini.
-
-  Konvensi standar yang ditentukan untuk view / layout anak:
-    - @section('judul', '...')       : Menentukan judul halaman pada tag <title>
-    - @section('badan') ... @endsection : Kerangka pembungkus layout anak (cth: sidebar, navbar)
-    - @section('konten') ... @endsection: Isi konten utama halaman
-    - @push('gaya') ... @endpush     : Menambahkan stylesheet khusus ke dalam <head>
-    - @push('skrip') ... @endpush    : Menambahkan script khusus sebelum penutup </body>
---}}
+{{-- Layout dasar utama (root) seluruh aplikasi Ngaksara. Semua layout turunan (layouts.app, layouts.auth, layouts.latihan) mengekstensi berkas ini. --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
