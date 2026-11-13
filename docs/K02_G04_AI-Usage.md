@@ -96,9 +96,11 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 ### Milestone 9
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
-| Claude Code | Memeriksa integrasi seluruh branch di `develop`, mencari bug lintas modul (route Beranda tertimpa, terbitkan tugas gagal, hasil latihan non-kanvas error, tombol kerjakan komponen tugas), lalu memperbaikinya | "Lakukan integrasi branch ke develop, cek apakah ada bug, dan perbaiki langsung di develop tanpa commit/push." | Rencana perbaikan disetujui sebelum dijalankan; hasil diverifikasi dengan `php artisan test` (378 test lolos) dan uji manual tiga peran di `localhost`; commit dan push dilakukan sendiri oleh anggota. |
+| Claude Code | Memeriksa integrasi seluruh branch di `develop`, mencari bug lintas modul (route Beranda tertimpa, terbitkan tugas gagal, hasil latihan non-kanvas error, tombol kerjakan komponen tugas), lalu memperbaikinya | "Lakukan integrasi branch ke develop, cek apakah ada bug, bila ada perbaiki." | Rencana perbaikan disetujui sebelum dijalankan; hasil diverifikasi dengan `php artisan test` (378 test lolos) dan uji manual tiga peran di `localhost`; commit dan push dilakukan sendiri oleh anggota. |
 | Claude Code | Memindahkan sidebar per peran dari branch `feat/akun-layout`, menyeragamkan layout Kelas Pelajar, dan menambah efek visual (kartu muncul, skor naik, taburan kawung, toast badge, centang pengumpulan) | "Tambahkan efek saat selesai mengerjakan tugas, sesuai konteks dan tidak berlebihan." | Efek dicek ulang agar nonaktif saat *reduce motion*; tampilan dibandingkan dengan desain Figma (I-12, I-13). |
-| Claude Code | Meringkas komentar kode multi-baris menjadi satu baris, membantu profiling (`EXPLAIN`, waktu query), dan menyusun draf laporan M9 (B.1 sampai B.5), README, serta logbook | "Sederhanakan komentar yang lebih dari 1 baris menjadi 1 baris; bantu isi laporan M9." | Angka profiling diambil dari pengukuran nyata di MySQL lokal; isi B.1, B.3, dan B.4 diperiksa dan disepakati kelompok. |
+| Claude Chat | Membantu menemukan penyebab `composer install` gagal (lock mengunci Symfony 8.1, butuh PHP 8.4.1) | Menempelkan keluaran error `composer install` dan bertanya penyebab serta perbaikannya | Menjalankan `composer config platform.php 8.3.0` dan `composer update "symfony/*"` sendiri, lalu memastikan `composer install` berhasil |
+| Claude Chat| Menelusuri penyebab error test halaman progres (cache tampilan Blade yang sudah dikompilasi) | Melaporkan satu test gagal dan hasil `php artisan test` | Menjalankan `php artisan view:clear`, lalu test lolos. Penyebab diverifikasi dengan mengulang test |
+
 
 ---
 ### Pernyataan Integritas dan Persetujuan
