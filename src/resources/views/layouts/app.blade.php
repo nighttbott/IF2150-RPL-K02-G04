@@ -6,6 +6,29 @@
 --}}
 @extends('layouts.base')
 
+<style>
+.nk-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 264px;
+    height: 100vh;
+    overflow-y: auto;
+    background: white;
+    border-right: 2px solid #eadfcb;
+    padding: 30px 18px;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.nk-konten {
+    margin-left: 264px; 
+    padding: 38px 44px;
+    max-width: calc(100% - 264px);
+}
+</style>
+
 @section('badan')
 @php
     $user = auth()->user();
