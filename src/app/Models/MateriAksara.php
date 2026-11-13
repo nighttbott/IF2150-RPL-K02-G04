@@ -13,11 +13,7 @@ use App\Support\Materi\TemplateAksara;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-/**
- * C02 MateriAksara (Model). Atribut Tabel 4.1: idMateri, namaMateri, jenisAksara, tingkatKesulitan,
- * statusPublikasi -> kolom id_materi, nama_materi, jenis_aksara, tingkat_kesulitan, status_publikasi.
- * Operasi: ambilMetadata, ambilTargetLatihan, perbaruiData, simpan, ambilDaftarMateri, ambilMateriRekomendasi.
- */
+/** C02 MateriAksara (Model). */
 class MateriAksara extends Model
 {
     protected $table = 'materi_aksara';
@@ -70,6 +66,7 @@ class MateriAksara extends Model
                     'karakter' => $karakter,
                     'bunyi' => $templat['kode'] ?? null,
                     'template' => $templat['goresan'] ?? null,
+                    'tengah' => $templat['tengah'] ?? null,
                 ];
             }
         }
@@ -119,11 +116,7 @@ class MateriAksara extends Model
         return HasilOperasi::sukses(['idMateri' => $this->id_materi]);
     }
 
-    /**
-     * Algo-040: materi sesuai filter. Arsip tidak pernah ikut; draf hanya bila filter->termasukDraf.
-     *
-     * @return list<MateriAksara>
-     */
+    /** Algo-040: materi sesuai filter. Arsip tidak pernah ikut; draf hanya bila filter->termasukDraf. @return list<MateriAksara> */
     public static function ambilDaftarMateri(FilterMateri $filter): array
     {
         $query = static::query()->with('konten')->where('status_publikasi', '!=', StatusPublikasi::Arsip->value);
@@ -140,13 +133,7 @@ class MateriAksara extends Model
         return $query->orderBy('jenis_aksara')->orderBy('tingkat_kesulitan')->orderBy('nama_materi')->get()->all();
     }
 
-    /**
-     * Algo-041: materi terbit yang belum dikuasai. $penguasaan: idMateri => skor 0..100.
-     * Tingkat terbuka bila semua materi tingkat di bawahnya (jenis sama) sudah mencapai ambang.
-     *
-     * @param  array<int, int|float|null>  $penguasaan
-     * @return list<MateriAksara>
-     */
+    /** Algo-041: materi terbit yang belum dikuasai. $penguasaan: idMateri => skor 0..100. @param  array<int, int|float|null>  $penguasaan @return list<MateriAksara> */
     public static function ambilMateriRekomendasi(array $penguasaan): array
     {
         $semua = static::ambilDaftarMateri(new FilterMateri);

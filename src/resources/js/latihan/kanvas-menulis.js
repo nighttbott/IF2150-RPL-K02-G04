@@ -1,5 +1,4 @@
-// C08 HalamanLatihan, mode MENULIS (DPPL 5.8). Menggambar sepenuhnya di browser; server hanya
-// dipanggil saat Periksa dan Selesaikan (KNF04).
+// C08 HalamanLatihan, mode MENULIS (DPPL 5.8). Menggambar sepenuhnya di browser; server hanya dipanggil saat Periksa dan Selesaikan (KNF04).
 
 const kanvas = document.getElementById('kanvas');
 const ctx = kanvas.getContext('2d');
@@ -35,7 +34,7 @@ function aturUkuran() {
 
 function gambarSegmen(a, b) {
     ctx.strokeStyle = gaya.getPropertyValue('--nk-indigo-tua');
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 14;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.beginPath();
