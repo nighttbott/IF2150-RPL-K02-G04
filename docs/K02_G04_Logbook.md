@@ -175,7 +175,7 @@
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | 07-11-2026 | Ryuza | Inisialisasi proyek Laravel di `src/`, `docker-compose.yml` MySQL 8.4, `.env.example`, route per modul | 1 | Done | - |
-| 09-11-2026 | Natan | Migrasi seluruh tabel, seeder akun uji, model RiwayatLatihan dan MotivasiBelajar, halaman progres (I-11) dan pemantauan (I-17), perintah profiling | [isi] | Done | - |
+| 09-11-2026 | Natan | Migrasi seluruh tabel, seeder akun uji, model RiwayatLatihan dan MotivasiBelajar, halaman progres (I-11) dan pemantauan (I-17), perintah profiling | 5 | Done | - |
 | 09-11-2026 | Ryuza | Layout dasar, sidebar per peran, konfigurasi navigasi; layout auth dan latihan (10-11) | 4 | Done | Branch `feat/akun-layout` belum di-PR |
 | 09-11-2026 | Diandra | Modul materi: enum, kelas pendukung, controller, view I-04, I-05, I-18, I-19, templat aksara Jawa dan Sunda, seeder materi | [isi] | Done | - |
 | 09-11-2026 | Abduh | Fondasi keanggotaan dan tugas, halaman tugas Pelajar, pengumpulan atomik, test kelas | [isi] | Done | - |
@@ -186,7 +186,7 @@
 | 12-11-2026 | Ryuza | Feedback (I-20) | 2 | Done | - |
 | 12-11-2026 | Ryuza | Beranda (I-03) | 3 | Done | - |
 | 12-11-2026 | Naufal | Latihan dari tugas kelas (`id_tugas`, `id_komponen`) | [isi] | Done | - |
-| 13-11-2026 | Natan | Integrasi akhir `develop`: perbaikan bug lintas modul, port sidebar `feat/akun-layout`, efek visual, ringkas komentar, profiling dengan indeks, README, laporan M9 | [isi] | Done | Beberapa modul tidak cocok saat digabung (lihat B.3 laporan) |
+| 13-11-2026 | Natan | Integrasi akhir `develop`: perbaikan bug lintas modul, port sidebar `feat/akun-layout`, efek visual, ringkas komentar, profiling dengan indeks, README, laporan M9 | 6 | Done | Beberapa modul tidak cocok saat digabung (lihat B.3 laporan) |
 
 **Catatan/Evaluasi Milestone 9:**
 * Integrasi sebaiknya dilakukan lebih awal (setiap PR langsung dicoba bersama modul lain), karena beberapa bug baru muncul setelah semua branch digabung.
