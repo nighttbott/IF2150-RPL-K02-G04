@@ -1,0 +1,55 @@
+/* Efek visual halus (resources/js/efek.js); semua dimatikan bila pengguna memilih prefers-reduced-motion. */
+
+/* Transisi umum: kartu muncul bertahap, tombol 3D bisa "ditekan", kartu tautan sedikit terangkat */
+.nk-efek-siap [data-efek-muncul], .nk-efek-siap .nk-konten .kartu { animation: nk-muncul .45s cubic-bezier(.2, .7, .3, 1) both; animation-delay: var(--nk-tunda, 0ms); }
+@keyframes nk-muncul { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.tombol, .lt-tombol, .lt-tombol-mulai { transition: transform .12s ease, box-shadow .12s ease, filter .12s ease; }
+.tombol:hover, .lt-tombol:hover:not(:disabled), .lt-tombol-mulai:hover { filter: brightness(1.05); transform: translateY(-1px); }
+.tombol:active, .lt-tombol:active:not(:disabled), .lt-tombol-mulai:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--nk-garis); }
+.lt-kartu-mode, .kp-tab a, a.kartu { transition: transform .18s ease, box-shadow .18s ease; }
+.lt-kartu-mode:hover, .kp-tab a:hover, a.kartu:hover { transform: translateY(-3px); }
+.nk-menu a { transition: background-color .15s ease, color .15s ease; }
+
+/* Bilah progres terisi perlahan */
+.bilah > span { transition: width .9s cubic-bezier(.2, .7, .3, 1); }
+
+/* Angka streak/poin berdenyut sekali */
+.nk-denyut { display: inline-block; animation: nk-denyut .6s ease-out .5s both; }
+@keyframes nk-denyut { 0% { transform: scale(1); } 40% { transform: scale(1.35); color: var(--nk-emas-tua); } 100% { transform: scale(1); } }
+
+/* Badge baru muncul dengan pop */
+.nk-pop { animation: nk-pop .5s cubic-bezier(.3, 1.6, .5, 1) both; animation-delay: var(--nk-tunda, .6s); }
+@keyframes nk-pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+
+/* Maskot bergoyang ringan saat latihan perlu diulang */
+.nk-goyang { animation: nk-goyang .6s ease-in-out .3s both; }
+@keyframes nk-goyang { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
+
+/* Taburan motif kawung saat latihan berhasil */
+.nk-taburan { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 1080; }
+.nk-kawung { position: absolute; top: -40px; width: 22px; height: 22px; opacity: 0; animation: nk-jatuh var(--nk-durasi, 2.4s) cubic-bezier(.3, .4, .5, 1) var(--nk-tunda, 0s) forwards; }
+.nk-kawung::before, .nk-kawung::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background:
+    radial-gradient(ellipse 28% 38% at 30% 30%, var(--nk-warna) 98%, transparent),
+    radial-gradient(ellipse 28% 38% at 70% 70%, var(--nk-warna) 98%, transparent); }
+.nk-kawung::after { transform: rotate(90deg); }
+@keyframes nk-jatuh {
+    0% { opacity: 0; transform: translate(0, 0) rotate(0); }
+    10% { opacity: .9; }
+    100% { opacity: 0; transform: translate(var(--nk-geser, 0px), 105vh) rotate(var(--nk-putar, 180deg)); }
+}
+
+/* Toast badge baru */
+.nk-toast { position: fixed; right: 24px; bottom: 24px; z-index: 1090; display: flex; align-items: center; gap: 12px; padding: 12px 18px; background: var(--nk-emas-muda); border: 2px solid var(--nk-emas); border-radius: 16px; box-shadow: 0 4px 0 var(--nk-emas); font-weight: 800; color: var(--nk-tinta); animation: nk-toast 4.2s ease forwards; }
+.nk-toast img { width: 32px; height: 32px; }
+@keyframes nk-toast { 0% { opacity: 0; transform: translateY(20px); } 8%, 85% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(10px); } }
+
+/* Tanda centang tergambar saat tugas berhasil dikumpulkan */
+.nk-centang-gambar { width: 44px; height: 44px; flex: none; }
+.nk-centang-gambar circle { stroke-dasharray: 126; stroke-dashoffset: 126; animation: nk-gores .5s ease-out .15s forwards; }
+.nk-centang-gambar path { stroke-dasharray: 30; stroke-dashoffset: 30; animation: nk-gores .35s ease-out .6s forwards; }
+@keyframes nk-gores { to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; }
+    .nk-taburan { display: none; }
+}

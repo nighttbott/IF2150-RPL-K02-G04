@@ -30,7 +30,8 @@
 * [Milestone 5](#milestone-5)
 * [Milestone 6](#milestone-6)
 * [Milestone 7](#milestone-7)
-* [Milestone 7](#milestone-8)
+* [Milestone 8](#milestone-8)
+* [Milestone 9](#milestone-9)
 * Notes: Copy bagian Daftar Isi seperti Milestone 1 untuk Milestone berikutnya, contoh ``* [Milestone 2](#milestone-2)``. Ketika Daftar isi diklik maka akan langsung diarahkan ke bagian bawah sesuai dengan Milestone tujuan.
 
 
@@ -165,6 +166,29 @@
 
 **Catatan/Evaluasi Milestone 8:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
+
+---
+
+### Milestone 9
+**Periode:** 29-10-2026 - 13-11-2026
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 07-11-2026 | Ryuza | Inisialisasi proyek Laravel di `src/`, `docker-compose.yml` MySQL 8.4, `.env.example`, route per modul | [isi] | Done | - |
+| 09-11-2026 | Natan | Migrasi seluruh tabel, seeder akun uji, model RiwayatLatihan dan MotivasiBelajar, halaman progres (I-11) dan pemantauan (I-17), perintah profiling | [isi] | Done | - |
+| 09-11-2026 | Ryuza | Layout dasar, sidebar per peran, konfigurasi navigasi | [isi] | Done | Branch `feat/akun-layout` belum di-PR |
+| 09-11-2026 | Diandra | Modul materi: enum, kelas pendukung, controller, view I-04, I-05, I-18, I-19, templat aksara Jawa dan Sunda, seeder materi | [isi] | Done | - |
+| 09-11-2026 | Abduh | Fondasi keanggotaan dan tugas, halaman tugas Pelajar, pengumpulan atomik, test kelas | [isi] | Done | - |
+| 10-11-2026 | Naufal | Kanvas menulis (I-06, I-07), penilaian akurasi goresan, simpan hasil, streak, poin, badge, hasil latihan (I-10) | [isi] | Done | - |
+| 10-11-2026 | Marvel | Kelola kelas Pengajar (I-14 sampai I-16), mode latihan bunyi, merangkai, transliterasi | [isi] | Done | - |
+| 10-11-2026 | Ryuza | Model AkunPengguna, middleware peran, masuk dan keluar | [isi] | Done | - |
+| 10-11-2026 | Abduh | Perbaikan pembatalan transaksi dan penyelesaian materi pada tugas | [isi] | Done | - |
+| 12-11-2026 | Ryuza | Pendaftaran akun, Beranda (I-03), Feedback (I-20) | [isi] | Done | - |
+| 12-11-2026 | Naufal | Latihan dari tugas kelas (`id_tugas`, `id_komponen`) | [isi] | Done | - |
+| 13-11-2026 | Natan | Integrasi akhir `develop`: perbaikan bug lintas modul, port sidebar `feat/akun-layout`, efek visual, ringkas komentar, profiling dengan indeks, README, laporan M9 | [isi] | Done | Beberapa modul tidak cocok saat digabung (lihat B.3 laporan) |
+
+**Catatan/Evaluasi Milestone 9:**
+* Integrasi sebaiknya dilakukan lebih awal (setiap PR langsung dicoba bersama modul lain), karena beberapa bug baru muncul setelah semua branch digabung.
 
 ---
 

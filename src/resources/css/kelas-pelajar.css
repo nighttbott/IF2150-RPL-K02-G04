@@ -1,0 +1,46 @@
+/* Kelas Pelajar I-12 dan I-13 (Abduh), dipindah dari CSS inline layout lama; prefix kp- agar tidak bentrok dengan Bootstrap. */
+.kp-judul h1 { font-size: 36px; line-height: 44px; margin: 0 0 4px; }
+.kp-judul p { margin: 0; color: var(--nk-redup); }
+.kp-kembali { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 6px; font-weight: 800; font-size: 14px; color: var(--nk-redup); text-decoration: none; }
+.kp-kembali:hover { color: var(--nk-indigo); }
+.kp-tumpuk { display: flex; flex-direction: column; gap: 24px; margin-top: 24px; }
+.kp-kartu h2 { font-size: 18px; margin: 0 0 14px; display: flex; align-items: center; gap: 10px; }
+.kp-gabung { display: flex; gap: 12px; }
+.kp-isian { flex: 1; display: flex; align-items: center; gap: 10px; background: #fff; border: 2px solid var(--nk-garis); border-radius: 14px; padding: 0 14px; }
+.kp-isian:focus-within { border-color: var(--nk-indigo); }
+.kp-isian input { flex: 1; min-width: 0; border: 0; outline: 0; padding: 12px 0; font: 800 18px/22px 'Nunito', sans-serif; letter-spacing: .12em; text-transform: uppercase; color: var(--nk-tinta); background: transparent; }
+.kp-isian input::placeholder { letter-spacing: normal; text-transform: none; font-weight: 600; color: #B9AE9E; }
+.kp-tab { display: flex; gap: 12px; flex-wrap: wrap; }
+.kp-tab a { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 14px; border: 2px solid var(--nk-garis); background: #fff; color: var(--nk-tinta); font-weight: 800; text-decoration: none; box-shadow: 0 3px 0 var(--nk-garis); }
+.kp-tab a.aktif { background: var(--nk-teal); border-color: var(--nk-teal); color: #fff; box-shadow: 0 3px 0 var(--nk-teal-tua); }
+.kp-baris { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 2px solid #F2ECE2; }
+.kp-baris:last-child { border-bottom: 0; padding-bottom: 0; }
+.kp-baris-teks { flex: 1; min-width: 0; }
+.kp-baris-teks strong { display: block; font-size: 16px; }
+.kp-baris-teks small { display: block; color: var(--nk-redup); font-weight: 600; margin-top: 2px; }
+.kp-baris-aksi { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+.kp-ikon-tugas { width: 44px; height: 44px; flex: none; border-radius: 12px; background: var(--nk-teal-muda); color: var(--nk-teal); display: inline-flex; align-items: center; justify-content: center; }
+.kp-ikon-komponen { width: 36px; height: 36px; flex: none; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: #F2ECE2; color: var(--nk-redup); }
+.kp-ikon-komponen.selesai { background: var(--nk-hijau); color: #fff; }
+.kp-hitung { background: var(--nk-teal-muda); color: var(--nk-teal-tua); }
+.kp-instruksi { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0 0 12px; }
+.kp-tenggat { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; color: var(--nk-tinta); }
+.kp-tenggat.lewat { color: var(--nk-merah-tua); }
+.kp-kepala-komponen { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.kp-kepala-komponen span { font-weight: 800; color: var(--nk-redup); font-size: 14px; }
+.kp-statistik { display: flex; justify-content: space-around; gap: 8px; padding: 14px 16px; }
+.kp-statistik div { display: flex; align-items: center; gap: 8px; }
+.kp-statistik b { display: block; font: 800 18px/20px 'Baloo 2', sans-serif; }
+.kp-statistik span { font-size: 12px; color: var(--nk-redup); font-weight: 700; }
+.kp-tip { display: flex; gap: 14px; align-items: center; }
+.kp-tip img { width: 84px; height: auto; flex: none; }
+.kp-tip h2 { font-size: 17px; color: var(--nk-sogan); margin: 0 0 4px; }
+.kp-tip p { margin: 0; font-size: 14px; font-weight: 600; }
+.kp-pesan { display: flex; gap: 12px; align-items: flex-start; }
+.kp-pesan strong { display: block; }
+.kp-pesan-emas { background: var(--nk-emas-muda); border-color: var(--nk-emas); color: var(--nk-emas-tua); }
+@media (max-width: 575.98px) {
+    .kp-gabung { flex-direction: column; }
+    .kp-baris { flex-wrap: wrap; }
+    .kp-baris-aksi { width: 100%; justify-content: flex-start; }
+}
