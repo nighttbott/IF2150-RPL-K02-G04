@@ -31,6 +31,7 @@
 * [Milestone 6](#milestone-6)
 * [Milestone 7](#milestone-7)
 * [Milestone 8](#milestone-8)
+* [Milestone 9](#milestone-9)
 
 ---
 
@@ -92,10 +93,12 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | :--- | :--- | :--- | :--- |
 | Claude | Membantu membuat algoritma dari operasi dalam suatu kelas | Menggunakan pseudocode, buatkan contoh algoritma untuk operasi berikut dari kelas tersebut. | Memvalidasi pseudocode yang dibuat dan mengoreksi jika ada kekeliruan | 
 
-### Milestone X
+### Milestone 9
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
-| | | | | 
+| Claude Code | Memeriksa integrasi seluruh branch di `develop`, mencari bug lintas modul (route Beranda tertimpa, terbitkan tugas gagal, hasil latihan non-kanvas error, tombol kerjakan komponen tugas), lalu memperbaikinya | "Lakukan integrasi branch ke develop, cek apakah ada bug, dan perbaiki langsung di develop tanpa commit/push." | Rencana perbaikan disetujui sebelum dijalankan; hasil diverifikasi dengan `php artisan test` (378 test lolos) dan uji manual tiga peran di `localhost`; commit dan push dilakukan sendiri oleh anggota. |
+| Claude Code | Memindahkan sidebar per peran dari branch `feat/akun-layout`, menyeragamkan layout Kelas Pelajar, dan menambah efek visual (kartu muncul, skor naik, taburan kawung, toast badge, centang pengumpulan) | "Tambahkan efek saat selesai mengerjakan tugas, sesuai konteks dan tidak berlebihan." | Efek dicek ulang agar nonaktif saat *reduce motion*; tampilan dibandingkan dengan desain Figma (I-12, I-13). |
+| Claude Code | Meringkas komentar kode multi-baris menjadi satu baris, membantu profiling (`EXPLAIN`, waktu query), dan menyusun draf laporan M9 (B.1 sampai B.5), README, serta logbook | "Sederhanakan komentar yang lebih dari 1 baris menjadi 1 baris; bantu isi laporan M9." | Angka profiling diambil dari pengukuran nyata di MySQL lokal; isi B.1, B.3, dan B.4 diperiksa dan disepakati kelompok. |
 
 ---
 ### Pernyataan Integritas dan Persetujuan
