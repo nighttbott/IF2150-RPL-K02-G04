@@ -11,16 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-/**
- * C01 AkunPengguna — Model pengguna utama Ngaksara.
- *
- * Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi,
- * serta menjadi acuan hak akses seluruh fitur.
- *
- * Kolom peran sengaja tetap berupa teks huruf kecil ('pelajar', 'pengajar',
- * 'tim_materi'), karena modul lain membandingkannya langsung sebagai teks.
- *
- */
+/** C01 AkunPengguna — Model pengguna utama Ngaksara. Menyimpan kredensial, profil, dan peran Pelajar, Pengajar, atau Tim Materi, serta menjadi acuan hak akses seluruh fitur. */
 class AkunPengguna extends Authenticatable
 {
     use HasFactory;
@@ -51,14 +42,7 @@ class AkunPengguna extends Authenticatable
         return '';
     }
 
-    /**
-     * Menyimpan akun baru.
-     *
-     * data->passwordHash harus sudah di-hash oleh pemanggil (OtentikasiController.hashPassword()).
-     * Menolak email atau username yang sudah dipakai dan mengembalikan kode galat yang spesifik.
-     *
-     * @return HasilOperasi  sukses -> data['id_akun'];  gagal -> kode EMAIL_TERDAFTAR / USERNAME_TERPAKAI / AKUN_SUDAH_ADA
-     */
+    /** Menyimpan akun baru. data->passwordHash harus sudah di-hash oleh pemanggil (OtentikasiController.hashPassword()). */
     public function buatAkunBaru(DataPendaftaran $data): HasilOperasi
     {
         $email = strtolower(trim($data->email));
@@ -121,8 +105,7 @@ class AkunPengguna extends Authenticatable
         return HasilOperasi::sukses(['id_akun' => $idBaru]);
     }
 
-    /**
-     * Mengambil akun berdasarkan email untuk proses login. Mengembalikan null jika tidak ada. */
+    /** Mengambil akun berdasarkan email untuk proses login. Mengembalikan null jika tidak ada. */
     public static function cariBerdasarkanEmail(string $email): ?static
     {
         return static::query()
@@ -130,21 +113,13 @@ class AkunPengguna extends Authenticatable
             ->first();
     }
 
-    /**
-     * Memeriksa kata sandi terhadap passwordHash tanpa mengeluarkan nilai hash dari objek.
-     */
+    /** Memeriksa kata sandi terhadap passwordHash tanpa mengeluarkan nilai hash dari objek. */
     public function cocokkanPassword(string $password): bool
     {
         return Hash::check($password, $this->password_hash);
     }
 
-    /**
-     * Mengembalikan data profil publik: idAkun, username, namaTampilan, peran.
-     *
-     * Dipakai oleh HalamanUtama dan FeedbackController. Tidak memuat email dan passwordHash.
-     *
-     * return array{id_akun: int, username: string, nama_tampilan: string, peran: string}
-     */
+    /** Mengembalikan data profil publik: idAkun, username, namaTampilan, peran. Dipakai oleh HalamanUtama dan FeedbackController. */
     public function getProfil(): array
     {
         return [
@@ -155,29 +130,13 @@ class AkunPengguna extends Authenticatable
         ];
     }
 
-    /**
-     * Mengembalikan profil beserta email untuk halaman akun milik pengguna sendiri. (DPPL2 §5.1)
-     *
-     * Tidak memuat passwordHash.
-     *
-     * return array{id_akun: int, username: string, nama_tampilan: string, peran: string, email: string}
-     */
+    /** Mengembalikan profil beserta email untuk halaman akun milik pengguna sendiri. */
     public function getDetailAkun(): array
     {
         return array_merge($this->getProfil(), ['email' => $this->email]);
     }
 
-    /**
-     * Memeriksa apakah peran akun boleh menjalankan aksi tertentu.
-     *
-     * Aksi bersifat case-insensitive dan mendukung camelCase maupun SCREAMING_SNAKE_CASE:
-     *   "kelolaMateri", "kelola_materi", "KELOLA_MATERI" sama.
-     *
-     * Daftar hak akses per peran mengikuti aktor setiap use case pada SKPL:
-     *   Pelajar    -> UC-02–UC-05, UC-09
-     *   Pengajar   -> UC-07–UC-09
-     *   Tim Materi -> UC-06
-     */
+    /** Memeriksa apakah peran akun boleh menjalankan aksi tertentu. */
     public function verifikasiHakAkses(string $aksi): bool
     {
         /** @var array<string, list<string>> */
@@ -244,10 +203,7 @@ class AkunPengguna extends Authenticatable
     // Private helpers
 
 
-    /**
-     * Normalisasi nama aksi ke SCREAMING_SNAKE_CASE.
-     * Contoh: "kelolaMateri" -> "KELOLA_MATERI", "kelola_materi" -> "KELOLA_MATERI"
-     */
+    /** Normalisasi nama aksi ke SCREAMING_SNAKE_CASE. Contoh: "kelolaMateri" -> "KELOLA_MATERI", "kelola_materi" -> "KELOLA_MATERI" */
     private function normalisasiAksi(string $aksi): string
     {
         // sisipkan "_" sebelum setiap huruf besar yang didahului huruf kecil (camelCase -> snake_case)

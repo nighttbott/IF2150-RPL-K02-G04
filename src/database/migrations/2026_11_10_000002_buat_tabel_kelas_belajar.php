@@ -5,10 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Tabel kelas_belajar (C23 KelasBelajar, pemilik modul: Marvel; migrasi disiapkan Natan).
- * Kode bergabung harus unik (KF25).
- */
+/** Tabel kelas_belajar (C23 KelasBelajar, pemilik modul: Marvel; migrasi disiapkan Natan). Kode bergabung harus unik (KF25). */
 return new class extends Migration
 {
     public function up(): void

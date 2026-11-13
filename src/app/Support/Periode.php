@@ -4,10 +4,7 @@ namespace App\Support;
 
 use Carbon\CarbonImmutable;
 
-/**
- * Rentang waktu untuk menyaring riwayat (tipe Periode pada DPPL).
- * Batas awal dan akhir sama-sama termasuk (inklusif).
- */
+/** Rentang waktu untuk menyaring riwayat (tipe Periode pada DPPL). Batas awal dan akhir sama-sama termasuk (inklusif). */
 final class Periode
 {
     public function __construct(
@@ -29,10 +26,7 @@ final class Periode
         return new self(CarbonImmutable::create(2000, 1, 1), CarbonImmutable::now()->addYears(50));
     }
 
-    /**
-     * Membuat periode dari pilihan pada halaman (7, 30, 90, atau semua).
-     * Nilai yang tidak dikenal dianggap 30 hari terakhir.
-     */
+    /** Membuat periode dari pilihan pada halaman (7, 30, 90, atau semua). Nilai yang tidak dikenal dianggap 30 hari terakhir. */
     public static function dariPilihan(?string $pilihan): self
     {
         return match ($pilihan) {

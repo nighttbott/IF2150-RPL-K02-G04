@@ -5,10 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Tabel akun_pengguna (C01 AkunPengguna, pemilik modul: Ryuza; migrasi disiapkan Natan).
- * Kata sandi hanya disimpan sebagai hash. Peran berupa teks huruf kecil.
- */
+/** Tabel akun_pengguna (C01 AkunPengguna, pemilik modul: Ryuza; migrasi disiapkan Natan). Kata sandi hanya disimpan sebagai hash. Peran berupa teks huruf kecil. */
 return new class extends Migration
 {
     public function up(): void

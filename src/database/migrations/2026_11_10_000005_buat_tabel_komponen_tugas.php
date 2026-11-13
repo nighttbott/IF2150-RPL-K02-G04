@@ -5,10 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Tabel komponen_tugas (pendukung C25 TugasKelas, pemilik modul: Abduh; migrasi disiapkan Natan).
- * Jenis komponen: materi atau latihan. Mode hanya diisi untuk komponen latihan.
- */
+/** Tabel komponen_tugas (pendukung C25 TugasKelas, pemilik modul: Abduh; migrasi disiapkan Natan). Jenis komponen: materi atau latihan. */
 return new class extends Migration
 {
     public function up(): void

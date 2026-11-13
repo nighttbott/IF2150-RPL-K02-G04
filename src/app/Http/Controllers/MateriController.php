@@ -26,13 +26,7 @@ use Illuminate\Contracts\View\View;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-/**
- * C17 MateriController (Controller). Operasi Tabel 4.1 menjadi method public bernama sama
- * (ambilDaftarMateri, muatPaketMateri, ambilAudioPengucapan, ambilKontenLatihan, tambahMateri,
- * perbaruiMateri, validasiFormatFile, hapusMateri). Method "aksi HTTP" di bagian bawah hanya
- * penghubung route -> operasi -> view (C13 HalamanMateri = resources/views/materi/{index,show},
- * C09 HalamanKelolaMateri = resources/views/materi/{kelola,form}).
- */
+/** C17 MateriController (Controller). */
 class MateriController extends Controller
 {
     /* ===================== Operasi Tabel 4.1 ===================== */
@@ -370,10 +364,7 @@ class MateriController extends Controller
         abort_unless($this->punyaHak($aksi), 403, 'Anda tidak berhak mengakses halaman ini');
     }
 
-    /**
-     * idMateri => ['status' => 'selesai'|'sedang'|'belum', 'persen' => int] dari RiwayatLatihan::ambilStatusProgres
-     * (C03, Natan). Bila layanan belum ada atau gagal, daftar tetap tampil tanpa status progres.
-     */
+    /** idMateri => ['status' => 'selesai'|'sedang'|'belum', 'persen' => int] dari RiwayatLatihan::ambilStatusProgres (C03, Natan). */
     private function petaProgres(): array
     {
         $kelas = 'App\\Models\\RiwayatLatihan';
@@ -414,10 +405,7 @@ class MateriController extends Controller
         return null;
     }
 
-    /**
-     * Menyimpan berkas ke disk materi. Mengembalikan path audio (mp3) atau null; path yang ditulis
-     * dicatat di $tersimpan supaya bisa dibersihkan bila transaksi dibatalkan.
-     */
+    /** Menyimpan berkas ke disk materi. Mengembalikan path audio (mp3) atau null; path yang ditulis dicatat di $tersimpan supaya bisa dibersihkan bila transaksi dibatalkan. */
     private function simpanBerkas(?UploadedFile $berkas, int $idMateri, array &$tersimpan): ?string
     {
         if ($berkas === null) {

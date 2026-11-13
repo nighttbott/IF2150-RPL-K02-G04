@@ -1,7 +1,4 @@
-{{--
-    I-17 Pantau Progres Anggota (bagian HalamanKelolaKelas untuk UC-08, pemilik: Natan).
-    Data disiapkan PemantauanKelasController::tampilkan(). Hanya anggota aktif yang tampil.
---}}
+{{-- I-17 Pantau Progres Anggota (bagian HalamanKelolaKelas untuk UC-08, pemilik: Natan). Data disiapkan PemantauanKelasController::tampilkan(). --}}
 @extends('layouts.app')
 
 @section('judul', 'Pantau Progres Anggota')

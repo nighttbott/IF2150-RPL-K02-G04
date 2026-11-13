@@ -1,11 +1,4 @@
-{{--
-  I-20 Kirim Feedback (C10 HalamanFeedback).
-  Data   : $kategori (array<KategoriFeedback>) dari FeedbackController::index
-  Kirim  : POST route('feedback.kirim') dengan isian kategori, pesan
-  Sesi   : session('sukses') -> I-20-04 (form kosong)
-           session('galat')  -> I-20-05 (isian dipertahankan lewat withInput)
-           $errors           -> galat per isian, tampil di bawah isian
---}}
+{{-- I-20 Kirim Feedback (C10 HalamanFeedback). --}}
 @extends('layouts.app')
 @section('judul', 'Kirim Feedback · Ngaksara')
 

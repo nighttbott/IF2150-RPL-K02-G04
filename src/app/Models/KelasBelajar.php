@@ -10,14 +10,7 @@ use Illuminate\Database\UniqueConstraintViolationException;
 use RuntimeException;
 use Throwable;
 
-/**
- * C23 KelasBelajar (tabel kelas_belajar). Operasi milik UC-07 (Marvel): simpan (Algo-087),
- * buatKodeBergabung (Algo-088), gantiKodeBergabung (Algo-089), periksaPemilik (Algo-090),
- * aturScoreboard (Algo-091), daftarKelasPengajar (Algo-092).
- * validasiKode, gabungkanPelajar, ambilDaftarTugas, bukaTugas, finalisasiTugas
- * (UC-05, Algo-093 s.d. Algo-097) ditulis Abduh pada kelas yang sama.
- * Nilai status huruf kecil mengikuti App\Enums\StatusKelas dan batasan CHECK di basis data.
- */
+/** C23 KelasBelajar (tabel kelas_belajar). */
 class KelasBelajar extends Model
 {
     protected $table = 'kelas_belajar';

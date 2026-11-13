@@ -45,12 +45,7 @@ class FeedbackController extends Controller
         return redirect()->route('feedback.index')->with('sukses', $konfirmasi['pesan']); // form kosong
     }
 
-    /**
-     * Mengembalikan peta galat per isian; kosong berarti valid.
-     * Tanpa hak KIRIM_FEEDBACK permintaan ditolak 403.
-     *
-     * @return array<string, string>
-     */
+    /** Mengembalikan peta galat per isian; kosong berarti valid. Tanpa hak KIRIM_FEEDBACK permintaan ditolak 403. @return array<string, string> */
     public function validasiFeedback(?AkunPengguna $akun, array $data): array
     {
         $this->pastikanHakAkses($akun);

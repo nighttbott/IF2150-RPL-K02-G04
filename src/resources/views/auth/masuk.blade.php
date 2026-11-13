@@ -1,12 +1,4 @@
-{{--
-  I-02 Login (HalamanLogin, C06) - UC-01.
-  Nama isian yang dikirim: email, password.
-  Disesuaikan dengan OtentikasiController (C15):
-  - session('galat')  : pesan umum I-02-05 (gagal atau terkunci)
-  - session('tunggu') : sisa detik saat dibatasi RateLimiter, tombol nonaktif sampai habis
-  - session('sukses') : pesan berhasil (setelah keluar / setelah mendaftar)
-  - $errors email/password : hanya dari validasi "wajib diisi"
---}}
+{{-- I-02 Login (HalamanLogin, C06) - UC-01. Nama isian yang dikirim: email, password. --}}
 @extends('layouts.tamu')
 
 @section('judul', 'Masuk · Ngaksara')

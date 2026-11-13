@@ -2,11 +2,7 @@
 
 namespace App\Support;
 
-/**
- * Pembantu tampilan: mengubah satu aksara dasar menjadi nama Latinnya
- * (misalnya ꦲ menjadi "ha"). Dipakai untuk label pola kesalahan agar mudah dibaca.
- * Aksara yang tidak dikenal dikembalikan apa adanya.
- */
+/** Pembantu tampilan: mengubah satu aksara dasar menjadi nama Latinnya (misalnya ꦲ menjadi "ha"). Dipakai untuk label pola kesalahan agar mudah dibaca. */
 final class Aksara
 {
     private const LATIN = [

@@ -16,25 +16,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
-/**
- * Bagian C20 KelasController untuk pemantauan (UC-08), pemilik modul: Natan.
- *
- * Kelas C20 pada DPPL dipecah menjadi tiga berkas agar tiga anggota tidak mengubah
- * berkas yang sama (dicatat di B.1 dan B.5):
- *   - KelasPengajarController   (Marvel, UC-07)
- *   - KelasPelajarController    (Abduh, UC-05)
- *   - PemantauanKelasController (Natan, UC-08)  <- berkas ini
- *
- * Operasi DPPL yang diwujudkan di sini: ambilProgresAnggota (Algo-081) dan
- * kirimUmpanBalik (Algo-080). Halaman: I-17 Pantau Progres Anggota.
- * Tabel kelas dan feedback dibaca/ditulis lewat query langsung agar tidak bergantung pada
- * model modul lain yang belum digabung.
- */
+/** Bagian C20 KelasController untuk pemantauan (UC-08), pemilik modul: Natan. */
 class PemantauanKelasController extends Controller
 {
-    /**
-     * Daftar kelas aktif milik Pengajar. Bila hanya satu kelas, langsung dibuka.
-     */
+    /** Daftar kelas aktif milik Pengajar. Bila hanya satu kelas, langsung dibuka. */
     public function daftarKelas(Request $request): View|RedirectResponse
     {
         $kelas = DB::table('kelas_belajar as k')
@@ -54,10 +39,7 @@ class PemantauanKelasController extends Controller
         return view('pemantauan.daftar-kelas', ['daftarKelas' => $kelas]);
     }
 
-    /**
-     * Halaman I-17: ringkasan kelas, progres tiap anggota aktif, pola kesalahan,
-     * dan detail satu anggota bila ?pelajar=ID diisi (pilihAnggota).
-     */
+    /** Halaman I-17: ringkasan kelas, progres tiap anggota aktif, pola kesalahan, dan detail satu anggota bila ?pelajar=ID diisi (pilihAnggota). */
     public function tampilkan(Request $request, int $idKelas): View
     {
         $kelas = $this->kelasMilikPengajar($idKelas, (int) $request->user()->id_akun);
@@ -87,12 +69,7 @@ class PemantauanKelasController extends Controller
         ]);
     }
 
-    /**
-     * ambilProgresAnggota(idKelas, idPelajar): Data  (Algo-081)
-     *
-     * Hanya untuk anggota aktif kelas milik Pengajar. Bila bukan anggota aktif,
-     * hasilnya galat BUKAN_ANGGOTA_AKTIF (UC-08 alternatif 2) dan dicatat ke log.
-     */
+    /** ambilProgresAnggota(idKelas, idPelajar): Data (Algo-081) Hanya untuk anggota aktif kelas milik Pengajar. */
     public function ambilProgresAnggota(int $idKelas, int $idPelajar, ?Periode $periode = null): HasilOperasi
     {
         $this->kelasMilikPengajar($idKelas, (int) auth()->id());
@@ -118,13 +95,7 @@ class PemantauanKelasController extends Controller
         ]);
     }
 
-    /**
-     * kirimUmpanBalik(idKelas, data: DataUmpanBalik): HasilOperasi  (Algo-080)
-     *
-     * Sesuai DPPL, umpan balik disimpan di data_feedback dengan id_akun = Pelajar
-     * tujuan dan kategori MATERI. Agar dapat dibedakan dari feedback biasa, pesan
-     * diberi awalan nama Pengajar dan kelas (keputusan implementasi, dicatat di B.1).
-     */
+    /** kirimUmpanBalik(idKelas, data: DataUmpanBalik): HasilOperasi (Algo-080) Sesuai DPPL, umpan balik disimpan di data_feedback dengan id_akun = Pelajar tujuan dan kategori MATERI. */
     public function kirimUmpanBalik(Request $request, int $idKelas): RedirectResponse
     {
         $kelas = $this->kelasMilikPengajar($idKelas, (int) $request->user()->id_akun);
@@ -161,10 +132,7 @@ class PemantauanKelasController extends Controller
             ->with('status', 'Umpan balik terkirim ke '.$anggota[(int) $data['id_pelajar']].'.');
     }
 
-    /**
-     * Memastikan kelas aktif dan milik Pengajar yang sedang masuk; selain itu 403.
-     * (Setara KelasBelajar.periksaPemilik milik modul Marvel; dapat diganti setelah tersedia.)
-     */
+    /** Memastikan kelas aktif dan milik Pengajar yang sedang masuk; selain itu 403. (Setara KelasBelajar.periksaPemilik milik modul Marvel; dapat diganti setelah tersedia.) */
     private function kelasMilikPengajar(int $idKelas, int $idPengajar): object
     {
         $kelas = DB::table('kelas_belajar')

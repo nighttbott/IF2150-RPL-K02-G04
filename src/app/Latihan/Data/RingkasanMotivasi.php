@@ -4,9 +4,7 @@ namespace App\Latihan\Data;
 
 final readonly class RingkasanMotivasi
 {
-    /**
-     * @param  list<string>  $badgeBaru
-     */
+    /** @param  list<string>  $badgeBaru */
     public function __construct(
         public int $streak,
         public int $poin,

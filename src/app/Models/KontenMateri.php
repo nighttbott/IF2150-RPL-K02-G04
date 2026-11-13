@@ -13,11 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-/**
- * C21 KontenMateri (Model). Atribut Tabel 4.1 -> kolom id_konten, id_materi, bentuk_aksara, aturan,
- * contoh, path_audio, versi_konten, versi_aplikasi_minimum.
- * Operasi: ambilKonten, ambilAudio, perbaruiKonten, arsipkanVersi, simpanKonten.
- */
+/** C21 KontenMateri (Model). Atribut Tabel 4.1 -> kolom id_konten, id_materi, bentuk_aksara, aturan, contoh, path_audio, versi_konten, versi_aplikasi_minimum. */
 class KontenMateri extends Model
 {
     protected $table = 'konten_materi';

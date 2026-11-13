@@ -6,13 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Middleware pembatas akses berdasarkan peran (DPPL Algo-002 verifikasiHakAkses).
- *
- * Contoh pada route:  ->middleware(['auth', 'peran:pelajar'])  atau  'peran:pengajar,tim_materi'
- * Perbandingan tidak peka huruf besar/kecil. Disiapkan Natan sebagai fondasi; dikembangkan
- * Ryuza bersama pembatasan akses modul (Unit 5).
- */
+/** Middleware pembatas akses berdasarkan peran (DPPL Algo-002 verifikasiHakAkses). */
 class CekPeran
 {
     public function handle(Request $request, Closure $next, string ...$peran): Response

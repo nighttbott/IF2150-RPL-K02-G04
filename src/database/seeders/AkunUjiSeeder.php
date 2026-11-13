@@ -8,10 +8,7 @@ use App\Models\MotivasiBelajar;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-/**
- * Akun uji untuk tiga peran. Kata sandi semua akun: Rahasia123!
- * Data fiktif, jangan dipakai di lingkungan produksi.
- */
+/** Akun uji untuk tiga peran. Kata sandi semua akun: Rahasia123! Data fiktif, jangan dipakai di lingkungan produksi. */
 class AkunUjiSeeder extends Seeder
 {
     /** email => [username, nama tampilan, peran] */

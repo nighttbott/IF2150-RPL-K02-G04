@@ -2,10 +2,7 @@
 
 namespace App\Latihan;
 
-/**
- * Logika Algo-027 (DPPL 5.16.7) tanpa ketergantungan Laravel. Kode badge mengikuti
- * MotivasiBelajar::BADGE (huruf kecil, dipakai halaman progres); nama tampilan diambil dari sana.
- */
+/** Logika Algo-027 (DPPL 5.16.7) tanpa ketergantungan Laravel. */
 final class PemeriksaBadge
 {
     /** Deskripsi untuk kartu I-10-05. */
@@ -15,10 +12,7 @@ final class PemeriksaBadge
         'seratus_poin' => 'Mengumpulkan 100 poin.',
     ];
 
-    /**
-     * @param  list<string>  $dimiliki
-     * @return list<string> kode badge yang syaratnya baru terpenuhi
-     */
+    /** @param  list<string>  $dimiliki @return list<string> kode badge yang syaratnya baru terpenuhi */
     public function periksa(int $streak, int $poin, array $dimiliki): array
     {
         $syarat = [

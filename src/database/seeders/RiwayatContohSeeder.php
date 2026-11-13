@@ -9,11 +9,7 @@ use App\Models\RiwayatLatihan;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Seeder;
 
-/**
- * Riwayat latihan contoh selama 20 hari terakhir untuk akun Pelajar uji, memakai materi
- * aksara Jawa tingkat 1 dari MateriSeeder. Streak dan poin dihitung dengan aturan aplikasi
- * (MotivasiBelajar::perbaruiStreak dan tambahPoin), bukan diisi manual.
- */
+/** Riwayat latihan contoh selama 20 hari terakhir untuk akun Pelajar uji, memakai materi aksara Jawa tingkat 1 dari MateriSeeder. */
 class RiwayatContohSeeder extends Seeder
 {
     public function run(): void

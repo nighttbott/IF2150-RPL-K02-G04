@@ -10,11 +10,7 @@ use App\Support\Materi\DataKonten;
 use App\Support\Materi\PengolahKonten;
 use Illuminate\Database\Seeder;
 
-/**
- * Materi awal (terbit). Jalankan: php artisan db:seed --class=MateriSeeder
- * Isi aturan dan contoh perlu diperiksa ejaannya oleh yang paham bahasa sebelum rilis.
- * Aksara pada tingkat 1 berasal dari template_aksara.json (kode latin -> karakter).
- */
+/** Materi awal berstatus terbit beserta konten dan templat aksara (php artisan db:seed --class=MateriSeeder). */
 class MateriSeeder extends Seeder
 {
     public function run(): void

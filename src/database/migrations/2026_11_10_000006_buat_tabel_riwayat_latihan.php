@@ -5,12 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Tabel riwayat_latihan (C03 RiwayatLatihan, pemilik modul: Natan).
- * Sumber data hasil latihan, aktivitas belajar, bukti komponen tugas, dan catatan pengumpulan.
- * id_materi boleh kosong karena catatan pengumpulan tugas (mode_aktivitas = pengumpulan) tidak
- * terikat satu materi. Indeks gabungan untuk agregasi sengaja dipisah ke database/migrations-profiling.
- */
+/** Tabel riwayat_latihan (C03 RiwayatLatihan, pemilik modul: Natan). */
 return new class extends Migration
 {
     public function up(): void

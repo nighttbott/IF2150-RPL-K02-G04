@@ -8,17 +8,7 @@ use App\Support\Periode;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-/**
- * Profiling agregasi progres kelas (bahan laporan B.2.1, pemilik: Natan).
- *
- * Membandingkan dua cara menghitung ringkasan progres kelas (Algo-102):
- *   1. Versi DPPL: membaca riwayat setiap anggota satu per satu (2 query per anggota).
- *   2. Versi dioptimalkan: 3 query agregasi (GROUP BY) berapa pun jumlah anggotanya.
- * Perintah ini mencatat jumlah query dan median waktu, lalu memastikan hasilnya sama.
- *
- *   php artisan ngaksara:profil-progres                 (kelas dengan anggota aktif terbanyak)
- *   php artisan ngaksara:profil-progres 3 --ulang=10 --periode=90
- */
+/** Profiling agregasi progres kelas (bahan laporan B.2.1, pemilik: Natan). Membandingkan dua cara menghitung ringkasan progres kelas (Algo-102): 1. */
 class ProfilProgresKelas extends Command
 {
     protected $signature = 'ngaksara:profil-progres
@@ -91,10 +81,7 @@ class ProfilProgresKelas extends Command
         return ['hasil' => $hasil, 'query' => $query, 'median' => round($waktu[intdiv(count($waktu), 2)], 2), 'min' => round($waktu[0], 2)];
     }
 
-    /**
-     * Versi Algo-102 seperti tertulis di DPPL: riwayat dibaca per anggota dengan
-     * RiwayatLatihan::ambilRiwayatPelajar (Q-014), lalu dirangkum di PHP.
-     */
+    /** Versi Algo-102 seperti tertulis di DPPL: riwayat dibaca per anggota dengan RiwayatLatihan::ambilRiwayatPelajar (Q-014), lalu dirangkum di PHP. */
     private function agregasiVersiDppl(array $anggota, Periode $periode): array
     {
         [$mulai, $selesai] = $periode->rentang();

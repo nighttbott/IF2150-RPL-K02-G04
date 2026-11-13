@@ -8,10 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
-/**
- * C26: pemetaan data, ketepatan, dan pembacaan status.
- * Penyimpanan atomik beserta verifikasi bukti ditangani layanan PengumpulanTugas.
- */
+/** C26: pemetaan data, ketepatan, dan pembacaan status. Penyimpanan atomik beserta verifikasi bukti ditangani layanan PengumpulanTugas. */
 class PenyelesaianTugas extends Model
 {
     protected $table = 'penyelesaian_tugas';
@@ -38,12 +35,7 @@ class PenyelesaianTugas extends Model
         return $waktuSelesai <= $tenggat ? 'tepat_waktu' : 'terlambat';
     }
 
-    /**
-     * Algo-121/Q-C26-04. Pemanggil menyediakan ID tugas dari kelas yang boleh diakses.
-     *
-     * @param  list<int>  $daftarTugas  Daftar ID, bukan model atau payload request mentah.
-     * @return Collection<int, array{id_tugas: int, status: string, waktu_kumpul: mixed}>
-     */
+    /** Algo-121/Q-C26-04. Pemanggil menyediakan ID tugas dari kelas yang boleh diakses. @param  list<int>  $daftarTugas  Daftar ID, bukan model atau payload request mentah. @return Collection<int, array{id_tugas: int, status: string, waktu_kumpul: mixed}> */
     public static function ambilStatus(int $idPelajar, array $daftarTugas): Collection
     {
         foreach ($daftarTugas as $idTugas) {

@@ -5,9 +5,7 @@ namespace App\Support\Materi;
 /** Tipe "PaketMateri" pada Tabel 4.1: isi satu materi siap ditampilkan di I-05. */
 final class PaketMateri
 {
-    /**
-     * @param  list<array{karakter: string, kode: ?string}>  $aksara
-     */
+    /** @param  list<array{karakter: string, kode: ?string}>  $aksara */
     public function __construct(
         public ?string $galat = null,
         public int $idMateri = 0,

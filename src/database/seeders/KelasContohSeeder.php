@@ -5,12 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-/**
- * Satu kelas contoh milik Bu Rina: tiga anggota aktif dan satu anggota yang sudah keluar
- * (untuk menguji bahwa anggota tidak aktif tidak tampil di pemantauan), serta satu tugas
- * terbit berisi dua komponen. Ditulis lewat query langsung agar tidak bergantung pada model
- * modul kelas.
- */
+/** Satu kelas contoh milik Bu Rina: tiga anggota aktif dan satu anggota yang sudah keluar (untuk menguji bahwa anggota tidak aktif tidak tampil di pemantauan), serta satu tugas terbit berisi dua komponen. */
 class KelasContohSeeder extends Seeder
 {
     public function run(): void

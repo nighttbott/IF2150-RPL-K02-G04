@@ -5,21 +5,10 @@ namespace App\Services\Latihan;
 use App\Enums\ModeLatihan;
 use App\Models\MateriAksara;
 
-/**
- * Menyusun soal latihan non-kanvas dari konten materi (bahan: MateriAksara::ambilTargetLatihan).
- * Bagian dari C16 LatihanController.siapkanSoal (Algo-021). Setiap soal berisi kunci; hanya bagian
- * publik (lihat publik()) yang boleh dikirim ke browser.
- *
- * Bentuk soal:
- *  - bunyi         : id, target (aksara jawaban benar), bunyi (bacaan latin, penanda soal), opsi [{id, teks = aksara}], kunci (id opsi)
- *  - merangkai     : id, target (kata), bunyi, ubin [{id, teks}], kunci (list teks ubin berurutan)
- *  - transliterasi : id, target (aksara/kata), kunci (teks latin)
- */
+/** Menyusun soal latihan non-kanvas dari konten materi (bahan: MateriAksara::ambilTargetLatihan). Bagian dari C16 LatihanController.siapkanSoal (Algo-021). */
 final class PenyusunSoal
 {
-    /**
-     * @return list<array<string, mixed>>  kosong bila materi belum punya bahan untuk mode ini
-     */
+    /** @return list<array<string, mixed>>  kosong bila materi belum punya bahan untuk mode ini */
     public function susun(MateriAksara $materi, ModeLatihan $mode, int $jumlah): array
     {
         $soal = match ($mode) {
@@ -37,12 +26,7 @@ final class PenyusunSoal
         return $soal;
     }
 
-    /**
-     * Bagian soal yang aman dikirim ke browser (tanpa kunci).
-     *
-     * @param  list<array<string, mixed>>  $soal
-     * @return list<array<string, mixed>>
-     */
+    /** Bagian soal yang aman dikirim ke browser (tanpa kunci). @param  list<array<string, mixed>>  $soal @return list<array<string, mixed>> */
     public static function publik(array $soal): array
     {
         // Pada mode bunyi dan merangkai, target adalah jawaban yang benar sehingga ikut disembunyikan.
@@ -53,10 +37,7 @@ final class PenyusunSoal
         }, $soal);
     }
 
-    /**
-     * I-08: Pelajar mendengar audio pengucapan lalu memilih aksara yang sesuai (Algo-021, cabang BUNYI).
-     * Pilihan = aksara yang benar + sampai 3 aksara lain dari butir materi yang sama.
-     */
+    /** I-08: Pelajar mendengar audio pengucapan lalu memilih aksara yang sesuai (Algo-021, cabang BUNYI). */
     private function soalBunyi(MateriAksara $materi, int $jumlah): array
     {
         $butir = array_values(array_filter(

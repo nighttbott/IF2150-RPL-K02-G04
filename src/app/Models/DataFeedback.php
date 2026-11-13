@@ -35,10 +35,7 @@ class DataFeedback extends Model
         ];
     }
 
-    /**
-     * $data: id_akun (dari sesi, diisi FeedbackController), kategori, pesan (sudah di-trim).
-     * Status awal baru dan waktu kirim dari server.
-     */
+    /** $data: id_akun (dari sesi, diisi FeedbackController), kategori, pesan (sudah di-trim). Status awal baru dan waktu kirim dari server. */
     public function simpan(array $data): HasilOperasi
     {
         $this->fill([

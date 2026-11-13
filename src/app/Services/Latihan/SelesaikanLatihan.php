@@ -9,23 +9,10 @@ use Illuminate\Support\Facades\DB;
 use RuntimeException;
 use Throwable;
 
-/**
- * Bagian dari C16 LatihanController.simpanHasil (Algo-026) untuk satu sesi soal: dalam satu DB::transaction
- * simpan hasil tiap soal (RiwayatLatihan.simpanHasil), perbarui streak (Algo-028), tambah poin hanya untuk
- * soal yang baru pertama kali berhasil (Algo-029), dan beri badge (Algo-030, syaratnya periksaBadge Algo-027).
- * Hasil perlu_diulang tidak mengubah streak dan poin.
- *
- * Dibuat Marvel agar mode non-kanvas bisa menyimpan hasil tanpa menunggu simpanHasil milik Naufal.
- * Bila Naufal sudah punya operasi setara, controller cukup memanggil operasi itu.
- */
+/** Bagian dari C16 LatihanController.simpanHasil (Algo-026) untuk satu sesi soal: dalam satu DB::transaction simpan hasil tiap soal (RiwayatLatihan.simpanHasil), perbarui streak (Algo-028), tambah poin hanya untuk soal yang baru pertama kali berhasil (Algo-029), dan beri badge (Algo-030, syaratnya periksaBadge Algo-027). */
 final class SelesaikanLatihan
 {
-    /**
-     * @param  list<array<string, mixed>>  $daftarHasil  tiap elemen berisi kunci simpanHasil
-     *                                                   (id_materi, target_soal, mode, skor, status, opsional id_tugas dan id_komponen)
-     *                                                   tanpa id_pelajar
-     * @return HasilOperasi data: idRiwayat (list), poinDidapat, totalPoin, streak, badgeBaru (list kode)
-     */
+    /** @param  list<array<string, mixed>>  $daftarHasil  tiap elemen berisi kunci simpanHasil (id_materi, target_soal, mode, skor, status, opsional id_tugas dan id_komponen) tanpa id_pelajar @return HasilOperasi data: idRiwayat (list), poinDidapat, totalPoin, streak, badgeBaru (list kode) */
     public function selesaikan(int $idPelajar, array $daftarHasil): HasilOperasi
     {
         if ($daftarHasil === []) {

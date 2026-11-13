@@ -4,10 +4,7 @@ namespace App\Support\Materi;
 
 use App\Enums\JenisAksara;
 
-/**
- * Akses ke template titik aksara (resources/aksara/template_aksara.json), dibuat sekali jalan oleh
- * scripts/buat_template_aksara.py dari font Noto Sans Javanese/Sundanese.
- */
+/** Akses ke template titik aksara (resources/aksara/template_aksara.json), dibuat sekali jalan oleh scripts/buat_template_aksara.py dari font Noto Sans Javanese/Sundanese. */
 final class TemplateAksara
 {
     /** @var array{karakter: array<string, array<string, array>>, kode: array<string, array<string, string>>}|null */

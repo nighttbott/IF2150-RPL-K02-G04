@@ -8,16 +8,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-/**
- * Dataset fiktif untuk profiling B.2.1: satu kelas berisi 100 Pelajar aktif
- * dan 10.000 baris riwayat latihan dalam 120 hari terakhir.
- *
- *   php artisan db:seed --class=ProfilingSeeder
- *   php artisan ngaksara:profil-progres
- *
- * Jalankan setelah DatabaseSeeder (butuh materi dan akun Pengajar uji).
- * Data kelas ditulis lewat query langsung agar tidak bergantung pada model modul kelas.
- */
+/** Dataset fiktif profiling B.2.1 (100 Pelajar, 10.000 riwayat); jalankan sesudah DatabaseSeeder: php artisan db:seed --class=ProfilingSeeder. */
 class ProfilingSeeder extends Seeder
 {
     public const JUMLAH_PELAJAR = 100;

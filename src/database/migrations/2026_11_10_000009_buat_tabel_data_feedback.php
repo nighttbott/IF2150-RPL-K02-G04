@@ -5,10 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Tabel data_feedback (C04 DataFeedback, pemilik modul: Ryuza; migrasi disiapkan Natan).
- * Juga dipakai umpan balik Pengajar kepada anggota kelas (Algo-080).
- */
+/** Tabel data_feedback (C04 DataFeedback, pemilik modul: Ryuza; migrasi disiapkan Natan). Juga dipakai umpan balik Pengajar kepada anggota kelas (Algo-080). */
 return new class extends Migration
 {
     public function up(): void

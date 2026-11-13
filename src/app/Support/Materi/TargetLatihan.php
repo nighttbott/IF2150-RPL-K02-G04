@@ -2,17 +2,10 @@
 
 namespace App\Support\Materi;
 
-/**
- * Tipe "TargetLatihan" pada Tabel 4.1, dipakai LatihanController (Naufal/Marvel).
- * Bentuk satu butir:
- *  - menulis/bunyi : ['karakter' => 'ꦲ', 'bunyi' => 'ha'|null, 'template' => list<list<{x,y}>>|null]
- *  - merangkai     : ['kata' => 'ꦲꦤ', 'bunyi' => 'ana']
- */
+/** Tipe "TargetLatihan" pada Tabel 4.1, dipakai LatihanController (Naufal/Marvel). */
 final class TargetLatihan
 {
-    /**
-     * @param  list<array<string, mixed>>  $butir
-     */
+    /** @param  list<array<string, mixed>>  $butir */
     public function __construct(
         public int $idMateri,
         public string $mode,

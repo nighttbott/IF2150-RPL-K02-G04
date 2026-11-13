@@ -1,9 +1,4 @@
-{{--
-  I-01 Pendaftaran (HalamanPendaftaran, C05) — UC-01.
-  Nama isian yang dikirim: peran, email, username, password, setuju_tnc.
-  Galat konflik email/username (I-01-09) dibaca dari kunci galat 'akun';
-  galat format per isian dibaca dari kunci isian masing-masing (Algo-009).
---}}
+{{-- I-01 Pendaftaran (HalamanPendaftaran, C05) — UC-01. Nama isian yang dikirim: peran, email, username, password, setuju_tnc. --}}
 @extends('layouts.tamu')
 
 @section('judul', 'Daftar · Ngaksara')

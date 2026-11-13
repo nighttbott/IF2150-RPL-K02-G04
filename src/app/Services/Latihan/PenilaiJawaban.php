@@ -2,12 +2,7 @@
 
 namespace App\Services\Latihan;
 
-/**
- * Penilaian mode non-kanvas (Marvel), bagian dari C16 LatihanController.nilaiJawaban (Algo-022):
- * bunyi = cocokkanBunyi (Algo-024), merangkai = validasiRangkaian (Algo-025). Transliterasi tidak ada di
- * DPPL (tambahan KF23, dicatat di B.1).
- * Fungsi murni tanpa basis data. Skor selalu dihitung di server; kunci tidak pernah dikirim ke browser.
- */
+/** Penilaian mode non-kanvas (Marvel), bagian dari C16 LatihanController.nilaiJawaban (Algo-022): bunyi = cocokkanBunyi (Algo-024), merangkai = validasiRangkaian (Algo-025). */
 final class PenilaiJawaban
 {
     /** Bunyi: id_pilihan dibandingkan dengan id pilihan kunci. */
@@ -18,13 +13,7 @@ final class PenilaiJawaban
         return new HasilPenilaian($benar ? 100.0 : 0.0, $benar);
     }
 
-    /**
-     * Merangkai: urutan ubin dibandingkan dengan urutan benar; posisi yang salah ditandai.
-     * Skor = persen posisi benar terhadap panjang terpanjang antara jawaban dan kunci.
-     *
-     * @param  list<string>  $urutan
-     * @param  list<string>  $kunci
-     */
+    /** Merangkai: urutan ubin dibandingkan dengan urutan benar; posisi yang salah ditandai. Skor = persen posisi benar terhadap panjang terpanjang antara jawaban dan kunci. @param  list<string>  $urutan @param  list<string>  $kunci */
     public static function merangkai(array $urutan, array $kunci): HasilPenilaian
     {
         $urutan = array_values($urutan);

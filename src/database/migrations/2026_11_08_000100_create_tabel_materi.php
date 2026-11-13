@@ -4,11 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/*
- * Migrasi resmi tabel modul materi (Diandra): materi_aksara, konten_materi, konten_materi_arsip.
- * Migrasi tabel lain (akun, kelas, tugas, riwayat, motivasi, feedback) ada di berkas
- * 2026_11_10_* dan dijalankan setelah berkas ini karena merujuk ke materi_aksara.
- */
+// Migrasi resmi tabel modul materi (Diandra): materi_aksara, konten_materi, konten_materi_arsip.
 return new class extends Migration
 {
     public function up(): void

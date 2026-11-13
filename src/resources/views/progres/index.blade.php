@@ -1,7 +1,4 @@
-{{--
-    I-11 Progres Pelajar (kelas C14 HalamanProgres, pemilik: Natan).
-    Data disiapkan ProgresController::tampilkan(). Nomor objek I-11-xx mengikuti BAB 6 DPPL2.
---}}
+{{-- I-11 Progres Pelajar (kelas C14 HalamanProgres, pemilik: Natan). Data disiapkan ProgresController::tampilkan(). Nomor objek I-11-xx mengikuti BAB 6 DPPL2. --}}
 @extends('layouts.app')
 
 @section('judul', 'Progres Belajar')

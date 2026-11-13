@@ -12,17 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-/**
- * C03 RiwayatLatihan (pemilik modul: Natan).
- *
- * Sumber data tunggal untuk hasil latihan, aktivitas belajar, dan bukti penyelesaian
- * komponen tugas. Modul lain (latihan, materi, tugas, progres, pemantauan) sebaiknya membaca
- * dan menulis riwayat melalui operasi pada kelas ini.
- *
- * Penamaan operasi mengikuti DPPL2 subbab 5.3. Query mengikuti Q-008 sampai Q-016,
- * ditulis dengan query builder agar berjalan di MySQL maupun SQLite (pengujian).
- * Semua nilai mode dan status memakai huruf kecil (lihat App\Enums).
- */
+/** C03 RiwayatLatihan (pemilik modul: Natan). Sumber data tunggal untuk hasil latihan, aktivitas belajar, dan bukti penyelesaian komponen tugas. */
 class RiwayatLatihan extends Model
 {
     protected $table = 'riwayat_latihan';
@@ -59,17 +49,7 @@ class RiwayatLatihan extends Model
     // Operasi penulisan
     // ------------------------------------------------------------------
 
-    /**
-     * simpanHasil(hasil: HasilLatihan): HasilOperasi  (DPPL 5.3.1, Q-008)
-     *
-     * Menyimpan hasil satu latihan. Kunci yang wajib ada pada $hasil:
-     *   id_pelajar, id_materi, target_soal, mode, skor, status ('berhasil' atau 'perlu_diulang').
-     * Kunci tambahan (opsional) bila latihan berasal dari tugas kelas:
-     *   id_tugas, id_komponen. Keduanya diperlukan agar latihan tercatat sebagai bukti
-     *   penyelesaian tugas (perubahan terhadap Q-008, dicatat di B.1).
-     *
-     * Operasi ini tidak memberi poin atau streak; itu tugas LatihanController (Algo-026).
-     */
+    /** simpanHasil(hasil: HasilLatihan): HasilOperasi (DPPL 5.3.1, Q-008) Menyimpan hasil satu latihan. */
     public static function simpanHasil(array $hasil): HasilOperasi
     {
         $wajib = ['id_pelajar', 'id_materi', 'target_soal', 'mode', 'skor', 'status'];
@@ -113,13 +93,7 @@ class RiwayatLatihan extends Model
         return HasilOperasi::sukses(['idRiwayat' => $riwayat->id_riwayat]);
     }
 
-    /**
-     * catatAktivitas(aktivitas: AktivitasBelajar): HasilOperasi  (DPPL 5.3.2, Q-016)
-     *
-     * Mencatat aktivitas selain latihan, misalnya membaca materi yang menjadi
-     * komponen tugas. Kunci wajib: id_pelajar dan mode_aktivitas ('materi', 'tugas', atau
-     * 'pengumpulan'); opsional: id_materi, id_tugas, id_komponen, waktu_selesai.
-     */
+    /** catatAktivitas(aktivitas: AktivitasBelajar): HasilOperasi (DPPL 5.3.2, Q-016) Mencatat aktivitas selain latihan, misalnya membaca materi yang menjadi komponen tugas. */
     public static function catatAktivitas(array $aktivitas): HasilOperasi
     {
         foreach (['id_pelajar', 'mode_aktivitas'] as $kunci) {
@@ -152,10 +126,7 @@ class RiwayatLatihan extends Model
     // Operasi pembacaan
     // ------------------------------------------------------------------
 
-    /**
-     * cekPernahSelesai(idPelajar, targetSoal, mode): Boolean  (DPPL 5.3.9, Q-009)
-     * Dipakai LatihanController agar soal yang sama tidak memberi poin dua kali.
-     */
+    /** cekPernahSelesai(idPelajar, targetSoal, mode): Boolean (DPPL 5.3.9, Q-009) Dipakai LatihanController agar soal yang sama tidak memberi poin dua kali. */
     public static function cekPernahSelesai(int $idPelajar, string $targetSoal, ModeLatihan|string $mode): bool
     {
         $mode = $mode instanceof ModeLatihan ? $mode->value : strtolower($mode);
@@ -168,9 +139,7 @@ class RiwayatLatihan extends Model
             ->exists();
     }
 
-    /**
-     * ambilRiwayat(idPelajar, periode): List<RiwayatLatihan>  (DPPL 5.3.3, Q-011)
-     */
+    /** ambilRiwayat(idPelajar, periode): List<RiwayatLatihan> (DPPL 5.3.3, Q-011) */
     public static function ambilRiwayat(int $idPelajar, Periode $periode): Collection
     {
         return self::query()
@@ -182,10 +151,7 @@ class RiwayatLatihan extends Model
             ->get();
     }
 
-    /**
-     * ambilRiwayatMateri(idPelajar, idMateri): List<RiwayatLatihan>
-     * Seluruh riwayat Pelajar pada satu materi, untuk detail hasil di halaman progres.
-     */
+    /** ambilRiwayatMateri(idPelajar, idMateri): List<RiwayatLatihan> Seluruh riwayat Pelajar pada satu materi, untuk detail hasil di halaman progres. */
     public static function ambilRiwayatMateri(int $idPelajar, int $idMateri): Collection
     {
         return self::query()
@@ -196,14 +162,7 @@ class RiwayatLatihan extends Model
             ->get();
     }
 
-    /**
-     * ambilBuktiPenyelesaian(idPelajar, idTugas): BuktiPenyelesaian  (DPPL 5.3.4, Q-015)
-     *
-     * Mengembalikan peta id_komponen => waktu selesai terakhir. Percobaan berstatus
-     * perlu_diulang tidak dihitung sebagai bukti selesai.
-     *
-     * @return array<int, string>
-     */
+    /** ambilBuktiPenyelesaian(idPelajar, idTugas): BuktiPenyelesaian (DPPL 5.3.4, Q-015) Mengembalikan peta id_komponen => waktu selesai terakhir. @return array<int, string> */
     public static function ambilBuktiPenyelesaian(int $idPelajar, int $idTugas): array
     {
         return self::query()
@@ -217,18 +176,7 @@ class RiwayatLatihan extends Model
             ->all();
     }
 
-    /**
-     * ambilStatusProgres(idPelajar): Data  (DPPL 5.3.5, Q-012)
-     *
-     * Status belajar per materi, dipakai MateriController (I-04) dan halaman progres:
-     *   'belum'   : belum ada riwayat pada materi itu;
-     *   'selesai' : rata-rata skor >= ambang tuntas (config ngaksara.materi.ambang_tuntas, bawaan 70);
-     *   'sedang'  : sudah ada riwayat tetapi belum tuntas.
-     * 'persen' adalah rata-rata skor yang dibulatkan (0-100), 0 bila belum ada skor.
-     * Jika $daftarIdMateri diisi, materi tanpa riwayat dalam daftar ikut dikembalikan sebagai 'belum'.
-     *
-     * @return array<int, array{status: string, persen: int}>
-     */
+    /** ambilStatusProgres(idPelajar): Data (DPPL 5.3.5, Q-012) Status belajar per materi, dipakai MateriController (I-04) dan halaman progres: 'belum' : belum ada riwayat pada materi itu; 'selesai' : rata-rata skor >= ambang tuntas (config ngaksara.materi.ambang_tuntas, bawaan 70); 'sedang' : sudah ada riwayat tetapi belum tuntas. @return array<int, array{status: string, persen: int}> */
     public static function ambilStatusProgres(int $idPelajar, ?array $daftarIdMateri = null): array
     {
         $ambang = (float) config('ngaksara.materi.ambang_tuntas', 70);
@@ -258,14 +206,7 @@ class RiwayatLatihan extends Model
         return $status;
     }
 
-    /**
-     * hitungPenguasaan(idPelajar): Data  (DPPL 5.3.6, Q-010)
-     *
-     * Penguasaan per materi = rata-rata skor latihan. Nilai dihitung setiap kali,
-     * tidak disimpan. Periode bersifat opsional (perluasan untuk filter halaman progres).
-     *
-     * @return array<int, float> id_materi => penguasaan (0-100)
-     */
+    /** hitungPenguasaan(idPelajar): Data (DPPL 5.3.6, Q-010) Penguasaan per materi = rata-rata skor latihan. Nilai dihitung setiap kali, tidak disimpan. @return array<int, float> id_materi => penguasaan (0-100) */
     public static function hitungPenguasaan(int $idPelajar, ?Periode $periode = null): array
     {
         $query = self::query()
@@ -284,10 +225,7 @@ class RiwayatLatihan extends Model
             ->all();
     }
 
-    /**
-     * ambilRiwayatPelajar(idPelajar): List<RiwayatLatihan>  (DPPL 5.3.7, Q-014)
-     * Seluruh riwayat satu Pelajar, terbaru lebih dulu.
-     */
+    /** ambilRiwayatPelajar(idPelajar): List<RiwayatLatihan> (DPPL 5.3.7, Q-014) Seluruh riwayat satu Pelajar, terbaru lebih dulu. */
     public static function ambilRiwayatPelajar(int $idPelajar): Collection
     {
         return self::query()
@@ -297,12 +235,7 @@ class RiwayatLatihan extends Model
             ->get();
     }
 
-    /**
-     * hitungPolaKesalahan(idPelajar): Data  (DPPL 5.3.8, Q-013)
-     * Lima target soal yang paling sering berstatus perlu_diulang.
-     *
-     * @return array<string, int> target_soal => jumlah salah
-     */
+    /** hitungPolaKesalahan(idPelajar): Data (DPPL 5.3.8, Q-013) Lima target soal yang paling sering berstatus perlu_diulang. @return array<string, int> target_soal => jumlah salah */
     public static function hitungPolaKesalahan(int $idPelajar, ?Periode $periode = null): array
     {
         $query = self::query()

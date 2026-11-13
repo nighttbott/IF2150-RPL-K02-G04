@@ -2,10 +2,7 @@
 
 namespace App\Support\Progres;
 
-/**
- * Tipe "HasilOperasi" pada Tabel 4.1 untuk modul riwayat, motivasi, progres, dan pemantauan.
- * Bentuknya sama dengan App\Support\Materi\HasilOperasi, ditambah pembaca data ambil().
- */
+/** Tipe "HasilOperasi" pada Tabel 4.1 untuk modul riwayat, motivasi, progres, dan pemantauan. */
 final class HasilOperasi
 {
     private function __construct(

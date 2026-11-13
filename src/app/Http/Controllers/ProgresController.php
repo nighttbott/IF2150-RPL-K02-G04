@@ -16,23 +16,13 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
-/**
- * C19 ProgresController (pemilik modul: Natan).
- *
- * Mengolah riwayat dan progres belajar, menyiapkan rekomendasi materi, indikator
- * motivasi, dan papan peringkat (DPPL2 subbab 5.19, Algo-100 sampai Algo-102).
- * Aksi halaman: tampilkan() untuk I-11 Progres Pelajar.
- * Operasi lain bersifat publik karena juga dipakai PemantauanKelasController (UC-08).
- * Data kelas dibaca lewat query langsung agar modul ini tidak bergantung pada model modul kelas.
- */
+/** C19 ProgresController (pemilik modul: Natan). */
 class ProgresController extends Controller
 {
     /** Pilihan periode pada halaman progres. */
     public const PILIHAN_PERIODE = ['7' => '7 hari terakhir', '30' => '30 hari terakhir', '90' => '90 hari terakhir', 'semua' => 'Semua riwayat'];
 
-    /**
-     * Halaman I-11 (bukaHalamanProgres, pilihPeriode, pilihMateriRiwayat, bukaPapanPeringkat).
-     */
+    /** Halaman I-11 (bukaHalamanProgres, pilihPeriode, pilihMateriRiwayat, bukaPapanPeringkat). */
     public function tampilkan(Request $request): View
     {
         $idPelajar = (int) $request->user()->id_akun;
@@ -76,21 +66,13 @@ class ProgresController extends Controller
         ]);
     }
 
-    /**
-     * ambilRiwayat(idPelajar, periode): List<RiwayatLatihan>  (Q-011)
-     */
+    /** ambilRiwayat(idPelajar, periode): List<RiwayatLatihan> (Q-011) */
     public function ambilRiwayat(int $idPelajar, Periode $periode): Collection
     {
         return RiwayatLatihan::ambilRiwayat($idPelajar, $periode);
     }
 
-    /**
-     * hitungProgres(idPelajar): RingkasanProgres  (Algo-100)
-     *
-     * Penguasaan per materi, jumlah latihan, dan pola kesalahan. Penguasaan dihitung
-     * dari riwayat setiap kali dibutuhkan (tidak disimpan). Periode opsional; bila
-     * kosong seluruh riwayat dipakai.
-     */
+    /** hitungProgres(idPelajar): RingkasanProgres (Algo-100) Penguasaan per materi, jumlah latihan, dan pola kesalahan. */
     public function hitungProgres(int $idPelajar, ?Periode $periode = null): array
     {
         $penguasaan = RiwayatLatihan::hitungPenguasaan($idPelajar, $periode);
@@ -125,15 +107,7 @@ class ProgresController extends Controller
         ];
     }
 
-    /**
-     * siapkanRekomendasi(idPelajar): List<MetadataMateri>  (Algo-101)
-     *
-     * Memakai MateriAksara::ambilMateriRekomendasi (modul materi, Diandra): materi terbit yang
-     * belum tuntas, dengan tingkat berikutnya terbuka bila tingkat di bawahnya sudah tuntas.
-     * Bila belum ada riwayat, hasilnya materi tingkat paling awal (UC-04 alternatif 1).
-     *
-     * @return list<array{materi: MateriAksara, penguasaan: float|null}>
-     */
+    /** siapkanRekomendasi(idPelajar): List<MetadataMateri> (Algo-101) Memakai MateriAksara::ambilMateriRekomendasi (modul materi, Diandra): materi terbit yang belum tuntas, dengan tingkat berikutnya terbuka bila tingkat di bawahnya sudah tuntas. @return list<array{materi: MateriAksara, penguasaan: float|null}> */
     public function siapkanRekomendasi(int $idPelajar): array
     {
         $penguasaan = RiwayatLatihan::hitungPenguasaan($idPelajar);
@@ -144,10 +118,7 @@ class ProgresController extends Controller
         );
     }
 
-    /**
-     * ambilIndikatorMotivasi(idPelajar): Data
-     * Streak, poin, dan badge (beserta nama tampilan badge) dari MotivasiBelajar.
-     */
+    /** ambilIndikatorMotivasi(idPelajar): Data Streak, poin, dan badge (beserta nama tampilan badge) dari MotivasiBelajar. */
     public function ambilIndikatorMotivasi(int $idPelajar): array
     {
         $motivasi = MotivasiBelajar::ambilMotivasi($idPelajar);
@@ -158,14 +129,7 @@ class ProgresController extends Controller
         return $motivasi;
     }
 
-    /**
-     * ambilScoreboard(idKelas): HasilScoreboard  (memakai Algo-031)
-     *
-     * Papan peringkat hanya untuk anggota aktif kelas (atau Pengajar pemilik kelas)
-     * dan hanya bila Pengajar mengaktifkannya (UC-04 alternatif 2).
-     *
-     * @return array{aktif: bool, pesan: string|null, daftar: array}
-     */
+    /** ambilScoreboard(idKelas): HasilScoreboard (memakai Algo-031) Papan peringkat hanya untuk anggota aktif kelas (atau Pengajar pemilik kelas) dan hanya bila Pengajar mengaktifkannya (UC-04 alternatif 2). @return array{aktif: bool, pesan: string|null, daftar: array} */
     public function ambilScoreboard(int $idKelas): array
     {
         $kelas = DB::table('kelas_belajar')->where('id_kelas', $idKelas)->where('status', StatusKelas::Aktif->value)->first();
@@ -186,15 +150,7 @@ class ProgresController extends Controller
         return ['aktif' => true, 'pesan' => null, 'daftar' => MotivasiBelajar::susunScoreboard($anggota)];
     }
 
-    /**
-     * agregasiProgres(anggotaAktif, periode): RingkasanProgres  (Algo-102, versi dioptimalkan)
-     *
-     * DPPL menulis versi yang membaca riwayat per anggota (2 query per anggota).
-     * Versi ini memakai 3 query agregasi tetap berapa pun jumlah anggotanya
-     * (hasilnya sama; dibuktikan oleh test dan perintah ngaksara:profil-progres).
-     *
-     * @param  array<int, int>  $anggotaAktif  daftar id Pelajar berstatus aktif
-     */
+    /** agregasiProgres(anggotaAktif, periode): RingkasanProgres (Algo-102, versi dioptimalkan) DPPL menulis versi yang membaca riwayat per anggota (2 query per anggota). @param  array<int, int>  $anggotaAktif  daftar id Pelajar berstatus aktif */
     public function agregasiProgres(array $anggotaAktif, Periode $periode): array
     {
         $kosong = ['jumlahAnggota' => count($anggotaAktif), 'jumlahLatihan' => 0, 'rataPenguasaan' => null,
@@ -257,28 +213,19 @@ class ProgresController extends Controller
         ];
     }
 
-    /**
-     * hitungPolaKesalahan(idPelajar): Data  (Q-013)
-     */
+    /** hitungPolaKesalahan(idPelajar): Data (Q-013) */
     public function hitungPolaKesalahan(int $idPelajar, ?Periode $periode = null): array
     {
         return RiwayatLatihan::hitungPolaKesalahan($idPelajar, $periode);
     }
 
-    /**
-     * ambilDetailHasil(idPelajar, idMateri): List<RiwayatLatihan>
-     */
+    /** ambilDetailHasil(idPelajar, idMateri): List<RiwayatLatihan> */
     public function ambilDetailHasil(int $idPelajar, int $idMateri): Collection
     {
         return RiwayatLatihan::ambilRiwayatMateri($idPelajar, $idMateri);
     }
 
-    /**
-     * Peta id_pelajar => nama_tampilan untuk anggota aktif sebuah kelas.
-     * (Pembantu internal; setara KeanggotaanKelas::daftarAnggotaAktif milik modul Abduh.)
-     *
-     * @return array<int, string>
-     */
+    /** Peta id_pelajar => nama_tampilan untuk anggota aktif sebuah kelas. (Pembantu internal; setara KeanggotaanKelas::daftarAnggotaAktif milik modul Abduh.) @return array<int, string> */
     public function anggotaAktif(int $idKelas): array
     {
         return AkunPengguna::query()

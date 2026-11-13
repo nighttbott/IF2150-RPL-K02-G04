@@ -5,10 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Tabel penyelesaian_tugas (C26 PenyelesaianTugas, pemilik modul: Abduh; migrasi disiapkan Natan).
- * Satu Pelajar mengumpulkan satu tugas satu kali.
- */
+/** Tabel penyelesaian_tugas (C26 PenyelesaianTugas, pemilik modul: Abduh; migrasi disiapkan Natan). Satu Pelajar mengumpulkan satu tugas satu kali. */
 return new class extends Migration
 {
     public function up(): void

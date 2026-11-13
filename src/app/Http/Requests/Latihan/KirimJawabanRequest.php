@@ -21,10 +21,7 @@ class KirimJawabanRequest extends FormRequest
         ];
     }
 
-    /**
-     * Titik diperiksa dalam satu loop, bukan aturan wildcard per titik, karena payload bisa
-     * memuat ribuan titik.
-     */
+    /** Titik diperiksa dalam satu loop, bukan aturan wildcard per titik, karena payload bisa memuat ribuan titik. */
     public function after(): array
     {
         return [function (Validator $validator) {

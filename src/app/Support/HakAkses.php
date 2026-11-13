@@ -5,11 +5,7 @@ namespace App\Support;
 use App\Enums\Peran;
 use Illuminate\Contracts\Auth\Authenticatable;
 
-/**
- * Pemeriksaan hak akses Pengajar pada modul kelas (DPPL: AkunPengguna.verifikasiHakAkses, C01).
- * Memakai AkunPengguna::verifikasiHakAkses() bila pemilik modul (Ryuza) sudah menambahkannya,
- * sama seperti pola di MateriController; sementara membaca kolom `peran`.
- */
+/** Pemeriksaan hak akses Pengajar pada modul kelas (DPPL: AkunPengguna.verifikasiHakAkses, C01). */
 final class HakAkses
 {
     private const AKSI_PENGAJAR = [

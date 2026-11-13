@@ -54,9 +54,7 @@ class PengumpulanTugas
         }
     }
 
-    /** Helper ambilBuktiPenyelesaian saat ini memakai MAX waktu; finalisasi perlu
-     * seluruh atribut bukti dan MIN keberhasilan tiap komponen sebelum MAX antarkomponen.
-     */
+    /** Helper ambilBuktiPenyelesaian saat ini memakai MAX waktu; finalisasi perlu seluruh atribut bukti dan MIN keberhasilan tiap komponen sebelum MAX antarkomponen. */
     public function progres(TugasKelas $tugas, int $idPelajar): array
     {
         $catatan = RiwayatLatihan::query()->where('id_pelajar', $idPelajar)->where('id_tugas', $tugas->id_tugas)->whereNotNull('waktu_selesai')->where('waktu_selesai', '<=', now())->get();

@@ -7,11 +7,7 @@ use App\Models\AkunPengguna;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 
-/**
- * Pembuat data akun fiktif untuk seeder dan pengujian.
- *
- * @extends Factory<AkunPengguna>
- */
+/** Pembuat data akun fiktif untuk seeder dan pengujian. @extends Factory<AkunPengguna> */
 class AkunPenggunaFactory extends Factory
 {
     protected $model = AkunPengguna::class;

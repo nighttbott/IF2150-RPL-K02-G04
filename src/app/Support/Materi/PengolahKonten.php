@@ -7,11 +7,7 @@ use App\Enums\JenisAksara;
 /** Fungsi murni untuk memecah/menyusun teks konten materi (mudah diuji tanpa basis data). */
 final class PengolahKonten
 {
-    /**
-     * Teks form "Aturan penulisan dan contoh" dipecah pada kata "Contoh:".
-     *
-     * @return array{aturan: string, contoh: string}
-     */
+    /** Teks form "Aturan penulisan dan contoh" dipecah pada kata "Contoh:". @return array{aturan: string, contoh: string} */
     public static function pisahAturanContoh(string $teks): array
     {
         if (preg_match('/^(.*?)\bContoh\s*:\s*(.*)$/isu', trim($teks), $m)) {
@@ -27,10 +23,7 @@ final class PengolahKonten
         return trim($aturan)."\nContoh: ".trim($contoh);
     }
 
-    /**
-     * Nama materi berbentuk "Nglegena: ma ga ba tha nga" -> "ꦩ ꦒ ꦧ ꦛ ꦔ".
-     * Mengembalikan string kosong bila ada kode yang tidak dikenal atau tidak ada bagian setelah ':'.
-     */
+    /** Nama materi berbentuk "Nglegena: ma ga ba tha nga" -> "ꦩ ꦒ ꦧ ꦛ ꦔ". Mengembalikan string kosong bila ada kode yang tidak dikenal atau tidak ada bagian setelah ':'. */
     public static function bentukDariNama(JenisAksara $jenis, string $nama): string
     {
         $bagian = explode(':', $nama, 2);
@@ -55,11 +48,7 @@ final class PengolahKonten
         return preg_split('/\s+/u', trim($bentuk), -1, PREG_SPLIT_NO_EMPTY) ?: [];
     }
 
-    /**
-     * Contoh `ꦲꦤ = "ana" (ada); ꦕꦫ = "cara"` -> [['kata' => 'ꦲꦤ', 'bunyi' => 'ana'], ...]
-     *
-     * @return list<array{kata: string, bunyi: string}>
-     */
+    /** Contoh `ꦲꦤ = "ana" (ada); ꦕꦫ = "cara"` -> [['kata' => 'ꦲꦤ', 'bunyi' => 'ana'], ...] @return list<array{kata: string, bunyi: string}> */
     public static function pasangContoh(string $contoh): array
     {
         preg_match_all('/(\S+)\s*=\s*"([^"]+)"/u', $contoh, $m, PREG_SET_ORDER);
@@ -77,11 +66,7 @@ final class PengolahKonten
         return $mayor.'.'.($minor + 1);
     }
 
-    /**
-     * Pilih versi konten terbaru yang kompatibel dengan versi aplikasi (Algo-056).
-     *
-     * @param  list<array{versi_konten: string, versi_aplikasi_minimum: string}>  $kandidat
-     */
+    /** Pilih versi konten terbaru yang kompatibel dengan versi aplikasi (Algo-056). @param  list<array{versi_konten: string, versi_aplikasi_minimum: string}>  $kandidat */
     public static function pilihVersi(array $kandidat, string $versiAplikasi): ?array
     {
         usort($kandidat, fn ($a, $b) => version_compare($b['versi_konten'], $a['versi_konten']));

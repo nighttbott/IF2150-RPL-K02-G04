@@ -5,10 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Tabel keanggotaan_kelas (C24 KeanggotaanKelas, pemilik modul: Abduh; migrasi disiapkan Natan).
- * Satu Pelajar satu baris per kelas; keluar kelas mengubah status, riwayat tidak dihapus.
- */
+/** Tabel keanggotaan_kelas (C24 KeanggotaanKelas, pemilik modul: Abduh; migrasi disiapkan Natan). */
 return new class extends Migration
 {
     public function up(): void

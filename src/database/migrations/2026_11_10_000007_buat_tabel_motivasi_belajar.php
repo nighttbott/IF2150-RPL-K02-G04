@@ -5,10 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Tabel motivasi_belajar (C22 MotivasiBelajar, pemilik modul: Natan).
- * Satu baris per Pelajar. Badge disimpan sebagai daftar JSON; NULL dibaca sebagai daftar kosong.
- */
+/** Tabel motivasi_belajar (C22 MotivasiBelajar, pemilik modul: Natan). Satu baris per Pelajar. Badge disimpan sebagai daftar JSON; NULL dibaca sebagai daftar kosong. */
 return new class extends Migration
 {
     public function up(): void
