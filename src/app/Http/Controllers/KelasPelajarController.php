@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\KeanggotaanKelas;
+use App\Models\MateriAksara;
+use App\Models\MotivasiBelajar;
 use App\Models\PenyelesaianTugas;
 use App\Models\TugasKelas;
 use App\Services\PengumpulanTugas;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 
 class KelasPelajarController extends Controller
 {
@@ -40,7 +41,9 @@ class KelasPelajarController extends Controller
         $tugas = $kelas ? TugasKelas::ambilTugasAktif($kelas) : collect();
         $status = PenyelesaianTugas::ambilStatus($id, $tugas->pluck('id_tugas')->all())->keyBy('id_tugas');
 
-        return view('kelas-pelajar.index', compact('daftar', 'kelas', 'tugas', 'status'));
+        $motivasi = MotivasiBelajar::ambilMotivasi($id);
+
+        return view('kelas-pelajar.index', compact('daftar', 'kelas', 'tugas', 'status', 'motivasi'));
     }
 
     public function gabung(Request $r)
@@ -66,8 +69,10 @@ class KelasPelajarController extends Controller
         abort_unless($detail, 404);
         $progres = $layanan->progres($detail, $id);
         $hasil = PenyelesaianTugas::ambilStatus($id, [$tugas])->first();
+        $namaMateri = MateriAksara::query()->whereIn('id_materi', $detail->komponen->pluck('id_materi'))->pluck('nama_materi', 'id_materi');
+        $namaKelas = DB::table('kelas_belajar')->where('id_kelas', $kelas)->value('nama');
 
-        return view('kelas-pelajar.detail', compact('detail', 'kelas', 'progres', 'hasil'));
+        return view('kelas-pelajar.detail', compact('detail', 'kelas', 'progres', 'hasil', 'namaMateri', 'namaKelas'));
     }
 
     public function kumpulkan(Request $r, int $kelas, int $tugas, PengumpulanTugas $layanan)
@@ -76,7 +81,9 @@ class KelasPelajarController extends Controller
         abort_unless(TugasKelas::ambilDetail($kelas, $tugas), 404);
         $hasil = $layanan->simpanPengumpulan($kelas, $tugas, $id);
 
-        return $hasil->berhasil ? back()->with('sukses', $hasil->pesan.' Status: '.str_replace('_', ' ', $hasil->data['status'])) : back()->withErrors(['pengumpulan' => $hasil->pesan]);
+        return $hasil->berhasil
+            ? back()->with('sukses', $hasil->pesan.' Status: '.str_replace('_', ' ', $hasil->data['status']))->with('baru_dikumpulkan', $hasil->data['status'])
+            : back()->withErrors(['pengumpulan' => $hasil->pesan]);
     }
 
     public function kerjakan(Request $r, int $kelas, int $tugas, int $komponen)
@@ -98,12 +105,8 @@ class KelasPelajarController extends Controller
                 ],
             ]);
         }
-        $name = 'latihan.pilih-mode';
-        if (! Route::has($name)) {
-            return back()->withErrors(['modul' => 'Modul pengerjaan belum terpasang. Hubungi pengelola kelas.']);
-        }
-
-        return redirect()->route($name, [$c->id_materi, 'id_tugas' => $tugas, 'id_komponen' => $komponen, 'mode' => $c->mode]);
+        // Komponen latihan dibuka langsung pada mode yang ditentukan Pengajar, membawa konteks tugas.
+        return redirect()->route('latihan.soal', [$c->id_materi, $c->mode, 'tugas' => $tugas, 'komponen' => $komponen]);
     }
 
     public function selesaikanMateri(Request $r, int $kelas, int $tugas, int $komponen, PengumpulanTugas $layanan): RedirectResponse

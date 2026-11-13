@@ -9,6 +9,7 @@ use App\Enums\StatusPublikasi;
 use App\Enums\StatusTugas;
 use App\Models\MateriAksara;
 use App\Models\MotivasiBelajar;
+use App\Models\TugasKelas;
 use App\Services\Latihan\PenilaiJawaban;
 use App\Services\Latihan\PenyusunSoal;
 use App\Services\Latihan\SelesaikanLatihan;
@@ -18,15 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
-/**
- * Bagian dari C16 LatihanController untuk mode non-kanvas (Marvel): bunyi (I-08), merangkai (I-09),
- * dan transliterasi. Mode menulis (kanvas) ada di berkas milik Naufal; catat pemecahan C16 di B.1.
- *
- * Alur: mulai() = siapkanSoal (Algo-021): menyusun soal dan menyimpan kuncinya di sesi server.
- * kirim() = nilaiJawaban (Algo-022; cocokkanBunyi Algo-024, validasiRangkaian Algo-025) dan
- * simpanHasil (Algo-026) lewat SelesaikanLatihan, lalu mengalihkan ke hasil() (I-10).
- * Sesi soal hanya bisa dipakai sekali sehingga kirim ulang tidak menggandakan poin.
- */
+/** Bagian dari C16 LatihanController untuk mode non-kanvas (Marvel): bunyi (I-08), merangkai (I-09), dan transliterasi. */
 class LatihanNonKanvasController extends Controller
 {
     private const KUNCI_SESI = 'latihan_non_kanvas';
@@ -155,6 +148,7 @@ class LatihanNonKanvasController extends Controller
             'streak' => $simpan->ambil('streak', 0),
             'badge_baru' => $badge,
             'dari_tugas' => $sesi['id_tugas'] !== null,
+            'id_tugas' => $sesi['id_tugas'],
         ]);
     }
 
@@ -166,12 +160,16 @@ class LatihanNonKanvasController extends Controller
             return redirect()->route('materi.index');
         }
 
-        return view('latihan.hasil', ['hasil' => $hasil, 'materi' => MateriAksara::query()->find($hasil['id_materi'])]);
+        $tugas = ($hasil['id_tugas'] ?? null) ? TugasKelas::query()->find($hasil['id_tugas']) : null;
+
+        return view('latihan.hasil-soal', [
+            'hasil' => $hasil,
+            'materi' => MateriAksara::query()->find($hasil['id_materi']),
+            'urlTugas' => $tugas ? route('kelas-pelajar.detail', [$tugas->id_kelas, $tugas->id_tugas]) : null,
+        ]);
     }
 
-    /**
-     * @return array{target: string, bunyi?: ?string, jawaban: string, kunci: string, penilaian: \App\Services\Latihan\HasilPenilaian}
-     */
+    /** @return array{target: string, bunyi?: ?string, jawaban: string, kunci: string, penilaian: \App\Services\Latihan\HasilPenilaian} */
     private function nilai(ModeLatihan $mode, array $soal, Request $request): array
     {
         $id = $soal['id'];
@@ -210,10 +208,7 @@ class LatihanNonKanvasController extends Controller
         return $modeLatihan;
     }
 
-    /**
-     * Komponen tugas harus: milik tugas yang terbit, berjenis latihan dengan mode dan materi yang sama,
-     * pada kelas aktif yang Pelajar ini masih menjadi anggota aktifnya.
-     */
+    /** Komponen tugas harus: milik tugas yang terbit, berjenis latihan dengan mode dan materi yang sama, pada kelas aktif yang Pelajar ini masih menjadi anggota aktifnya. */
     private function periksaKomponenTugas(int $idPelajar, ?int $idTugas, ?int $idKomponen, int $idMateri, ModeLatihan $mode): void
     {
         abort_if($idTugas === null || $idKomponen === null, 422, 'Tugas dan komponen harus diisi bersama.');

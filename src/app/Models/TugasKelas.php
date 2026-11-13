@@ -36,11 +36,7 @@ class TugasKelas extends Model
         return $this->hasMany(KomponenTugas::class, 'id_tugas', 'id_tugas')->orderBy('id_komponen');
     }
 
-    /**
-     * Algo-113. id_tugas hanya diisi untuk memperbarui draf pada kelas yang sama.
-     *
-     * @param  array{id_kelas?: int, id_tugas?: int, instruksi?: string, tenggat?: string, komponen_tugas?: array}  $data
-     */
+    /** Algo-113. id_tugas hanya diisi untuk memperbarui draf pada kelas yang sama. @param  array{id_kelas?: int, id_tugas?: int, instruksi?: string, tenggat?: string, komponen_tugas?: array}  $data */
     public function simpan(array $data): HasilOperasi
     {
         try {
@@ -122,6 +118,9 @@ class TugasKelas extends Model
                     return HasilOperasi::gagal('tugasTidakDapatDiubah', 'Status tugas tidak dapat diterbitkan.');
                 }
                 $komponen = $tugas->komponen()->lockForUpdate()->get();
+                if ($komponen->isEmpty()) {
+                    return HasilOperasi::gagal('KOMPONEN_KOSONG', 'Tambahkan minimal satu komponen tugas.');
+                }
                 $validator = self::validatorData([
                     'id_kelas' => $tugas->id_kelas,
                     'instruksi' => $tugas->instruksi,

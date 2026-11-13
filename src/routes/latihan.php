@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 // UC-03 Latihan (Naufal)
 Route::middleware(['auth', 'peran:pelajar'])->prefix('latihan')->name('latihan.')->controller(LatihanController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
     Route::post('jawaban', 'nilaiJawaban')->name('nilai');
     Route::post('selesai', 'simpanHasil')->name('selesai');
     Route::get('hasil', 'hasil')->name('hasil');

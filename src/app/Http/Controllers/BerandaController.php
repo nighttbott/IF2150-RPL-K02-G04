@@ -109,12 +109,7 @@ class BerandaController extends Controller
         ];
     }
 
-    /**
-     * I-03-04: materi terakhir berstatus sedang (riwayat paling baru).
-     * Bila belum ada, kartu menawarkan materi saran dengan progresnya saat ini.
-     *
-     * @return array{materi: MateriAksara, persen: int}|null
-     */
+    /** I-03-04: materi terakhir berstatus sedang (riwayat paling baru). Bila belum ada, kartu menawarkan materi saran dengan progresnya saat ini. @return array{materi: MateriAksara, persen: int}|null */
     private function materiTerakhir(int $idPelajar, array $statusProgres, ?MateriAksara $saran): ?array
     {
         $idSedang = array_keys(array_filter($statusProgres, fn (array $p) => $p['status'] === 'sedang'));
@@ -134,10 +129,7 @@ class BerandaController extends Controller
         return $materi ? ['materi' => $materi, 'persen' => $statusProgres[$materi->id_materi]['persen'] ?? 0] : null;
     }
 
-    /**
-     * I-03-05: peta belajar satu jenis aksara (jenis materi saran; bawaan Jawa),
-     * satu bagian per tingkat kesulitan. Gembok mengikuti Algo-041.
-     */
+    /** I-03-05: peta belajar satu jenis aksara (jenis materi saran; bawaan Jawa), satu bagian per tingkat kesulitan. Gembok mengikuti Algo-041. */
     private function jalurBelajar(?MateriAksara $saran, array $penguasaan): array
     {
         $jenis = $saran?->jenis_aksara ?? JenisAksara::from('jawa');
@@ -150,15 +142,7 @@ class BerandaController extends Controller
         ];
     }
 
-    /**
-     * Keadaan simpul: selesai (penguasaan ≥ ambang), terkunci (tingkat belum terbuka, Algo-041),
-     * mulai (materi pertama yang terbuka dan belum selesai), terbuka (sisanya).
-     * Urutan: tingkat, lalu id_materi (urutan hanacaraka), bukan nama.
-     *
-     * @param  iterable<MateriAksara>  $semua  materi satu jenis aksara
-     * @param  array<int, float>  $penguasaan  id_materi => 0..100
-     * @return list<array{tingkat:int, langkah:list<array{id_materi:int, nama:string, keadaan:string}>}>
-     */
+    /** Keadaan simpul: selesai (penguasaan ≥ ambang), terkunci (tingkat belum terbuka, Algo-041), mulai (materi pertama yang terbuka dan belum selesai), terbuka (sisanya). @param  iterable<MateriAksara>  $semua  materi satu jenis aksara @param  array<int, float>  $penguasaan  id_materi => 0..100 @return list<array{tingkat:int, langkah:list<array{id_materi:int, nama:string, keadaan:string}>}> */
     public static function susunJalur(iterable $semua, array $penguasaan): array
     {
         $urut = collect($semua)
@@ -188,11 +172,7 @@ class BerandaController extends Controller
         return array_values($bagian);
     }
 
-    /**
-     * I-03-07: latihan berhasil hari ini dibandingkan target harian.
-     *
-     * @return array{selesai: int, target: int}
-     */
+    /** I-03-07: latihan berhasil hari ini dibandingkan target harian. @return array{selesai: int, target: int} */
     private function targetHarian(int $idPelajar): array
     {
         $selesai = RiwayatLatihan::query()
@@ -205,21 +185,28 @@ class BerandaController extends Controller
         return ['selesai' => $selesai, 'target' => max(1, (int) config('ngaksara.target_harian', 3))];
     }
 
-    /**
-     * Kartu "Kelasmu": kelas aktif yang diikuti (query sama dengan ProgresController::tampilkan).
-     * tugas_menunggu masih null sampai operasi tugas dari modul kelas tersedia.
-     */
+    /** Kartu "Kelasmu": kelas aktif yang diikuti beserta jumlah tugas terbit yang belum dikumpulkan Pelajar. */
     private function kelasDiikuti(int $idPelajar): array
     {
-        return DB::table('kelas_belajar as k')
+        $kelas = DB::table('kelas_belajar as k')
             ->join('keanggotaan_kelas as a', 'a.id_kelas', '=', 'k.id_kelas')
             ->where('a.id_pelajar', $idPelajar)
             ->where('a.status', StatusKeanggotaan::Aktif->value)
             ->where('k.status', StatusKelas::Aktif->value)
             ->orderBy('k.nama')
             ->limit(3)
-            ->get(['k.id_kelas', 'k.nama'])
-            ->map(fn ($k) => ['id_kelas' => (int) $k->id_kelas, 'nama' => $k->nama, 'tugas_menunggu' => null])
+            ->get(['k.id_kelas', 'k.nama']);
+        // Satu query untuk semua kelas: tugas terbit tanpa baris penyelesaian milik Pelajar ini.
+        $menunggu = DB::table('tugas_kelas as t')
+            ->whereIn('t.id_kelas', $kelas->pluck('id_kelas'))
+            ->where('t.status', 'terbit')
+            ->whereNotExists(fn ($q) => $q->from('penyelesaian_tugas as p')->whereColumn('p.id_tugas', 't.id_tugas')->where('p.id_pelajar', $idPelajar))
+            ->groupBy('t.id_kelas')
+            ->selectRaw('t.id_kelas, COUNT(*) AS jumlah')
+            ->pluck('jumlah', 'id_kelas');
+
+        return $kelas
+            ->map(fn ($k) => ['id_kelas' => (int) $k->id_kelas, 'nama' => $k->nama, 'tugas_menunggu' => (int) ($menunggu[$k->id_kelas] ?? 0)])
             ->all();
     }
 }

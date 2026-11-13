@@ -11,7 +11,7 @@ Route::middleware('peran:pelajar')->group(function () {
 });
 
 // Tim Materi: I-18 Kelola Materi, I-19 Unggah Materi
-Route::middleware('peran:tim_materi')->group(function () {
+Route::middleware('peran:tim_materi')->prefix('kelola/materi')->group(function () {
     Route::get('/', [MateriController::class, 'kelola'])->name('materi.kelola');
     Route::get('/baru', [MateriController::class, 'buat'])->name('materi.buat');
     Route::post('/', [MateriController::class, 'simpan'])->name('materi.simpan');

@@ -12,38 +12,31 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function () {
-            // Autentikasi: terbuka untuk tamu; route di dalamnya mengatur guest/auth sendiri.
+            // Autentikasi terbuka untuk tamu; guest/auth diatur di dalam routes/auth.php.
             Route::middleware('web')->group(base_path('routes/auth.php'));
 
-            // Peta peran per modul (Algo-002). Modul yang dipakai lebih dari satu peran
-            // memasang peran: sendiri per grup di dalam berkas route-nya (lihat Langkah 5).
+            // Peta peran per modul (Algo-002); modul lintas peran memasang peran:... di berkas route-nya sendiri.
             $modul = [
                 'latihan'        => ['auth', 'peran:pelajar'],
                 'kelas-pelajar'  => ['auth', 'peran:pelajar'],
                 'kelas-pengajar' => ['auth', 'peran:pengajar'],
                 'feedback'       => ['auth', 'peran:pelajar,pengajar'],
-                'materi'         => ['auth'],   // pelajar dan tim_materi: lihat routes/materi.php
-                'progres'        => ['auth'],   // pelajar dan pengajar bila pemantauan di berkas ini
+                'materi'         => ['auth'],
+                'progres'        => ['auth'],
             ];
 
             foreach ($modul as $nama => $middleware) {
                 Route::middleware(['web', ...$middleware])->group(base_path("routes/{$nama}.php"));
             }
-
-            // Route masuk sementara untuk pengembangan (hanya di lingkungan local)
-            if (app()->environment('local') && file_exists(base_path('routes/dev.php'))) {
-                Route::middleware('web')->group(base_path('routes/dev.php'));
-            }
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Alias middleware pembatas peran: ->middleware(['auth', 'peran:pelajar'])
+        // Alias pembatas peran, contoh: ->middleware(['auth', 'peran:pelajar']).
         $middleware->alias([
             'peran' => \App\Http\Middleware\CekPeran::class,
         ]);
 
-        // Tamu yang membuka halaman berlogin diarahkan ke route 'login' (modul autentikasi).
-        // Selama route itu belum ada, tamu diarahkan ke halaman awal.
+        // Tamu yang membuka halaman berlogin diarahkan ke halaman Masuk (I-02).
         $middleware->redirectGuestsTo(fn () => route('masuk'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {

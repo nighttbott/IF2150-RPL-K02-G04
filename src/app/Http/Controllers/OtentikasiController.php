@@ -126,27 +126,23 @@ class OtentikasiController extends Controller
     {
         $hasil = $this->simpanAkun($request->validated());
 
-    if (! $hasil->berhasil) {
-        $keterangan = [
-            'EMAIL_TERDAFTAR'   => 'Gunakan email lain atau masuk dengan akun yang ada.',
-            'USERNAME_TERPAKAI' => 'Gunakan username lain.',
-            'AKUN_SUDAH_ADA'    => 'Periksa kembali email dan username, lalu coba lagi.',
-        ][$hasil->kode] ?? 'Silakan coba lagi.';
+        if (! $hasil->berhasil) {
+            $keterangan = [
+                'EMAIL_TERDAFTAR'   => 'Gunakan email lain atau masuk dengan akun yang ada.',
+                'USERNAME_TERPAKAI' => 'Gunakan username lain.',
+                'AKUN_SUDAH_ADA'    => 'Periksa kembali email dan username, lalu coba lagi.',
+            ][$hasil->kode] ?? 'Silakan coba lagi.';
 
-        return back()
-            ->withInput($request->except('password')) // password cleared (Algo-005)
-            ->withErrors(['akun' => $keterangan, 'akun_judul' => $hasil->pesan]);
-    }
+            return back()
+                ->withInput($request->except('password')) // sandi dikosongkan (Algo-005)
+                ->withErrors(['akun' => $keterangan, 'akun_judul' => $hasil->pesan])
+                ->with('galat_daftar', ['kode' => $hasil->kode, 'pesan' => $hasil->pesan]);
+        }
 
         return redirect()->route('masuk')->with('sukses', 'Akun berhasil dibuat. Silakan masuk.');
     }
 
-    /**
-     * Algo-011. Data sudah divalidasi oleh DaftarRequest (Algo-009).
-     * Baris motivasi_belajar dibuat untuk Pelajar dalam transaksi yang sama.
-     *
-     * param  array{email:string, username:string, password:string, peran:string, nama_tampilan?:?string}  $data
-     */
+    /** Algo-011. Data sudah divalidasi oleh DaftarRequest (Algo-009). */
     public function simpanAkun(array $data): HasilOperasi
     {
         $dataSimpan = new DataPendaftaran(

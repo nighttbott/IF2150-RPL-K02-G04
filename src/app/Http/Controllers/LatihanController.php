@@ -16,6 +16,7 @@ use App\Latihan\PemeriksaBadge;
 use App\Models\MateriAksara;
 use App\Models\MotivasiBelajar;
 use App\Models\RiwayatLatihan;
+use App\Models\TugasKelas;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -28,16 +29,22 @@ use LogicException;
 use RuntimeException;
 use Throwable;
 
-/**
- * C16 LatihanController (DPPL 5.16). Atribut `konteks` diwujudkan session Laravel.
- * Hak akses Pelajar (KF02) dijaga middleware peran:pelajar di routes/latihan.php.
- */
+/** C16 LatihanController (DPPL 5.16). Atribut `konteks` diwujudkan session Laravel. Hak akses Pelajar (KF02) dijaga middleware peran:pelajar di routes/latihan.php. */
 class LatihanController extends Controller
 {
+    /** Menu "Latihan": langsung ke I-06 untuk materi rekomendasi teratas (Algo-101), atau ke daftar materi. */
+    public function index(Request $request): RedirectResponse
+    {
+        $rekomendasi = MateriAksara::ambilMateriRekomendasi(RiwayatLatihan::hitungPenguasaan((int) $request->user()->getKey()));
+
+        return $rekomendasi !== []
+            ? redirect()->route('latihan.mode', $rekomendasi[0]->id_materi)
+            : redirect()->route('materi.index')->with('info', 'Pilih materi terlebih dahulu untuk mulai latihan.');
+    }
+
     /** I-06 Pilih Mode Latihan. */
     public function pilihMode(Request $request, int $materi): View
     {
-
         return view('latihan.pilih-mode', [
             'idMateri' => $materi,
             'namaMateri' => $this->namaMateri($materi),
@@ -46,8 +53,15 @@ class LatihanController extends Controller
     }
 
     /** I-07: memakai ulang soal aktif bila materi dan mode sama, supaya refresh tidak mengganti soal. */
-    public function soal(Request $request, int $materi, ModeLatihan $mode): View
+    public function soal(Request $request, int $materi, ModeLatihan $mode): View|RedirectResponse
     {
+        // Mode non-kanvas (bunyi, merangkai, transliterasi) dilayani LatihanNonKanvasController.
+        if ($mode !== ModeLatihan::Menulis) {
+            return redirect()->route('latihan.soal.mulai', array_filter([
+                'mode' => $mode->value, 'idMateri' => $materi,
+                'tugas' => $request->integer('tugas') ?: null, 'komponen' => $request->integer('komponen') ?: null,
+            ]));
+        }
         $request->validate([
             'tugas' => ['nullable', 'integer', 'required_with:komponen'],
             'komponen' => ['nullable', 'integer', 'required_with:tugas'],
@@ -81,7 +95,7 @@ class LatihanController extends Controller
         $jawaban = new JawabanLatihan($soal->idSoal, $soal->mode, goresan: $request->input('goresan'));
 
         $skor = match ($soal->mode) {
-            ModeLatihan::Menulis => $this->hitungAkurasiGoresan($jawaban->goresan, $soal->templat ?? []),
+            ModeLatihan::Menulis => $this->hitungAkurasiGoresan($jawaban->goresan, $soal->templat ?? [], $soal->tengah),
             default => throw new LogicException('Mode ini belum tersedia.'),
         };
         $status = $skor >= config('latihan.ambang_akurasi') ? 'berhasil' : 'perlu_diulang';
@@ -103,9 +117,7 @@ class LatihanController extends Controller
         ));
     }
 
-    /**
-     * Algo-026, DPPL 5.16.6. Hasil diambil dari session, bukan dari body request.
-     */
+    /** Algo-026, DPPL 5.16.6. Hasil diambil dari session, bukan dari body request. */
     public function simpanHasil(SelesaikanLatihanRequest $request): JsonResponse
     {
         $hasil = $request->session()->get('latihan.hasilTerakhir');
@@ -116,10 +128,10 @@ class LatihanController extends Controller
 
         try {
             $ringkasan = DB::transaction(function () use ($hasil) {
-                // Dicek sebelum hasil baru disimpan; sesudahnya baris baru ini sendiri akan terhitung.
+                // Kunci baris motivasi dulu agar dua kiriman paralel tidak sama-sama mendapat poin.
+                $m = MotivasiBelajar::milikPelajar($hasil->idPelajar, kunci: true);
                 $pernah = RiwayatLatihan::cekPernahSelesai($hasil->idPelajar, $hasil->targetSoal, $hasil->mode);
                 $idRiwayat = $this->simpanRiwayat($hasil);
-                $m = MotivasiBelajar::milikPelajar($hasil->idPelajar, kunci: true);
                 $m->perbaruiStreak(today());
                 if (! $pernah) {
                     $m->tambahPoin($idRiwayat, config('latihan.poin_per_soal'));
@@ -162,10 +174,13 @@ class LatihanController extends Controller
             return redirect()->route('beranda');
         }
 
+        $tugas = ($data['idTugas'] ?? null) ? TugasKelas::query()->find($data['idTugas']) : null;
+
         return view('latihan.hasil', [
             ...$data,
             'ringkasan' => RingkasanMotivasi::fromArray($data['ringkasan']),
             'mode' => ModeLatihan::from($data['mode']),
+            'urlTugas' => $tugas ? route('kelas-pelajar.detail', [$tugas->id_kelas, $tugas->id_tugas]) : null,
         ]);
     }
 
@@ -191,9 +206,7 @@ class LatihanController extends Controller
         return redirect()->route('latihan.soal', [$materi, $mode]);
     }
 
-    /**
-     * Algo-021, DPPL 5.16.1. Memilih acak dari butir yang belum diselesaikan di sesi ini.
-     */
+    /** Algo-021, DPPL 5.16.1. Memilih acak dari butir yang belum diselesaikan di sesi ini. */
     private function siapkanSoal(Request $request, int $idMateri, ModeLatihan $mode, ?array $konteksTugas = null): SoalLatihan
     {
         if (! view()->exists("latihan.{$mode->value}")) {
@@ -224,6 +237,7 @@ class LatihanController extends Controller
             ModeLatihan::Menulis => new SoalLatihan(
                 (string) Str::uuid(), $idMateri, $mode, $butir['karakter'], $butir['bunyi'] ?? '',
                 templat: $butir['template'],
+                tengah: $butir['tengah'] ?? null,
             ),
             default => throw new LogicException('Mode ini belum tersedia.'),
         };
@@ -235,41 +249,25 @@ class LatihanController extends Controller
         return $soal;
     }
 
-    /**
-     * Algo-023, DPPL 5.16.3. Logika ada di AkurasiGoresan agar bisa diuji tanpa HTTP.
-     */
-    private function hitungAkurasiGoresan(array $goresan, array $templat): float
+    /** Algo-023, DPPL 5.16.3. Logika ada di AkurasiGoresan agar bisa diuji tanpa HTTP. */
+    private function hitungAkurasiGoresan(array $goresan, array $kontur, ?array $tengah = null): float
     {
-        return (new AkurasiGoresan(config('latihan.jumlah_titik'), config('latihan.d_maks')))->hitung($goresan, $templat);
+        $penilai = new AkurasiGoresan(
+            config('latihan.jumlah_titik'), config('latihan.d_maks'),
+            config('latihan.buang_outlier'), config('latihan.faktor_toleransi'),
+        );
+
+        // Goresan dibandingkan dengan garis tengah huruf; kontur dipakai untuk toleransi ketebalan.
+        return $penilai->hitung($goresan, $tengah ?: $kontur, $kontur);
     }
 
-    // Diisi Marvel: mode bunyi (Algo-024).
-    private function cocokkanBunyi(string $pilihan, string $kunci): bool
-    {
-        throw new LogicException('Mode ini belum tersedia.');
-    }
-
-    // Diisi Marvel: mode merangkai (Algo-025).
-    private function validasiRangkaian(array $urutan, array $kunci): array
-    {
-        throw new LogicException('Mode ini belum tersedia.');
-    }
-
-    /**
-     * Algo-027, DPPL 5.16.7.
-     *
-     * @return list<string>
-     */
+    /** Algo-027, DPPL 5.16.7. @return list<string> */
     private function periksaBadge(int $streak, int $poin, array $dimiliki): array
     {
         return (new PemeriksaBadge)->periksa($streak, $poin, $dimiliki);
     }
 
-    /**
-     * Pelajar harus anggota aktif kelas pemilik tugas terbit, dan komponen harus milik tugas itu
-     * dengan materi dan mode yang sama. Tenggat yang lewat tidak menolak (SKPL 2.4 butir 7).
-     * Sementara memakai query langsung, diganti validasi milik Abduh (TugasKelas, KeanggotaanKelas).
-     */
+    /** Pelajar harus anggota aktif kelas pemilik tugas terbit, dan komponen harus milik tugas itu dengan materi dan mode yang sama. */
     private function validasiKonteksTugas(int $idPelajar, array $konteks, int $idMateri, ModeLatihan $mode): void
     {
         $sah = DB::table('komponen_tugas as k')

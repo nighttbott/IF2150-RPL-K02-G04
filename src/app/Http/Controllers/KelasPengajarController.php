@@ -18,13 +18,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
-/**
- * C20 KelasController, bagian pengelolaan Pengajar (UC-07): buatKelas (Algo-071), buatTugas (Algo-072),
- * terbitkanTugas (Algo-073), ambilDaftarAnggota (Algo-074), kelolaAnggota (Algo-075),
- * gantiKodeKelas (Algo-076), aturScoreboard (Algo-077), ambilKelasPengajar (Algo-078).
- * Method aksi HTTP di sini menghubungkan route -> operasi -> view C12 HalamanKelolaKelas
- * (resources/views/kelas-pengajar). Urutan di setiap aksi mengikuti DPPL: hak akses -> kepemilikan -> aksi.
- */
+/** C20 KelasController, bagian pengelolaan Pengajar (UC-07): buatKelas (Algo-071), buatTugas (Algo-072), terbitkanTugas (Algo-073), ambilDaftarAnggota (Algo-074), kelolaAnggota (Algo-075), gantiKodeKelas (Algo-076), aturScoreboard (Algo-077), ambilKelasPengajar (Algo-078). */
 class KelasPengajarController extends Controller
 {
     private const JENIS = [
@@ -40,11 +34,17 @@ class KelasPengajarController extends Controller
     {
         $this->izinkan($request, 'buatKelas');
 
-        $daftarKelas = KelasBelajar::daftarKelasPengajar($request->user()->getKey())
-            ->each(function (KelasBelajar $kelas) {
-                $kelas->jumlah_anggota = KeanggotaanKelas::daftarAnggotaAktif($kelas->id_kelas)->count();
-                $kelas->jumlah_tugas = count(TugasKelas::ambilTugasAktif($kelas->id_kelas));
-            });
+        $daftarKelas = KelasBelajar::daftarKelasPengajar($request->user()->getKey());
+        $idKelas = $daftarKelas->pluck('id_kelas')->all();
+        // Hitung anggota aktif dan tugas terbit untuk semua kelas sekaligus (hindari N+1).
+        $anggota = KeanggotaanKelas::query()->whereIn('id_kelas', $idKelas)->where('status', StatusKeanggotaan::Aktif->value)
+            ->selectRaw('id_kelas, COUNT(*) AS jumlah')->groupBy('id_kelas')->pluck('jumlah', 'id_kelas');
+        $tugas = TugasKelas::query()->whereIn('id_kelas', $idKelas)->where('status', 'terbit')
+            ->selectRaw('id_kelas, COUNT(*) AS jumlah')->groupBy('id_kelas')->pluck('jumlah', 'id_kelas');
+        $daftarKelas->each(function (KelasBelajar $kelas) use ($anggota, $tugas) {
+            $kelas->jumlah_anggota = (int) ($anggota[$kelas->id_kelas] ?? 0);
+            $kelas->jumlah_tugas = (int) ($tugas[$kelas->id_kelas] ?? 0);
+        });
 
         return view('kelas-pengajar.index', ['daftarKelas' => $daftarKelas]);
     }
@@ -164,10 +164,7 @@ class KelasPengajarController extends Controller
         ]);
     }
 
-    /**
-     * I-15-05. Algo-072 buatTugas lalu Algo-073 terbitkanTugas.
-     * Desain layar hanya punya satu tombol "Terbitkan", jadi draf disimpan lalu langsung diterbitkan.
-     */
+    /** I-15-05. Algo-072 buatTugas lalu Algo-073 terbitkanTugas. Desain layar hanya punya satu tombol "Terbitkan", jadi draf disimpan lalu langsung diterbitkan. */
     public function terbitkan(Request $request, int $idKelas): RedirectResponse
     {
         $kelas = $this->kelasMilikku($request, $idKelas, 'buatTugas');
@@ -193,14 +190,19 @@ class KelasPengajarController extends Controller
             'id_kelas' => $kelas->id_kelas,
             'instruksi' => $data['instruksi'],
             'tenggat' => $data['tenggat'],
-            'komponen' => $data['komponen'],
+            'komponen_tugas' => array_map(fn (array $k): array => [
+                'jenis' => $k['jenis'] === 'materi' ? 'materi' : 'latihan',
+                'id_materi' => (int) $k['materi'],
+                'mode' => $k['jenis'] === 'materi' ? null : $k['jenis'],
+                'wajib' => (bool) $k['wajib'],
+            ], array_values($data['komponen'])),
         ]);
         if (! $draf->berhasil) {
             return back()->withInput()->withErrors(['tugas' => $draf->pesan ?? 'Tugas gagal disimpan.']);
         }
 
         $this->izinkan($request, 'terbitkanTugas');
-        $tugas = TugasKelas::find($draf->data['idTugas']);
+        $tugas = TugasKelas::find($draf->data['id_tugas'] ?? null);
         $hasil = $tugas?->terbitkan();
         if ($hasil === null || ! $hasil->berhasil) {
             Log::error('Gagal menerbitkan tugas', ['id_kelas' => $idKelas]);
@@ -234,13 +236,7 @@ class KelasPengajarController extends Controller
         return $kelas;
     }
 
-    /**
-     * Profil anggota aktif untuk I-16. Hanya id_akun dan nama_tampilan yang diambil dari akun_pengguna
-     * (DPPL: AkunPengguna.getProfil tidak memuat email maupun hash kata sandi), sehingga data pribadi
-     * lain tidak pernah sampai ke Pengajar.
-     *
-     * @return list<array{idAkun:int, namaTampilan:string}>
-     */
+    /** Profil anggota aktif untuk I-16. @return list<array{idAkun:int, namaTampilan:string}> */
     private function profilAnggota(int $idKelas): array
     {
         $idPelajar = KeanggotaanKelas::daftarAnggotaAktif($idKelas)->pluck('id_pelajar')->all();

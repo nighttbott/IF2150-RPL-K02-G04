@@ -1,11 +1,4 @@
-{{--
-  I-03 Halaman Utama / Beranda (C07 HalamanUtama)
-  Data dari BerandaController::tampilkan:
-    $akun, $pelajar (bool), $salam (string), $motivasi {streak, poin, badge}
-    Khusus Pelajar: $saran (MateriAksara|null), $lanjutkan {materi, persen}|null,
-    $saranBaru (bool), $jalur {jenis, judul, bagian[{tingkat, langkah[{id_materi, nama, keadaan}]}]},
-    $target {selesai, target}, $kelas [{id_kelas, nama, tugas_menunggu}], $tips (string)
---}}
+{{-- I-03 Halaman Utama / Beranda (C07 HalamanUtama); data dari BerandaController::tampilkan (motivasi, saran, jalur materi, target harian, kelas, tips). --}}
 @extends('layouts.app')
 @section('judul', 'Beranda · Ngaksara')
 
@@ -154,15 +147,13 @@
             <section class="kartu">
                 <h2 class="nk-judul-kartu">Kelasmu</h2>
                 @forelse ($kelas as $k)
-                    <div class="d-flex align-items-center gap-3 @unless ($loop->last) mb-3 @endunless">
+                    <a href="{{ route('kelas-pelajar.kelas', $k['id_kelas']) }}" class="d-flex align-items-center gap-3 text-reset text-decoration-none @unless ($loop->last) mb-3 @endunless">
                         <img src="{{ asset('img/ikon-joglo.svg') }}" alt="" width="26" height="26">
                         <div class="overflow-hidden">
                             <div class="fw-bold small text-truncate">{{ $k['nama'] }}</div>
-                            @if ($k['tugas_menunggu'] !== null)
-                                <div class="teks-redup" style="font-size: .8rem">{{ $k['tugas_menunggu'] }} tugas menunggu</div>
-                            @endif
+                            <div class="teks-redup" style="font-size: .8rem">{{ $k['tugas_menunggu'] > 0 ? $k['tugas_menunggu'].' tugas menunggu' : 'Semua tugas sudah dikumpulkan' }}</div>
                         </div>
-                    </div>
+                    </a>
                 @empty
                     <p class="small teks-redup mb-0">
                         Kamu belum ikut kelas.

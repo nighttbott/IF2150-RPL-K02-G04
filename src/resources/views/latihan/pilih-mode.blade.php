@@ -30,7 +30,11 @@
             @foreach (array_chunk($kartu, 2) as $baris)
                 <div class="lt-baris-mode">
                     @foreach ($baris as $k)
-                        @php $tersedia = view()->exists('latihan.'.$k['mode']->value); @endphp
+                        @php
+                            $tujuan = $k['mode'] === \App\Enums\ModeLatihan::Menulis
+                                ? route('latihan.soal', [$idMateri, $k['mode']])
+                                : route('latihan.soal.mulai', [$k['mode']->value, $idMateri]);
+                        @endphp
                         <div class="kartu lt-kartu-mode lt-mode-{{ $k['warna'] }}">
                             <div class="lt-kepala-mode">
                                 <span class="lt-kotak-ikon"><img src="{{ asset('img/'.$k['ikon']) }}" alt="" width="34" height="34"></span>
@@ -39,11 +43,7 @@
                                     <p>{{ $k['teks'] }}</p>
                                 </div>
                             </div>
-                            @if ($tersedia)
-                                <a href="{{ route('latihan.soal', [$idMateri, $k['mode']]) }}" class="lt-tombol-mulai">Mulai</a>
-                            @else
-                                <span class="lt-tombol-mulai" aria-disabled="true">Segera hadir</span>
-                            @endif
+                            <a href="{{ $tujuan }}" class="lt-tombol-mulai">Mulai</a>
                         </div>
                     @endforeach
                 </div>
