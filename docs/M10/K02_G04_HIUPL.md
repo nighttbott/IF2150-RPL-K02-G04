@@ -357,6 +357,19 @@ Tabel 4.4.1. Hasil Pengujian Use Case [UC01]
 *[Lanjutkan untuk seluruh use case dengan pola yang sama, hingga 4.4.N.]*
 
 <br>
+### 4.4.7 Use Case Menyiapkan Pembelajaran Kelas
+
+**ID Use Case:** UC-07  
+**Nama Use Case:** Menyiapkan Pembelajaran Kelas
+
+Tabel 4.4.7. Hasil Pengujian Use Case UC-07
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC07-TC01 | KF25, KF27 | Normal | 1. Masuk sebagai Pengajar.<br>2. Buat kelas baru.<br>3. Buka Tugas, isi instruksi dan tenggat, tambah komponen, tekan "Terbitkan". | Nama kelas: Kelas Uji HIUPL<br>Tenggat: 3 hari lagi 21.00 | Kelas dibuat dengan kode bergabung 6 karakter dan tugas berstatus terbit. | Kelas dibuat dengan kode NJ528B; tugas terbit. Bukti: Gambar UC07-TC01. | Pass |
+| UC07-TC02 | KF25 | Alternatif 1: Mengganti kode kelas | 1. Masuk sebagai pemilik kelas.<br>2. Tekan "Ganti kode" pada kartu kelas. | Kelas: Kelas Uji HIUPL | Kode baru tampil dan kode lama tidak berlaku. | Kode NJ528B diganti menjadi ANEKER; kode lama tidak berlaku. Bukti: Gambar UC07-TC02. | Pass |
+| UC07-TC03 | KF02, KF25 | Alternatif 2: Mengeluarkan anggota | 1. Masuk sebagai pemilik kelas K7M2QX.<br>2. Buka Anggota, tekan "Keluarkan" pada Sari.<br>3. Konfirmasi "Ya, keluarkan". | Anggota: Sari | Dialog konfirmasi tampil; Sari tidak lagi aktif dan kehilangan akses kelas. | Dialog konfirmasi tampil; Sari dikeluarkan (status nonaktif). Bukti: Gambar UC07-TC03. | Pass |
+| UC07-TC04 | KF24, KF25 | Alternatif 3: Mengaktifkan papan peringkat | 1. Masuk sebagai pemilik kelas.<br>2. Buka Anggota, nyalakan sakelar Papan peringkat. | Kelas: Kelas Uji HIUPL | Status papan peringkat kelas menjadi aktif. | Sakelar papan peringkat aktif; status_scoreboard = 1. Bukti: Gambar UC07-TC04. | Pass |
 
 ## 4.5 Pengujian Kebutuhan Non-Fungsional (KNF)
 
