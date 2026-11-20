@@ -1,0 +1,181 @@
+{
+ "UC01-TC01": {
+  "judul": "Normal: pendaftaran akun Pelajar baru",
+  "status": "Lulus",
+  "catatan": "Akun tersimpan, diarahkan ke /masuk; password_hash diawali $2y$12$",
+  "detik": 1.3
+ },
+ "UC01-TC02": {
+  "judul": "Alternatif 1: kredensial tidak valid (email sudah terdaftar)",
+  "status": "Lulus",
+  "catatan": "Tetap di halaman daftar, pesan: \"Email sudah terdaftar. Gunakan email lain atau masuk dengan akun yang ada.\"",
+  "detik": 1.3
+ },
+ "UC02-TC01": {
+  "judul": "Normal: memilih jenis/tingkat, membuka materi, memutar audio",
+  "status": "Lulus",
+  "catatan": "Daftar & isi materi tampil; GET /materi/1/audio = 200, tanpa pesan galat audio",
+  "detik": 3.6
+ },
+ "UC02-TC02": {
+  "judul": "Alternatif 1: materi belum tersedia",
+  "status": "Lulus",
+  "catatan": "Halaman menampilkan keadaan kosong \"materi belum tersedia\"",
+  "detik": 1.3
+ },
+ "UC02-TC03": {
+  "judul": "Alternatif 2: audio gagal diputar",
+  "status": "Lulus",
+  "catatan": "Berkas audio hilang -> pesan \"Audio tidak dapat diputar...\" tampil, materi tetap terbaca",
+  "detik": 2.5
+ },
+ "UC03-TC01": {
+  "judul": "Normal: latihan menulis di kanvas berhasil",
+  "status": "Lulus",
+  "catatan": "Aksara ꦕ: Akurasi 100%.; hasil latihan, poin, dan streak tampil",
+  "detik": 6.0
+ },
+ "UC03-TC02": {
+  "judul": "Alternatif 1: latihan mode bunyi",
+  "status": "Lulus",
+  "catatan": "5 soal bunyi dijawab; halaman hasil tampil dengan skor per soal",
+  "detik": 3.0
+ },
+ "UC03-TC03": {
+  "judul": "Alternatif 2: latihan mode merangkai",
+  "status": "Lulus",
+  "catatan": "Ubin dirangkai lalu dikirim; posisi salah ditandai di halaman hasil",
+  "detik": 3.2
+ },
+ "UC03-TC04": {
+  "judul": "Alternatif 3: hasil gambar kurang akurat lalu ulangi",
+  "status": "Lulus",
+  "catatan": "Umpan balik \"Akurasi 0%. Tulis lebih dekat ke garis bantu.\"; tombol Ulangi menghapus goresan, soal tetap",
+  "detik": 2.0
+ },
+ "UC04-TC01": {
+  "judul": "Normal: meninjau progres dan motivasi",
+  "status": "Lulus",
+  "catatan": "Penguasaan per materi, pola kesalahan, rekomendasi, streak, poin, dan badge tampil",
+  "detik": 2.0
+ },
+ "UC04-TC02": {
+  "judul": "Alternatif 1: belum ada riwayat latihan",
+  "status": "Lulus",
+  "catatan": "Pelajar baru melihat pesan belum ada riwayat dan ajakan mulai belajar",
+  "detik": 1.8
+ },
+ "UC04-TC03": {
+  "judul": "Alternatif 2: melihat papan peringkat kelas",
+  "status": "Lulus",
+  "catatan": "Papan peringkat anggota aktif tampil urut poin, tanpa email",
+  "detik": 1.9
+ },
+ "UC05-TC01": {
+  "judul": "Normal: bergabung kelas, mengerjakan, dan mengumpulkan tugas",
+  "status": "Lulus",
+  "catatan": "Bergabung dengan kode, komponen materi & latihan selesai, tugas terkumpul tepat_waktu",
+  "detik": 10.0
+ },
+ "UC05-TC02": {
+  "judul": "Alternatif 1: sudah menjadi anggota",
+  "status": "Lulus",
+  "catatan": "Pesan \"Kamu sudah menjadi anggota kelas ini.\" dan diarahkan ke halaman kelas",
+  "detik": 3.0
+ },
+ "UC05-TC03": {
+  "judul": "Alternatif 2: tugas dikumpulkan melewati tenggat",
+  "status": "Lulus",
+  "catatan": "Tugas lewat tenggat tetap dapat dikumpulkan dan berstatus \"terlambat\"",
+  "detik": 3.1
+ },
+ "UC05-TC04": {
+  "judul": "Alternatif 3: kode kelas tidak valid",
+  "status": "Lulus",
+  "catatan": "Pesan \"Kode tidak ditemukan atau kelas tidak aktif.\" tampil; isian tetap",
+  "detik": 2.6
+ },
+ "UC06-TC01": {
+  "judul": "Normal: Tim Materi menambah materi dengan audio lalu menerbitkan",
+  "status": "Lulus",
+  "catatan": "Materi tersimpan (audio materi/10/audio.mp3) lalu terbit",
+  "detik": 3.0
+ },
+ "UC06-TC02": {
+  "judul": "Alternatif 1: penambahan gagal karena berkas tidak didukung",
+  "status": "Lulus",
+  "catatan": "Pesan \"Jenis berkas tidak didukung\"; materi tidak tersimpan",
+  "detik": 2.1
+ },
+ "UC07-TC01": {
+  "judul": "Normal: membuat kelas dan menerbitkan tugas",
+  "status": "Lulus",
+  "catatan": "Kelas dibuat dengan kode SU89MJ; tugas terbit",
+  "detik": 4.7
+ },
+ "UC07-TC02": {
+  "judul": "Alternatif 1: mengganti kode kelas",
+  "status": "Lulus",
+  "catatan": "Kode SU89MJ diganti menjadi FQN5NH; kode lama tidak berlaku",
+  "detik": 2.9
+ },
+ "UC07-TC03": {
+  "judul": "Alternatif 2: mengeluarkan anggota",
+  "status": "Lulus",
+  "catatan": "Dialog konfirmasi tampil; Wulan dikeluarkan (status nonaktif)",
+  "detik": 3.0
+ },
+ "UC07-TC04": {
+  "judul": "Alternatif 3: mengaktifkan papan peringkat",
+  "status": "Lulus",
+  "catatan": "Sakelar papan peringkat aktif; status_scoreboard = 1",
+  "detik": 2.9
+ },
+ "UC08-TC01": {
+  "judul": "Normal: memantau progres anggota dan mengirim umpan balik",
+  "status": "Lulus",
+  "catatan": "Ringkasan kelas & detail Sari tampil; umpan balik terkirim",
+  "detik": 4.0
+ },
+ "UC08-TC02": {
+  "judul": "Alternatif 1: belum ada hasil latihan",
+  "status": "Lulus",
+  "catatan": "Kelas tanpa hasil latihan menampilkan pesan belum ada data progres",
+  "detik": 1.9
+ },
+ "UC08-TC03": {
+  "judul": "Alternatif 2: pengguna bukan anggota aktif",
+  "status": "Lulus",
+  "catatan": "Pesan \"Pengguna ini bukan anggota aktif kelas...\" dan data progres tidak ditampilkan",
+  "detik": 1.9
+ },
+ "UC09-TC01": {
+  "judul": "Normal: mengirim feedback",
+  "status": "Lulus",
+  "catatan": "Pesan \"Feedback terkirim. Matur nuwun!\" tampil; formulir kosong",
+  "detik": 2.4
+ },
+ "UC09-TC02": {
+  "judul": "Alternatif 1: feedback gagal terkirim",
+  "status": "Lulus",
+  "catatan": "Basis data gagal menulis -> pesan gagal tampil dan isi pesan tidak hilang",
+  "detik": 2.6
+ },
+ "KNF03-ukur": {
+  "n": 10,
+  "median_ms": 89.4,
+  "maks_ms": 122.4
+ },
+ "KNF03-TC02": {
+  "judul": "KNF03: waktu muat daftar materi di browser",
+  "status": "Lulus",
+  "catatan": "10 kali muat: median 89 ms, maks 122 ms (< 3000 ms)",
+  "detik": 2.4
+ },
+ "KNF04-ukur": {
+  "n": 209,
+  "median_ms": 12.5,
+  "p95_ms": 13.6,
+  "maks_ms": 13.9
+ }
+}
