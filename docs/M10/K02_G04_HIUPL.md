@@ -347,8 +347,6 @@ Tabel 4.2.10. Hasil Pengujian Unit Kelas C20
 | C20-UT21 | `simpanPengumpulan(idKelas, idTugas)` | Normal | Anggota menyelesaikan komponen materi lalu POST kumpulkan | Pesan sukses; penyelesaian_tugas tepat_waktu | Sesuai harapan (2 asersi lulus, 33 ms) | Pass |
 | C20-UT22 | `simpanPengumpulan(idKelas, idTugas)` | Negatif | Pengajar mencoba POST kumpulkan | 403; tidak ada penyelesaian | Sesuai harapan (2 asersi lulus, 17 ms) | Pass |
 
-Catatan: tingkat Sedang tidak mensyaratkan coverage; sebagai informasi, `KelasPengajarController`: baris 86.9% (113/130), cabang 74.4% (29/39); seluruh suite (PCOV): baris 86.9%<br>`KelasPelajarController`: baris 72.6% (45/62), cabang 79.3% (23/29); seluruh suite (PCOV): baris 96.8%<br>`PemantauanKelasController`: baris 96.3% (78/81), cabang 87.5% (21/24); seluruh suite (PCOV): baris 96.3%.
-
 ### 4.2.13 Kelas KelasBelajar
 
 **ID Kelas:** C23  
