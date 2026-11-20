@@ -32,6 +32,7 @@
 * [Milestone 7](#milestone-7)
 * [Milestone 8](#milestone-8)
 * [Milestone 9](#milestone-9)
+* [Milestone 10](#milestone-10)
 * Notes: Copy bagian Daftar Isi seperti Milestone 1 untuk Milestone berikutnya, contoh ``* [Milestone 2](#milestone-2)``. Ketika Daftar isi diklik maka akan langsung diarahkan ke bagian bawah sesuai dengan Milestone tujuan.
 
 
@@ -186,11 +187,24 @@
 | 12-11-2026 | Ryuza | Pendaftaran akun, Beranda (I-03), Feedback (I-20) | [isi] | Done | - |
 | 12-11-2026 | Naufal | Latihan dari tugas kelas (`id_tugas`, `id_komponen`) | [isi] | Done | - |
 | 13-11-2026 | Natan | Integrasi akhir `develop`: perbaikan bug lintas modul, port sidebar `feat/akun-layout`, efek visual, ringkas komentar, profiling dengan indeks, README, laporan M9 | [isi] | Done | Beberapa modul tidak cocok saat digabung (lihat B.3 laporan) |
+| 13-11-2026 | Naufal | Laporan M9 modul latihan (B.1, B.2), AI-Usage, penutupan issue #26 dan #28 sampai #32 | [isi] | Done | - |
 
 **Catatan/Evaluasi Milestone 9:**
 * Integrasi sebaiknya dilakukan lebih awal (setiap PR langsung dicoba bersama modul lain), karena beberapa bug baru muncul setelah semua branch digabung.
 
 ---
 
+
+### Milestone 10
+**Periode:** 14-11-2026 - 20-11-2026
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 20-11-2026 | Naufal | Menyiapkan lingkungan uji (PHP 8.4, PCOV, Playwright), menjalankan dan memeriksa unit test C16 (18 test) beserta coverage kelas latihan, menyiapkan skrip pengujian use case UC03 dan KNF04, serta bukti `unit-C16.png` dan `coverage-C16.png` | [isi] | Done | Perintah `npm` diblokir execution policy PowerShell (dipakai `npm.cmd`); konflik `stash` pada AI-Usage |
+
+**Catatan/Evaluasi Milestone 10:**
+* Pembagian berkas unit test dan skrip pengujian perlu disepakati di awal agar tidak ada dua versi test untuk kelas yang sama.
+
+---
 
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``

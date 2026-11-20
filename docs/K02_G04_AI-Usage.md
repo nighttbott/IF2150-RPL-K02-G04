@@ -32,6 +32,7 @@
 * [Milestone 7](#milestone-7)
 * [Milestone 8](#milestone-8)
 * [Milestone 9](#milestone-9)
+* [Milestone 10](#milestone-10)
 
 ---
 
@@ -99,6 +100,15 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Claude Code | Memeriksa integrasi seluruh branch di `develop`, mencari bug lintas modul (route Beranda tertimpa, terbitkan tugas gagal, hasil latihan non-kanvas error, tombol kerjakan komponen tugas), lalu memperbaikinya | "Lakukan integrasi branch ke develop, cek apakah ada bug, dan perbaiki langsung di develop tanpa commit/push." | Rencana perbaikan disetujui sebelum dijalankan; hasil diverifikasi dengan `php artisan test` (378 test lolos) dan uji manual tiga peran di `localhost`; commit dan push dilakukan sendiri oleh anggota. |
 | Claude Code | Memindahkan sidebar per peran dari branch `feat/akun-layout`, menyeragamkan layout Kelas Pelajar, dan menambah efek visual (kartu muncul, skor naik, taburan kawung, toast badge, centang pengumpulan) | "Tambahkan efek saat selesai mengerjakan tugas, sesuai konteks dan tidak berlebihan." | Efek dicek ulang agar nonaktif saat *reduce motion*; tampilan dibandingkan dengan desain Figma (I-12, I-13). |
 | Claude Code | Meringkas komentar kode multi-baris menjadi satu baris, membantu profiling (`EXPLAIN`, waktu query), dan menyusun draf laporan M9 (B.1 sampai B.5), README, serta logbook | "Sederhanakan komentar yang lebih dari 1 baris menjadi 1 baris; bantu isi laporan M9." | Angka profiling diambil dari pengukuran nyata di MySQL lokal; isi B.1, B.3, dan B.4 diperiksa dan disepakati kelompok. |
+| Claude Chat | Membantu menemukan penyebab `composer install` gagal (lock mengunci Symfony 8.1, butuh PHP 8.4.1) | Menempelkan keluaran error `composer install` dan bertanya penyebab serta perbaikannya | Menjalankan `composer config platform.php 8.3.0` dan `composer update "symfony/*"` sendiri, lalu memastikan `composer install` berhasil |
+| Claude Chat| Menelusuri penyebab error test halaman progres (cache tampilan Blade yang sudah dikompilasi) | Melaporkan satu test gagal dan hasil `php artisan test` | Menjalankan `php artisan view:clear`, lalu test lolos. Penyebab diverifikasi dengan mengulang test |
+| Claude Chat | Menjabarkan tugas dari Pembagian Tugas M9 menjadi langkah kerja berurutan dan walkthrough per unit kerja beserta rujukan DPPL | "Bagi task-task berikut menjadi beberapa unit kerja. Utamakan pekerjaan yang merupakan prasyarat bagi pekerjaan lain. Setiap unit kerja berisi definisi unit pekerjaan, rujukan dari DPPL, apa yang perlu dicek dari DPPL untuk mengimplementasikannya, dan langkah-langkahnya secara garis besar." | Urutan disesuaikan dengan kondisi branch `develop` terbaru |
+| Claude Code | Merancang implementasi modul latihan menulis berdasarkan dokumen handoff: tipe data, penilaian akurasi goresan (Algo-023), badge (Algo-027), `LatihanController` dan view I-06, I-07, I-10, kanvas Pointer Events, penyimpanan hasil (Algo-026), konteks tugas, beserta unit dan feature test.
+
+### Milestone 10
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| Claude Code | Merancang test file unit C16 (LatihanController dan algoritma penilaian), skrip pengujian use case UC03, dan skrip ukur KNF04; membantu mengukur coverage dan memeriksa kesesuaian dengan hasil rekan tim | "Perhatikan dan pelajari apa yang perlu dilaksanakan dalam milestone ini. Lalu, buatkan rencana implementasi tugas tugas tersebut." | Test dijalankan ulang di laptop sendiri (18 test lulus), coverage diukur dan dicocokkan dengan dokumen HIUPL, tangkapan layar bukti diambil sendiri |
 
 ---
 ### Pernyataan Integritas dan Persetujuan
