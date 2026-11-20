@@ -1116,8 +1116,8 @@ Tabel 4.6. Bukti Hasil Pengujian
 | C26-UT01 – C26-UT10 | <img src="./assets/bukti/unit-C26.png" alt="Keluaran PHPUnit C26" width="600"> |
 | C26 (coverage) | <img src="./assets/bukti/coverage-C26.png" alt="Coverage C26" width="600"> |
 | INT-TC01 – INT-TC14 | <img src="./assets/bukti/integrasi.png" alt="Keluaran PHPUnit integrasi" width="600"> |
-| UC01-TC01 | <img src="./assets/uc/UC01-TC1.png" alt="Gambar UC01-TC01" width="600"> |
-| UC01-TC2 | <img src="./assets/uc/UC01-TC2.png" alt="Gambar UC01-TC02" width="600"> |
+| UC01-TC01 | <img src="./assets/uc/UC01-TC01.png" alt="Gambar UC01-TC01" width="600"> |
+| UC01-TC2 | <img src="./assets/uc/UC01-TC02.png" alt="Gambar UC01-TC02" width="600"> |
 | UC02-TC01 | <img src="./assets/uc/UC02-TC01.png" alt="Gambar UC02-TC01" width="600"> |
 | UC02-TC02 | <img src="./assets/uc/UC02-TC02.png" alt="Gambar UC02-TC02" width="600"> |
 | UC02-TC03 | <img src="./assets/uc/UC02-TC03.png" alt="Gambar UC02-TC03" width="600"> |
@@ -1141,8 +1141,8 @@ Tabel 4.6. Bukti Hasil Pengujian
 | UC08-TC01 | <img src="./assets/uc/UC08-TC01.png" alt="Gambar UC08-TC01" width="600"> |
 | UC08-TC02 | <img src="./assets/uc/UC08-TC02.png" alt="Gambar UC08-TC02" width="600"> |
 | UC08-TC03 | <img src="./assets/uc/UC08-TC03.png" alt="Gambar UC08-TC03" width="600"> |
-| UC09-TC01 | <img src="./assets/uc/UC09-TC1.png" alt="Gambar UC09-TC01" width="600"> |
-| UC09-TC02 | <img src="./assets/uc/UC09-TC2.png" alt="Gambar UC09-TC02" width="600"> |
+| UC09-TC01 | <img src="./assets/uc/UC09-TC01.png" alt="Gambar UC09-TC01" width="600"> |
+| UC09-TC02 | <img src="./assets/uc/UC09-TC02.png" alt="Gambar UC09-TC02" width="600"> |
 | KNF01-TC01, KNF01-TC02, KNF02-TC01, KNF02-TC02, KNF03-TC01, KNF05-TC01, KNF05-TC02 | <img src="./assets/bukti/knf.png" alt="Keluaran PHPUnit KNF" width="600"> |
 | KNF03-TC02, KNF04-TC01 | <img src="./assets/bukti/KNF03-TC02.png" alt="Hasil ukur browser" width="600"> |
 | Seluruh suite | <img src="./assets/bukti/suite.png" alt="Ringkasan seluruh test" width="600"> |
