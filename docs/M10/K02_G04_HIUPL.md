@@ -626,6 +626,18 @@ Tabel 4.4.7. Hasil Pengujian Use Case UC-07
 | UC07-TC03 | KF02, KF25 | Alternatif 2: Mengeluarkan anggota | 1. Masuk sebagai pemilik kelas K7M2QX.<br>2. Buka Anggota, tekan "Keluarkan" pada Sari.<br>3. Konfirmasi "Ya, keluarkan". | Anggota: Sari | Dialog konfirmasi tampil; Sari tidak lagi aktif dan kehilangan akses kelas. | Dialog konfirmasi tampil; Sari dikeluarkan (status nonaktif). Bukti: Gambar UC07-TC03. | Pass |
 | UC07-TC04 | KF24, KF25 | Alternatif 3: Mengaktifkan papan peringkat | 1. Masuk sebagai pemilik kelas.<br>2. Buka Anggota, nyalakan sakelar Papan peringkat. | Kelas: Kelas Uji HIUPL | Status papan peringkat kelas menjadi aktif. | Sakelar papan peringkat aktif; status_scoreboard = 1. Bukti: Gambar UC07-TC04. | Pass |
 
+### 4.4.9 Use Case Menyampaikan Feedback
+
+**ID Use Case:** UC-09  
+**Nama Use Case:** Menyampaikan Feedback
+
+Tabel 4.4.9. Hasil Pengujian Use Case UC-09
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC09-TC01 | KF18, KF19, KF20 | Normal | 1. Masuk sebagai Pelajar.<br>2. Buka Feedback, pilih kategori Fitur, isi pesan.<br>3. Tekan "Kirim". | Pesan: "Tolong tambahkan latihan aksara Bali juga." | Pesan "Feedback terkirim. Matur nuwun!" tampil dan formulir kosong kembali. | Pesan "Feedback terkirim. Matur nuwun!" tampil; formulir kosong. Bukti: Gambar UC09-TC01. | Pass |
+| UC09-TC02 | KF17, KF18 | Alternatif 1: Feedback gagal terkirim | 1. Masuk sebagai Pelajar dan isi formulir Feedback.<br>2. Tabel data_feedback dibuat tidak dapat ditulis (simulasi galat basis data).<br>3. Tekan "Kirim". | Pesan: "Audio materi kedua tidak bisa diputar." | Pesan "Feedback gagal terkirim ... Isi pesanmu tidak hilang." tampil, isian tetap, galat tercatat di log. | Basis data gagal menulis -> pesan gagal tampil dan isi pesan tidak hilang. Bukti: Gambar UC09-TC02. | Pass |
+
 ## 4.5 Pengujian Kebutuhan Non-Fungsional (KNF)
 
 Setiap KNF pada Tabel 3.2 SKPL diuji secara terukur berdasarkan parameter yang telah didefinisikan. Setiap pengujian memuat target terukur, metode dan alat yang sesuai dengan parameter (misalnya Chrome DevTools untuk *response time* dan inspeksi basis data untuk *security*), serta hasil aktual berupa angka atau data. KNF yang belum dipenuhi atau tidak diimplementasikan dicantumkan beserta alasan dan rencana perbaikan.
@@ -634,6 +646,12 @@ Tabel 4.5. Hasil Pengujian KNF
 
 | ID Pengujian | ID KNF | Parameter | Target Terukur | Metode dan Alat | Hasil Aktual | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| KNF01-TC01 | KNF01 | Maintainability | Setiap kegagalan login dan kegagalan simpan tercatat di berkas log dengan waktu dan level; data pribadi (email) tidak ikut tertulis | PHPUnit `KnfTest::test_knf01_tc01_log`: picu login gagal dan galat basis data, lalu baca berkas log (`storage/logs`) | 2 entri tercatat: `[2026-11-20 01:51:58] testing.WARNING: Login gagal {"ip":"127.0.0.1"} ` dan `[2026-11-20 01:51:58] testing.ERROR: Feedback gagal disimpan {"id_akun":1} `; email tidak muncul | Pass |
+| KNF01-TC02 | KNF01 | Maintainability | Penolakan akses pemantauan tercatat sebagai WARNING | PHPUnit `KnfTest::test_knf01_tc02_log_penolakan` | Entri "Pemantauan ditolak: bukan anggota aktif" tertulis di log | Pass |
+| KNF02-TC01 | KNF02 | Security | Kolom `password_hash` berisi hash adaptif bersalt (bcrypt, cost ≥ 10), bukan teks asli | Daftar akun lewat HTTP lalu inspeksi tabel `akun_pengguna` dengan `password_get_info()` | Algoritma bcrypt, cost 12, awalan `$2y$12$`, panjang 60 karakter; teks "Rahasia123" tidak ditemukan di tabel | Pass |
+| KNF02-TC02 | KNF02 | Security | Sandi sama menghasilkan hash berbeda; hash tidak dapat dipakai sebagai sandi | Dua akun dengan sandi sama, lalu login memakai nilai hash | Hash kedua akun berbeda (salt unik); login dengan hash ditolak | Pass |
+| KNF05-TC01 | KNF05 | Reliability | Feedback valid tersimpan dan konfirmasi tampil | PHPUnit `KnfTest::test_knf05_tc01_terkirim` + UC09-TC01 di browser | Pesan "Feedback terkirim. Matur nuwun!" tampil; 1 baris tersimpan di `data_feedback` | Pass |
+| KNF05-TC02 | KNF05 | Reliability | Saat penyimpanan gagal, pesan galat tampil dan isi pesan tidak hilang | PHPUnit `KnfTest::test_knf05_tc02_gagal` (tabel dihapus) + UC09-TC02 di browser (tabel diganti nama sementara) | Pesan "Feedback gagal terkirim. Periksa koneksi lalu coba lagi. Isi pesanmu tidak hilang." tampil, isian tetap | Pass |
 | *KNF01-TC01* | *KNF01* | *Reliability* | *Tidak ada data hilang/ganda saat jaringan putus di tengah transaksi* | *Simulasi putus koneksi saat bayar, lalu cek status di DB* | *[Hasil aktual]* | *Pass/Fail* |
 | *KNF02-TC01* | *KNF02* | *Security* | *Password tersimpan sebagai hash, bukan plain-text* | *Inspeksi tabel pengguna di DB* | *[...]* | *Pass/Fail* |
 | *KNFXX-TC01* | *KNFXX* | *Response time* | *Halaman tampil ≤ 4 detik* | *Chrome DevTools, 5 kali ukur, ambil rata-rata* | *[Rata-rata ... detik, maks ... detik]* | *Pass/Fail* |
