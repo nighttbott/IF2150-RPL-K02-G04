@@ -1,0 +1,126 @@
+
+
+[1;37;40mCode Coverage Report:        [0m
+[1;37;40m  2026-11-20 20:32:30        [0m
+[1;37;40m                             [0m
+[1;37;40m Summary:                    [0m
+[37;41m  Classes: 23.94% (17/71)    [0m
+[37;41m  Methods: 43.17% (136/315)  [0m
+[37;41m  Paths:    4.87% (270/5548) [0m
+[30;43m  Branches:   57.21% (877/1533)[0m
+[30;43m  Lines:   67.50% (1643/2434)[0m
+
+App\Enums\JenisAksara
+  [37;41mMethods:   0.00% ( 0/ 1)[0m   [37;41mPaths:  33.33% (  1/  3)[0m   [37;41mBranches:  42.86% (  3/  7)[0m   [30;42mLines: 100.00% (  4/  4)[0m
+App\Enums\ModeLatihan
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mPaths: 100.00% (  1/  1)[0m   [30;42mBranches: 100.00% (  1/  1)[0m   [30;42mLines: 100.00% (  1/  1)[0m
+App\Http\Controllers\FeedbackController
+  [30;43mMethods:  66.67% ( 4/ 6)[0m   [37;41mPaths:  48.39% ( 15/ 31)[0m   [30;42mBranches:  93.94% ( 31/ 33)[0m   [30;42mLines: 100.00% ( 36/ 36)[0m
+App\Http\Controllers\KelasPelajarController
+  [37;41mMethods:  25.00% ( 2/ 8)[0m   [37;41mPaths:  30.00% (  6/ 20)[0m   [30;43mBranches:  56.25% ( 18/ 32)[0m   [37;41mLines:  43.55% ( 27/ 62)[0m
+App\Http\Controllers\KelasPengajarController
+  [37;41mMethods:  33.33% ( 4/12)[0m   [37;41mPaths:  21.43% (  6/ 28)[0m   [37;41mBranches:  33.33% ( 13/ 39)[0m   [30;43mLines:  55.38% ( 72/130)[0m
+App\Http\Controllers\LatihanController
+  [37;41mMethods:  25.00% ( 4/16)[0m   [37;41mPaths:   3.61% ( 10/277)[0m   [30;43mBranches:  58.25% ( 60/103)[0m   [30;43mLines:  70.48% (117/166)[0m
+App\Http\Controllers\LatihanNonKanvasController
+  [37;41mMethods:  28.57% ( 2/ 7)[0m   [37;41mPaths:   2.34% (  6/256)[0m   [30;43mBranches:  53.85% ( 35/ 65)[0m   [30;43mLines:  75.91% (104/137)[0m
+App\Http\Controllers\MateriController
+  [37;41mMethods:  12.00% ( 3/25)[0m   [37;41mPaths:  10.86% ( 19/175)[0m   [37;41mBranches:  47.34% ( 80/169)[0m   [30;43mLines:  57.43% (116/202)[0m
+App\Http\Controllers\OtentikasiController
+  [30;43mMethods:  81.82% ( 9/11)[0m   [30;43mPaths:  82.61% ( 19/ 23)[0m   [30;42mBranches:  94.29% ( 33/ 35)[0m   [30;42mLines: 100.00% ( 75/ 75)[0m
+App\Http\Controllers\PemantauanKelasController
+  [37;41mMethods:  40.00% ( 2/ 5)[0m   [37;41mPaths:  25.00% (  4/ 16)[0m   [37;41mBranches:  48.15% ( 13/ 27)[0m   [30;43mLines:  55.56% ( 45/ 81)[0m
+App\Http\Controllers\ProgresController
+  [30;43mMethods:  60.00% ( 6/10)[0m   [37;41mPaths:  33.33% ( 11/ 33)[0m   [30;43mBranches:  74.29% ( 26/ 35)[0m   [30;42mLines:  97.04% (131/135)[0m
+App\Http\Middleware\CekPeran
+  [37;41mMethods:   0.00% ( 0/ 1)[0m   [37;41mPaths:  16.67% (  1/  6)[0m   [30;43mBranches:  54.55% (  6/ 11)[0m   [30;43mLines:  66.67% (  6/  9)[0m
+App\Http\Requests\DaftarRequest
+  [30;43mMethods:  75.00% ( 3/ 4)[0m   [37;41mPaths:  13.16% (  5/ 38)[0m   [30;42mBranches:  92.00% ( 23/ 25)[0m   [30;42mLines: 100.00% ( 24/ 24)[0m
+App\Http\Requests\Latihan\KirimJawabanRequest
+  [37;41mMethods:  50.00% ( 2/ 4)[0m   [37;41mPaths:  13.04% (  3/ 23)[0m   [30;43mBranches:  78.57% ( 11/ 14)[0m   [30;43mLines:  83.33% ( 20/ 24)[0m
+App\Http\Requests\Latihan\SelesaikanLatihanRequest
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mPaths: 100.00% (  2/  2)[0m   [30;42mBranches: 100.00% (  2/  2)[0m   [30;42mLines: 100.00% (  2/  2)[0m
+App\Http\Requests\SimpanMateriRequest
+  [30;43mMethods:  60.00% ( 3/ 5)[0m   [30;43mPaths:  55.56% (  5/  9)[0m   [30;43mBranches:  75.00% (  9/ 12)[0m   [30;42mLines:  97.14% ( 34/ 35)[0m
+App\Latihan\AkurasiGoresan
+  [37;41mMethods:  16.67% ( 1/ 6)[0m   [37;41mPaths:   1.78% (  4/225)[0m   [30;43mBranches:  81.61% ( 71/ 87)[0m   [30;42mLines:  93.33% ( 70/ 75)[0m
+App\Latihan\Data\HasilLatihan
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mPaths: 100.00% (  3/  3)[0m   [30;42mBranches: 100.00% (  3/  3)[0m   [30;42mLines: 100.00% (  3/  3)[0m
+App\Latihan\Data\HasilPenilaian
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mPaths: 100.00% (  1/  1)[0m   [30;42mBranches: 100.00% (  1/  1)[0m   [30;42mLines: 100.00% (  1/  1)[0m
+App\Latihan\Data\JawabanLatihan
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mPaths: 100.00% (  1/  1)[0m   [30;42mBranches: 100.00% (  1/  1)[0m   [30;42mLines: 100.00% (  1/  1)[0m
+App\Latihan\Data\RingkasanMotivasi
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mPaths: 100.00% (  3/  3)[0m   [30;42mBranches: 100.00% (  3/  3)[0m   [30;42mLines: 100.00% (  3/  3)[0m
+App\Latihan\Data\SoalLatihan
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mPaths: 100.00% (  3/  3)[0m   [30;42mBranches: 100.00% (  3/  3)[0m   [30;42mLines: 100.00% (  3/  3)[0m
+App\Latihan\PemeriksaBadge
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mPaths: 100.00% (  1/  1)[0m   [30;42mBranches: 100.00% (  1/  1)[0m   [30;42mLines: 100.00% ( 10/ 10)[0m
+App\Models\AkunPengguna
+  [30;43mMethods:  64.29% ( 9/14)[0m   [30;43mPaths:  68.00% ( 17/ 25)[0m   [30;43mBranches:  81.08% ( 30/ 37)[0m   [30;42mLines:  96.34% ( 79/ 82)[0m
+App\Models\DataFeedback
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mPaths: 100.00% (  6/  6)[0m   [30;42mBranches: 100.00% ( 10/ 10)[0m   [30;42mLines: 100.00% ( 28/ 28)[0m
+App\Models\KeanggotaanKelas
+  [37;41mMethods:  42.86% ( 3/ 7)[0m   [37;41mPaths:  23.53% (  4/ 17)[0m   [37;41mBranches:  20.00% (  4/ 20)[0m   [37;41mLines:  38.33% ( 23/ 60)[0m
+App\Models\KelasBelajar
+  [37;41mMethods:  28.57% ( 2/ 7)[0m   [37;41mPaths:  10.26% (  4/ 39)[0m   [37;41mBranches:  38.46% ( 20/ 52)[0m   [37;41mLines:  40.68% ( 24/ 59)[0m
+App\Models\KomponenTugas
+  [37;41mMethods:  50.00% ( 1/ 2)[0m   [37;41mPaths:  50.00% (  1/  2)[0m   [37;41mBranches:  50.00% (  1/  2)[0m   [37;41mLines:  50.00% (  1/  2)[0m
+App\Models\KontenMateri
+  [37;41mMethods:  16.67% ( 1/ 6)[0m   [37;41mPaths:   1.52% (  6/394)[0m   [30;43mBranches:  56.72% ( 38/ 67)[0m   [30;43mLines:  60.81% ( 45/ 74)[0m
+App\Models\MateriAksara
+  [30;43mMethods:  58.33% ( 7/12)[0m   [37;41mPaths:  22.39% ( 15/ 67)[0m   [30;43mBranches:  82.89% ( 63/ 76)[0m   [30;43mLines:  89.89% ( 80/ 89)[0m
+App\Models\MotivasiBelajar
+  [37;41mMethods:  50.00% ( 5/10)[0m   [37;41mPaths:  22.45% ( 11/ 49)[0m   [30;43mBranches:  78.85% ( 41/ 52)[0m   [30;42mLines:  90.14% ( 64/ 71)[0m
+App\Models\PenyelesaianTugas
+  [37;41mMethods:  25.00% ( 1/ 4)[0m   [37;41mPaths:  14.29% (  2/ 14)[0m   [37;41mBranches:  25.00% (  4/ 16)[0m   [37;41mLines:  11.11% (  2/ 18)[0m
+App\Models\RiwayatLatihan
+  [37;41mMethods:  46.15% ( 6/13)[0m   [37;41mPaths:   2.91% ( 13/447)[0m   [30;43mBranches:  73.08% ( 57/ 78)[0m   [30;43mLines:  77.69% (101/130)[0m
+App\Models\TugasKelas
+  [30;43mMethods:  57.14% ( 4/ 7)[0m   [30;43mPaths:  60.00% (  6/ 10)[0m   [30;43mBranches:  53.85% (  7/ 13)[0m   [30;43mLines:  72.81% ( 83/114)[0m
+App\Providers\AppServiceProvider
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mPaths: 100.00% (  2/  2)[0m   [30;42mBranches: 100.00% (  2/  2)[0m   [30;42mLines: 100.00% (  2/  2)[0m
+App\Services\Latihan\HasilPenilaian
+  [30;42mMethods: 100.00% ( 2/ 2)[0m   [30;42mPaths: 100.00% (  2/  2)[0m   [30;42mBranches: 100.00% (  2/  2)[0m   [30;42mLines: 100.00% (  2/  2)[0m
+App\Services\Latihan\PenilaiJawaban
+  [37;41mMethods:   0.00% ( 0/ 4)[0m   [37;41mPaths:   2.63% (  1/ 38)[0m   [37;41mBranches:  20.00% (  7/ 35)[0m   [37;41mLines:  13.33% (  2/ 15)[0m
+App\Services\Latihan\PenyusunSoal
+  [37;41mMethods:  16.67% ( 1/ 6)[0m   [37;41mPaths:   2.06% (  2/ 97)[0m   [37;41mBranches:  29.31% ( 17/ 58)[0m   [37;41mLines:  47.14% ( 33/ 70)[0m
+App\Services\Latihan\SelesaikanLatihan
+  [37;41mMethods:   0.00% ( 0/ 1)[0m   [37;41mPaths:  33.33% (  1/  3)[0m   [37;41mBranches:  40.00% (  2/  5)[0m   [30;43mLines:  87.23% ( 41/ 47)[0m
+App\Services\PengumpulanTugas
+  [37;41mMethods:   0.00% ( 0/ 3)[0m   [37;41mPaths:   0.14% (  4/2912)[0m   [30;43mBranches:  76.19% ( 32/ 42)[0m   [30;43mLines:  79.73% ( 59/ 74)[0m
+App\Support\BatasanCheck
+  [37;41mMethods:   0.00% ( 0/ 2)[0m   [37;41mPaths:  50.00% (  3/  6)[0m   [30;43mBranches:  80.00% (  8/ 10)[0m   [30;43mLines:  83.33% (  5/  6)[0m
+App\Support\DataPendaftaran
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mPaths: 100.00% (  1/  1)[0m   [30;42mBranches: 100.00% (  1/  1)[0m   [30;42mLines: 100.00% (  1/  1)[0m
+App\Support\HakAkses
+  [37;41mMethods:   0.00% ( 0/ 1)[0m   [37;41mPaths:  16.67% (  1/  6)[0m   [37;41mBranches:  30.00% (  3/ 10)[0m   [37;41mLines:  50.00% (  3/  6)[0m
+App\Support\HasilOperasi
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mPaths: 100.00% (  3/  3)[0m   [30;42mBranches: 100.00% (  3/  3)[0m   [30;42mLines: 100.00% (  3/  3)[0m
+App\Support\Kelas\HasilOperasi
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mPaths: 100.00% (  3/  3)[0m   [30;42mBranches: 100.00% (  3/  3)[0m   [30;42mLines: 100.00% (  3/  3)[0m
+App\Support\Materi\DataKonten
+  [30;43mMethods:  66.67% ( 2/ 3)[0m   [37;41mPaths:  15.00% (  3/ 20)[0m   [30;43mBranches:  81.25% ( 13/ 16)[0m   [30;42mLines: 100.00% (  3/  3)[0m
+App\Support\Materi\FilterMateri
+  [37;41mMethods:  33.33% ( 1/ 3)[0m   [37;41mPaths:  50.00% (  2/  4)[0m   [30;43mBranches:  66.67% (  4/  6)[0m   [30;43mLines:  80.00% (  4/  5)[0m
+App\Support\Materi\HasilBerkas
+  [30;42mMethods: 100.00% ( 3/ 3)[0m   [30;42mPaths: 100.00% (  3/  3)[0m   [30;42mBranches: 100.00% (  3/  3)[0m   [30;42mLines: 100.00% (  3/  3)[0m
+App\Support\Materi\HasilOperasi
+  [30;43mMethods:  66.67% ( 2/ 3)[0m   [30;43mPaths:  66.67% (  2/  3)[0m   [30;43mBranches:  66.67% (  2/  3)[0m   [30;43mLines:  66.67% (  2/  3)[0m
+App\Support\Materi\HasilValidasi
+  [30;43mMethods:  66.67% ( 2/ 3)[0m   [30;43mPaths:  66.67% (  2/  3)[0m   [30;43mBranches:  66.67% (  2/  3)[0m   [30;43mLines:  66.67% (  2/  3)[0m
+App\Support\Materi\MetadataMateri
+  [30;42mMethods: 100.00% ( 1/ 1)[0m   [30;42mPaths: 100.00% (  1/  1)[0m   [30;42mBranches: 100.00% (  1/  1)[0m   [30;42mLines: 100.00% (  1/  1)[0m
+App\Support\Materi\PaketMateri
+  [30;43mMethods:  66.67% ( 2/ 3)[0m   [30;43mPaths:  66.67% (  2/  3)[0m   [30;43mBranches:  66.67% (  2/  3)[0m   [30;43mLines:  66.67% (  2/  3)[0m
+App\Support\Materi\PengolahKonten
+  [37;41mMethods:   0.00% ( 0/ 7)[0m   [37;41mPaths:  10.00% (  4/ 40)[0m   [37;41mBranches:  49.02% ( 25/ 51)[0m   [30;43mLines:  57.69% ( 15/ 26)[0m
+App\Support\Materi\TargetLatihan
+  [37;41mMethods:  33.33% ( 1/ 3)[0m   [37;41mPaths:  33.33% (  1/  3)[0m   [37;41mBranches:  33.33% (  1/  3)[0m   [37;41mLines:  33.33% (  1/  3)[0m
+App\Support\Materi\TemplateAksara
+  [30;43mMethods:  66.67% ( 2/ 3)[0m   [30;43mPaths:  57.14% (  4/  7)[0m   [30;42mBranches:  90.91% ( 10/ 11)[0m   [30;42mLines: 100.00% ( 10/ 10)[0m
+App\Support\Periode
+  [37;41mMethods:  40.00% ( 2/ 5)[0m   [37;41mPaths:  44.44% (  4/  9)[0m   [30;43mBranches:  61.54% (  8/ 13)[0m   [30;43mLines:  63.64% (  7/ 11)[0m
+App\Support\Progres\HasilOperasi
+  [30;42mMethods: 100.00% ( 4/ 4)[0m   [30;42mPaths: 100.00% (  4/  4)[0m   [30;42mBranches: 100.00% (  4/  4)[0m   [30;42mLines: 100.00% (  4/  4)[0m

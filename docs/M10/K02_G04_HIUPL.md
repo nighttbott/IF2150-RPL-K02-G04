@@ -246,11 +246,32 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 
 | ID Kelas | Nama Kelas | Tingkat | Alasan | Test Case Terkait |
 | :--- | :--- | :--- | :--- | :--- |
-| *C02* | *Pesanan* | *Mendalam* | *Memuat `hitungTotal()` dan transisi status pembayaran* | *C02-UT01 s.d. C02-UT08* |
-| *C03* | *Keranjang* | *Sedang* | *Delegasi sederhana ke Produk dan Pesanan* | *C03-UT01 s.d. C03-UT03, INT-TC02* |
-| *C01* | *Pelanggan* | *Tidak perlu* | *Hanya menyimpan data akun, tanpa logika* | *-* |
-| *[CXX]* | *[Nama kelas]* | *[Mendalam/Sedang/Tidak perlu]* | *[Alasan penentuan tingkat pengujian]* | *[ID test case atau -]* |
-| *...* | *...* | *...* | *...* | *...* |
+| C01 | AkunPengguna | Mendalam | Menyimpan kredensial dan menentukan hak akses per peran (keamanan, KF02, KF05): normalisasi email, cek duplikasi, verifikasi hash, tabel hak akses. | C01-UT01 s.d. C01-UT19 |
+| C02 | MateriAksara | Mendalam | Memuat validasi metadata (nama, tingkat 1–3, duplikat), filter status publikasi, dan algoritma rekomendasi materi berdasarkan ambang tuntas (Algo-040 s.d. Algo-044). | C02-UT01 s.d. C02-UT18 |
+| C03 | RiwayatLatihan | Mendalam | Memvalidasi hasil latihan (skor 0–100, status, mode) dan menghitung status progres, penguasaan, serta pola kesalahan yang menjadi dasar UC-04 dan UC-08. | C03-UT01 s.d. C03-UT27 |
+| C04 | DataFeedback | Sedang | Hanya menyimpan feedback dan memajukan status satu arah; validasi isi feedback berada di C18 FeedbackController. | C04-UT01 s.d. C04-UT04 |
+| C05 | HalamanPendaftaran | Tidak perlu | View Blade tanpa logika bisnis; validasi dilakukan di server (C15). Teruji tidak langsung lewat pengujian use case. | UC01-TC01, UC01-TC02 |
+| C06 | HalamanLogin | Tidak perlu | View Blade formulir masuk tanpa logika bisnis. | UC01-TC01 s.d. UC09-TC02 (langkah masuk), INT-TC01, INT-TC02 |
+| C07 | HalamanUtama | Tidak perlu | View Blade yang menampilkan menu sesuai peran; data disiapkan BerandaController. | UC02-TC01, INT-TC01 |
+| C08 | HalamanLatihan | Tidak perlu | View Blade dan skrip kanvas; penilaian dilakukan di server (C16). Perekaman goresan diukur pada KNF04. | UC03-TC01 s.d. UC03-TC04, KNF04-TC01 |
+| C09 | HalamanKelolaMateri | Tidak perlu | View Blade formulir materi; validasi berkas berada di C17 dan SimpanMateriRequest. | UC06-TC01, UC06-TC02 |
+| C10 | HalamanFeedback | Tidak perlu | View Blade formulir feedback; validasi di C18. | UC09-TC01, UC09-TC02, KNF05-TC01, KNF05-TC02 |
+| C11 | HalamanKelasPelajar | Tidak perlu | View Blade kelas dan tugas Pelajar tanpa logika bisnis. | UC05-TC01 s.d. UC05-TC04 |
+| C12 | HalamanKelolaKelas | Tidak perlu | View Blade pengelolaan kelas dan pemantauan; aturan berada di C20, C23–C25. | UC07-TC01 s.d. UC07-TC04, UC08-TC01 s.d. UC08-TC03 |
+| C13 | HalamanMateri | Tidak perlu | View Blade daftar dan detail materi; pemutaran audio memakai elemen Audio browser. | UC02-TC01 s.d. UC02-TC03, KNF03-TC02 |
+| C14 | HalamanProgres | Tidak perlu | View Blade progres; perhitungan berada di C19. | UC04-TC01 s.d. UC04-TC03 |
+| C15 | OtentikasiController | Mendalam | Keamanan: validasi format pendaftaran, hash kata sandi bcrypt, verifikasi login dengan pesan galat yang sama (Algo-009 s.d. Algo-012, KNF02). | C15-UT01 s.d. C15-UT09 |
+| C16 | LatihanController | Mendalam | Memuat algoritma akurasi goresan, penilaian bunyi/merangkai/transliterasi, aturan poin-streak-badge (Algo-021 s.d. Algo-027). | C16-UT01 s.d. C16-UT18 |
+| C17 | MateriController | Mendalam | Hak akses Tim Materi, validasi jenis dan ukuran berkas, transaksi simpan materi + konten + berkas dengan pembersihan saat gagal (Algo-049 s.d. Algo-055). | C17-UT01 s.d. C17-UT24 |
+| C18 | FeedbackController | Mendalam | Validasi kategori dan panjang pesan, hak akses peran, serta penanganan kegagalan simpan (KNF05, Algo-013, Algo-014). | C18-UT01 s.d. C18-UT09 |
+| C19 | ProgresController | Mendalam | Agregasi progres per Pelajar dan per kelas, rekomendasi, serta aturan akses papan peringkat (Algo-100 s.d. Algo-102). | C19-UT01 s.d. C19-UT18 |
+| C20 | KelasController | Sedang | Mengoordinasikan permintaan HTTP kelas lalu mendelegasikan aturan ke C23–C26. Pada implementasi dipecah menjadi KelasPengajarController, KelasPelajarController, dan PemantauanKelasController. | C20-UT01 s.d. C20-UT22, INT-TC10 s.d. INT-TC12 |
+| C21 | KontenMateri | Mendalam | Pemilihan versi konten yang kompatibel, pengarsipan versi, kenaikan nomor versi, dan pemeriksaan berkas audio (Algo-056 s.d. Algo-059). | C21-UT01 s.d. C21-UT15 |
+| C22 | MotivasiBelajar | Mendalam | Aturan streak harian, poin, badge tanpa duplikasi, dan peringkat dengan nilai seri (Algo-028 s.d. Algo-033). | C22-UT01 s.d. C22-UT18 |
+| C23 | KelasBelajar | Mendalam | Validasi nama kelas, pembuatan kode bergabung unik tanpa karakter ambigu, kepemilikan kelas, pengaturan papan peringkat (Algo-087 s.d. Algo-092). | C23-UT01 s.d. C23-UT17 |
+| C24 | KeanggotaanKelas | Mendalam | Transaksi bergabung (baru, sudah anggota, aktivasi ulang), perubahan status, dan kontrol akses anggota (Algo-109 s.d. Algo-112). | C24-UT01 s.d. C24-UT15 |
+| C25 | TugasKelas | Mendalam | Validasi tugas (tenggat, komponen wajib, mode sesuai jenis, materi terbit) dan transisi draf ke terbit (Algo-113 s.d. Algo-117). | C25-UT01 s.d. C25-UT12 |
+| C26 | PenyelesaianTugas | Mendalam | Aturan ketepatan waktu terhadap tenggat dan transaksi pengumpulan sekali saja (Algo-118 s.d. Algo-121); simpanPengumpulan diwujudkan oleh layanan PengumpulanTugas. | C26-UT01 s.d. C26-UT10 |
 
 ## 4.2 Pengujian Unit Kelas
 
@@ -291,6 +312,266 @@ Tabel 4.2.1b. Ringkasan Cakupan Kelas [C02]
 *[Ulangi pola 4.2.1 untuk setiap kelas bertingkat Mendalam atau Sedang.]*
 
 <br>
+
+### 4.2.1 Kelas AkunPengguna
+
+**ID Kelas:** C01  
+**Nama Kelas:** AkunPengguna  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C01AkunPenggunaTest.php`
+
+Tabel 4.2.1. Hasil Pengujian Unit Kelas C01
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C01-UT01 | `buatAkunBaru(data: DataPendaftaran)` | Normal | Data pendaftaran baru (email budi@contoh.test, username budi, peran pelajar) | Akun tersimpan di akun_pengguna dan hasil berhasil berisi id_akun | Sesuai harapan (3 asersi lulus, 174 ms) | Pass |
+| C01-UT02 | `buatAkunBaru(data: DataPendaftaran)` | Batas | Email "  Budi@Contoh.TEST  " (huruf besar dan spasi) dan nama tampilan kosong | Email disimpan dalam huruf kecil tanpa spasi; nama tampilan diisi username | Sesuai harapan (2 asersi lulus, 13 ms) | Pass |
+| C01-UT03 | `buatAkunBaru(data: DataPendaftaran)` | Negatif | Email yang sudah terdaftar dipakai lagi dengan username lain | Gagal dengan kode EMAIL_TERDAFTAR; tidak ada akun baru | Sesuai harapan (3 asersi lulus, 16 ms) | Pass |
+| C01-UT04 | `buatAkunBaru(data: DataPendaftaran)` | Negatif | Username yang sudah dipakai didaftarkan dengan email lain | Gagal dengan kode USERNAME_TERPAKAI | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C01-UT05 | `cariBerdasarkanEmail(email: String): AkunPengguna?` | Normal | Email akun yang terdaftar | Mengembalikan akun yang sesuai | Sesuai harapan (1 asersi lulus, 21 ms) | Pass |
+| C01-UT06 | `cariBerdasarkanEmail(email: String): AkunPengguna?` | Batas | Email terdaftar ditulis dengan huruf besar dan spasi di awal/akhir | Akun tetap ditemukan | Sesuai harapan (1 asersi lulus, 12 ms) | Pass |
+| C01-UT07 | `cariBerdasarkanEmail(email: String): AkunPengguna?` | Negatif | Email yang tidak terdaftar | Mengembalikan null | Sesuai harapan (1 asersi lulus, 11 ms) | Pass |
+| C01-UT08 | `cocokkanPassword(password: String): Boolean` | Normal | Kata sandi yang benar untuk akun uji | true | Sesuai harapan (1 asersi lulus, 13 ms) | Pass |
+| C01-UT09 | `cocokkanPassword(password: String): Boolean` | Batas | String kosong dan kata sandi benar dengan beda satu huruf kapital | Keduanya false | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C01-UT10 | `cocokkanPassword(password: String): Boolean` | Negatif | Kata sandi salah | false; hash tersimpan bukan teks asli | Sesuai harapan (2 asersi lulus, 13 ms) | Pass |
+| C01-UT11 | `verifikasiHakAkses(aksi: String): Boolean` | Normal | Pelajar meminta MENGERJAKAN_LATIHAN; Pengajar meminta KELOLA_KELAS | Keduanya true | Sesuai harapan (2 asersi lulus, 13 ms) | Pass |
+| C01-UT12 | `verifikasiHakAkses(aksi: String): Boolean` | Batas | Tim Materi meminta KELOLA_MATERI (satu-satunya hak) dan KIRIM_FEEDBACK | KELOLA_MATERI true, KIRIM_FEEDBACK false | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C01-UT13 | `verifikasiHakAkses(aksi: String): Boolean` | Negatif | Pelajar meminta KELOLA_KELAS; akun yang belum tersimpan meminta MENGERJAKAN_LATIHAN | Keduanya false | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C01-UT14 | `getProfil(): Profil` | Normal | Akun Pelajar "Sari" | Berisi id_akun, username, nama_tampilan, peran | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C01-UT15 | `getProfil(): Profil` | Batas | Akun dengan nama tampilan sama dengan username (nama tidak diisi saat daftar) | Profil memakai username sebagai nama tampilan | Sesuai harapan (1 asersi lulus, 13 ms) | Pass |
+| C01-UT16 | `getProfil(): Profil` | Negatif | Profil dipakai untuk tampilan publik (papan peringkat) | Tidak memuat email maupun password_hash | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C01-UT17 | `getDetailAkun(): DetailAkun` | Normal | Akun Pengajar | Profil ditambah email pemilik akun | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C01-UT18 | `getDetailAkun(): DetailAkun` | Batas | Akun dengan email yang didaftarkan berhuruf besar | Email pada detail sudah huruf kecil | Sesuai harapan (1 asersi lulus, 13 ms) | Pass |
+| C01-UT19 | `getDetailAkun(): DetailAkun` | Negatif | Objek akun kosong (belum tersimpan) | id_akun dan email bernilai null, tanpa galat | Sesuai harapan (2 asersi lulus, 11 ms) | Pass |
+
+Tabel 4.2.1b. Ringkasan Cakupan Kelas C01
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `buatAkunBaru()`, `getProfil()`, `verifikasiHakAkses()`, `getDetailAkun()`, `cariBerdasarkanEmail()`, `cocokkanPassword()` |
+| Operasi yang diuji | `buatAkunBaru()`, `cariBerdasarkanEmail()`, `cocokkanPassword()`, `getDetailAkun()`, `getProfil()`, `verifikasiHakAkses()` |
+| ID Algoritma yang tercakup | Algo-001, Algo-002 |
+| Coverage (wajib ≥ 70%) | `AkunPengguna`: baris 96.3% (79/82), cabang 81.1% (30/37)<br>Alat: Xdebug 3.5.3 (`--path-coverage`), PHP 8.5.12, PHPUnit 12.5.43, Windows; diukur dari unit test kelas ini ditambah test fitur yang memakai kelas ini. Bukti: Tabel 4.6 (C01 coverage). |
+
+### 4.2.4 Kelas DataFeedback
+
+**ID Kelas:** C04  
+**Nama Kelas:** DataFeedback  
+**Tingkat:** Sedang  
+**File test:** `src/tests/Unit/Hiupl/C04DataFeedbackTest.php`
+
+Tabel 4.2.4. Hasil Pengujian Unit Kelas C04
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C04-UT01 | `simpan(data: MasukanFeedback): HasilOperasi` | Normal | Feedback kategori fitur dari Pelajar | Berhasil; baris data_feedback berstatus baru | Sesuai harapan (1 asersi lulus, 17 ms) | Pass |
+| C04-UT02 | `simpan(data: MasukanFeedback): HasilOperasi` | Negatif | id_akun yang tidak ada di akun_pengguna (melanggar foreign key) | Gagal dengan SIMPAN_GAGAL; tidak ada baris tersimpan | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C04-UT03 | `perbaruiStatus(status: StatusFeedback): HasilOperasi` | Normal | Status baru dimajukan ke ditinjau lalu selesai | Keduanya berhasil; status akhir selesai | Sesuai harapan (3 asersi lulus, 14 ms) | Pass |
+| C04-UT04 | `perbaruiStatus(status: StatusFeedback): HasilOperasi` | Negatif | Status selesai dimundurkan ke baru; status diubah pihak lain sebelum disimpan | STATUS_TIDAK_VALID dan STATUS_BERUBAH | Sesuai harapan (2 asersi lulus, 18 ms) | Pass |
+
+### 4.2.5 Kelas OtentikasiController
+
+**ID Kelas:** C15  
+**Nama Kelas:** OtentikasiController  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C15OtentikasiControllerTest.php`
+
+Tabel 4.2.5. Hasil Pengujian Unit Kelas C15
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C15-UT01 | `verifikasiFormatData(data: DataPendaftaran)` | Normal | Kirim formulir daftar yang valid ke POST /daftar | Tidak ada galat validasi; akun dibuat | Sesuai harapan (2 asersi lulus, 278 ms) | Pass |
+| C15-UT02 | `verifikasiFormatData(data: DataPendaftaran)` | Batas | Kata sandi tepat 8 karakter (huruf + angka) dan username tepat 3 karakter | Diterima tanpa galat | Sesuai harapan (1 asersi lulus, 251 ms) | Pass |
+| C15-UT03 | `verifikasiFormatData(data: DataPendaftaran)` | Negatif | Sandi 7 karakter, sandi tanpa angka, email tidak valid, T&C tidak dicentang, peran tim_materi | Ditolak dengan galat pada isian terkait; tidak ada akun dibuat | Sesuai harapan (11 asersi lulus, 31 ms) | Pass |
+| C15-UT04 | `simpanAkun(data: DataPendaftaran): HasilOperasi` | Normal | Data Pelajar valid | Berhasil; sandi tersimpan sebagai hash bcrypt; baris motivasi_belajar dibuat | Sesuai harapan (5 asersi lulus, 477 ms) | Pass |
+| C15-UT05 | `simpanAkun(data: DataPendaftaran): HasilOperasi` | Batas | Data Pengajar valid | Berhasil tanpa baris motivasi_belajar (motivasi hanya untuk Pelajar) | Sesuai harapan (2 asersi lulus, 246 ms) | Pass |
+| C15-UT06 | `simpanAkun(data: DataPendaftaran): HasilOperasi` | Negatif | Email yang sudah terdaftar | Gagal dengan kode EMAIL_TERDAFTAR; jumlah akun tetap | Sesuai harapan (2 asersi lulus, 479 ms) | Pass |
+| C15-UT07 | `validasiLogin(email: String, password: String): HasilOperasi` | Normal | Email dan sandi akun uji yang benar | Berhasil, data berisi akun yang sesuai | Sesuai harapan (2 asersi lulus, 15 ms) | Pass |
+| C15-UT08 | `validasiLogin(email: String, password: String): HasilOperasi` | Batas | Email benar dengan huruf besar; sandi benar | Berhasil (email tidak peka huruf besar) | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C15-UT09 | `validasiLogin(email: String, password: String): HasilOperasi` | Negatif | (a) sandi salah, (b) email tidak terdaftar | Keduanya gagal dengan kode dan pesan yang sama (KREDENSIAL_SALAH) agar tidak membocorkan email terdaftar | Sesuai harapan (3 asersi lulus, 16 ms) | Pass |
+
+Tabel 4.2.5b. Ringkasan Cakupan Kelas C15
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `verifikasiFormatData()`, `simpanAkun()`, `validasiLogin()` |
+| Operasi yang diuji | `simpanAkun()`, `validasiLogin()`, `verifikasiFormatData()`<br>Catatan: hashPassword() bersifat privat dan diuji lewat simpanAkun (C15-UT04). |
+| ID Algoritma yang tercakup | Algo-009, Algo-010, Algo-011, Algo-012 |
+| Coverage (wajib ≥ 70%) | `OtentikasiController`: baris 100.0% (75/75), cabang 94.3% (33/35)<br>`DaftarRequest`: baris 100.0% (24/24), cabang 92.0% (23/25)<br>Alat: Xdebug 3.5.3 (`--path-coverage`), PHP 8.5.12, PHPUnit 12.5.43, Windows; diukur dari unit test kelas ini ditambah test fitur yang memakai kelas ini. Bukti: Tabel 4.6 (C15 coverage). |
+
+### 4.2.6 Kelas LatihanController
+
+**ID Kelas:** C16  
+**Nama Kelas:** LatihanController  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C16LatihanControllerTest.php`
+
+Tabel 4.2.6. Hasil Pengujian Unit Kelas C16
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C16-UT01 | `siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan` | Normal | Pelajar membuka GET /latihan/1/menulis | 200; soal aktif tersimpan di sesi; templat goresan tidak dikirim ke HTML | Sesuai harapan (4 asersi lulus, 77 ms) | Pass |
+| C16-UT02 | `siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan` | Batas | Halaman soal dimuat ulang (refresh) | Soal yang sama dipakai lagi (idSoal tetap) | Sesuai harapan (5 asersi lulus, 77 ms) | Pass |
+| C16-UT03 | `siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan` | Negatif | (a) tamu tanpa login; (b) Pengajar membuka latihan | (a) dialihkan ke /masuk; (b) 403 | Sesuai harapan (3 asersi lulus, 47 ms) | Pass |
+| C16-UT04 | `hitungAkurasiGoresan(goresan: List<Goresan>, templat: TemplatAksara): Decimal` | Normal | Goresan tepat di garis tengah ꦲ, ꦏ, ꦤ | Skor 100.0 | Sesuai harapan (3 asersi lulus, 115 ms) | Pass |
+| C16-UT05 | `hitungAkurasiGoresan(goresan: List<Goresan>, templat: TemplatAksara): Decimal` | Batas | Goresan kosong, satu titik, templat kosong; goresan separuh huruf | Kasus tepi: 0.0; separuh: < 70 (ambang lulus) | Sesuai harapan (4 asersi lulus, 64 ms) | Pass |
+| C16-UT06 | `hitungAkurasiGoresan(goresan: List<Goresan>, templat: TemplatAksara): Decimal` | Negatif | Menulis ꦗ untuk soal ꦲ, dan ꦕ untuk soal ꦫ | Skor < 70 (tidak lulus) | Sesuai harapan (2 asersi lulus, 87 ms) | Pass |
+| C16-UT07 | `nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian` | Normal | POST /latihan/jawaban dengan goresan sesuai templat soal | 200; status berhasil; skor ≥ 70 dihitung server | Sesuai harapan (5 asersi lulus, 105 ms) | Pass |
+| C16-UT08 | `nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian` | Batas | 51 goresan (batas 50), 2001 titik dalam satu goresan (batas 2000), koordinat x = 3.5 | 422 untuk semuanya | Sesuai harapan (5 asersi lulus, 106 ms) | Pass |
+| C16-UT09 | `nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian` | Negatif | (a) goresan jauh dari templat; (b) idSoal bukan soal aktif | (a) perlu_diulang dan riwayat tercatat; (b) 409 SOAL_TIDAK_DITEMUKAN | Sesuai harapan (5 asersi lulus, 95 ms) | Pass |
+| C16-UT10 | `nilaiJawaban (mode non-kanvas: bunyi, merangkai, transliterasi)` | Normal | Pilihan bunyi benar; urutan ubin benar; jawaban "Hana" untuk kunci "hana" | Semua benar, skor 100 | Sesuai harapan (3 asersi lulus, 42 ms) | Pass |
+| C16-UT11 | `nilaiJawaban (mode non-kanvas)` | Batas | Merangkai 3 ubin dengan 1 posisi tertukar; urutan kosong vs kunci kosong | Skor 33.33 dengan posisiSalah [1,2]; urutan kosong skor 0 | Sesuai harapan (3 asersi lulus, 41 ms) | Pass |
+| C16-UT12 | `nilaiJawaban (mode non-kanvas)` | Negatif | Bunyi tanpa pilihan (null), transliterasi kosong, merangkai kurang ubin | Semua salah | Sesuai harapan (3 asersi lulus, 39 ms) | Pass |
+| C16-UT13 | `simpanHasil(hasil: HasilLatihan): RingkasanMotivasi` | Normal | Jawaban benar lalu POST /latihan/selesai | Riwayat berhasil tersimpan; poin +10; streak 1; badge pemula | Sesuai harapan (6 asersi lulus, 105 ms) | Pass |
+| C16-UT14 | `simpanHasil(hasil: HasilLatihan): RingkasanMotivasi` | Batas | Soal yang sama diselesaikan dua kali | Riwayat bertambah tetapi poin tidak bertambah lagi (tetap 10) | Sesuai harapan (2 asersi lulus, 46 ms) | Pass |
+| C16-UT15 | `simpanHasil(hasil: HasilLatihan): RingkasanMotivasi` | Negatif | (a) POST /latihan/selesai sebelum jawaban berhasil; (b) daftar hasil kosong; (c) skor 150 | (a) 422 BELUM_BERHASIL; (b) TANPA_HASIL; (c) SIMPAN_GAGAL dan transaksi dibatalkan | Sesuai harapan (6 asersi lulus, 64 ms) | Pass |
+| C16-UT16 | `periksaBadge(streak, poin, dimiliki): List<String>` | Normal | streak 7, poin 100, belum punya badge | [pemula, konsisten_7, seratus_poin] | Sesuai harapan (1 asersi lulus, 38 ms) | Pass |
+| C16-UT17 | `periksaBadge(streak, poin, dimiliki): List<String>` | Batas | streak 6, poin 9 (tepat di bawah ambang) dan poin 10 | Poin 9: []; poin 10: [pemula] | Sesuai harapan (2 asersi lulus, 35 ms) | Pass |
+| C16-UT18 | `periksaBadge(streak, poin, dimiliki): List<String>` | Negatif | Syarat terpenuhi tetapi badge sudah dimiliki | Daftar kosong (tidak diberikan ulang) | Sesuai harapan (1 asersi lulus, 32 ms) | Pass |
+
+Tabel 4.2.6b. Ringkasan Cakupan Kelas C16
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `siapkanSoal()`, `nilaiJawaban()`, `simpanHasil()` |
+| Operasi yang diuji | `hitungAkurasiGoresan()`, `nilaiJawaban()`, `periksaBadge()`, `siapkanSoal()`, `simpanHasil()`<br>Catatan: siapkanSoal, nilaiJawaban, dan simpanHasil diuji melalui LatihanController; algoritma pembantunya (hitungAkurasiGoresan, cocokkanBunyi, validasiRangkaian, periksaBadge) diuji langsung pada kelas implementasinya. |
+| ID Algoritma yang tercakup | Algo-021, Algo-022, Algo-023, Algo-024, Algo-025, Algo-026, Algo-027 |
+| Coverage (wajib ≥ 70%) | `LatihanController`: baris 68.1% (113/166), cabang 66.0% (66/100); seluruh suite (PCOV): baris 95.8%<br>`LatihanNonKanvasController`: baris 99.3% (136/137), cabang 94.9% (56/59); seluruh suite (PCOV): baris 99.3%<br>`AkurasiGoresan`: baris 96.0% (72/75), cabang 91.7% (55/60); seluruh suite (PCOV): baris 96.0%<br>`PemeriksaBadge`: baris 100.0% (10/10), cabang 100.0% (1/1); seluruh suite (PCOV): baris 100.0%<br>`PenilaiJawaban`: baris 100.0% (15/15), cabang 100.0% (29/29); seluruh suite (PCOV): baris 100.0%<br>`PenyusunSoal`: baris 95.7% (67/70), cabang 92.7% (51/55); seluruh suite (PCOV): baris 95.7%<br>`SelesaikanLatihan`: baris 97.9% (46/47), cabang 100.0% (5/5); seluruh suite (PCOV): baris 97.9%<br>Gabungan seluruh berkas C16 dari unit test C16 (Xdebug): baris 81,8% (256/313), cabang 80,0% (156/195). Cabang `LatihanController` di bawah 70% karena aksi HTTP lain (index, hasil, ulangi, lanjut) diuji oleh test fitur `tests/Feature/Latihan`, yang tidak dapat diukur cabangnya dalam batas waktu karena perhitungan akurasi sangat lambat di bawah Xdebug; coverage baris seluruh suite 95,8%.<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C16 coverage). |
+
+### 4.2.8 Kelas FeedbackController
+
+**ID Kelas:** C18  
+**Nama Kelas:** FeedbackController  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C18FeedbackControllerTest.php`
+
+Tabel 4.2.8. Hasil Pengujian Unit Kelas C18
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C18-UT01 | `validasiFeedback(data: MasukanFeedback): HasilValidasi` | Normal | Pelajar, kategori fitur, pesan 30 karakter | Tidak ada galat | Sesuai harapan (1 asersi lulus, 11 ms) | Pass |
+| C18-UT02 | `validasiFeedback(data: MasukanFeedback): HasilValidasi` | Batas | Pesan tepat 10 dan 1.000 karakter (valid); 9 dan 1.001 karakter; 10 karakter diapit spasi | 10 dan 1.000: valid; 9 dan 1.001: galat pesan; spasi tidak dihitung | Sesuai harapan (5 asersi lulus, 10 ms) | Pass |
+| C18-UT03 | `validasiFeedback(data: MasukanFeedback): HasilValidasi` | Negatif | (a) kategori "lainnya" dan pesan kosong; (b) akun Tim Materi; (c) tanpa akun | (a) galat kategori dan pesan; (b)(c) HttpException 403 | Sesuai harapan (3 asersi lulus, 10 ms) | Pass |
+| C18-UT04 | `simpanFeedback(data: MasukanFeedback): HasilOperasi` | Normal | Pengajar mengirim kategori tampilan | Berhasil; baris data_feedback dengan id_akun Pengajar dan pesan ter-trim | Sesuai harapan (2 asersi lulus, 11 ms) | Pass |
+| C18-UT05 | `simpanFeedback(data: MasukanFeedback): HasilOperasi` | Batas | Pesan 1.000 karakter beraksara Jawa (multibyte) | Tersimpan utuh 1.000 karakter | Sesuai harapan (1 asersi lulus, 11 ms) | Pass |
+| C18-UT06 | `simpanFeedback(data: MasukanFeedback): HasilOperasi` | Negatif | (a) pesan 5 karakter; (b) tabel data_feedback tidak dapat ditulis (tabel dihapus) | (a) DATA_TIDAK_VALID; (b) SIMPAN_GAGAL dan galat tercatat di log | Sesuai harapan (3 asersi lulus, 14 ms) | Pass |
+| C18-UT07 | `kirimKonfirmasi(hasil: HasilOperasi): void` | Normal | HasilOperasi sukses | berhasil true dengan pesan "Feedback terkirim. Matur nuwun!" | Sesuai harapan (1 asersi lulus, 9 ms) | Pass |
+| C18-UT08 | `kirimKonfirmasi(hasil: HasilOperasi): void` | Negatif | HasilOperasi gagal SIMPAN_GAGAL | berhasil false; pesan meminta mencoba lagi dan menyatakan isian tidak hilang | Sesuai harapan (2 asersi lulus, 9 ms) | Pass |
+| C18-UT09 | `kirimKonfirmasi(hasil: HasilOperasi): void` | Batas | Alur HTTP POST /feedback saat penyimpanan gagal | Kembali ke formulir dengan pesan galat dan isian lama dipertahankan (old input) | Sesuai harapan (4 asersi lulus, 14 ms) | Pass |
+
+Tabel 4.2.8b. Ringkasan Cakupan Kelas C18
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `validasiFeedback()`, `simpanFeedback()`, `kirimKonfirmasi()` |
+| Operasi yang diuji | `kirimKonfirmasi()`, `simpanFeedback()`, `validasiFeedback()` |
+| ID Algoritma yang tercakup | Algo-013, Algo-014 |
+| Coverage (wajib ≥ 70%) | `FeedbackController`: baris 100.0% (36/36), cabang 93.9% (31/33)<br>Alat: Xdebug 3.5.3 (`--path-coverage`), PHP 8.5.12, PHPUnit 12.5.43, Windows; diukur dari unit test kelas ini ditambah test fitur yang memakai kelas ini. Bukti: Tabel 4.6 (C18 coverage). |
+
+### 4.2.10 Kelas KelasController
+
+**ID Kelas:** C20  
+**Nama Kelas:** KelasController  
+**Tingkat:** Sedang  
+**File test:** `src/tests/Unit/Hiupl/C20KelasControllerTest.php`
+
+Tabel 4.2.10. Hasil Pengujian Unit Kelas C20
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C20-UT01 | `buatKelas(data: DataKelas): HasilOperasi` | Normal | Pengajar POST /pengajar/kelas nama "Aksara Jawa Dasar" | Redirect ke daftar kelas dengan pesan sukses; kelas tersimpan | Sesuai harapan (4 asersi lulus, 22 ms) | Pass |
+| C20-UT02 | `buatKelas(data: DataKelas): HasilOperasi` | Negatif | Nama kosong; Pelajar membuat kelas | Galat isian nama; 403 | Sesuai harapan (3 asersi lulus, 20 ms) | Pass |
+| C20-UT03 | `validasiKodeBergabung(kode) + gabungkanPelajar(idKelas): HasilOperasi` | Normal | Pelajar POST /pelajar/kelas/gabung dengan kode huruf kecil yang benar | Redirect ke halaman kelas; keanggotaan aktif | Sesuai harapan (3 asersi lulus, 26 ms) | Pass |
+| C20-UT04 | `validasiKodeBergabung(kode: String): HasilOperasi` | Negatif | Kode "ZZZZZZ" (tidak terdaftar) dan "AB-12" (format salah) | Galat isian kode; tidak ada keanggotaan (UC05 Alternatif 3) | Sesuai harapan (5 asersi lulus, 21 ms) | Pass |
+| C20-UT05 | `gantiKodeKelas(idKelas: Integer): HasilOperasi` | Normal | Pemilik POST ganti-kode | Kode berubah; pesan sukses berisi kode baru | Sesuai harapan (2 asersi lulus, 18 ms) | Pass |
+| C20-UT06 | `gantiKodeKelas(idKelas: Integer): HasilOperasi` | Negatif | Pengajar lain mengganti kode | 403; kode tetap | Sesuai harapan (2 asersi lulus, 18 ms) | Pass |
+| C20-UT07 | `kelolaAnggota(idKelas, idPelajar, status): HasilOperasi` | Normal | Pemilik mengeluarkan anggota aktif | Status keanggotaan nonaktif; anggota kehilangan akses halaman kelas (404, kelas disembunyikan) | Sesuai harapan (3 asersi lulus, 24 ms) | Pass |
+| C20-UT08 | `kelolaAnggota(idKelas, idPelajar, status): HasilOperasi` | Negatif | Mengeluarkan Pelajar yang bukan anggota | Galat "bukan anggota kelas ini" | Sesuai harapan (2 asersi lulus, 19 ms) | Pass |
+| C20-UT09 | `aturScoreboard(idKelas: Integer, aktif: Boolean): HasilOperasi` | Normal | Pemilik mengaktifkan scoreboard | status_scoreboard true | Sesuai harapan (1 asersi lulus, 18 ms) | Pass |
+| C20-UT10 | `aturScoreboard(idKelas: Integer, aktif: Boolean): HasilOperasi` | Negatif | Nilai aktif "mungkin" (bukan boolean) | Galat validasi isian aktif | Sesuai harapan (2 asersi lulus, 19 ms) | Pass |
+| C20-UT11 | `buatTugas + terbitkanTugas(idKelas, data: DataTugas): HasilOperasi` | Normal | Pemilik mengirim instruksi, tenggat besok, satu komponen latihan menulis wajib | Tugas berstatus terbit | Sesuai harapan (2 asersi lulus, 35 ms) | Pass |
+| C20-UT12 | `buatTugas + terbitkanTugas(idKelas, data: DataTugas): HasilOperasi` | Negatif | Tenggat kemarin dan tanpa komponen | Galat tenggat dan komponen; tidak ada tugas | Sesuai harapan (4 asersi lulus, 21 ms) | Pass |
+| C20-UT13 | `ambilProgresAnggota(idKelas, idPelajar): Data` | Normal | Pemilik meminta progres anggota aktif dengan satu riwayat | Berhasil; ringkasan jumlahLatihan 1 | Sesuai harapan (1 asersi lulus, 20 ms) | Pass |
+| C20-UT14 | `ambilProgresAnggota(idKelas, idPelajar): Data` | Negatif | Pelajar bukan anggota aktif | BUKAN_ANGGOTA_AKTIF (UC08 Alternatif 2) | Sesuai harapan (1 asersi lulus, 21 ms) | Pass |
+| C20-UT15 | `kirimUmpanBalik(idKelas, data: DataUmpanBalik): HasilOperasi` | Normal | Pemilik mengirim pesan ke anggota aktif | Pesan tersimpan di data_feedback untuk anggota tersebut | Sesuai harapan (2 asersi lulus, 19 ms) | Pass |
+| C20-UT16 | `kirimUmpanBalik(idKelas, data: DataUmpanBalik): HasilOperasi` | Negatif | Pesan kosong; penerima bukan anggota | Galat isian pesan; tidak ada data tersimpan | Sesuai harapan (5 asersi lulus, 21 ms) | Pass |
+| C20-UT17 | `ambilKelasPengajar() + ambilDaftarAnggota(idKelas)` | Normal | Pemilik membuka /pengajar/kelas dan /pengajar/kelas/{id}/anggota | 200; nama kelas dan nama anggota aktif tampil | Sesuai harapan (4 asersi lulus, 35 ms) | Pass |
+| C20-UT18 | `ambilKelasPengajar() + ambilDaftarAnggota(idKelas)` | Negatif | Pengajar lain membuka daftar anggota; Pelajar membuka daftar kelas Pengajar | 403 untuk keduanya | Sesuai harapan (2 asersi lulus, 22 ms) | Pass |
+| C20-UT19 | `ambilTugasAktif(idKelas) + bukaTugas(idKelas, idTugas)` | Normal | Anggota membuka halaman kelas dan detail tugas terbit | 200; instruksi tugas tampil | Sesuai harapan (4 asersi lulus, 39 ms) | Pass |
+| C20-UT20 | `ambilTugasAktif(idKelas) + bukaTugas(idKelas, idTugas)` | Negatif | Bukan anggota membuka kelas; anggota membuka ID tugas yang tidak ada | 404 untuk keduanya | Sesuai harapan (2 asersi lulus, 23 ms) | Pass |
+| C20-UT21 | `simpanPengumpulan(idKelas, idTugas)` | Normal | Anggota menyelesaikan komponen materi lalu POST kumpulkan | Pesan sukses; penyelesaian_tugas tepat_waktu | Sesuai harapan (2 asersi lulus, 33 ms) | Pass |
+| C20-UT22 | `simpanPengumpulan(idKelas, idTugas)` | Negatif | Pengajar mencoba POST kumpulkan | 403; tidak ada penyelesaian | Sesuai harapan (2 asersi lulus, 17 ms) | Pass |
+
+### 4.2.13 Kelas KelasBelajar
+
+**ID Kelas:** C23  
+**Nama Kelas:** KelasBelajar  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C23KelasBelajarTest.php`
+
+Tabel 4.2.13. Hasil Pengujian Unit Kelas C23
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C23-UT01 | `simpan(data: DataKelas): HasilOperasi` | Normal | Nama "Kelas 7A" dan pemilik Pengajar | Berhasil; kelas aktif dengan kode 6 karakter dan scoreboard nonaktif | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C23-UT02 | `simpan(data: DataKelas): HasilOperasi` | Batas | Nama tepat 100 karakter, dan nama 101 karakter | 100 karakter diterima; 101 karakter NAMA_TIDAK_VALID | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C23-UT03 | `simpan(data: DataKelas): HasilOperasi` | Negatif | Nama berisi spasi saja; pemilik kosong | NAMA_TIDAK_VALID dan PEMILIK_TIDAK_VALID; tidak ada kelas tersimpan | Sesuai harapan (3 asersi lulus, 12 ms) | Pass |
+| C23-UT04 | `buatKodeBergabung(): String` | Normal | Dipanggil 50 kali | Setiap kode 6 karakter dari alfabet tanpa huruf/angka ambigu (I, O, 0, 1) | Sesuai harapan (50 asersi lulus, 16 ms) | Pass |
+| C23-UT05 | `buatKodeBergabung(): String` | Batas | Kode yang sudah dipakai kelas lain ada di basis data | Kode baru tidak sama dengan kode yang sudah tersimpan | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C23-UT06 | `gantiKodeBergabung(idPengajar: Integer): HasilOperasi` | Normal | Pemilik kelas mengganti kode | Berhasil; kode di basis data berubah dan kode lama tidak berlaku | Sesuai harapan (3 asersi lulus, 14 ms) | Pass |
+| C23-UT07 | `gantiKodeBergabung(idPengajar: Integer): HasilOperasi` | Batas | Pemilik mengganti kode pada kelas yang sudah diarsipkan | TIDAK_DITEMUKAN | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C23-UT08 | `gantiKodeBergabung(idPengajar: Integer): HasilOperasi` | Negatif | Pengajar lain (bukan pemilik) mengganti kode | AKSES_DITOLAK; kode tidak berubah | Sesuai harapan (2 asersi lulus, 15 ms) | Pass |
+| C23-UT09 | `periksaPemilik(idPengajar: Integer): Boolean` | Normal | ID pemilik kelas | true | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C23-UT10 | `periksaPemilik(idPengajar: Integer): Boolean` | Batas | null (sesi tanpa akun) | false | Sesuai harapan (1 asersi lulus, 13 ms) | Pass |
+| C23-UT11 | `periksaPemilik(idPengajar: Integer): Boolean` | Negatif | ID Pengajar lain | false | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C23-UT12 | `aturScoreboard(aktif: Boolean): HasilOperasi` | Normal | Aktifkan papan peringkat | Berhasil; statusScoreboard aktif dan kolom bernilai true | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C23-UT13 | `aturScoreboard(aktif: Boolean): HasilOperasi` | Batas | Aktifkan dua kali lalu nonaktifkan | Tetap berhasil (idempoten); status akhir nonaktif | Sesuai harapan (2 asersi lulus, 15 ms) | Pass |
+| C23-UT14 | `aturScoreboard(aktif: Boolean): HasilOperasi` | Negatif | Objek kelas yang tidak valid (tanpa nama dan pemilik, gagal disimpan) | GAGAL_SIMPAN | Sesuai harapan (1 asersi lulus, 12 ms) | Pass |
+| C23-UT15 | `daftarKelasPengajar(idPengajar: Integer): List` | Normal | Pengajar memiliki dua kelas aktif (B dan A) | Dua kelas urut nama (A, B) | Sesuai harapan (1 asersi lulus, 13 ms) | Pass |
+| C23-UT16 | `daftarKelasPengajar(idPengajar: Integer): List` | Batas | Satu kelas aktif dan satu kelas arsip | Hanya kelas aktif | Sesuai harapan (1 asersi lulus, 20 ms) | Pass |
+| C23-UT17 | `daftarKelasPengajar(idPengajar: Integer): List` | Negatif | Pengajar lain tanpa kelas | Daftar kosong (kelas Pengajar lain tidak terlihat) | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+
+Tabel 4.2.13b. Ringkasan Cakupan Kelas C23
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `validasiKode()`, `gabungkanPelajar()`, `gantiKodeBergabung()`, `finalisasiTugas()`, `periksaPemilik()`, `ambilDaftarTugas()`, `bukaTugas()`, `simpan()`, `buatKodeBergabung()`, `daftarKelasPengajar()`, `aturScoreboard()` |
+| Operasi yang diuji | `aturScoreboard()`, `buatKodeBergabung()`, `daftarKelasPengajar()`, `gantiKodeBergabung()`, `periksaPemilik()`, `simpan()`<br>Catatan: validasiKode, gabungkanPelajar, ambilDaftarTugas, bukaTugas, dan finalisasiTugas pada DPPL diwujudkan oleh KeanggotaanKelas (C24-UT01 s.d. C24-UT03), KelasPelajarController (C20-UT03, C20-UT04, C20-UT19, C20-UT20), dan PengumpulanTugas (C26-UT04 s.d. C26-UT06). |
+| ID Algoritma yang tercakup | Algo-087, Algo-088, Algo-089, Algo-090, Algo-091, Algo-092, Algo-093, Algo-094, Algo-095, Algo-096, Algo-097 |
+| Coverage (wajib ≥ 70%) | `KelasBelajar`: baris 81.4% (48/59), method 57.1% (4/7)<br>Alat: Xdebug 3.5.3 (`xdebug.mode=coverage`), PHP 8.3.36, PHPUnit 12.5.43, Windows. Bukti: Tabel 4.6 (C23 coverage). |
+
+### 4.2.15 Kelas TugasKelas
+
+**ID Kelas:** C25  
+**Nama Kelas:** TugasKelas  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C25TugasKelasTest.php`
+
+Tabel 4.2.15. Hasil Pengujian Unit Kelas C25
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C25-UT01 | `simpan(data: DataTugas): HasilOperasi` | Normal | Instruksi, tenggat 3 hari lagi, satu komponen latihan wajib | drafDisimpan; tugas berstatus draf dengan 1 komponen | Sesuai harapan (2 asersi lulus, 19 ms) | Pass |
+| C25-UT02 | `simpan(data: DataTugas): HasilOperasi` | Batas | Komponen materi (mode null) + latihan tidak wajib, satu komponen wajib; tenggat 1 menit lagi | drafDisimpan dengan 2 komponen | Sesuai harapan (2 asersi lulus, 19 ms) | Pass |
+| C25-UT03 | `simpan(data: DataTugas): HasilOperasi` | Negatif | (a) tenggat sudah lewat; (b) tanpa komponen wajib; (c) mode latihan tidak dikenal; (d) materi masih draf; (e) kelas diarsipkan | dataTidakValid untuk (a)–(d), kelasTidakAktif untuk (e); tidak ada tugas tersimpan | Sesuai harapan (6 asersi lulus, 24 ms) | Pass |
+| C25-UT04 | `terbitkan(): HasilOperasi` | Normal | Draf valid diterbitkan | tugasDiterbitkan; status terbit; muncul di ambilTugasAktif | Sesuai harapan (2 asersi lulus, 22 ms) | Pass |
+| C25-UT05 | `terbitkan(): HasilOperasi` | Batas | Tugas yang sudah terbit diterbitkan lagi | sudahTerbit (idempoten, tidak galat) | Sesuai harapan (1 asersi lulus, 22 ms) | Pass |
+| C25-UT06 | `terbitkan(): HasilOperasi` | Negatif | (a) draf tanpa komponen; (b) draf yang tenggatnya sudah lewat; (c) objek tugas belum tersimpan | KOMPONEN_KOSONG, dataTidakValid, tugasTidakDitemukan; status tetap draf | Sesuai harapan (4 asersi lulus, 26 ms) | Pass |
+| C25-UT07 | `ambilTugasAktif(idKelas: Integer): List` | Normal | Dua tugas terbit dengan tenggat berbeda | Urut tenggat terdekat | Sesuai harapan (1 asersi lulus, 28 ms) | Pass |
+| C25-UT08 | `ambilTugasAktif(idKelas: Integer): List` | Batas | Kelas hanya punya draf | Daftar kosong (draf tidak terlihat Pelajar) | Sesuai harapan (1 asersi lulus, 21 ms) | Pass |
+| C25-UT09 | `ambilDetail(idKelas: Integer, idTugas: Integer): TugasKelas?` | Negatif | ID tugas dari kelas lain | null | Sesuai harapan (2 asersi lulus, 23 ms) | Pass |
+| C25-UT10 | `ambilDetail(idKelas: Integer, idTugas: Integer): TugasKelas?` | Normal | Tugas terbit pada kelas yang benar | Tugas beserta komponennya | Sesuai harapan (1 asersi lulus, 22 ms) | Pass |
+| C25-UT11 | `ambilDetail(idKelas: Integer, idTugas: Integer): TugasKelas?` | Batas | Tugas masih draf | null (draf belum boleh dibuka Pelajar) | Sesuai harapan (1 asersi lulus, 18 ms) | Pass |
+| C25-UT12 | `ambilTugasAktif(idKelas: Integer): List` | Negatif | Tugas terbit milik kelas lain | Tidak ikut dalam daftar kelas ini | Sesuai harapan (1 asersi lulus, 29 ms) | Pass |
+
+Tabel 4.2.15b. Ringkasan Cakupan Kelas C25
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `ambilTugasAktif()`, `terbitkan()`, `verifikasiDanSimpan()`, `ambilStatus()`, `ambilDetail()`, `simpan()` |
+| Operasi yang diuji | `ambilDetail()`, `ambilTugasAktif()`, `simpan()`, `terbitkan()`<br>Catatan: verifikasiDanSimpan dan periksaKomponenWajib diwujudkan oleh PengumpulanTugas (C26-UT04 s.d. C26-UT06); ambilStatus diwujudkan oleh PenyelesaianTugas (C26-UT07 s.d. C26-UT10). |
+| ID Algoritma yang tercakup | Algo-113, Algo-114, Algo-115, Algo-116, Algo-117 |
+| Coverage (wajib ≥ 70%) | `TugasKelas`: baris 86.0% (98/114), method 71.4% (5/7)<br>Alat: Xdebug 3.5.3 (`xdebug.mode=coverage`), PHP 8.3.36, PHPUnit 12.5.43, Windows. Bukti: Tabel 4.6 (C25 coverage). |
 
 ## 4.3 Pengujian Integrasi
 
@@ -358,6 +639,32 @@ Tabel 4.4.1. Hasil Pengujian Use Case [UC01]
 
 <br>
 
+### 4.4.1 Use Case Melakukan Pendaftaran Akun
+
+**ID Use Case:** UC-01  
+**Nama Use Case:** Melakukan Pendaftaran Akun
+
+Tabel 4.4.1. Hasil Pengujian Use Case UC-01
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC01-TC01 | KF01, KF04, KF05, KF06, KF07 | Normal | 1. Buka halaman Daftar (I-01).<br>2. Pilih peran Pelajar.<br>3. Isi email, username, kata sandi.<br>4. Centang persetujuan T&C.<br>5. Tekan "Daftar". | Peran: Pelajar<br>Email: dewi.e2e@ngaksara.test<br>Username: dewi_e2e<br>Sandi: Rahasia123 | Akun tersimpan dengan sandi ter-hash dan pengguna diarahkan ke halaman Masuk dengan pesan berhasil. | Akun tersimpan, diarahkan ke /masuk; password_hash diawali $2y$12$. Bukti: Gambar UC01-TC01. | Pass |
+| UC01-TC02 | KF04 | Alternatif 1: Kredensial tidak valid | 1. Buka halaman Daftar.<br>2. Isi email yang sudah terdaftar.<br>3. Centang T&C lalu tekan "Daftar". | Email: pelajar@ngaksara.test (sudah ada)<br>Username: sari_baru<br>Sandi: Rahasia123 | Pendaftaran ditolak, tetap di halaman Daftar, pesan "Email sudah terdaftar" tampil dan isian lain dipertahankan. | Tetap di halaman daftar, pesan: "Email sudah terdaftar. Gunakan email lain atau masuk dengan akun yang ada.". Bukti: Gambar UC01-TC02. | Pass |
+
+### 4.4.3 Use Case Mengerjakan Latihan Aksara
+
+**ID Use Case:** UC-03  
+**Nama Use Case:** Mengerjakan Latihan Aksara
+
+Tabel 4.4.3. Hasil Pengujian Use Case UC-03
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC03-TC01 | KF10, KF11, KF12, KF14 | Normal | 1. Masuk sebagai Pelajar.<br>2. Buka latihan menulis materi 1 (outline aktif).<br>3. Gambar aksara target mengikuti bentuk templat.<br>4. Tekan "Periksa", lalu "Selesaikan". | Akun: budi@ngaksara.test<br>Goresan: titik-titik garis tengah templat aksara target | Umpan balik "Bagus!" dengan akurasi ≥ 70%, lalu halaman hasil menampilkan skor, poin, dan streak. | Aksara ꦕ: Akurasi 100%.; hasil latihan, poin, dan streak tampil. Bukti: Gambar UC03-TC01. | Pass |
+| UC03-TC02 | KF21 | Alternatif 1: Latihan bunyi | 1. Masuk sebagai Pelajar.<br>2. Buka latihan bunyi materi 1.<br>3. Pilih satu jawaban untuk setiap soal.<br>4. Tekan "Kirim jawaban". | Akun: wulan@ngaksara.test<br>Jawaban: opsi pertama setiap soal | Jawaban dinilai di server dan halaman hasil menampilkan benar/salah per soal beserta skor. | 5 soal bunyi dijawab; halaman hasil tampil dengan skor per soal. Bukti: Gambar UC03-TC02. | Pass |
+| UC03-TC03 | KF22 | Alternatif 2: Latihan merangkai | 1. Buka latihan merangkai materi 1.<br>2. Tekan ubin aksara sesuai urutan yang dipilih.<br>3. Tekan "Kirim jawaban". | Urutan ubin: sesuai urutan tampil | Rangkaian dievaluasi; halaman hasil menandai posisi yang salah dan menampilkan skor. | Ubin dirangkai lalu dikirim; posisi salah ditandai di halaman hasil. Bukti: Gambar UC03-TC03. | Pass |
+| UC03-TC04 | KF12 | Alternatif 3: Hasil gambar kurang akurat | 1. Buka latihan menulis materi 1.<br>2. Gambar garis pendek yang tidak sesuai bentuk aksara.<br>3. Tekan "Periksa".<br>4. Tekan "Ulangi". | Goresan: satu garis pendek di pojok kiri atas kanvas | Status "Belum tepat" dengan pesan "Tulis lebih dekat ke garis bantu."; tombol Ulangi menghapus goresan tanpa mengganti soal. | Umpan balik "Akurasi 0%. Tulis lebih dekat ke garis bantu."; tombol Ulangi menghapus goresan, soal tetap. Bukti: Gambar UC03-TC04. | Pass |
+
 ### 4.4.7 Use Case Menyiapkan Pembelajaran Kelas
 
 **ID Use Case:** UC-07  
@@ -372,6 +679,18 @@ Tabel 4.4.7. Hasil Pengujian Use Case UC-07
 | UC07-TC03 | KF02, KF25 | Alternatif 2: Mengeluarkan anggota | 1. Masuk sebagai pemilik kelas K7M2QX.<br>2. Buka Anggota, tekan "Keluarkan" pada Sari.<br>3. Konfirmasi "Ya, keluarkan". | Anggota: Sari | Dialog konfirmasi tampil; Sari tidak lagi aktif dan kehilangan akses kelas. | Dialog konfirmasi tampil; Sari dikeluarkan (status nonaktif). Bukti: Gambar UC07-TC03. | Pass |
 | UC07-TC04 | KF24, KF25 | Alternatif 3: Mengaktifkan papan peringkat | 1. Masuk sebagai pemilik kelas.<br>2. Buka Anggota, nyalakan sakelar Papan peringkat. | Kelas: Kelas Uji HIUPL | Status papan peringkat kelas menjadi aktif. | Sakelar papan peringkat aktif; status_scoreboard = 1. Bukti: Gambar UC07-TC04. | Pass |
 
+### 4.4.9 Use Case Menyampaikan Feedback
+
+**ID Use Case:** UC-09  
+**Nama Use Case:** Menyampaikan Feedback
+
+Tabel 4.4.9. Hasil Pengujian Use Case UC-09
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC09-TC01 | KF18, KF19, KF20 | Normal | 1. Masuk sebagai Pelajar.<br>2. Buka Feedback, pilih kategori Fitur, isi pesan.<br>3. Tekan "Kirim". | Pesan: "Tolong tambahkan latihan aksara Bali juga." | Pesan "Feedback terkirim. Matur nuwun!" tampil dan formulir kosong kembali. | Pesan "Feedback terkirim. Matur nuwun!" tampil; formulir kosong. Bukti: Gambar UC09-TC01. | Pass |
+| UC09-TC02 | KF17, KF18 | Alternatif 1: Feedback gagal terkirim | 1. Masuk sebagai Pelajar dan isi formulir Feedback.<br>2. Tabel data_feedback dibuat tidak dapat ditulis (simulasi galat basis data).<br>3. Tekan "Kirim". | Pesan: "Audio materi kedua tidak bisa diputar." | Pesan "Feedback gagal terkirim ... Isi pesanmu tidak hilang." tampil, isian tetap, galat tercatat di log. | Basis data gagal menulis -> pesan gagal tampil dan isi pesan tidak hilang. Bukti: Gambar UC09-TC02. | Pass |
+
 ## 4.5 Pengujian Kebutuhan Non-Fungsional (KNF)
 
 Setiap KNF pada Tabel 3.2 SKPL diuji secara terukur berdasarkan parameter yang telah didefinisikan. Setiap pengujian memuat target terukur, metode dan alat yang sesuai dengan parameter (misalnya Chrome DevTools untuk *response time* dan inspeksi basis data untuk *security*), serta hasil aktual berupa angka atau data. KNF yang belum dipenuhi atau tidak diimplementasikan dicantumkan beserta alasan dan rencana perbaikan.
@@ -380,6 +699,13 @@ Tabel 4.5. Hasil Pengujian KNF
 
 | ID Pengujian | ID KNF | Parameter | Target Terukur | Metode dan Alat | Hasil Aktual | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| KNF01-TC01 | KNF01 | Maintainability | Setiap kegagalan login dan kegagalan simpan tercatat di berkas log dengan waktu dan level; data pribadi (email) tidak ikut tertulis | PHPUnit `KnfTest::test_knf01_tc01_log`: picu login gagal dan galat basis data, lalu baca berkas log (`storage/logs`) | 2 entri tercatat: `[2026-11-20 01:51:58] testing.WARNING: Login gagal {"ip":"127.0.0.1"} ` dan `[2026-11-20 01:51:58] testing.ERROR: Feedback gagal disimpan {"id_akun":1} `; email tidak muncul | Pass |
+| KNF01-TC02 | KNF01 | Maintainability | Penolakan akses pemantauan tercatat sebagai WARNING | PHPUnit `KnfTest::test_knf01_tc02_log_penolakan` | Entri "Pemantauan ditolak: bukan anggota aktif" tertulis di log | Pass |
+| KNF02-TC01 | KNF02 | Security | Kolom `password_hash` berisi hash adaptif bersalt (bcrypt, cost ≥ 10), bukan teks asli | Daftar akun lewat HTTP lalu inspeksi tabel `akun_pengguna` dengan `password_get_info()` | Algoritma bcrypt, cost 12, awalan `$2y$12$`, panjang 60 karakter; teks "Rahasia123" tidak ditemukan di tabel | Pass |
+| KNF02-TC02 | KNF02 | Security | Sandi sama menghasilkan hash berbeda; hash tidak dapat dipakai sebagai sandi | Dua akun dengan sandi sama, lalu login memakai nilai hash | Hash kedua akun berbeda (salt unik); login dengan hash ditolak | Pass |
+| KNF04-TC01 | KNF04 | Response time | Jeda dari event `pointermove` sampai segmen goresan digambar di kanvas ≤ 50 ms | Chromium (Playwright) pada I-07: skrip pengukur membandingkan `event.timeStamp` dengan `performance.now()` saat `stroke()` dipanggil; 209 segmen dari UC03-TC01 dan UC05-TC01 | Median 12.5 ms, p95 13.6 ms, maks 13.9 ms | Pass |
+| KNF05-TC01 | KNF05 | Reliability | Feedback valid tersimpan dan konfirmasi tampil | PHPUnit `KnfTest::test_knf05_tc01_terkirim` + UC09-TC01 di browser | Pesan "Feedback terkirim. Matur nuwun!" tampil; 1 baris tersimpan di `data_feedback` | Pass |
+| KNF05-TC02 | KNF05 | Reliability | Saat penyimpanan gagal, pesan galat tampil dan isi pesan tidak hilang | PHPUnit `KnfTest::test_knf05_tc02_gagal` (tabel dihapus) + UC09-TC02 di browser (tabel diganti nama sementara) | Pesan "Feedback gagal terkirim. Periksa koneksi lalu coba lagi. Isi pesanmu tidak hilang." tampil, isian tetap | Pass |
 | *KNF01-TC01* | *KNF01* | *Reliability* | *Tidak ada data hilang/ganda saat jaringan putus di tengah transaksi* | *Simulasi putus koneksi saat bayar, lalu cek status di DB* | *[Hasil aktual]* | *Pass/Fail* |
 | *KNF02-TC01* | *KNF02* | *Security* | *Password tersimpan sebagai hash, bukan plain-text* | *Inspeksi tabel pengguna di DB* | *[...]* | *Pass/Fail* |
 | *KNFXX-TC01* | *KNFXX* | *Response time* | *Halaman tampil ≤ 4 detik* | *Chrome DevTools, 5 kali ukur, ambil rata-rata* | *[Rata-rata ... detik, maks ... detik]* | *Pass/Fail* |
