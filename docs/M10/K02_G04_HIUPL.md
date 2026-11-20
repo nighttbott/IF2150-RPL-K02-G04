@@ -1083,7 +1083,7 @@ Tabel 4.6. Bukti Hasil Pengujian
 
 | ID Pengujian | Bukti Hasil Pengujian |
 | :--- | :--- |
-| C01-UT01 – C01-UT19 | <img src="./assets/bukti/unit-c01.png" alt="Keluaran PHPUnit C01" width="600"> |
+| C01-UT01 – C01-UT19 | <img src="./assets/bukti/unit-C01.png" alt="Keluaran PHPUnit C01" width="600"> |
 | C01 (coverage) | <img src="./assets/bukti/coverage-C01.png" alt="Coverage C01" width="600"> |
 | C02-UT01 – C02-UT18 | <img src="./assets/bukti/unit-C02.png" alt="Keluaran PHPUnit C02" width="600"> |
 | C02 (coverage) | <img src="./assets/bukti/coverage-C02.png" alt="Coverage C02" width="600"> |
