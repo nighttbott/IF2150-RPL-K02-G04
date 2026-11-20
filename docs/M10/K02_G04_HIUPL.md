@@ -399,6 +399,45 @@ Tabel 4.2.5b. Ringkasan Cakupan Kelas C15
 | ID Algoritma yang tercakup | Algo-009, Algo-010, Algo-011, Algo-012 |
 | Coverage (wajib ≥ 70%) | `OtentikasiController`: baris 100.0% (75/75), cabang 96.9% (31/32); seluruh suite (PCOV): baris 100.0%<br>`DaftarRequest`: baris 100.0% (24/24), cabang 100.0% (19/19); seluruh suite (PCOV): baris 100.0%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C15 coverage). |
 
+### 4.2.6 Kelas LatihanController
+
+**ID Kelas:** C16  
+**Nama Kelas:** LatihanController  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C16LatihanControllerTest.php`
+
+Tabel 4.2.6. Hasil Pengujian Unit Kelas C16
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C16-UT01 | `siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan` | Normal | Pelajar membuka GET /latihan/1/menulis | 200; soal aktif tersimpan di sesi; templat goresan tidak dikirim ke HTML | Sesuai harapan (4 asersi lulus, 77 ms) | Pass |
+| C16-UT02 | `siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan` | Batas | Halaman soal dimuat ulang (refresh) | Soal yang sama dipakai lagi (idSoal tetap) | Sesuai harapan (5 asersi lulus, 77 ms) | Pass |
+| C16-UT03 | `siapkanSoal(idMateri: Integer, mode: ModeLatihan): SoalLatihan` | Negatif | (a) tamu tanpa login; (b) Pengajar membuka latihan | (a) dialihkan ke /masuk; (b) 403 | Sesuai harapan (3 asersi lulus, 47 ms) | Pass |
+| C16-UT04 | `hitungAkurasiGoresan(goresan: List<Goresan>, templat: TemplatAksara): Decimal` | Normal | Goresan tepat di garis tengah ꦲ, ꦏ, ꦤ | Skor 100.0 | Sesuai harapan (3 asersi lulus, 115 ms) | Pass |
+| C16-UT05 | `hitungAkurasiGoresan(goresan: List<Goresan>, templat: TemplatAksara): Decimal` | Batas | Goresan kosong, satu titik, templat kosong; goresan separuh huruf | Kasus tepi: 0.0; separuh: < 70 (ambang lulus) | Sesuai harapan (4 asersi lulus, 64 ms) | Pass |
+| C16-UT06 | `hitungAkurasiGoresan(goresan: List<Goresan>, templat: TemplatAksara): Decimal` | Negatif | Menulis ꦗ untuk soal ꦲ, dan ꦕ untuk soal ꦫ | Skor < 70 (tidak lulus) | Sesuai harapan (2 asersi lulus, 87 ms) | Pass |
+| C16-UT07 | `nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian` | Normal | POST /latihan/jawaban dengan goresan sesuai templat soal | 200; status berhasil; skor ≥ 70 dihitung server | Sesuai harapan (5 asersi lulus, 105 ms) | Pass |
+| C16-UT08 | `nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian` | Batas | 51 goresan (batas 50), 2001 titik dalam satu goresan (batas 2000), koordinat x = 3.5 | 422 untuk semuanya | Sesuai harapan (5 asersi lulus, 106 ms) | Pass |
+| C16-UT09 | `nilaiJawaban(jawaban: JawabanLatihan): HasilPenilaian` | Negatif | (a) goresan jauh dari templat; (b) idSoal bukan soal aktif | (a) perlu_diulang dan riwayat tercatat; (b) 409 SOAL_TIDAK_DITEMUKAN | Sesuai harapan (5 asersi lulus, 95 ms) | Pass |
+| C16-UT10 | `nilaiJawaban (mode non-kanvas: bunyi, merangkai, transliterasi)` | Normal | Pilihan bunyi benar; urutan ubin benar; jawaban "Hana" untuk kunci "hana" | Semua benar, skor 100 | Sesuai harapan (3 asersi lulus, 42 ms) | Pass |
+| C16-UT11 | `nilaiJawaban (mode non-kanvas)` | Batas | Merangkai 3 ubin dengan 1 posisi tertukar; urutan kosong vs kunci kosong | Skor 33.33 dengan posisiSalah [1,2]; urutan kosong skor 0 | Sesuai harapan (3 asersi lulus, 41 ms) | Pass |
+| C16-UT12 | `nilaiJawaban (mode non-kanvas)` | Negatif | Bunyi tanpa pilihan (null), transliterasi kosong, merangkai kurang ubin | Semua salah | Sesuai harapan (3 asersi lulus, 39 ms) | Pass |
+| C16-UT13 | `simpanHasil(hasil: HasilLatihan): RingkasanMotivasi` | Normal | Jawaban benar lalu POST /latihan/selesai | Riwayat berhasil tersimpan; poin +10; streak 1; badge pemula | Sesuai harapan (6 asersi lulus, 105 ms) | Pass |
+| C16-UT14 | `simpanHasil(hasil: HasilLatihan): RingkasanMotivasi` | Batas | Soal yang sama diselesaikan dua kali | Riwayat bertambah tetapi poin tidak bertambah lagi (tetap 10) | Sesuai harapan (2 asersi lulus, 46 ms) | Pass |
+| C16-UT15 | `simpanHasil(hasil: HasilLatihan): RingkasanMotivasi` | Negatif | (a) POST /latihan/selesai sebelum jawaban berhasil; (b) daftar hasil kosong; (c) skor 150 | (a) 422 BELUM_BERHASIL; (b) TANPA_HASIL; (c) SIMPAN_GAGAL dan transaksi dibatalkan | Sesuai harapan (6 asersi lulus, 64 ms) | Pass |
+| C16-UT16 | `periksaBadge(streak, poin, dimiliki): List<String>` | Normal | streak 7, poin 100, belum punya badge | [pemula, konsisten_7, seratus_poin] | Sesuai harapan (1 asersi lulus, 38 ms) | Pass |
+| C16-UT17 | `periksaBadge(streak, poin, dimiliki): List<String>` | Batas | streak 6, poin 9 (tepat di bawah ambang) dan poin 10 | Poin 9: []; poin 10: [pemula] | Sesuai harapan (2 asersi lulus, 35 ms) | Pass |
+| C16-UT18 | `periksaBadge(streak, poin, dimiliki): List<String>` | Negatif | Syarat terpenuhi tetapi badge sudah dimiliki | Daftar kosong (tidak diberikan ulang) | Sesuai harapan (1 asersi lulus, 32 ms) | Pass |
+
+Tabel 4.2.6b. Ringkasan Cakupan Kelas C16
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `siapkanSoal()`, `nilaiJawaban()`, `simpanHasil()` |
+| Operasi yang diuji | `hitungAkurasiGoresan()`, `nilaiJawaban()`, `periksaBadge()`, `siapkanSoal()`, `simpanHasil()`<br>Catatan: siapkanSoal, nilaiJawaban, dan simpanHasil diuji melalui LatihanController; algoritma pembantunya (hitungAkurasiGoresan, cocokkanBunyi, validasiRangkaian, periksaBadge) diuji langsung pada kelas implementasinya. |
+| ID Algoritma yang tercakup | Algo-021, Algo-022, Algo-023, Algo-024, Algo-025, Algo-026, Algo-027 |
+| Coverage (wajib ≥ 70%) | `LatihanController`: baris 68.1% (113/166), cabang 66.0% (66/100); seluruh suite (PCOV): baris 95.8%<br>`LatihanNonKanvasController`: baris 99.3% (136/137), cabang 94.9% (56/59); seluruh suite (PCOV): baris 99.3%<br>`AkurasiGoresan`: baris 96.0% (72/75), cabang 91.7% (55/60); seluruh suite (PCOV): baris 96.0%<br>`PemeriksaBadge`: baris 100.0% (10/10), cabang 100.0% (1/1); seluruh suite (PCOV): baris 100.0%<br>`PenilaiJawaban`: baris 100.0% (15/15), cabang 100.0% (29/29); seluruh suite (PCOV): baris 100.0%<br>`PenyusunSoal`: baris 95.7% (67/70), cabang 92.7% (51/55); seluruh suite (PCOV): baris 95.7%<br>`SelesaikanLatihan`: baris 97.9% (46/47), cabang 100.0% (5/5); seluruh suite (PCOV): baris 97.9%<br>Gabungan seluruh berkas C16 dari unit test C16 (Xdebug): baris 81,8% (256/313), cabang 80,0% (156/195). Cabang `LatihanController` di bawah 70% karena aksi HTTP lain (index, hasil, ulangi, lanjut) diuji oleh test fitur `tests/Feature/Latihan`, yang tidak dapat diukur cabangnya dalam batas waktu karena perhitungan akurasi sangat lambat di bawah Xdebug; coverage baris seluruh suite 95,8%.<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C16 coverage). |
+
 ### 4.2.8 Kelas FeedbackController
 
 **ID Kelas:** C18  
@@ -612,6 +651,20 @@ Tabel 4.4.1. Hasil Pengujian Use Case UC-01
 | UC01-TC01 | KF01, KF04, KF05, KF06, KF07 | Normal | 1. Buka halaman Daftar (I-01).<br>2. Pilih peran Pelajar.<br>3. Isi email, username, kata sandi.<br>4. Centang persetujuan T&C.<br>5. Tekan "Daftar". | Peran: Pelajar<br>Email: dewi.e2e@ngaksara.test<br>Username: dewi_e2e<br>Sandi: Rahasia123 | Akun tersimpan dengan sandi ter-hash dan pengguna diarahkan ke halaman Masuk dengan pesan berhasil. | Akun tersimpan, diarahkan ke /masuk; password_hash diawali $2y$12$. Bukti: Gambar UC01-TC01. | Pass |
 | UC01-TC02 | KF04 | Alternatif 1: Kredensial tidak valid | 1. Buka halaman Daftar.<br>2. Isi email yang sudah terdaftar.<br>3. Centang T&C lalu tekan "Daftar". | Email: pelajar@ngaksara.test (sudah ada)<br>Username: sari_baru<br>Sandi: Rahasia123 | Pendaftaran ditolak, tetap di halaman Daftar, pesan "Email sudah terdaftar" tampil dan isian lain dipertahankan. | Tetap di halaman daftar, pesan: "Email sudah terdaftar. Gunakan email lain atau masuk dengan akun yang ada.". Bukti: Gambar UC01-TC02. | Pass |
 
+### 4.4.3 Use Case Mengerjakan Latihan Aksara
+
+**ID Use Case:** UC-03  
+**Nama Use Case:** Mengerjakan Latihan Aksara
+
+Tabel 4.4.3. Hasil Pengujian Use Case UC-03
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC03-TC01 | KF10, KF11, KF12, KF14 | Normal | 1. Masuk sebagai Pelajar.<br>2. Buka latihan menulis materi 1 (outline aktif).<br>3. Gambar aksara target mengikuti bentuk templat.<br>4. Tekan "Periksa", lalu "Selesaikan". | Akun: budi@ngaksara.test<br>Goresan: titik-titik garis tengah templat aksara target | Umpan balik "Bagus!" dengan akurasi ≥ 70%, lalu halaman hasil menampilkan skor, poin, dan streak. | Aksara ꦕ: Akurasi 100%.; hasil latihan, poin, dan streak tampil. Bukti: Gambar UC03-TC01. | Pass |
+| UC03-TC02 | KF21 | Alternatif 1: Latihan bunyi | 1. Masuk sebagai Pelajar.<br>2. Buka latihan bunyi materi 1.<br>3. Pilih satu jawaban untuk setiap soal.<br>4. Tekan "Kirim jawaban". | Akun: wulan@ngaksara.test<br>Jawaban: opsi pertama setiap soal | Jawaban dinilai di server dan halaman hasil menampilkan benar/salah per soal beserta skor. | 5 soal bunyi dijawab; halaman hasil tampil dengan skor per soal. Bukti: Gambar UC03-TC02. | Pass |
+| UC03-TC03 | KF22 | Alternatif 2: Latihan merangkai | 1. Buka latihan merangkai materi 1.<br>2. Tekan ubin aksara sesuai urutan yang dipilih.<br>3. Tekan "Kirim jawaban". | Urutan ubin: sesuai urutan tampil | Rangkaian dievaluasi; halaman hasil menandai posisi yang salah dan menampilkan skor. | Ubin dirangkai lalu dikirim; posisi salah ditandai di halaman hasil. Bukti: Gambar UC03-TC03. | Pass |
+| UC03-TC04 | KF12 | Alternatif 3: Hasil gambar kurang akurat | 1. Buka latihan menulis materi 1.<br>2. Gambar garis pendek yang tidak sesuai bentuk aksara.<br>3. Tekan "Periksa".<br>4. Tekan "Ulangi". | Goresan: satu garis pendek di pojok kiri atas kanvas | Status "Belum tepat" dengan pesan "Tulis lebih dekat ke garis bantu."; tombol Ulangi menghapus goresan tanpa mengganti soal. | Umpan balik "Akurasi 0%. Tulis lebih dekat ke garis bantu."; tombol Ulangi menghapus goresan, soal tetap. Bukti: Gambar UC03-TC04. | Pass |
+
 ### 4.4.7 Use Case Menyiapkan Pembelajaran Kelas
 
 **ID Use Case:** UC-07  
@@ -650,6 +703,7 @@ Tabel 4.5. Hasil Pengujian KNF
 | KNF01-TC02 | KNF01 | Maintainability | Penolakan akses pemantauan tercatat sebagai WARNING | PHPUnit `KnfTest::test_knf01_tc02_log_penolakan` | Entri "Pemantauan ditolak: bukan anggota aktif" tertulis di log | Pass |
 | KNF02-TC01 | KNF02 | Security | Kolom `password_hash` berisi hash adaptif bersalt (bcrypt, cost ≥ 10), bukan teks asli | Daftar akun lewat HTTP lalu inspeksi tabel `akun_pengguna` dengan `password_get_info()` | Algoritma bcrypt, cost 12, awalan `$2y$12$`, panjang 60 karakter; teks "Rahasia123" tidak ditemukan di tabel | Pass |
 | KNF02-TC02 | KNF02 | Security | Sandi sama menghasilkan hash berbeda; hash tidak dapat dipakai sebagai sandi | Dua akun dengan sandi sama, lalu login memakai nilai hash | Hash kedua akun berbeda (salt unik); login dengan hash ditolak | Pass |
+| KNF04-TC01 | KNF04 | Response time | Jeda dari event `pointermove` sampai segmen goresan digambar di kanvas ≤ 50 ms | Chromium (Playwright) pada I-07: skrip pengukur membandingkan `event.timeStamp` dengan `performance.now()` saat `stroke()` dipanggil; 209 segmen dari UC03-TC01 dan UC05-TC01 | Median 12.5 ms, p95 13.6 ms, maks 13.9 ms | Pass |
 | KNF05-TC01 | KNF05 | Reliability | Feedback valid tersimpan dan konfirmasi tampil | PHPUnit `KnfTest::test_knf05_tc01_terkirim` + UC09-TC01 di browser | Pesan "Feedback terkirim. Matur nuwun!" tampil; 1 baris tersimpan di `data_feedback` | Pass |
 | KNF05-TC02 | KNF05 | Reliability | Saat penyimpanan gagal, pesan galat tampil dan isi pesan tidak hilang | PHPUnit `KnfTest::test_knf05_tc02_gagal` (tabel dihapus) + UC09-TC02 di browser (tabel diganti nama sementara) | Pesan "Feedback gagal terkirim. Periksa koneksi lalu coba lagi. Isi pesanmu tidak hilang." tampil, isian tetap | Pass |
 | *KNF01-TC01* | *KNF01* | *Reliability* | *Tidak ada data hilang/ganda saat jaringan putus di tengah transaksi* | *Simulasi putus koneksi saat bayar, lalu cek status di DB* | *[Hasil aktual]* | *Pass/Fail* |
