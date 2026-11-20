@@ -159,7 +159,7 @@ Ngaksara menyediakan pengelolaan akun, materi, latihan, progres, motivasi belaja
 
 Latihan mencakup menggambar dengan atau tanpa outline, mencocokkan bunyi, merangkai aksara, dan transliterasi Latin ke aksara Jawa/Sunda atau sebaliknya. Transliterasi tidak menerjemahkan makna. Sistem mengevaluasi latihan dan menyediakan hasil untuk peninjauan progres serta rekomendasi materi. Papan peringkat hanya berlaku per kelas, menggunakan nama tampilan, dan dapat diaktifkan atau dinonaktifkan Pengajar.
 
-Pelajar dan Pengajar menyampaikan feedback aplikasi melalui UC-09. Ngaksara tidak menyediakan pengiriman pesan antar pengguna. Pengajar memantau progres anggota kelas melalui UC-08 tanpa mengirim pesan melalui sistem.
+Pelajar dan Pengajar menyampaikan feedback aplikasi melalui UC-09. Ngaksara tidak menyediakan pengiriman pesan antar pengguna. Pengajar memantau progres anggota kelas melalui UC-08.
 
 Untuk implementasi awal, Ngaksara tidak menggunakan API atau layanan eksternal. Materi, audio, gambar, font, dan komponen antarmuka disediakan sebagai aset aplikasi pada server. Basis data dan penyimpanan berkas merupakan komponen internal. Distribusi audio dan gambar dari server kepada browser merupakan bagian operasi Ngaksara.
 
