@@ -72,7 +72,7 @@ Dipersiapkan oleh:
 # BAB 1: Pendahuluan
 
 ## 1.1 Tujuan Penulisan Dokumen
-Tuliskan uraian ringkas mengenai isi dokumen, tujuan pembuatan dokumen HIUPL ini, dan siapa saja target pembacanya.
+Dokumen Hasil Implementasi dan Uji Perangkat Lunak (HIUPL) ini mencatat hasil implementasi Ngaksara terhadap rancangan pada DPPL dan seluruh hasil pengujiannya. Isinya mencakup lingkungan implementasi, daftar modul dan antarmuka yang sudah dibuat, hasil pengujian unit, integrasi, use case, dan kebutuhan non-fungsional, serta matriks kerunutan dari KF dan KNF ke test case. Dokumen ditujukan untuk asisten dan dosen mata kuliah IF2150 sebagai bahan penilaian, serta untuk anggota Kelompok 4 K2 sebagai acuan perbaikan dan pemeliharaan.
 
 ## 1.2 Lingkup Masalah
 Ngaksara adalah perangkat lunak berbasis web untuk membantu pengguna mengenal kembali aksara Jawa dan aksara Sunda. Pelajar dapat mempelajari materi, mengerjakan latihan menggambar, mencocokkan bunyi, merangkai aksara, dan transliterasi, serta meninjau progres dan motivasi belajar. Pengajar dapat membuat kelas, menerbitkan tugas, dan memantau progres anggota kelas. Tim Materi mengelola materi pembelajaran. Pelajar dan Pengajar juga dapat menyampaikan feedback kepada sistem.
@@ -124,7 +124,6 @@ Tabel 1.3. Definisi Istilah dan Singkatan
 | Hash | Hasil fungsi satu arah yang digunakan untuk menyimpan kata sandi tanpa menyimpan teks aslinya. |
 
 ## 1.4 Aturan Penomoran
-Tuliskan aturan penomoran (ID) yang digunakan dalam dokumen ini. Gunakan pola ID yang **sama** dengan yang sudah dipakai pada dokumen-dokumen sebelumnya (SKPL, APL, DPPL), kecuali untuk ID pengujian yang baru diperkenalkan pada dokumen ini.
 
 Tabel 1.4. Aturan Penomoran
 
@@ -148,7 +147,7 @@ Tabel 1.4. Aturan Penomoran
 4. Perangkat pembuat diagram: draw.io (https://www.drawio.com/), StarUML (https://staruml.io/), dan Mermaid (https://mermaid.js.org/).
 
 ## 1.6 Deskripsi Umum Dokumen (Ikhtisar)
-Tuliskan sistematika pembahasan dokumen ini secara ringkas dan runut bab demi bab, dengan maksimal 1 paragraf.
+Bab 1 menjelaskan tujuan, lingkup, istilah, aturan penomoran, dan referensi dokumen. Bab 2 memberi gambaran umum Ngaksara beserta diagram use case. Bab 3 mencatat lingkungan implementasi serta daftar modul, antarmuka, dan file lain yang telah dibuat. Bab 4 melaporkan strategi kedalaman pengujian kelas dan hasil pengujian unit, integrasi, use case, dan KNF lengkap dengan buktinya. Bab 5 memetakan setiap KF dan KNF ke use case, kelas, file implementasi, dan test case untuk memverifikasi bahwa seluruh kebutuhan terpenuhi.
 
 <br>
 
@@ -165,10 +164,10 @@ Pelajar dan Pengajar menyampaikan feedback aplikasi melalui UC-09. Ngaksara tida
 Untuk implementasi awal, Ngaksara tidak menggunakan API atau layanan eksternal. Materi, audio, gambar, font, dan komponen antarmuka disediakan sebagai aset aplikasi pada server. Basis data dan penyimpanan berkas merupakan komponen internal. Distribusi audio dan gambar dari server kepada browser merupakan bagian operasi Ngaksara.
 
 <p align="center">
-<img alt="System Overview / Use Case Diagram" src="./assets/contoh-uc-diagram.webp" width="90%">
+<img alt="System Overview / Use Case Diagram" src="./assets/Diagram_Use_Case_Ngaksara.png" width="90%">
 </p>
 <p align="center">
-<i>Gambar 2.1. Use Case Diagram [Nama P/L]</i>
+<i>Gambar 2.1. Use Case Diagram Ngaksara</i>
 </p>
 
 <br>
@@ -177,58 +176,103 @@ Untuk implementasi awal, Ngaksara tidak menggunakan API atau layanan eksternal. 
 
 # BAB 3: Implementasi
 
-Bagian ini diisi dengan informasi tentang elemen P/L yang dikembangkan (*executable files*, *configuration files*, *data files*, dan sebagainya) serta perubahannya terhadap rancangan pada DPPL (jika ada).
-
-## 3.1 Lingkungan Implementasi
-
-Tuliskan *hardware* dan *software* yang digunakan untuk implementasi, mencakup *operating system*, bahasa pemrograman beserta versinya, *framework*/*library*, DBMS, *development tools*, dan *version control*. Lingkungan ini harus konsisten dengan **Subbab 2.1 DPPL**; jelaskan jika ada perubahan. Cantumkan juga *framework* dan alat pengujian yang dipakai.
-
 Tabel 3.1. Lingkungan Implementasi
 
 | Aspek | Keterangan |
 | :--- | :--- |
-| *Hardware* | *[Spesifikasi perangkat keras]* |
-| *Operating System* | *[Nama dan versi OS]* |
-| *Bahasa Pemrograman* | *[Bahasa dan versi]* |
-| *Framework/Library* | *[Daftar framework/library beserta versi]* |
-| *DBMS* | *[Nama dan versi DBMS]* |
-| *Development Tools* | *[IDE, version control, tools lain]* |
-| *Testing Tools* | *[Framework unit test, alat ukur performa, alat coverage]* |
+| *Hardware* | Pengembangan: laptop anggota kelompok (x86-64, RAM ≥ 8 GB). Pengujian HIUPL: mesin Linux x86-64 2 vCPU. |
+| *Operating System* | Pengembangan: Windows 11 dan Linux. Pengujian HIUPL: Ubuntu 24.04.5 LTS. |
+| *Bahasa Pemrograman* | PHP 8.4 (pengembangan, sesuai DPPL); PHP 8.3.6 (eksekusi pengujian, `composer.json` mengunci platform PHP 8.3.0 sehingga kompatibel); JavaScript (ES2022) untuk kanvas; HTML/CSS. |
+| *Framework/Library* | Laravel 13.40.0 (Eloquent ORM, Blade, Filesystem, Log), Bootstrap 5.3.8, Vite 8 + laravel-vite-plugin 3.1, Node.js 22. |
+| *DBMS* | MySQL 8.4 (utf8mb4) untuk pengembangan/produksi melalui Docker; SQLite 3.45.1 untuk pengujian otomatis (in-memory) dan server uji browser (berkas `database/e2e.sqlite`). |
+| *Development Tools* | Visual Studio Code, Composer 2.8, npm, Git, GitHub (*branch* fitur, *pull request*, tag rilis), Docker. |
+| *Testing Tools* | PHPUnit 12.5.43 (unit, integrasi, KNF), PCOV 1.0 (coverage baris seluruh suite), Xdebug 3.4.1 (`--path-coverage`, coverage baris dan cabang per kelas), Playwright 1.63 + Chromium 157 (uji use case, tangkapan layar, KNF03 dan KNF04), Navigation Timing API dan `performance.now()` (alat ukur waktu). |
 
 ## 3.2 Implementasi Modul
 
-Daftar modul/kelas yang **TELAH** diimplementasikan. Gunakan nama dan ID kelas yang sama dengan DPPL, dan konsisten dengan Tabel B.5 pada dokumen Implementasi (Tugas 9).
+Seluruh 26 kelas pada DPPL telah diimplementasikan. Nama dan ID kelas sama dengan DPPL dan Tabel B.5 dokumen Implementasi (Tugas 9).
 
 Tabel 3.2. Implementasi Modul
 
 | No | ID Kelas | Nama Modul/Kelas | Nama File Fisik | Nama File Executable |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | *[C01]* | *[Nama modul/kelas]* | *[path/ke/file]* | *[Nama file executable, atau - jika tidak ada]* |
-| 2 | *[C02]* | *[Nama modul/kelas]* | *[path/ke/file]* | *[...]* |
-| ... | *...* | *...* | *...* | *...* |
-
-## 3.3 Implementasi Antarmuka
-
-Daftar antarmuka yang telah diimplementasikan. Gunakan ID dan nama layar yang sama dengan ID dan nama layar pada tugas DPPL.
+| 1 | C01 | AkunPengguna | `src/app/Models/AkunPengguna.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 2 | C02 | MateriAksara | `src/app/Models/MateriAksara.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 3 | C03 | RiwayatLatihan | `src/app/Models/RiwayatLatihan.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 4 | C04 | DataFeedback | `src/app/Models/DataFeedback.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 5 | C05 | HalamanPendaftaran | `src/resources/views/auth/daftar.blade.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 6 | C06 | HalamanLogin | `src/resources/views/auth/masuk.blade.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 7 | C07 | HalamanUtama | `src/resources/views/beranda.blade.php`<br>`src/resources/views/layouts/sidebar.blade.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 8 | C08 | HalamanLatihan | `src/resources/views/latihan/*.blade.php`<br>`src/resources/js/latihan/kanvas-menulis.js` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 9 | C09 | HalamanKelolaMateri | `src/resources/views/materi/kelola.blade.php`<br>`src/resources/views/materi/form.blade.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 10 | C10 | HalamanFeedback | `src/resources/views/feedback/index.blade.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 11 | C11 | HalamanKelasPelajar | `src/resources/views/kelas-pelajar/index.blade.php`<br>`src/resources/views/kelas-pelajar/detail.blade.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 12 | C12 | HalamanKelolaKelas | `src/resources/views/kelas-pengajar/*.blade.php`<br>`src/resources/views/pemantauan/*.blade.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 13 | C13 | HalamanMateri | `src/resources/views/materi/index.blade.php`<br>`src/resources/views/materi/show.blade.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 14 | C14 | HalamanProgres | `src/resources/views/progres/index.blade.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 15 | C15 | OtentikasiController | `src/app/Http/Controllers/OtentikasiController.php`<br>`src/app/Http/Requests/DaftarRequest.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 16 | C16 | LatihanController | `src/app/Http/Controllers/LatihanController.php`<br>`src/app/Http/Controllers/LatihanNonKanvasController.php`<br>`src/app/Latihan/AkurasiGoresan.php`<br>`src/app/Latihan/PemeriksaBadge.php`<br>`src/app/Services/Latihan/PenilaiJawaban.php`<br>`src/app/Services/Latihan/PenyusunSoal.php`<br>`src/app/Services/Latihan/SelesaikanLatihan.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 17 | C17 | MateriController | `src/app/Http/Controllers/MateriController.php`<br>`src/app/Http/Requests/SimpanMateriRequest.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 18 | C18 | FeedbackController | `src/app/Http/Controllers/FeedbackController.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 19 | C19 | ProgresController | `src/app/Http/Controllers/ProgresController.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 20 | C20 | KelasController | `src/app/Http/Controllers/KelasPengajarController.php`<br>`src/app/Http/Controllers/KelasPelajarController.php`<br>`src/app/Http/Controllers/PemantauanKelasController.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 21 | C21 | KontenMateri | `src/app/Models/KontenMateri.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 22 | C22 | MotivasiBelajar | `src/app/Models/MotivasiBelajar.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 23 | C23 | KelasBelajar | `src/app/Models/KelasBelajar.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 24 | C24 | KeanggotaanKelas | `src/app/Models/KeanggotaanKelas.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 25 | C25 | TugasKelas | `src/app/Models/TugasKelas.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
+| 26 | C26 | PenyelesaianTugas | `src/app/Models/PenyelesaianTugas.php`<br>`src/app/Services/PengumpulanTugas.php` | - (dijalankan interpreter PHP melalui `src/public/index.php`) |
 
 Tabel 3.3. Implementasi Antarmuka
 
 | No | ID Antarmuka | Nama Antarmuka | Nama File Fisik | Nama File Executable |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | *[I-01]* | *[Nama layar]* | *[path/ke/file]* | *[Nama file executable, atau - jika tidak ada]* |
-| 2 | *[I-02]* | *[Nama layar]* | *[path/ke/file]* | *[...]* |
-| ... | *...* | *...* | *...* | *...* |
-
-## 3.4 File Lain
-
-Daftar file lain yang dibuat selain file kelas dan antarmuka, misalnya file *utility*, *configuration*, *database schema/seed*, *file test*, atau *data*.
+| 1 | I-01 | Pendaftaran | `src/resources/views/auth/daftar.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 2 | I-02 | Login | `src/resources/views/auth/masuk.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 3 | I-03 | Halaman Utama | `src/resources/views/beranda.blade.php`<br>`src/resources/views/layouts/app.blade.php`<br>`src/resources/views/layouts/sidebar.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 4 | I-04 | Daftar Materi | `src/resources/views/materi/index.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 5 | I-05 | Detail Materi | `src/resources/views/materi/show.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 6 | I-06 | Pilih Mode Latihan | `src/resources/views/latihan/pilih-mode.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 7 | I-07 | Latihan Menulis | `src/resources/views/latihan/menulis.blade.php`<br>`src/resources/views/latihan/layout-fokus.blade.php`<br>`src/resources/js/latihan/kanvas-menulis.js` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 8 | I-08 | Latihan Mencocokkan Bunyi | `src/resources/views/latihan/bunyi.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 9 | I-09 | Latihan Merangkai Aksara | `src/resources/views/latihan/merangkai.blade.php`<br>`src/resources/views/latihan/transliterasi.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 10 | I-10 | Hasil Latihan | `src/resources/views/latihan/hasil.blade.php`<br>`src/resources/views/latihan/hasil-soal.blade.php`<br>`src/resources/views/latihan/kosong.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 11 | I-11 | Progres Pelajar | `src/resources/views/progres/index.blade.php`<br>`src/resources/views/progres/label-status.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 12 | I-12 | Kelas Saya & Daftar Tugas | `src/resources/views/kelas-pelajar/index.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 13 | I-13 | Pengerjaan Tugas | `src/resources/views/kelas-pelajar/detail.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 14 | I-14 | Kelola Kelas | `src/resources/views/kelas-pengajar/index.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 15 | I-15 | Terbitkan Tugas | `src/resources/views/kelas-pengajar/tugas.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 16 | I-16 | Kelola Anggota dan Papan Peringkat | `src/resources/views/kelas-pengajar/anggota.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 17 | I-17 | Pantau Progres Anggota | `src/resources/views/pemantauan/daftar-kelas.blade.php`<br>`src/resources/views/pemantauan/index.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 18 | I-18 | Kelola Materi | `src/resources/views/materi/kelola.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 19 | I-19 | Unggah Materi | `src/resources/views/materi/form.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
+| 20 | I-20 | Feedback | `src/resources/views/feedback/index.blade.php` | - (dirender Blade; aset dibundel ke `src/public/build`) |
 
 Tabel 3.4. File Lain
 
 | No | Nama File | Keterangan |
 | :--- | :--- | :--- |
-| 1 | *[Nama file]* | *[Fungsi file]* |
-| ... | *...* | *...* |
+| 1 | `src/routes/web.php, auth.php, materi.php, latihan.php, progres.php, kelas-pelajar.php, kelas-pengajar.php, feedback.php` | Definisi rute HTTP dan middleware peran untuk setiap modul. |
+| 2 | `src/app/Http/Controllers/BerandaController.php` | Menyiapkan data Halaman Utama (I-03) sesuai peran; pelengkap C07. |
+| 3 | `src/app/Http/Middleware/CekPeran.php, src/app/Support/HakAkses.php` | Pemeriksaan hak akses per peran pada rute (KF02). |
+| 4 | `src/app/Http/Requests/DaftarRequest.php, SimpanMateriRequest.php, Latihan/KirimJawabanRequest.php, Latihan/SelesaikanLatihanRequest.php` | Aturan validasi masukan formulir dan payload JSON latihan. |
+| 5 | `src/app/Support/** (HasilOperasi, DataPendaftaran, Periode, Materi/*, Kelas/*, Progres/*)` | Tipe data pendukung (DTO) seperti HasilOperasi, DataKonten, FilterMateri, PaketMateri, Periode. |
+| 6 | `src/app/Enums/*.php` | Enum peran, jenis aksara, mode latihan, status publikasi, status riwayat, status feedback, dan lain-lain. |
+| 7 | `src/app/Latihan/Data/*.php` | Objek data soal, jawaban, hasil penilaian, dan ringkasan motivasi latihan menulis. |
+| 8 | `src/app/Console/Commands/ProfilProgresKelas.php` | Perintah artisan untuk profiling query progres kelas (dipakai saat optimasi T9). |
+| 9 | `src/config/ngaksara.php, src/config/latihan.php, src/config/navigation.php` | Konfigurasi materi (ekstensi, ukuran berkas, ambang tuntas), parameter algoritma latihan, dan menu navigasi. |
+| 10 | `src/database/migrations/2026_11_*.php` | Skema basis data: akun_pengguna, materi_aksara, konten_materi, konten_materi_arsip, kelas_belajar, keanggotaan_kelas, tugas_kelas, komponen_tugas, riwayat_latihan, motivasi_belajar, penyelesaian_tugas, data_feedback. |
+| 11 | `src/database/seeders/*.php` | Data fiktif untuk demo dan pengujian (akun uji, materi, kelas contoh K7M2QX, riwayat). |
+| 12 | `src/database/factories/AkunPenggunaFactory.php` | Pembuat data akun untuk pengujian otomatis. |
+| 13 | `src/resources/aksara/template_aksara.json` | Templat garis tengah dan kontur aksara Jawa/Sunda untuk penilaian goresan. |
+| 14 | `src/resources/css/*.css, src/resources/js/app.js, src/resources/js/efek.js` | Gaya tampilan dan skrip antarmuka umum (dibundel Vite ke public/build). |
+| 15 | `src/public/fonts/*, src/public/img/*` | Aset fon Noto Sans Javanese/Sundanese, ikon, dan ilustrasi maskot. |
+| 16 | `src/composer.json, src/package.json, src/vite.config.js` | Daftar dependensi PHP dan JavaScript serta konfigurasi build aset. |
+| 17 | `src/phpunit.xml` | Konfigurasi PHPUnit (basis data SQLite in-memory untuk pengujian). |
+| 18 | `src/tests/Unit/Hiupl/*.php` | Unit test HIUPL per kelas (C01–C04, C15–C26) dengan anotasi ID pengujian. |
+| 19 | `src/tests/Feature/Hiupl/IntegrasiTest.php, KnfTest.php` | Pengujian integrasi (INT-TC01 s.d. INT-TC14) dan pengujian KNF terotomasi. |
+| 20 | `src/tests/Feature/**, src/tests/Unit/Latihan/*` | Test fitur dan unit hasil Tugas 9 yang tetap dijalankan sebagai regresi. |
+| 21 | `docs/M10/pengujian/uji_uc.py` | Skrip Playwright untuk pengujian use case UC01-TC01 s.d. UC09-TC02, KNF03-TC02, dan KNF04-TC01 di browser. |
 
 <br>
 
@@ -236,11 +280,7 @@ Tabel 3.4. File Lain
 
 # BAB 4: Hasil Pengujian
 
-Bab ini melaporkan hasil pengujian P/L pada level unit, integrasi, dan sistem. Pengujian dilakukan pada tag release terakhir Tugas 9. Hasil aktual diisi berdasarkan pengamatan saat pengujian. Kesimpulan diisi `Pass` atau `Fail`, dan untuk `Fail` dilengkapi penyebab serta usulan perbaikan.
-
 ## 4.1 Strategi dan Kedalaman Pengujian Kelas
-
-Setiap kelas perancangan pada Tabel 4.1 DPPL diklasifikasikan ke dalam tiga tingkat kedalaman pengujian. Tingkat **Mendalam** diberikan pada kelas yang memuat logika bisnis, perhitungan, validasi, aturan status, algoritma, integrasi eksternal, atau keamanan. Tingkat **Sedang** diberikan pada kelas yang hanya mengoordinasikan atau mendelegasikan proses. Tingkat **Tidak perlu** diberikan pada kelas tanpa logika, seperti *entity/DTO* dan kelas konfigurasi, yang teruji secara tidak langsung melalui test case use case. Seluruh kelas wajib dicantumkan beserta alasan penentuan tingkatnya.
 
 Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 
@@ -275,43 +315,9 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 
 ## 4.2 Pengujian Unit Kelas
 
-Pengujian unit dilakukan pada kelas bertingkat Mendalam dan Sedang. Kelas Mendalam diuji pada seluruh operasi public dengan kasus normal, batas, dan negatif, serta mencapai *coverage* minimal 70%. Kelas Sedang diuji minimal dengan satu kasus normal dan satu kasus gagal pada operasi public utama.
+Cara menjalankan unit test: `php artisan test tests/Unit/Hiupl` (atau `php vendor/bin/phpunit --testdox tests/Unit/Hiupl`).
 
-Cara menjalankan unit test: *[tuliskan perintah, mis. `pytest src/tests/`]*.
-
-Lokasi file test: *[path, mis. `src/tests/`]*.
-
-### 4.2.1 Kelas [Nama Kelas 1]
-
-**ID Kelas:** *[C02]*  
-**Nama Kelas:** *[Pesanan]*  
-**Tingkat:** *[Mendalam]*
-
-Tabel 4.2.1. Hasil Pengujian Unit Kelas [C02]
-
-| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C02-UT01* | *`hitungTotal(): Decimal`* | *Normal* | *Pesanan berisi 2 item: 10.000 x 2 dan 5.000 x 1* | *Total = 25.000* | *[Hasil aktual]* | *Pass/Fail* |
-| *C02-UT02* | *`hitungTotal(): Decimal`* | *Batas* | *Pesanan berisi tepat 1 item dengan jumlah 1* | *Total = harga item tersebut* | *[...]* | *Pass/Fail* |
-| *C02-UT03* | *`hitungTotal(): Decimal`* | *Negatif* | *Pesanan tanpa item* | *Total = 0 atau melempar kesalahan sesuai rancangan* | *[...]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
-
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.1b. Ringkasan Cakupan Kelas [C02]
-
-| Informasi | Keterangan |
-| :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
-
-### 4.2.2 Kelas [Nama Kelas 2]
-
-*[Ulangi pola 4.2.1 untuk setiap kelas bertingkat Mendalam atau Sedang.]*
-
-<br>
+Lokasi file test: `src/tests/Unit/Hiupl/`. Setiap method test memuat anotasi `@uji ID | jenis | operasi | prosedur | harapan` dan `#[TestDox]` dengan ID yang sama dengan tabel di bawah.
 
 ### 4.2.1 Kelas AkunPengguna
 
@@ -352,6 +358,93 @@ Tabel 4.2.1b. Ringkasan Cakupan Kelas C01
 | Operasi yang diuji | `buatAkunBaru()`, `cariBerdasarkanEmail()`, `cocokkanPassword()`, `getDetailAkun()`, `getProfil()`, `verifikasiHakAkses()` |
 | ID Algoritma yang tercakup | Algo-001, Algo-002 |
 | Coverage (wajib ≥ 70%) | `AkunPengguna`: baris 96.3% (79/82), cabang 81.1% (30/37)<br>Alat: Xdebug 3.5.3 (`--path-coverage`), PHP 8.5.12, PHPUnit 12.5.43, Windows; diukur dari unit test kelas ini ditambah test fitur yang memakai kelas ini. Bukti: Tabel 4.6 (C01 coverage). |
+
+### 4.2.2 Kelas MateriAksara
+
+**ID Kelas:** C02  
+**Nama Kelas:** MateriAksara  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C02MateriAksaraTest.php`
+
+Tabel 4.2.2. Hasil Pengujian Unit Kelas C02
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C02-UT01 | `simpan(data: MetadataMateri): HasilOperasi` | Normal | Nama "Nglegena 1", jawa, tingkat 1, draf | Berhasil; metadata tersimpan | Sesuai harapan (2 asersi lulus, 17 ms) | Pass |
+| C02-UT02 | `simpan(data: MetadataMateri): HasilOperasi` | Batas | Tingkat 3 (maksimum), tingkat 0 dan 4 (di luar rentang), nama tepat 100 karakter | Tingkat 3 dan nama 100 karakter diterima; tingkat 0 dan 4 DATA_TIDAK_VALID | Sesuai harapan (4 asersi lulus, 13 ms) | Pass |
+| C02-UT03 | `simpan(data: MetadataMateri): HasilOperasi` | Negatif | Nama kosong; nama 101 karakter; nama/jenis/tingkat sama dengan materi yang ada | NAMA_TIDAK_VALID, NAMA_TIDAK_VALID, DUPLIKAT | Sesuai harapan (4 asersi lulus, 13 ms) | Pass |
+| C02-UT04 | `ambilDaftarMateri(filter: FilterMateri): List` | Normal | Filter jawa tingkat 1; ada materi terbit, draf, arsip | Hanya materi terbit | Sesuai harapan (1 asersi lulus, 22 ms) | Pass |
+| C02-UT05 | `ambilDaftarMateri(filter: FilterMateri): List` | Batas | termasukDraf = true (mode Tim Materi) | Terbit dan draf tampil; arsip tetap tidak tampil | Sesuai harapan (1 asersi lulus, 17 ms) | Pass |
+| C02-UT06 | `ambilDaftarMateri(filter: FilterMateri): List` | Negatif | Filter jenis sunda padahal hanya ada materi jawa | Daftar kosong (memicu UC02 Alternatif 1 "materi belum tersedia") | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C02-UT07 | `ambilTargetLatihan(mode: ModeLatihan): TargetLatihan` | Normal | Mode menulis untuk materi berisi ꦲ ꦤ | Dua butir target (ꦲ dan ꦤ) beserta templat goresan | Sesuai harapan (2 asersi lulus, 31 ms) | Pass |
+| C02-UT08 | `ambilTargetLatihan(mode: ModeLatihan): TargetLatihan` | Batas | Mode merangkai (memakai pasangan contoh, bukan bentuk) | Butir berasal dari contoh "ꦲꦤ = ana" | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C02-UT09 | `ambilTargetLatihan(mode: ModeLatihan): TargetLatihan` | Negatif | Materi tanpa konten | TargetLatihan kosong | Sesuai harapan (1 asersi lulus, 13 ms) | Pass |
+| C02-UT10 | `ambilMateriRekomendasi(penguasaan: Map): List` | Normal | Materi tingkat 1 belum tuntas (40) dan tingkat 2 | Rekomendasi materi tingkat 1 (tingkat 2 masih terkunci) | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C02-UT11 | `ambilMateriRekomendasi(penguasaan: Map): List` | Batas | Penguasaan tingkat 1 tepat 70 (ambang tuntas); lima materi tingkat 2 | Tingkat 1 dianggap tuntas; tingkat 2 terbuka; maksimal 3 rekomendasi | Sesuai harapan (2 asersi lulus, 21 ms) | Pass |
+| C02-UT12 | `ambilMateriRekomendasi(penguasaan: Map): List` | Negatif | Semua materi sudah tuntas (≥ 70) | Daftar kosong | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C02-UT13 | `perbaruiData(data: MetadataMateri): HasilOperasi` | Normal | Ganti nama dan status menjadi terbit | Berhasil; data berubah | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C02-UT14 | `perbaruiData(data: MetadataMateri): HasilOperasi` | Batas | Data yang sama persis dengan dirinya sendiri | Berhasil (tidak dianggap duplikat dirinya) | Sesuai harapan (1 asersi lulus, 13 ms) | Pass |
+| C02-UT15 | `perbaruiData(data: MetadataMateri): HasilOperasi` | Negatif | Nama diganti menjadi nama materi lain (jenis dan tingkat sama); objek belum tersimpan | DUPLIKAT; TIDAK_DITEMUKAN | Sesuai harapan (2 asersi lulus, 15 ms) | Pass |
+| C02-UT16 | `ambilMetadata(): MetadataMateri` | Normal | Materi terbit dengan konten versi 1.0 | Metadata berisi nama, jenis, tingkat, status, versiKonten 1.0 | Sesuai harapan (1 asersi lulus, 21 ms) | Pass |
+| C02-UT17 | `ambilMetadata(): MetadataMateri` | Batas | Konten sudah diperbarui sekali | versiKonten mengikuti versi terbaru (1.1) | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C02-UT18 | `ambilMetadata(): MetadataMateri` | Negatif | Materi tanpa konten | versiKonten null tanpa galat | Sesuai harapan (1 asersi lulus, 13 ms) | Pass |
+
+Tabel 4.2.2b. Ringkasan Cakupan Kelas C02
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `ambilMetadata()`, `ambilTargetLatihan()`, `perbaruiData()`, `simpan()`, `ambilDaftarMateri()`, `ambilMateriRekomendasi()` |
+| Operasi yang diuji | `ambilDaftarMateri()`, `ambilMateriRekomendasi()`, `ambilMetadata()`, `ambilTargetLatihan()`, `perbaruiData()`, `simpan()` |
+| ID Algoritma yang tercakup | Algo-040, Algo-041, Algo-042, Algo-043, Algo-044 |
+| Coverage (wajib ≥ 70%) | `MateriAksara`: baris 98.9% (88/89), cabang 98.4% (63/64); seluruh suite (PCOV): baris 98.9%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C02 coverage). |
+
+### 4.2.3 Kelas RiwayatLatihan
+
+**ID Kelas:** C03  
+**Nama Kelas:** RiwayatLatihan  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C03RiwayatLatihanTest.php`
+
+Tabel 4.2.3. Hasil Pengujian Unit Kelas C03
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C03-UT01 | `simpanHasil(hasil: HasilLatihan): HasilOperasi` | Normal | Hasil latihan mode bunyi, skor 80, status berhasil | Berhasil; baris riwayat tersimpan dengan waktu_selesai terisi | Sesuai harapan (3 asersi lulus, 20 ms) | Pass |
+| C03-UT02 | `simpanHasil(hasil: HasilLatihan): HasilOperasi` | Batas | Skor 0 dan skor 100 (batas rentang), mode ditulis "BUNYI" | Keduanya tersimpan; mode dinormalisasi menjadi bunyi; status perlu_diulang tanpa waktu_selesai | Sesuai harapan (2 asersi lulus, 16 ms) | Pass |
+| C03-UT03 | `simpanHasil(hasil: HasilLatihan): HasilOperasi` | Negatif | Skor 100.01, skor -1, status "selesai", mode "menggambar", kolom skor hilang | Gagal dengan SKOR_TIDAK_VALID, STATUS_TIDAK_VALID, MODE_TIDAK_VALID, DATA_TIDAK_LENGKAP; tidak ada baris tersimpan | Sesuai harapan (6 asersi lulus, 14 ms) | Pass |
+| C03-UT04 | `catatAktivitas(aktivitas: Aktivitas): HasilOperasi` | Normal | Aktivitas "materi" (Pelajar menyelesaikan materi) | Berhasil; status selesai | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C03-UT05 | `catatAktivitas(aktivitas: Aktivitas): HasilOperasi` | Batas | Aktivitas "PENGUMPULAN" (huruf besar) tanpa id_materi | Berhasil; id_materi null | Sesuai harapan (2 asersi lulus, 13 ms) | Pass |
+| C03-UT06 | `catatAktivitas(aktivitas: Aktivitas): HasilOperasi` | Negatif | Jenis "latihan" (harus lewat simpanHasil) dan data tanpa id_pelajar | AKTIVITAS_TIDAK_VALID dan DATA_TIDAK_LENGKAP | Sesuai harapan (2 asersi lulus, 11 ms) | Pass |
+| C03-UT07 | `cekPernahSelesai(idPelajar, targetSoal, mode): Boolean` | Normal | Pelajar pernah berhasil pada ꦲ mode menulis | true | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C03-UT08 | `cekPernahSelesai(idPelajar, targetSoal, mode): Boolean` | Batas | Target sama tetapi mode berbeda (bunyi), dan mode ditulis huruf besar "MENULIS" | Mode berbeda: false; huruf besar: true | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C03-UT09 | `cekPernahSelesai(idPelajar, targetSoal, mode): Boolean` | Negatif | Hanya ada riwayat perlu_diulang | false | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C03-UT10 | `ambilStatusProgres(idPelajar, daftarIdMateri): Map` | Normal | Materi A rata-rata skor 90, materi B rata-rata 50 | A selesai (90%), B sedang (50%) | Sesuai harapan (2 asersi lulus, 16 ms) | Pass |
+| C03-UT11 | `ambilStatusProgres(idPelajar, daftarIdMateri): Map` | Batas | Rata-rata tepat 70 (ambang tuntas) dan 69.99 | 70: selesai; 69.99: sedang | Sesuai harapan (2 asersi lulus, 15 ms) | Pass |
+| C03-UT12 | `ambilStatusProgres(idPelajar, daftarIdMateri): Map` | Negatif | Materi tanpa riwayat apa pun | Status belum, persen 0 | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C03-UT13 | `hitungPenguasaan(idPelajar, periode): Map` | Normal | Dua riwayat pada materi yang sama: 80 dan 60 | Penguasaan materi = 70.0 | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C03-UT14 | `hitungPenguasaan(idPelajar, periode): Map` | Batas | Riwayat milik Pelajar lain dan riwayat aktivitas tanpa skor | Tidak ikut dihitung (hasil kosong untuk Pelajar uji) | Sesuai harapan (1 asersi lulus, 16 ms) | Pass |
+| C03-UT15 | `hitungPenguasaan(idPelajar, periode): Map` | Negatif | ID Pelajar yang tidak ada | Map kosong tanpa galat | Sesuai harapan (1 asersi lulus, 11 ms) | Pass |
+| C03-UT16 | `hitungPolaKesalahan(idPelajar, periode): Map` | Normal | Salah pada ꦤ tiga kali dan ꦲ satu kali | {ꦤ: 3, ꦲ: 1} urut dari yang terbanyak | Sesuai harapan (1 asersi lulus, 16 ms) | Pass |
+| C03-UT17 | `hitungPolaKesalahan(idPelajar, periode): Map` | Batas | Enam aksara berbeda masing-masing salah sekali | Hanya 5 aksara teratas yang dikembalikan | Sesuai harapan (1 asersi lulus, 16 ms) | Pass |
+| C03-UT18 | `hitungPolaKesalahan(idPelajar, periode): Map` | Negatif | Semua riwayat berstatus berhasil | Map kosong | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C03-UT19 | `ambilRiwayat(idPelajar, periode): List<RiwayatLatihan>` | Normal | Tiga riwayat pada hari berbeda, periode semua | Tiga baris, urut terbaru lebih dulu, beserta nama materi | Sesuai harapan (2 asersi lulus, 18 ms) | Pass |
+| C03-UT20 | `ambilRiwayat(idPelajar, periode): List<RiwayatLatihan>` | Batas | Periode 7 hari terakhir; riwayat tepat di awal periode (6 hari lalu 00.00) dan 7 hari lalu | Hanya riwayat 6 hari lalu yang masuk | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C03-UT21 | `ambilRiwayat(idPelajar, periode): List<RiwayatLatihan>` | Negatif | Riwayat milik Pelajar lain | Daftar kosong | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C03-UT22 | `ambilBuktiPenyelesaian(idPelajar, idTugas): Map` | Normal | Aktivitas tugas untuk satu komponen materi | Peta {idKomponen: waktu_selesai} | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C03-UT23 | `ambilBuktiPenyelesaian(idPelajar, idTugas): Map` | Batas | Komponen yang sama diselesaikan dua kali | Satu entri dengan waktu terakhir | Sesuai harapan (2 asersi lulus, 16 ms) | Pass |
+| C03-UT24 | `ambilBuktiPenyelesaian(idPelajar, idTugas): Map` | Negatif | Latihan tugas berstatus perlu_diulang | Tidak dianggap bukti (map kosong) | Sesuai harapan (1 asersi lulus, 16 ms) | Pass |
+| C03-UT25 | `ambilRiwayatMateri(idPelajar, idMateri) / ambilRiwayatPelajar(idPelajar)` | Normal | Dua riwayat pada materi A dan satu pada materi B | ambilRiwayatMateri(A) = 2 baris; ambilRiwayatPelajar = 3 baris | Sesuai harapan (2 asersi lulus, 16 ms) | Pass |
+| C03-UT26 | `ambilRiwayatMateri(idPelajar, idMateri) / ambilRiwayatPelajar(idPelajar)` | Batas | Dua riwayat dengan waktu sama persis | Urutan stabil: id_riwayat terbesar lebih dulu | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C03-UT27 | `ambilRiwayatMateri(idPelajar, idMateri) / ambilRiwayatPelajar(idPelajar)` | Negatif | Materi yang tidak pernah dikerjakan; Pelajar tanpa riwayat | Keduanya koleksi kosong | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+
+Tabel 4.2.3b. Ringkasan Cakupan Kelas C03
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `simpanHasil()`, `catatAktivitas()`, `ambilRiwayat()`, `ambilBuktiPenyelesaian()`, `ambilStatusProgres()`, `hitungPenguasaan()`, `ambilRiwayatPelajar()`, `hitungPolaKesalahan()`, `cekPernahSelesai()`, `ambilRiwayatMateri()` |
+| Operasi yang diuji | `ambilBuktiPenyelesaian()`, `ambilRiwayat()`, `ambilRiwayatMateri()`, `ambilRiwayatPelajar()`, `ambilStatusProgres()`, `catatAktivitas()`, `cekPernahSelesai()`, `hitungPenguasaan()`, `hitungPolaKesalahan()`, `simpanHasil()` |
+| ID Algoritma yang tercakup | - |
+| Coverage (wajib ≥ 70%) | `RiwayatLatihan`: baris 97.7% (127/130), cabang 87.9% (58/66); seluruh suite (PCOV): baris 99.2%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C03 coverage). |
 
 ### 4.2.4 Kelas DataFeedback
 
@@ -438,6 +531,51 @@ Tabel 4.2.6b. Ringkasan Cakupan Kelas C16
 | ID Algoritma yang tercakup | Algo-021, Algo-022, Algo-023, Algo-024, Algo-025, Algo-026, Algo-027 |
 | Coverage (wajib ≥ 70%) | `LatihanController`: baris 68.1% (113/166), cabang 66.0% (66/100); seluruh suite (PCOV): baris 95.8%<br>`LatihanNonKanvasController`: baris 99.3% (136/137), cabang 94.9% (56/59); seluruh suite (PCOV): baris 99.3%<br>`AkurasiGoresan`: baris 96.0% (72/75), cabang 91.7% (55/60); seluruh suite (PCOV): baris 96.0%<br>`PemeriksaBadge`: baris 100.0% (10/10), cabang 100.0% (1/1); seluruh suite (PCOV): baris 100.0%<br>`PenilaiJawaban`: baris 100.0% (15/15), cabang 100.0% (29/29); seluruh suite (PCOV): baris 100.0%<br>`PenyusunSoal`: baris 95.7% (67/70), cabang 92.7% (51/55); seluruh suite (PCOV): baris 95.7%<br>`SelesaikanLatihan`: baris 97.9% (46/47), cabang 100.0% (5/5); seluruh suite (PCOV): baris 97.9%<br>Gabungan seluruh berkas C16 dari unit test C16 (Xdebug): baris 81,8% (256/313), cabang 80,0% (156/195). Cabang `LatihanController` di bawah 70% karena aksi HTTP lain (index, hasil, ulangi, lanjut) diuji oleh test fitur `tests/Feature/Latihan`, yang tidak dapat diukur cabangnya dalam batas waktu karena perhitungan akurasi sangat lambat di bawah Xdebug; coverage baris seluruh suite 95,8%.<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C16 coverage). |
 
+### 4.2.7 Kelas MateriController
+
+**ID Kelas:** C17  
+**Nama Kelas:** MateriController  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C17MateriControllerTest.php`
+
+Tabel 4.2.7. Hasil Pengujian Unit Kelas C17
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C17-UT01 | `ambilDaftarMateri(filter: FilterMateri): List<MetadataMateri>` | Normal | Pelajar dengan riwayat skor 90 pada materi terbit | Daftar berisi materi dengan statusProgres selesai, persen 90 | Sesuai harapan (1 asersi lulus, 20 ms) | Pass |
+| C17-UT02 | `ambilDaftarMateri(filter: FilterMateri): List<MetadataMateri>` | Batas | Pelajar meminta termasukDraf = true | Permintaan draf diabaikan; hanya materi terbit | Sesuai harapan (1 asersi lulus, 16 ms) | Pass |
+| C17-UT03 | `ambilDaftarMateri(filter: FilterMateri): List<MetadataMateri>` | Negatif | Filter tingkat 3 tanpa materi | Daftar kosong | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C17-UT04 | `muatPaketMateri(idMateri: Integer, versiAplikasi: String): PaketMateri` | Normal | Materi terbit, versi 1.0 | Paket berhasil dengan aksara ꦲ ꦤ | Sesuai harapan (2 asersi lulus, 16 ms) | Pass |
+| C17-UT05 | `muatPaketMateri(idMateri: Integer, versiAplikasi: String): PaketMateri` | Batas | Materi draf dibuka Tim Materi (pratinjau) dan Pelajar | Tim Materi: berhasil; Pelajar: MATERI_TIDAK_TERSEDIA | Sesuai harapan (2 asersi lulus, 17 ms) | Pass |
+| C17-UT06 | `muatPaketMateri(idMateri: Integer, versiAplikasi: String): PaketMateri` | Negatif | ID tidak ada; materi terbit tanpa konten | MATERI_TIDAK_TERSEDIA; KONTEN_TIDAK_ADA | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C17-UT07 | `ambilAudioPengucapan(idMateri: Integer): HasilBerkas` | Normal | Materi terbit dengan berkas audio ada | Berhasil dengan path audio | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C17-UT08 | `ambilAudioPengucapan(idMateri: Integer): HasilBerkas` | Batas | Materi terbit tanpa audio | AUDIO_TIDAK_ADA (halaman tetap tampil tanpa tombol audio) | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C17-UT09 | `ambilAudioPengucapan(idMateri: Integer): HasilBerkas` | Negatif | Materi draf; audio terdaftar tetapi berkas hilang | MATERI_TIDAK_TERSEDIA; BERKAS_HILANG (UC02 Alternatif 2) | Sesuai harapan (2 asersi lulus, 15 ms) | Pass |
+| C17-UT10 | `tambahMateri(data: DataKonten, berkas: Berkas?): HasilOperasi` | Normal | Tim Materi menambah materi dengan audio mp3 | Berhasil; materi + konten tersimpan; berkas audio ada di penyimpanan | Sesuai harapan (2 asersi lulus, 19 ms) | Pass |
+| C17-UT11 | `tambahMateri(data: DataKonten, berkas: Berkas?): HasilOperasi` | Batas | Tanpa berkas (berkas opsional) | Berhasil; path_audio null | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C17-UT12 | `tambahMateri(data: DataKonten, berkas: Berkas?): HasilOperasi` | Negatif | (a) Pelajar menambah materi; (b) berkas .exe; (c) konten tidak lengkap | AKSES_DITOLAK; FORMAT_TIDAK_VALID; KONTEN_TIDAK_LENGKAP dan transaksi dibatalkan (tidak ada materi) | Sesuai harapan (4 asersi lulus, 14 ms) | Pass |
+| C17-UT13 | `validasiFormatFile(berkas: Berkas): HasilValidasi` | Normal | Berkas json berisi objek valid dan png kecil | Keduanya valid | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C17-UT14 | `validasiFormatFile(berkas: Berkas): HasilValidasi` | Batas | mp3 tepat 10.240 KB (10 MB) dan 10.241 KB; ekstensi "MP3" huruf besar | 10 MB valid; 10.241 KB tidak valid; MP3 valid | Sesuai harapan (3 asersi lulus, 11 ms) | Pass |
+| C17-UT15 | `validasiFormatFile(berkas: Berkas): HasilValidasi` | Negatif | Berkas .pdf dan berkas json yang isinya bukan JSON | Tidak valid: "Jenis berkas tidak didukung" dan "Isi berkas json tidak valid" (UC06 Alternatif 1) | Sesuai harapan (2 asersi lulus, 10 ms) | Pass |
+| C17-UT16 | `perbaruiMateri(idMateri: Integer, data: DataKonten): HasilOperasi` | Normal | Tim Materi mengubah aturan materi | Berhasil; versi konten naik 1.1 | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C17-UT17 | `perbaruiMateri(idMateri: Integer, data: DataKonten): HasilOperasi` | Negatif | Materi yang sudah diarsipkan; Pengajar memperbarui | TIDAK_DITEMUKAN; AKSES_DITOLAK | Sesuai harapan (2 asersi lulus, 13 ms) | Pass |
+| C17-UT18 | `hapusMateri(idMateri: Integer): HasilOperasi` | Normal | Tim Materi menghapus materi terbit | Status menjadi arsip (soft delete); materi tidak tampil di daftar Pelajar | Sesuai harapan (2 asersi lulus, 20 ms) | Pass |
+| C17-UT19 | `hapusMateri(idMateri: Integer): HasilOperasi` | Batas | Menghapus materi yang sudah diarsipkan (dua kali) | TIDAK_DITEMUKAN pada percobaan kedua | Sesuai harapan (1 asersi lulus, 13 ms) | Pass |
+| C17-UT20 | `hapusMateri(idMateri: Integer): HasilOperasi` | Negatif | Pelajar menghapus materi | AKSES_DITOLAK; materi tetap terbit | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C17-UT21 | `ambilKontenLatihan(idMateri: Integer, mode: ModeLatihan): TargetLatihan` | Normal | Materi terbit, mode menulis | Target berisi ꦲ dan ꦤ | Sesuai harapan (1 asersi lulus, 13 ms) | Pass |
+| C17-UT22 | `ambilKontenLatihan(idMateri: Integer, mode: ModeLatihan): TargetLatihan` | Batas | Materi terbit tanpa konten | Target kosong (halaman latihan menampilkan "belum tersedia") | Sesuai harapan (1 asersi lulus, 11 ms) | Pass |
+| C17-UT23 | `ambilKontenLatihan(idMateri: Integer, mode: ModeLatihan): TargetLatihan` | Negatif | Materi draf dan ID tidak ada | Target kosong (tidak dapat dilatih) | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C17-UT24 | `perbaruiMateri(idMateri: Integer, data: DataKonten): HasilOperasi` | Batas | Materi lama tanpa konten diperbarui | Konten baru dibuat dengan versi 1.0 | Sesuai harapan (2 asersi lulus, 13 ms) | Pass |
+
+Tabel 4.2.7b. Ringkasan Cakupan Kelas C17
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `ambilDaftarMateri()`, `muatPaketMateri()`, `ambilAudioPengucapan()`, `ambilKontenLatihan()`, `tambahMateri()`, `perbaruiMateri()`, `validasiFormatFile()`, `hapusMateri()` |
+| Operasi yang diuji | `ambilAudioPengucapan()`, `ambilDaftarMateri()`, `ambilKontenLatihan()`, `hapusMateri()`, `muatPaketMateri()`, `perbaruiMateri()`, `tambahMateri()`, `validasiFormatFile()` |
+| ID Algoritma yang tercakup | Algo-049, Algo-050, Algo-051, Algo-052, Algo-053, Algo-054, Algo-055 |
+| Coverage (wajib ≥ 70%) | `MateriController`: baris 77.2% (156/202), cabang 70.7% (111/157); seluruh suite (PCOV): baris 77.2%<br>`SimpanMateriRequest`: baris 97.1% (34/35), cabang 77.8% (7/9); seluruh suite (PCOV): baris 97.1%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C17 coverage). |
+
 ### 4.2.8 Kelas FeedbackController
 
 **ID Kelas:** C18  
@@ -467,6 +605,45 @@ Tabel 4.2.8b. Ringkasan Cakupan Kelas C18
 | Operasi yang diuji | `kirimKonfirmasi()`, `simpanFeedback()`, `validasiFeedback()` |
 | ID Algoritma yang tercakup | Algo-013, Algo-014 |
 | Coverage (wajib ≥ 70%) | `FeedbackController`: baris 100.0% (36/36), cabang 93.9% (31/33)<br>Alat: Xdebug 3.5.3 (`--path-coverage`), PHP 8.5.12, PHPUnit 12.5.43, Windows; diukur dari unit test kelas ini ditambah test fitur yang memakai kelas ini. Bukti: Tabel 4.6 (C18 coverage). |
+
+### 4.2.9 Kelas ProgresController
+
+**ID Kelas:** C19  
+**Nama Kelas:** ProgresController  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C19ProgresControllerTest.php`
+
+Tabel 4.2.9. Hasil Pengujian Unit Kelas C19
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C19-UT01 | `hitungProgres(idPelajar: Integer, periode: Periode): RingkasanProgres` | Normal | Riwayat 80 dan 60 pada satu materi, satu kesalahan pada ꦤ | Penguasaan 70, jumlahLatihan 2, pola {ꦤ:1}, kosong false | Sesuai harapan (2 asersi lulus, 15 ms) | Pass |
+| C19-UT02 | `hitungProgres(idPelajar: Integer, periode: Periode): RingkasanProgres` | Batas | Riwayat 10 hari lalu dengan filter 7 hari terakhir | Tidak dihitung; kosong true | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C19-UT03 | `hitungProgres(idPelajar: Integer, periode: Periode): RingkasanProgres` | Negatif | Pelajar tanpa riwayat | kosong true, penguasaan [] (memicu UC04 Alternatif 1) | Sesuai harapan (2 asersi lulus, 11 ms) | Pass |
+| C19-UT04 | `siapkanRekomendasi(idPelajar: Integer): List<MateriAksara>` | Normal | Penguasaan materi tingkat 1 = 50 | Rekomendasi berisi materi itu dengan penguasaan 50 | Sesuai harapan (2 asersi lulus, 13 ms) | Pass |
+| C19-UT05 | `siapkanRekomendasi(idPelajar: Integer): List<MateriAksara>` | Batas | Pelajar baru tanpa riwayat | Materi tingkat 1 direkomendasikan dengan penguasaan null | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C19-UT06 | `siapkanRekomendasi(idPelajar: Integer): List<MateriAksara>` | Negatif | Belum ada materi terbit | Daftar kosong | Sesuai harapan (1 asersi lulus, 11 ms) | Pass |
+| C19-UT07 | `ambilScoreboard(idKelas: Integer): List<Peringkat>` | Normal | Anggota aktif membuka kelas dengan scoreboard aktif | aktif true; daftar berisi anggota | Sesuai harapan (2 asersi lulus, 15 ms) | Pass |
+| C19-UT08 | `ambilScoreboard(idKelas: Integer): List<Peringkat>` | Batas | Pengajar pemilik (bukan anggota) membuka; scoreboard nonaktif dibuka anggota | Pemilik: aktif true; nonaktif: pesan "belum diaktifkan" | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C19-UT09 | `ambilScoreboard(idKelas: Integer): List<Peringkat>` | Negatif | Pelajar bukan anggota; kelas tidak ada | aktif false dengan pesan "bukan anggota aktif" / "tidak ditemukan"; daftar kosong (UC08 Alternatif 2) | Sesuai harapan (2 asersi lulus, 11 ms) | Pass |
+| C19-UT10 | `agregasiProgres(anggotaAktif: List<Profil>, periode: Periode): RingkasanProgres` | Normal | Dua anggota: skor 80 dan 60 | jumlahLatihan 2, rataPenguasaan 70 | Sesuai harapan (1 asersi lulus, 17 ms) | Pass |
+| C19-UT11 | `agregasiProgres(anggotaAktif: List<Profil>, periode: Periode): RingkasanProgres` | Batas | Anggota ada tetapi tanpa riwayat dalam periode | jumlahAnggota 1, rataPenguasaan null, kosong true (UC08 Alternatif 1) | Sesuai harapan (1 asersi lulus, 20 ms) | Pass |
+| C19-UT12 | `agregasiProgres(anggotaAktif: List<Profil>, periode: Periode): RingkasanProgres` | Negatif | Daftar anggota kosong; riwayat non-anggota ada | Ringkasan kosong; riwayat non-anggota tidak ikut | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C19-UT13 | `ambilIndikatorMotivasi(idPelajar: Integer): DataMotivasi` | Normal | Pelajar memiliki badge pemula | Daftar badge lengkap dengan pemula dimiliki = true dan badge lain false | Sesuai harapan (2 asersi lulus, 15 ms) | Pass |
+| C19-UT14 | `ambilIndikatorMotivasi(idPelajar: Integer): DataMotivasi` | Negatif | Pelajar tanpa baris motivasi | streak 0, poin 0, semua badge dimiliki = false | Sesuai harapan (2 asersi lulus, 13 ms) | Pass |
+| C19-UT15 | `ambilIndikatorMotivasi(idPelajar: Integer): DataMotivasi` | Batas | Pelajar memiliki ketiga badge | Seluruh badge dimiliki = true | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C19-UT16 | `ambilRiwayat(idPelajar, periode) / ambilDetailHasil(idPelajar, idMateri)` | Normal | Dua riwayat materi A, satu materi B | ambilRiwayat semua = 3; ambilDetailHasil(A) = 2 | Sesuai harapan (2 asersi lulus, 17 ms) | Pass |
+| C19-UT17 | `ambilRiwayat(idPelajar, periode) / hitungPolaKesalahan(idPelajar, periode)` | Batas | Kesalahan 10 hari lalu, filter 7 hari | Riwayat dan pola kesalahan kosong untuk periode itu | Sesuai harapan (3 asersi lulus, 17 ms) | Pass |
+| C19-UT18 | `ambilDetailHasil(idPelajar, idMateri) / hitungPolaKesalahan(idPelajar, periode)` | Negatif | Materi yang tidak dikerjakan; Pelajar tanpa kesalahan | Koleksi kosong; pola kosong | Sesuai harapan (2 asersi lulus, 16 ms) | Pass |
+
+Tabel 4.2.9b. Ringkasan Cakupan Kelas C19
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `ambilRiwayat()`, `hitungProgres()`, `siapkanRekomendasi()`, `ambilScoreboard()`, `agregasiProgres()`, `hitungPolaKesalahan()`, `ambilDetailHasil()`, `ambilIndikatorMotivasi()` |
+| Operasi yang diuji | `agregasiProgres()`, `ambilDetailHasil()`, `ambilIndikatorMotivasi()`, `ambilRiwayat()`, `ambilScoreboard()`, `hitungPolaKesalahan()`, `hitungProgres()`, `siapkanRekomendasi()` |
+| ID Algoritma yang tercakup | Algo-100, Algo-101, Algo-102 |
+| Coverage (wajib ≥ 70%) | `ProgresController`: baris 100.0% (135/135), cabang 97.1% (34/35); seluruh suite (PCOV): baris 100.0%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C19 coverage). |
 
 ### 4.2.10 Kelas KelasController
 
@@ -501,6 +678,81 @@ Tabel 4.2.10. Hasil Pengujian Unit Kelas C20
 | C20-UT20 | `ambilTugasAktif(idKelas) + bukaTugas(idKelas, idTugas)` | Negatif | Bukan anggota membuka kelas; anggota membuka ID tugas yang tidak ada | 404 untuk keduanya | Sesuai harapan (2 asersi lulus, 23 ms) | Pass |
 | C20-UT21 | `simpanPengumpulan(idKelas, idTugas)` | Normal | Anggota menyelesaikan komponen materi lalu POST kumpulkan | Pesan sukses; penyelesaian_tugas tepat_waktu | Sesuai harapan (2 asersi lulus, 33 ms) | Pass |
 | C20-UT22 | `simpanPengumpulan(idKelas, idTugas)` | Negatif | Pengajar mencoba POST kumpulkan | 403; tidak ada penyelesaian | Sesuai harapan (2 asersi lulus, 17 ms) | Pass |
+
+### 4.2.11 Kelas KontenMateri
+
+**ID Kelas:** C21  
+**Nama Kelas:** KontenMateri  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C21KontenMateriTest.php`
+
+Tabel 4.2.11. Hasil Pengujian Unit Kelas C21
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C21-UT01 | `ambilKonten(versiAplikasi: String): PaketMateri` | Normal | Versi aplikasi 1.0, konten versi 1.0 | Paket berisi aksara ꦲ ꦤ, aturan, contoh, versi 1.0 | Sesuai harapan (3 asersi lulus, 15 ms) | Pass |
+| C21-UT02 | `ambilKonten(versiAplikasi: String): PaketMateri` | Batas | Konten terbaru butuh aplikasi 2.0 tetapi versi lama (1.0) ada di arsip; aplikasi klien versi 1.5 | Versi arsip 1.0 yang kompatibel dipilih | Sesuai harapan (2 asersi lulus, 17 ms) | Pass |
+| C21-UT03 | `ambilKonten(versiAplikasi: String): PaketMateri` | Negatif | Aplikasi versi 0.9, semua konten butuh minimal 1.0 | Galat KONTEN_TIDAK_KOMPATIBEL | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C21-UT04 | `ambilAudio(): HasilBerkas` | Normal | path_audio "materi/1/ha.mp3" ada di disk penyimpanan | Berhasil dengan path berkas | Sesuai harapan (2 asersi lulus, 15 ms) | Pass |
+| C21-UT05 | `ambilAudio(): HasilBerkas` | Batas | path_audio berupa string kosong | AUDIO_TIDAK_ADA | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C21-UT06 | `ambilAudio(): HasilBerkas` | Negatif | path_audio terisi tetapi berkas tidak ada di disk | BERKAS_HILANG (memicu UC02 Alternatif 2) | Sesuai harapan (1 asersi lulus, 16 ms) | Pass |
+| C21-UT07 | `perbaruiKonten(data: DataKonten): HasilOperasi` | Normal | Aturan diubah | Berhasil; versi naik 1.0 → 1.1; versi lama masuk konten_materi_arsip | Sesuai harapan (3 asersi lulus, 15 ms) | Pass |
+| C21-UT08 | `perbaruiKonten(data: DataKonten): HasilOperasi` | Batas | Data identik dengan konten sekarang | Berhasil dengan pesan "Tidak ada perubahan"; versi tetap 1.0; tidak ada arsip | Sesuai harapan (3 asersi lulus, 14 ms) | Pass |
+| C21-UT09 | `perbaruiKonten(data: DataKonten): HasilOperasi` | Negatif | Aturan berisi spasi saja | KONTEN_TIDAK_LENGKAP; konten lama tidak berubah | Sesuai harapan (2 asersi lulus, 15 ms) | Pass |
+| C21-UT10 | `simpanKonten(data: DataKonten): HasilOperasi` | Normal | Konten lengkap untuk materi baru | Berhasil; versi_konten 1.0 | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C21-UT11 | `simpanKonten(data: DataKonten): HasilOperasi` | Negatif | Bentuk aksara kosong | KONTEN_TIDAK_LENGKAP; tidak ada baris konten | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C21-UT12 | `simpanKonten(data: DataKonten): HasilOperasi` | Batas | Bentuk, aturan, dan contoh diapit spasi | Tersimpan setelah di-trim | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C21-UT13 | `arsipkanVersi(): HasilOperasi` | Normal | Konten versi 1.0 diarsipkan | Berhasil; baris konten_materi_arsip berisi salinan versi 1.0 | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C21-UT14 | `arsipkanVersi(): HasilOperasi` | Batas | Konten diperbarui dua kali (1.0 → 1.1 → 1.2) | Arsip berisi versi 1.0 dan 1.1; konten aktif 1.2 | Sesuai harapan (2 asersi lulus, 16 ms) | Pass |
+| C21-UT15 | `arsipkanVersi(): HasilOperasi` | Negatif | Tabel arsip tidak tersedia saat konten diperbarui | Operasi gagal dengan galat basis data dan konten aktif tidak tertimpa | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+
+Tabel 4.2.11b. Ringkasan Cakupan Kelas C21
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `ambilKonten()`, `ambilAudio()`, `perbaruiKonten()`, `arsipkanVersi()`, `simpanKonten()` |
+| Operasi yang diuji | `ambilAudio()`, `ambilKonten()`, `arsipkanVersi()`, `perbaruiKonten()`, `simpanKonten()` |
+| ID Algoritma yang tercakup | Algo-056, Algo-057, Algo-058, Algo-059 |
+| Coverage (wajib ≥ 70%) | `KontenMateri`: baris 98.7% (73/74), cabang 92.5% (37/40); seluruh suite (PCOV): baris 98.6%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C21 coverage). |
+
+### 4.2.12 Kelas MotivasiBelajar
+
+**ID Kelas:** C22  
+**Nama Kelas:** MotivasiBelajar  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C22MotivasiBelajarTest.php`
+
+Tabel 4.2.12. Hasil Pengujian Unit Kelas C22
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C22-UT01 | `perbaruiStreak(tanggal: Date)` | Normal | Aktivitas pada 01, 02, dan 03-11-2026 berturut-turut | Streak = 3 | Sesuai harapan (1 asersi lulus, 22 ms) | Pass |
+| C22-UT02 | `perbaruiStreak(tanggal: Date)` | Batas | Dua aktivitas pada hari yang sama (23.59 lalu 00.00 hari berikutnya juga diuji) | Hari sama: streak tetap 1; pergantian hari 23.59 ke 00.00: streak menjadi 2 | Sesuai harapan (2 asersi lulus, 16 ms) | Pass |
+| C22-UT03 | `perbaruiStreak(tanggal: Date)` | Negatif | Aktivitas 01 dan 02-11, lalu terlewat sehari dan aktif lagi 04-11 | Streak kembali 1 | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C22-UT04 | `tambahPoin(idAktivitas: Integer, nilai: Integer): HasilOperasi` | Normal | Tambah 10 poin dua kali | Berhasil; total poin 20 | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C22-UT05 | `tambahPoin(idAktivitas: Integer, nilai: Integer): HasilOperasi` | Batas | Nilai poin terkecil yang sah, yaitu 1 | Berhasil; poin = 1 | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C22-UT06 | `tambahPoin(idAktivitas: Integer, nilai: Integer): HasilOperasi` | Negatif | Nilai 0 dan nilai -5 | Gagal (NILAI_TIDAK_VALID); poin tetap 0 | Sesuai harapan (3 asersi lulus, 14 ms) | Pass |
+| C22-UT07 | `berikanBadge(kode: String): HasilOperasi` | Normal | Badge "pemula" diberikan pertama kali | Berhasil dengan baru = true; daftar badge berisi pemula | Sesuai harapan (2 asersi lulus, 15 ms) | Pass |
+| C22-UT08 | `berikanBadge(kode: String): HasilOperasi` | Batas | Badge kedua yang berbeda ditambahkan setelah badge pertama | Daftar berisi dua badge sesuai urutan | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C22-UT09 | `berikanBadge(kode: String): HasilOperasi` | Negatif | Badge yang sama diberikan dua kali | Pemberian kedua baru = false; badge tidak ganda | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C22-UT10 | `susunScoreboard(anggotaAktif: List<Profil>): List<Peringkat>` | Normal | Tiga anggota dengan poin 50, 30, 10 | Peringkat 1, 2, 3 urut poin menurun dengan nama tampilan | Sesuai harapan (2 asersi lulus, 18 ms) | Pass |
+| C22-UT11 | `susunScoreboard(anggotaAktif: List<Profil>): List<Peringkat>` | Batas | Poin sama (30, 30) dan anggota tanpa baris motivasi | Poin sama mendapat peringkat sama (1, 1, 3); anggota tanpa motivasi berpoin 0; tidak ada email di hasil | Sesuai harapan (3 asersi lulus, 17 ms) | Pass |
+| C22-UT12 | `susunScoreboard(anggotaAktif: List<Profil>): List<Peringkat>` | Negatif | Daftar anggota kosong | Hasil daftar kosong, tanpa galat | Sesuai harapan (1 asersi lulus, 11 ms) | Pass |
+| C22-UT13 | `ambilMotivasi(idPelajar: Integer): Data` | Normal | Pelajar aktif hari ini dengan streak 1, poin 40, badge pemula | Data berisi streak 1, poin 40, badge [pemula] | Sesuai harapan (1 asersi lulus, 16 ms) | Pass |
+| C22-UT14 | `ambilMotivasi(idPelajar: Integer): Data` | Batas | Aktivitas terakhir kemarin (masih tersambung) dan tiga hari lalu (terputus) | Kemarin: streak tetap; tiga hari lalu: streak ditampilkan 0 tanpa mengubah data tersimpan | Sesuai harapan (3 asersi lulus, 17 ms) | Pass |
+| C22-UT15 | `ambilMotivasi(idPelajar: Integer): Data` | Negatif | ID Pelajar yang tidak punya baris motivasi | Streak 0, poin 0, badge kosong | Sesuai harapan (1 asersi lulus, 12 ms) | Pass |
+| C22-UT16 | `ambilPoinKelas(anggotaAktif: List<Integer>): List<Peringkat>` | Normal | Tiga anggota dengan poin 10, 40, 20 | Urut 40, 20, 10 | Sesuai harapan (1 asersi lulus, 18 ms) | Pass |
+| C22-UT17 | `ambilPoinKelas(anggotaAktif: List<Integer>): List<Peringkat>` | Batas | Dua anggota berpoin sama dan satu tanpa baris motivasi | Poin sama diurutkan id terkecil; tanpa baris = 0 | Sesuai harapan (2 asersi lulus, 17 ms) | Pass |
+| C22-UT18 | `ambilPoinKelas(anggotaAktif: List<Integer>): List<Peringkat>` | Negatif | Daftar anggota kosong | Koleksi kosong | Sesuai harapan (1 asersi lulus, 11 ms) | Pass |
+
+Tabel 4.2.12b. Ringkasan Cakupan Kelas C22
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `perbaruiStreak()`, `tambahPoin()`, `berikanBadge()`, `susunScoreboard()`, `ambilMotivasi()`, `ambilPoinKelas()` |
+| Operasi yang diuji | `ambilMotivasi()`, `ambilPoinKelas()`, `berikanBadge()`, `perbaruiStreak()`, `susunScoreboard()`, `tambahPoin()` |
+| ID Algoritma yang tercakup | Algo-028, Algo-029, Algo-030, Algo-031, Algo-032, Algo-033 |
+| Coverage (wajib ≥ 70%) | `MotivasiBelajar`: baris 97.2% (69/71), cabang 91.8% (45/49); seluruh suite (PCOV): baris 97.2%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C22 coverage). |
 
 ### 4.2.13 Kelas KelasBelajar
 
@@ -540,6 +792,42 @@ Tabel 4.2.13b. Ringkasan Cakupan Kelas C23
 | ID Algoritma yang tercakup | Algo-087, Algo-088, Algo-089, Algo-090, Algo-091, Algo-092, Algo-093, Algo-094, Algo-095, Algo-096, Algo-097 |
 | Coverage (wajib ≥ 70%) | `KelasBelajar`: baris 81.4% (48/59), method 57.1% (4/7)<br>Alat: Xdebug 3.5.3 (`xdebug.mode=coverage`), PHP 8.3.36, PHPUnit 12.5.43, Windows. Bukti: Tabel 4.6 (C23 coverage). |
 
+### 4.2.14 Kelas KeanggotaanKelas
+
+**ID Kelas:** C24  
+**Nama Kelas:** KeanggotaanKelas  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C24KeanggotaanKelasTest.php`
+
+Tabel 4.2.14. Hasil Pengujian Unit Kelas C24
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C24-UT01 | `simpanKeanggotaan(idPelajar: Integer, idKelas: Integer): HasilOperasi` | Normal | Pelajar baru bergabung ke kelas aktif | berhasilBergabung; satu baris keanggotaan aktif | Sesuai harapan (2 asersi lulus, 15 ms) | Pass |
+| C24-UT02 | `simpanKeanggotaan(idPelajar: Integer, idKelas: Integer): HasilOperasi` | Batas | (a) Pelajar yang sudah anggota bergabung lagi; (b) anggota berstatus keluar bergabung lagi | (a) sudahAnggota tanpa baris ganda; (b) anggotaDiaktifkan | Sesuai harapan (3 asersi lulus, 16 ms) | Pass |
+| C24-UT03 | `simpanKeanggotaan(idPelajar: Integer, idKelas: Integer): HasilOperasi` | Negatif | (a) kelas diarsipkan; (b) kelas tidak ada; (c) akun Pengajar mencoba bergabung | kelasTidakAktif, kelasTidakAktif, pelajarTidakValid; tidak ada baris | Sesuai harapan (4 asersi lulus, 15 ms) | Pass |
+| C24-UT04 | `ubahStatus(status: String): HasilOperasi` | Normal | Anggota aktif dikeluarkan (status keluar) | statusDiubah; periksaAkses menjadi false | Sesuai harapan (2 asersi lulus, 15 ms) | Pass |
+| C24-UT05 | `ubahStatus(status: String): HasilOperasi` | Batas | Anggota keluar diaktifkan kembali pada kelas yang sudah diarsipkan; anggota dinonaktifkan pada kelas arsip | Aktivasi: kelasTidakAktif; nonaktif: statusDiubah | Sesuai harapan (2 asersi lulus, 16 ms) | Pass |
+| C24-UT06 | `ubahStatus(status: String): HasilOperasi` | Negatif | Status "dihapus" (tidak dikenal) dan objek keanggotaan yang belum tersimpan | statusTidakValid | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C24-UT07 | `periksaAkses(idPelajar: Integer, idKelas: Integer): Boolean` | Normal | Anggota aktif | true | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C24-UT08 | `periksaAkses(idPelajar: Integer, idKelas: Integer): Boolean` | Batas | Anggota berstatus nonaktif | false | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C24-UT09 | `periksaAkses(idPelajar: Integer, idKelas: Integer): Boolean` | Negatif | Pelajar yang bukan anggota | false | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C24-UT10 | `daftarAnggotaAktif(idKelas: Integer): List` | Normal | Dua anggota aktif dan satu anggota keluar | Dua anggota aktif | Sesuai harapan (2 asersi lulus, 16 ms) | Pass |
+| C24-UT11 | `daftarAnggotaAktif(idKelas: Integer): List` | Batas | Kelas tanpa anggota | Daftar kosong | Sesuai harapan (1 asersi lulus, 13 ms) | Pass |
+| C24-UT12 | `daftarAnggotaAktif(idKelas: Integer): List` | Negatif | Anggota kelas lain | Tidak ikut terdaftar | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C24-UT13 | `daftarAnggota(idKelas: Integer): List` | Normal | Anggota aktif, keluar, dan nonaktif | Ketiganya terdaftar dengan statusnya (riwayat keanggotaan tidak hilang) | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C24-UT14 | `daftarAnggota(idKelas: Integer): List` | Batas | Anggota keluar lalu bergabung lagi | Tetap satu baris (tidak ganda) berstatus aktif | Sesuai harapan (1 asersi lulus, 15 ms) | Pass |
+| C24-UT15 | `daftarAnggota(idKelas: Integer): List` | Negatif | ID kelas yang tidak ada | Koleksi kosong | Sesuai harapan (1 asersi lulus, 12 ms) | Pass |
+
+Tabel 4.2.14b. Ringkasan Cakupan Kelas C24
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `simpanKeanggotaan()`, `periksaAkses()`, `daftarAnggotaAktif()`, `ubahStatus()`, `daftarAnggota()` |
+| Operasi yang diuji | `daftarAnggota()`, `daftarAnggotaAktif()`, `periksaAkses()`, `simpanKeanggotaan()`, `ubahStatus()` |
+| ID Algoritma yang tercakup | Algo-109, Algo-110, Algo-111, Algo-112 |
+| Coverage (wajib ≥ 70%) | `KeanggotaanKelas`: baris 83.3% (50/60), cabang 76.5% (13/17); seluruh suite (PCOV): baris 98.3%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C24 coverage). |
+
 ### 4.2.15 Kelas TugasKelas
 
 **ID Kelas:** C25  
@@ -573,11 +861,44 @@ Tabel 4.2.15b. Ringkasan Cakupan Kelas C25
 | ID Algoritma yang tercakup | Algo-113, Algo-114, Algo-115, Algo-116, Algo-117 |
 | Coverage (wajib ≥ 70%) | `TugasKelas`: baris 86.0% (98/114), method 71.4% (5/7)<br>Alat: Xdebug 3.5.3 (`xdebug.mode=coverage`), PHP 8.3.36, PHPUnit 12.5.43, Windows. Bukti: Tabel 4.6 (C25 coverage). |
 
+### 4.2.16 Kelas PenyelesaianTugas
+
+**ID Kelas:** C26  
+**Nama Kelas:** PenyelesaianTugas  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C26PenyelesaianTugasTest.php`
+
+Tabel 4.2.16. Hasil Pengujian Unit Kelas C26
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C26-UT01 | `tentukanStatusKetepatan(waktuSelesai: DateTime, tenggat: DateTime): String` | Normal | Selesai 10-11-2026 20.00, tenggat 11-11-2026 21.50 | "tepat_waktu" | Sesuai harapan (1 asersi lulus, 11 ms) | Pass |
+| C26-UT02 | `tentukanStatusKetepatan(waktuSelesai: DateTime, tenggat: DateTime): String` | Batas | Selesai tepat pada detik tenggat, dan satu detik sesudahnya | Tepat di tenggat: "tepat_waktu"; +1 detik: "terlambat" | Sesuai harapan (2 asersi lulus, 11 ms) | Pass |
+| C26-UT03 | `tentukanStatusKetepatan(waktuSelesai: DateTime, tenggat: DateTime): String` | Negatif | Selesai sehari setelah tenggat | "terlambat" | Sesuai harapan (1 asersi lulus, 11 ms) | Pass |
+| C26-UT04 | `simpanPengumpulan(idPelajar, idTugas, waktuSelesai, tenggat): HasilOperasi` | Normal | Komponen wajib selesai sebelum tenggat lalu tugas dikumpulkan | Berhasil (tugasDikumpulkan) dengan status tepat_waktu; baris penyelesaian dan catatan pengumpulan tersimpan | Sesuai harapan (3 asersi lulus, 20 ms) | Pass |
+| C26-UT05 | `simpanPengumpulan(idPelajar, idTugas, waktuSelesai, tenggat): HasilOperasi` | Batas | (a) komponen selesai setelah tenggat; (b) pengumpulan diulang | (a) status terlambat; (b) sudahDikumpulkan tanpa baris ganda | Sesuai harapan (3 asersi lulus, 20 ms) | Pass |
+| C26-UT06 | `simpanPengumpulan(idPelajar, idTugas, waktuSelesai, tenggat): HasilOperasi` | Negatif | (a) komponen wajib belum selesai; (b) pengguna bukan anggota kelas | (a) komponenBelumLengkap; (b) aksesDitolak; tidak ada baris penyelesaian | Sesuai harapan (3 asersi lulus, 20 ms) | Pass |
+| C26-UT07 | `ambilStatus(idPelajar: Integer, daftarTugas: List): List` | Normal | Pelajar sudah mengumpulkan satu tugas | Status tugas tersebut tersedia (tepat_waktu) | Sesuai harapan (2 asersi lulus, 20 ms) | Pass |
+| C26-UT08 | `ambilStatus(idPelajar: Integer, daftarTugas: List): List` | Batas | Daftar tugas kosong | Koleksi kosong | Sesuai harapan (1 asersi lulus, 12 ms) | Pass |
+| C26-UT09 | `ambilStatus(idPelajar: Integer, daftarTugas: List): List` | Negatif | Pelajar lain yang tidak mengumpulkan menanyakan tugas yang sama | Status belum_selesai (status milik Pelajar lain tidak terbawa) | Sesuai harapan (1 asersi lulus, 21 ms) | Pass |
+| C26-UT10 | `ambilStatus(idPelajar: Integer, daftarTugas: List): List` | Negatif | Daftar tugas berisi ID 0 (tidak valid) | InvalidArgumentException dilempar | Sesuai harapan (1 asersi lulus, 11 ms) | Pass |
+
+Tabel 4.2.16b. Ringkasan Cakupan Kelas C26
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `simpanPengumpulan()`, `ambilStatus()` |
+| Operasi yang diuji | `ambilStatus()`, `simpanPengumpulan()`, `tentukanStatusKetepatan()`<br>Catatan: simpanAtomik dijalankan di dalam transaksi PengumpulanTugas::simpanPengumpulan (C26-UT04 s.d. C26-UT06). |
+| ID Algoritma yang tercakup | Algo-118, Algo-119, Algo-120, Algo-121 |
+| Coverage (wajib ≥ 70%) | `PenyelesaianTugas`: baris 94.4% (17/18), cabang 93.8% (15/16); seluruh suite (PCOV): baris 94.4%<br>`PengumpulanTugas`: baris 87.8% (65/74), cabang 95.2% (40/42); seluruh suite (PCOV): baris 97.3%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C26 coverage). |
+
+<br>
+
 ## 4.3 Pengujian Integrasi
 
-Pengujian integrasi memeriksa interaksi antarkomponen yang melewati batas, yaitu View ke Controller lewat HTTP, Controller ke Model, aplikasi ke basis data, aplikasi ke penyimpanan berkas, dan aplikasi ke log. Daftar antarmuka mengacu pada relasi komponen Subbab 2.4 DPPL. Semua test memakai komponen nyata: rute dan middleware Laravel, controller, model Eloquent, basis data SQLite, disk penyimpanan Laravel (disk `local` palsu untuk berkas unggahan), dan berkas log sungguhan. Ngaksara tidak memakai sistem eksternal, sehingga tidak ada batas aplikasi–sistem eksternal.
+Cara menjalankan: `php artisan test tests/Feature/Hiupl/IntegrasiTest.php`. 
 
-Cara menjalankan: `php artisan test tests/Feature/Hiupl/IntegrasiTest.php`. Lokasi: `src/tests/Feature/Hiupl/IntegrasiTest.php`.
+Lokasi: `src/tests/Feature/Hiupl/IntegrasiTest.php`.
 
 Tabel 4.3.1. Daftar Antarmuka Antarkomponen
 
@@ -618,27 +939,6 @@ Tabel 4.3.2. Hasil Pengujian Integrasi
 
 ## 4.4 Pengujian Use Case
 
-Pengujian use case dilakukan pada seluruh skenario normal dan alternatif sesuai Subbab 4.4 SKPL, dengan minimal satu test case untuk setiap skenario. Kolom ID KF menunjukkan KF yang diverifikasi oleh test case tersebut.
-
-### 4.4.1 Use Case [Nama Use Case 1]
-
-**ID Use Case:** *[UC01 sesuai SKPL]*  
-**Nama Use Case:** *[Nama use case sesuai SKPL]*
-
-Tabel 4.4.1. Hasil Pengujian Use Case [UC01]
-
-| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *UC01-TC01* | *KF01* | *Normal* | *1. Buka halaman login.<br>2. Masukkan kredensial.<br>3. Klik tombol "Login".* | *User: rpl@gmail.com<br>Pass: 123456* | *Pengguna diarahkan ke Halaman Dashboard.* | *Pengguna diarahkan ke Halaman Dashboard sesuai hasil yang diharapkan.* | *Pass* |
-| *UC01-TC02* | *KF01* | *Alternatif 1: [Nama skenario]* | *[Langkah-langkah pengujian]* | *[Data masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *[Pass/Fail. Jika Fail: penjelasan dan solusi]* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* | *...* |
-
-### 4.4.2 Use Case [Nama Use Case 2]
-
-*[Lanjutkan untuk seluruh use case dengan pola yang sama, hingga 4.4.N.]*
-
-<br>
-
 ### 4.4.1 Use Case Melakukan Pendaftaran Akun
 
 **ID Use Case:** UC-01  
@@ -650,6 +950,19 @@ Tabel 4.4.1. Hasil Pengujian Use Case UC-01
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | UC01-TC01 | KF01, KF04, KF05, KF06, KF07 | Normal | 1. Buka halaman Daftar (I-01).<br>2. Pilih peran Pelajar.<br>3. Isi email, username, kata sandi.<br>4. Centang persetujuan T&C.<br>5. Tekan "Daftar". | Peran: Pelajar<br>Email: dewi.e2e@ngaksara.test<br>Username: dewi_e2e<br>Sandi: Rahasia123 | Akun tersimpan dengan sandi ter-hash dan pengguna diarahkan ke halaman Masuk dengan pesan berhasil. | Akun tersimpan, diarahkan ke /masuk; password_hash diawali $2y$12$. Bukti: Gambar UC01-TC01. | Pass |
 | UC01-TC02 | KF04 | Alternatif 1: Kredensial tidak valid | 1. Buka halaman Daftar.<br>2. Isi email yang sudah terdaftar.<br>3. Centang T&C lalu tekan "Daftar". | Email: pelajar@ngaksara.test (sudah ada)<br>Username: sari_baru<br>Sandi: Rahasia123 | Pendaftaran ditolak, tetap di halaman Daftar, pesan "Email sudah terdaftar" tampil dan isian lain dipertahankan. | Tetap di halaman daftar, pesan: "Email sudah terdaftar. Gunakan email lain atau masuk dengan akun yang ada.". Bukti: Gambar UC01-TC02. | Pass |
+
+### 4.4.2 Use Case Mempelajari Materi
+
+**ID Use Case:** UC-02  
+**Nama Use Case:** Mempelajari Materi
+
+Tabel 4.4.2. Hasil Pengujian Use Case UC-02
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC02-TC01 | KF08, KF09 | Normal | 1. Masuk sebagai Pelajar.<br>2. Buka Materi, pilih aksara Jawa tingkat 1.<br>3. Pilih "Nglegena: ha na ca ra ka".<br>4. Tekan "Dengarkan". | Akun: pelajar@ngaksara.test<br>Filter: jawa, tingkat 1 | Daftar materi terbit tampil berurutan, isi materi tampil, audio diputar tanpa pesan galat. | Daftar & isi materi tampil; GET /materi/1/audio = 200, tanpa pesan galat audio. Bukti: Gambar UC02-TC01. | Pass |
+| UC02-TC02 | KF09 | Alternatif 1: Materi belum tersedia | 1. Masuk sebagai Pelajar.<br>2. Buka Materi dengan filter aksara Sunda tingkat 3. | Filter: sunda, tingkat 3 | Halaman menampilkan keadaan kosong bahwa materi belum tersedia. | Halaman menampilkan keadaan kosong "materi belum tersedia". Bukti: Gambar UC02-TC02. | Pass |
+| UC02-TC03 | KF08 | Alternatif 2: Audio gagal diputar | 1. Masuk sebagai Pelajar.<br>2. Buka materi 2 yang berkas audionya hilang.<br>3. Tekan "Dengarkan". | Materi: Nglegena: da ta sa wa la (path audio tidak ada di penyimpanan) | Pesan "Audio tidak dapat diputar. Periksa koneksi lalu tekan Dengarkan sekali lagi." tampil; isi materi tetap terbaca. | Berkas audio hilang -> pesan "Audio tidak dapat diputar..." tampil, materi tetap terbaca. Bukti: Gambar UC02-TC03. | Pass |
 
 ### 4.4.3 Use Case Mengerjakan Latihan Aksara
 
@@ -665,6 +978,45 @@ Tabel 4.4.3. Hasil Pengujian Use Case UC-03
 | UC03-TC03 | KF22 | Alternatif 2: Latihan merangkai | 1. Buka latihan merangkai materi 1.<br>2. Tekan ubin aksara sesuai urutan yang dipilih.<br>3. Tekan "Kirim jawaban". | Urutan ubin: sesuai urutan tampil | Rangkaian dievaluasi; halaman hasil menandai posisi yang salah dan menampilkan skor. | Ubin dirangkai lalu dikirim; posisi salah ditandai di halaman hasil. Bukti: Gambar UC03-TC03. | Pass |
 | UC03-TC04 | KF12 | Alternatif 3: Hasil gambar kurang akurat | 1. Buka latihan menulis materi 1.<br>2. Gambar garis pendek yang tidak sesuai bentuk aksara.<br>3. Tekan "Periksa".<br>4. Tekan "Ulangi". | Goresan: satu garis pendek di pojok kiri atas kanvas | Status "Belum tepat" dengan pesan "Tulis lebih dekat ke garis bantu."; tombol Ulangi menghapus goresan tanpa mengganti soal. | Umpan balik "Akurasi 0%. Tulis lebih dekat ke garis bantu."; tombol Ulangi menghapus goresan, soal tetap. Bukti: Gambar UC03-TC04. | Pass |
 
+### 4.4.4 Use Case Meninjau Progres dan Motivasi
+
+**ID Use Case:** UC-04  
+**Nama Use Case:** Meninjau Progres dan Motivasi
+
+Tabel 4.4.4. Hasil Pengujian Use Case UC-04
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC04-TC01 | KF24 | Normal | 1. Masuk sebagai Pelajar yang memiliki riwayat.<br>2. Buka halaman Progres. | Akun: pelajar@ngaksara.test (riwayat dari seeder) | Penguasaan per materi, pola kesalahan, rekomendasi, streak, poin, dan badge tampil. | Penguasaan per materi, pola kesalahan, rekomendasi, streak, poin, dan badge tampil. Bukti: Gambar UC04-TC01. | Pass |
+| UC04-TC02 | KF24 | Alternatif 1: Belum ada riwayat | 1. Masuk sebagai Pelajar baru.<br>2. Buka halaman Progres. | Akun: dewi.e2e@ngaksara.test (tanpa riwayat) | Halaman menampilkan keterangan belum ada riwayat dan rekomendasi materi awal. | Pelajar baru melihat pesan belum ada riwayat dan ajakan mulai belajar. Bukti: Gambar UC04-TC02. | Pass |
+| UC04-TC03 | KF24 | Alternatif 2: Melihat papan peringkat | 1. Masuk sebagai anggota kelas.<br>2. Buka Progres dan pilih kelas "Aksara Jawa Dasar". | Kelas: K7M2QX (papan peringkat aktif) | Papan peringkat anggota aktif tampil urut poin, memakai nama tampilan tanpa email. | Papan peringkat anggota aktif tampil urut poin, tanpa email. Bukti: Gambar UC04-TC03. | Pass |
+
+### 4.4.5 Use Case Mengikuti Pembelajaran Kelas
+
+**ID Use Case:** UC-05  
+**Nama Use Case:** Mengikuti Pembelajaran Kelas
+
+Tabel 4.4.5. Hasil Pengujian Use Case UC-05
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC05-TC01 | KF14, KF26, KF28 | Normal | 1. Masuk sebagai Pelajar baru.<br>2. Buka Kelas Saya, masukkan kode, tekan "Gabung".<br>3. Buka tugas, selesaikan komponen materi ("Selesai membaca") dan komponen latihan menulis.<br>4. Tekan "Kumpulkan". | Kode: k7m2qx (huruf kecil)<br>Akun: dewi.e2e@ngaksara.test | Pelajar menjadi anggota, kedua komponen tercatat selesai, tugas terkumpul dengan status "tepat waktu". | Bergabung dengan kode, komponen materi & latihan selesai, tugas terkumpul tepat_waktu. Bukti: Gambar UC05-TC01. | Pass |
+| UC05-TC02 | KF26 | Alternatif 1: Sudah menjadi anggota | 1. Masuk sebagai anggota kelas.<br>2. Masukkan kode kelas yang sama lalu tekan "Gabung". | Kode: K7M2QX<br>Akun: pelajar@ngaksara.test | Pesan "Kamu sudah menjadi anggota kelas ini." tampil dan tidak ada keanggotaan ganda. | Pesan "Kamu sudah menjadi anggota kelas ini." dan diarahkan ke halaman kelas. Bukti: Gambar UC05-TC02. | Pass |
+| UC05-TC03 | KF28 | Alternatif 2: Pengumpulan terlambat | 1. Masuk sebagai anggota.<br>2. Buka tugas yang tenggatnya sudah lewat.<br>3. Selesaikan komponen materi lalu tekan "Kumpulkan". | Tugas: tenggat kemarin<br>Akun: budi@ngaksara.test | Tugas tetap dapat dikumpulkan dan tersimpan dengan status "terlambat". | Tugas lewat tenggat tetap dapat dikumpulkan dan berstatus "terlambat". Bukti: Gambar UC05-TC03. | Pass |
+| UC05-TC04 | KF26 | Alternatif 3: Kode tidak valid | 1. Masuk sebagai Pelajar.<br>2. Masukkan kode yang tidak terdaftar lalu tekan "Gabung". | Kode: ZZZZZZ | Pesan "Kode tidak ditemukan atau kelas tidak aktif." tampil; tidak ada keanggotaan baru. | Pesan "Kode tidak ditemukan atau kelas tidak aktif." tampil; isian tetap. Bukti: Gambar UC05-TC04. | Pass |
+
+### 4.4.6 Use Case Memperbaharui Materi
+
+**ID Use Case:** UC-06  
+**Nama Use Case:** Memperbaharui Materi
+
+Tabel 4.4.6. Hasil Pengujian Use Case UC-06
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC06-TC01 | KF15, KF16 | Normal | 1. Masuk sebagai Tim Materi.<br>2. Buka Kelola Materi → Tambah.<br>3. Isi nama, jenis, tingkat, aturan dan contoh, unggah mp3.<br>4. Tekan "Simpan sebagai draf", lalu "Terbitkan". | Nama: Pasangan: ha na<br>Jawa, tingkat 2<br>Berkas: audio.mp3 (1 detik) | Materi tersimpan sebagai draf dengan audio, lalu berstatus terbit. | Materi tersimpan (audio materi/10/audio.mp3) lalu terbit. Bukti: Gambar UC06-TC01. | Pass |
+| UC06-TC02 | KF15 | Alternatif 1: Penambahan gagal | 1. Masuk sebagai Tim Materi.<br>2. Isi formulir materi baru.<br>3. Unggah berkas .exe lalu simpan. | Berkas: virus.exe (66 byte) | Pesan "Jenis berkas tidak didukung" tampil; materi dan berkas tidak tersimpan. | Pesan "Jenis berkas tidak didukung"; materi tidak tersimpan. Bukti: Gambar UC06-TC02. | Pass |
+
 ### 4.4.7 Use Case Menyiapkan Pembelajaran Kelas
 
 **ID Use Case:** UC-07  
@@ -678,6 +1030,19 @@ Tabel 4.4.7. Hasil Pengujian Use Case UC-07
 | UC07-TC02 | KF25 | Alternatif 1: Mengganti kode kelas | 1. Masuk sebagai pemilik kelas.<br>2. Tekan "Ganti kode" pada kartu kelas. | Kelas: Kelas Uji HIUPL | Kode baru tampil dan kode lama tidak berlaku. | Kode NJ528B diganti menjadi ANEKER; kode lama tidak berlaku. Bukti: Gambar UC07-TC02. | Pass |
 | UC07-TC03 | KF02, KF25 | Alternatif 2: Mengeluarkan anggota | 1. Masuk sebagai pemilik kelas K7M2QX.<br>2. Buka Anggota, tekan "Keluarkan" pada Sari.<br>3. Konfirmasi "Ya, keluarkan". | Anggota: Sari | Dialog konfirmasi tampil; Sari tidak lagi aktif dan kehilangan akses kelas. | Dialog konfirmasi tampil; Sari dikeluarkan (status nonaktif). Bukti: Gambar UC07-TC03. | Pass |
 | UC07-TC04 | KF24, KF25 | Alternatif 3: Mengaktifkan papan peringkat | 1. Masuk sebagai pemilik kelas.<br>2. Buka Anggota, nyalakan sakelar Papan peringkat. | Kelas: Kelas Uji HIUPL | Status papan peringkat kelas menjadi aktif. | Sakelar papan peringkat aktif; status_scoreboard = 1. Bukti: Gambar UC07-TC04. | Pass |
+
+### 4.4.8 Use Case Memantau dan Menindaklanjuti Progres
+
+**ID Use Case:** UC-08  
+**Nama Use Case:** Memantau dan Menindaklanjuti Progres
+
+Tabel 4.4.8. Hasil Pengujian Use Case UC-08
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC08-TC01 | KF13, KF14 | Normal | 1. Masuk sebagai Pengajar.<br>2. Buka Pantau Progres kelas, periode semua, pilih Sari.<br>3. Tulis umpan balik lalu kirim. | Pesan: "Bagus, Sari! Latih lagi aksara ra ya." | Ringkasan kelas dan detail progres Sari tampil; pesan "Umpan balik terkirim" tampil. | Ringkasan kelas & detail Sari tampil; umpan balik terkirim. Bukti: Gambar UC08-TC01. | Pass |
+| UC08-TC02 | KF13 | Alternatif 1: Belum ada hasil latihan | 1. Masuk sebagai Pengajar kelas baru.<br>2. Buka Pantau Progres kelas tersebut. | Kelas: Kelas Uji HIUPL (belum ada latihan) | Halaman menampilkan keterangan belum ada data progres. | Kelas tanpa hasil latihan menampilkan pesan belum ada data progres. Bukti: Gambar UC08-TC02. | Pass |
+| UC08-TC03 | KF02, KF13 | Alternatif 2: Bukan anggota aktif | 1. Masuk sebagai Pengajar.<br>2. Buka Pantau Progres untuk Raka (status keluar). | Pelajar: raka@ngaksara.test | Pesan "Pengguna ini bukan anggota aktif kelas. Data progres tidak ditampilkan." tampil. | Pesan "Pengguna ini bukan anggota aktif kelas..." dan data progres tidak ditampilkan. Bukti: Gambar UC08-TC03. | Pass |
 
 ### 4.4.9 Use Case Menyampaikan Feedback
 
@@ -693,7 +1058,6 @@ Tabel 4.4.9. Hasil Pengujian Use Case UC-09
 
 ## 4.5 Pengujian Kebutuhan Non-Fungsional (KNF)
 
-Setiap KNF pada Tabel 3.2 SKPL diuji secara terukur berdasarkan parameter yang telah didefinisikan. Setiap pengujian memuat target terukur, metode dan alat yang sesuai dengan parameter (misalnya Chrome DevTools untuk *response time* dan inspeksi basis data untuk *security*), serta hasil aktual berupa angka atau data. KNF yang belum dipenuhi atau tidak diimplementasikan dicantumkan beserta alasan dan rencana perbaikan.
 
 Tabel 4.5. Hasil Pengujian KNF
 
@@ -719,7 +1083,7 @@ Tabel 4.6. Bukti Hasil Pengujian
 
 | ID Pengujian | Bukti Hasil Pengujian |
 | :--- | :--- |
-| C01-UT01 – C01-UT19 | <img src="./assets/bukti/unit-C01.png" alt="Keluaran PHPUnit C01" width="600"> |
+| C01-UT01 – C01-UT19 | <img src="./assets/bukti/unit-c01.png" alt="Keluaran PHPUnit C01" width="600"> |
 | C01 (coverage) | <img src="./assets/bukti/coverage-C01.png" alt="Coverage C01" width="600"> |
 | C02-UT01 – C02-UT18 | <img src="./assets/bukti/unit-C02.png" alt="Keluaran PHPUnit C02" width="600"> |
 | C02 (coverage) | <img src="./assets/bukti/coverage-C02.png" alt="Coverage C02" width="600"> |
@@ -752,8 +1116,8 @@ Tabel 4.6. Bukti Hasil Pengujian
 | C26-UT01 – C26-UT10 | <img src="./assets/bukti/unit-C26.png" alt="Keluaran PHPUnit C26" width="600"> |
 | C26 (coverage) | <img src="./assets/bukti/coverage-C26.png" alt="Coverage C26" width="600"> |
 | INT-TC01 – INT-TC14 | <img src="./assets/bukti/integrasi.png" alt="Keluaran PHPUnit integrasi" width="600"> |
-| UC01-TC01 | <img src="./assets/uc/UC01-TC01.png" alt="Gambar UC01-TC01" width="600"> |
-| UC01-TC02 | <img src="./assets/uc/UC01-TC02.png" alt="Gambar UC01-TC02" width="600"> |
+| UC01-TC01 | <img src="./assets/uc/UC01-TC1.png" alt="Gambar UC01-TC01" width="600"> |
+| UC01-TC2 | <img src="./assets/uc/UC01-TC2.png" alt="Gambar UC01-TC02" width="600"> |
 | UC02-TC01 | <img src="./assets/uc/UC02-TC01.png" alt="Gambar UC02-TC01" width="600"> |
 | UC02-TC02 | <img src="./assets/uc/UC02-TC02.png" alt="Gambar UC02-TC02" width="600"> |
 | UC02-TC03 | <img src="./assets/uc/UC02-TC03.png" alt="Gambar UC02-TC03" width="600"> |
@@ -777,10 +1141,10 @@ Tabel 4.6. Bukti Hasil Pengujian
 | UC08-TC01 | <img src="./assets/uc/UC08-TC01.png" alt="Gambar UC08-TC01" width="600"> |
 | UC08-TC02 | <img src="./assets/uc/UC08-TC02.png" alt="Gambar UC08-TC02" width="600"> |
 | UC08-TC03 | <img src="./assets/uc/UC08-TC03.png" alt="Gambar UC08-TC03" width="600"> |
-| UC09-TC01 | <img src="./assets/uc/UC09-TC01.png" alt="Gambar UC09-TC01" width="600"> |
-| UC09-TC02 | <img src="./assets/uc/UC09-TC02.png" alt="Gambar UC09-TC02" width="600"> |
+| UC09-TC01 | <img src="./assets/uc/UC09-TC1.png" alt="Gambar UC09-TC01" width="600"> |
+| UC09-TC02 | <img src="./assets/uc/UC09-TC2.png" alt="Gambar UC09-TC02" width="600"> |
 | KNF01-TC01, KNF01-TC02, KNF02-TC01, KNF02-TC02, KNF03-TC01, KNF05-TC01, KNF05-TC02 | <img src="./assets/bukti/knf.png" alt="Keluaran PHPUnit KNF" width="600"> |
-| KNF03-TC02, KNF04-TC01 | <img src="./assets/bukti/knf-browser.png" alt="Hasil ukur browser" width="600"> |
+| KNF03-TC02, KNF04-TC01 | <img src="./assets/bukti/KNF03-TC02.png" alt="Hasil ukur browser" width="600"> |
 | Seluruh suite | <img src="./assets/bukti/suite.png" alt="Ringkasan seluruh test" width="600"> |
 
 <br>
