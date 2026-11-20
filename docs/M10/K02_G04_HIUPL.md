@@ -313,6 +313,122 @@ Tabel 4.2.1b. Ringkasan Cakupan Kelas [C02]
 
 <br>
 
+### 4.2.1 Kelas AkunPengguna
+
+**ID Kelas:** C01  
+**Nama Kelas:** AkunPengguna  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C01AkunPenggunaTest.php`
+
+Tabel 4.2.1. Hasil Pengujian Unit Kelas C01
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C01-UT01 | `buatAkunBaru(data: DataPendaftaran)` | Normal | Data pendaftaran baru (email budi@contoh.test, username budi, peran pelajar) | Akun tersimpan di akun_pengguna dan hasil berhasil berisi id_akun | Sesuai harapan (3 asersi lulus, 174 ms) | Pass |
+| C01-UT02 | `buatAkunBaru(data: DataPendaftaran)` | Batas | Email "  Budi@Contoh.TEST  " (huruf besar dan spasi) dan nama tampilan kosong | Email disimpan dalam huruf kecil tanpa spasi; nama tampilan diisi username | Sesuai harapan (2 asersi lulus, 13 ms) | Pass |
+| C01-UT03 | `buatAkunBaru(data: DataPendaftaran)` | Negatif | Email yang sudah terdaftar dipakai lagi dengan username lain | Gagal dengan kode EMAIL_TERDAFTAR; tidak ada akun baru | Sesuai harapan (3 asersi lulus, 16 ms) | Pass |
+| C01-UT04 | `buatAkunBaru(data: DataPendaftaran)` | Negatif | Username yang sudah dipakai didaftarkan dengan email lain | Gagal dengan kode USERNAME_TERPAKAI | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C01-UT05 | `cariBerdasarkanEmail(email: String): AkunPengguna?` | Normal | Email akun yang terdaftar | Mengembalikan akun yang sesuai | Sesuai harapan (1 asersi lulus, 21 ms) | Pass |
+| C01-UT06 | `cariBerdasarkanEmail(email: String): AkunPengguna?` | Batas | Email terdaftar ditulis dengan huruf besar dan spasi di awal/akhir | Akun tetap ditemukan | Sesuai harapan (1 asersi lulus, 12 ms) | Pass |
+| C01-UT07 | `cariBerdasarkanEmail(email: String): AkunPengguna?` | Negatif | Email yang tidak terdaftar | Mengembalikan null | Sesuai harapan (1 asersi lulus, 11 ms) | Pass |
+| C01-UT08 | `cocokkanPassword(password: String): Boolean` | Normal | Kata sandi yang benar untuk akun uji | true | Sesuai harapan (1 asersi lulus, 13 ms) | Pass |
+| C01-UT09 | `cocokkanPassword(password: String): Boolean` | Batas | String kosong dan kata sandi benar dengan beda satu huruf kapital | Keduanya false | Sesuai harapan (2 asersi lulus, 14 ms) | Pass |
+| C01-UT10 | `cocokkanPassword(password: String): Boolean` | Negatif | Kata sandi salah | false; hash tersimpan bukan teks asli | Sesuai harapan (2 asersi lulus, 13 ms) | Pass |
+| C01-UT11 | `verifikasiHakAkses(aksi: String): Boolean` | Normal | Pelajar meminta MENGERJAKAN_LATIHAN; Pengajar meminta KELOLA_KELAS | Keduanya true | Sesuai harapan (2 asersi lulus, 13 ms) | Pass |
+| C01-UT12 | `verifikasiHakAkses(aksi: String): Boolean` | Batas | Tim Materi meminta KELOLA_MATERI (satu-satunya hak) dan KIRIM_FEEDBACK | KELOLA_MATERI true, KIRIM_FEEDBACK false | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C01-UT13 | `verifikasiHakAkses(aksi: String): Boolean` | Negatif | Pelajar meminta KELOLA_KELAS; akun yang belum tersimpan meminta MENGERJAKAN_LATIHAN | Keduanya false | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C01-UT14 | `getProfil(): Profil` | Normal | Akun Pelajar "Sari" | Berisi id_akun, username, nama_tampilan, peran | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C01-UT15 | `getProfil(): Profil` | Batas | Akun dengan nama tampilan sama dengan username (nama tidak diisi saat daftar) | Profil memakai username sebagai nama tampilan | Sesuai harapan (1 asersi lulus, 13 ms) | Pass |
+| C01-UT16 | `getProfil(): Profil` | Negatif | Profil dipakai untuk tampilan publik (papan peringkat) | Tidak memuat email maupun password_hash | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C01-UT17 | `getDetailAkun(): DetailAkun` | Normal | Akun Pengajar | Profil ditambah email pemilik akun | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C01-UT18 | `getDetailAkun(): DetailAkun` | Batas | Akun dengan email yang didaftarkan berhuruf besar | Email pada detail sudah huruf kecil | Sesuai harapan (1 asersi lulus, 13 ms) | Pass |
+| C01-UT19 | `getDetailAkun(): DetailAkun` | Negatif | Objek akun kosong (belum tersimpan) | id_akun dan email bernilai null, tanpa galat | Sesuai harapan (2 asersi lulus, 11 ms) | Pass |
+
+Tabel 4.2.1b. Ringkasan Cakupan Kelas C01
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `buatAkunBaru()`, `getProfil()`, `verifikasiHakAkses()`, `getDetailAkun()`, `cariBerdasarkanEmail()`, `cocokkanPassword()` |
+| Operasi yang diuji | `buatAkunBaru()`, `cariBerdasarkanEmail()`, `cocokkanPassword()`, `getDetailAkun()`, `getProfil()`, `verifikasiHakAkses()` |
+| ID Algoritma yang tercakup | Algo-001, Algo-002 |
+| Coverage (wajib ≥ 70%) | `AkunPengguna`: baris 95.1% (78/82), cabang 84.0% (21/25); seluruh suite (PCOV): baris 96.3%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C01 coverage). |
+
+### 4.2.4 Kelas DataFeedback
+
+**ID Kelas:** C04  
+**Nama Kelas:** DataFeedback  
+**Tingkat:** Sedang  
+**File test:** `src/tests/Unit/Hiupl/C04DataFeedbackTest.php`
+
+Tabel 4.2.4. Hasil Pengujian Unit Kelas C04
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C04-UT01 | `simpan(data: MasukanFeedback): HasilOperasi` | Normal | Feedback kategori fitur dari Pelajar | Berhasil; baris data_feedback berstatus baru | Sesuai harapan (1 asersi lulus, 17 ms) | Pass |
+| C04-UT02 | `simpan(data: MasukanFeedback): HasilOperasi` | Negatif | id_akun yang tidak ada di akun_pengguna (melanggar foreign key) | Gagal dengan SIMPAN_GAGAL; tidak ada baris tersimpan | Sesuai harapan (2 asersi lulus, 12 ms) | Pass |
+| C04-UT03 | `perbaruiStatus(status: StatusFeedback): HasilOperasi` | Normal | Status baru dimajukan ke ditinjau lalu selesai | Keduanya berhasil; status akhir selesai | Sesuai harapan (3 asersi lulus, 14 ms) | Pass |
+| C04-UT04 | `perbaruiStatus(status: StatusFeedback): HasilOperasi` | Negatif | Status selesai dimundurkan ke baru; status diubah pihak lain sebelum disimpan | STATUS_TIDAK_VALID dan STATUS_BERUBAH | Sesuai harapan (2 asersi lulus, 18 ms) | Pass |
+
+### 4.2.5 Kelas OtentikasiController
+
+**ID Kelas:** C15  
+**Nama Kelas:** OtentikasiController  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C15OtentikasiControllerTest.php`
+
+Tabel 4.2.5. Hasil Pengujian Unit Kelas C15
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C15-UT01 | `verifikasiFormatData(data: DataPendaftaran)` | Normal | Kirim formulir daftar yang valid ke POST /daftar | Tidak ada galat validasi; akun dibuat | Sesuai harapan (2 asersi lulus, 278 ms) | Pass |
+| C15-UT02 | `verifikasiFormatData(data: DataPendaftaran)` | Batas | Kata sandi tepat 8 karakter (huruf + angka) dan username tepat 3 karakter | Diterima tanpa galat | Sesuai harapan (1 asersi lulus, 251 ms) | Pass |
+| C15-UT03 | `verifikasiFormatData(data: DataPendaftaran)` | Negatif | Sandi 7 karakter, sandi tanpa angka, email tidak valid, T&C tidak dicentang, peran tim_materi | Ditolak dengan galat pada isian terkait; tidak ada akun dibuat | Sesuai harapan (11 asersi lulus, 31 ms) | Pass |
+| C15-UT04 | `simpanAkun(data: DataPendaftaran): HasilOperasi` | Normal | Data Pelajar valid | Berhasil; sandi tersimpan sebagai hash bcrypt; baris motivasi_belajar dibuat | Sesuai harapan (5 asersi lulus, 477 ms) | Pass |
+| C15-UT05 | `simpanAkun(data: DataPendaftaran): HasilOperasi` | Batas | Data Pengajar valid | Berhasil tanpa baris motivasi_belajar (motivasi hanya untuk Pelajar) | Sesuai harapan (2 asersi lulus, 246 ms) | Pass |
+| C15-UT06 | `simpanAkun(data: DataPendaftaran): HasilOperasi` | Negatif | Email yang sudah terdaftar | Gagal dengan kode EMAIL_TERDAFTAR; jumlah akun tetap | Sesuai harapan (2 asersi lulus, 479 ms) | Pass |
+| C15-UT07 | `validasiLogin(email: String, password: String): HasilOperasi` | Normal | Email dan sandi akun uji yang benar | Berhasil, data berisi akun yang sesuai | Sesuai harapan (2 asersi lulus, 15 ms) | Pass |
+| C15-UT08 | `validasiLogin(email: String, password: String): HasilOperasi` | Batas | Email benar dengan huruf besar; sandi benar | Berhasil (email tidak peka huruf besar) | Sesuai harapan (1 asersi lulus, 14 ms) | Pass |
+| C15-UT09 | `validasiLogin(email: String, password: String): HasilOperasi` | Negatif | (a) sandi salah, (b) email tidak terdaftar | Keduanya gagal dengan kode dan pesan yang sama (KREDENSIAL_SALAH) agar tidak membocorkan email terdaftar | Sesuai harapan (3 asersi lulus, 16 ms) | Pass |
+
+Tabel 4.2.5b. Ringkasan Cakupan Kelas C15
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `verifikasiFormatData()`, `simpanAkun()`, `validasiLogin()` |
+| Operasi yang diuji | `simpanAkun()`, `validasiLogin()`, `verifikasiFormatData()`<br>Catatan: hashPassword() bersifat privat dan diuji lewat simpanAkun (C15-UT04). |
+| ID Algoritma yang tercakup | Algo-009, Algo-010, Algo-011, Algo-012 |
+| Coverage (wajib ≥ 70%) | `OtentikasiController`: baris 100.0% (75/75), cabang 96.9% (31/32); seluruh suite (PCOV): baris 100.0%<br>`DaftarRequest`: baris 100.0% (24/24), cabang 100.0% (19/19); seluruh suite (PCOV): baris 100.0%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C15 coverage). |
+
+### 4.2.8 Kelas FeedbackController
+
+**ID Kelas:** C18  
+**Nama Kelas:** FeedbackController  
+**Tingkat:** Mendalam  
+**File test:** `src/tests/Unit/Hiupl/C18FeedbackControllerTest.php`
+
+Tabel 4.2.8. Hasil Pengujian Unit Kelas C18
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C18-UT01 | `validasiFeedback(data: MasukanFeedback): HasilValidasi` | Normal | Pelajar, kategori fitur, pesan 30 karakter | Tidak ada galat | Sesuai harapan (1 asersi lulus, 11 ms) | Pass |
+| C18-UT02 | `validasiFeedback(data: MasukanFeedback): HasilValidasi` | Batas | Pesan tepat 10 dan 1.000 karakter (valid); 9 dan 1.001 karakter; 10 karakter diapit spasi | 10 dan 1.000: valid; 9 dan 1.001: galat pesan; spasi tidak dihitung | Sesuai harapan (5 asersi lulus, 10 ms) | Pass |
+| C18-UT03 | `validasiFeedback(data: MasukanFeedback): HasilValidasi` | Negatif | (a) kategori "lainnya" dan pesan kosong; (b) akun Tim Materi; (c) tanpa akun | (a) galat kategori dan pesan; (b)(c) HttpException 403 | Sesuai harapan (3 asersi lulus, 10 ms) | Pass |
+| C18-UT04 | `simpanFeedback(data: MasukanFeedback): HasilOperasi` | Normal | Pengajar mengirim kategori tampilan | Berhasil; baris data_feedback dengan id_akun Pengajar dan pesan ter-trim | Sesuai harapan (2 asersi lulus, 11 ms) | Pass |
+| C18-UT05 | `simpanFeedback(data: MasukanFeedback): HasilOperasi` | Batas | Pesan 1.000 karakter beraksara Jawa (multibyte) | Tersimpan utuh 1.000 karakter | Sesuai harapan (1 asersi lulus, 11 ms) | Pass |
+| C18-UT06 | `simpanFeedback(data: MasukanFeedback): HasilOperasi` | Negatif | (a) pesan 5 karakter; (b) tabel data_feedback tidak dapat ditulis (tabel dihapus) | (a) DATA_TIDAK_VALID; (b) SIMPAN_GAGAL dan galat tercatat di log | Sesuai harapan (3 asersi lulus, 14 ms) | Pass |
+| C18-UT07 | `kirimKonfirmasi(hasil: HasilOperasi): void` | Normal | HasilOperasi sukses | berhasil true dengan pesan "Feedback terkirim. Matur nuwun!" | Sesuai harapan (1 asersi lulus, 9 ms) | Pass |
+| C18-UT08 | `kirimKonfirmasi(hasil: HasilOperasi): void` | Negatif | HasilOperasi gagal SIMPAN_GAGAL | berhasil false; pesan meminta mencoba lagi dan menyatakan isian tidak hilang | Sesuai harapan (2 asersi lulus, 9 ms) | Pass |
+| C18-UT09 | `kirimKonfirmasi(hasil: HasilOperasi): void` | Batas | Alur HTTP POST /feedback saat penyimpanan gagal | Kembali ke formulir dengan pesan galat dan isian lama dipertahankan (old input) | Sesuai harapan (4 asersi lulus, 14 ms) | Pass |
+
+Tabel 4.2.8b. Ringkasan Cakupan Kelas C18
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `validasiFeedback()`, `simpanFeedback()`, `kirimKonfirmasi()` |
+| Operasi yang diuji | `kirimKonfirmasi()`, `simpanFeedback()`, `validasiFeedback()` |
+| ID Algoritma yang tercakup | Algo-013, Algo-014 |
+| Coverage (wajib ≥ 70%) | `FeedbackController`: baris 100.0% (36/36), cabang 100.0% (27/27); seluruh suite (PCOV): baris 100.0%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C18 coverage). |
+
 ### 4.2.10 Kelas KelasController
 
 **ID Kelas:** C20  
@@ -483,6 +599,18 @@ Tabel 4.4.1. Hasil Pengujian Use Case [UC01]
 *[Lanjutkan untuk seluruh use case dengan pola yang sama, hingga 4.4.N.]*
 
 <br>
+
+### 4.4.1 Use Case Melakukan Pendaftaran Akun
+
+**ID Use Case:** UC-01  
+**Nama Use Case:** Melakukan Pendaftaran Akun
+
+Tabel 4.4.1. Hasil Pengujian Use Case UC-01
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC01-TC01 | KF01, KF04, KF05, KF06, KF07 | Normal | 1. Buka halaman Daftar (I-01).<br>2. Pilih peran Pelajar.<br>3. Isi email, username, kata sandi.<br>4. Centang persetujuan T&C.<br>5. Tekan "Daftar". | Peran: Pelajar<br>Email: dewi.e2e@ngaksara.test<br>Username: dewi_e2e<br>Sandi: Rahasia123 | Akun tersimpan dengan sandi ter-hash dan pengguna diarahkan ke halaman Masuk dengan pesan berhasil. | Akun tersimpan, diarahkan ke /masuk; password_hash diawali $2y$12$. Bukti: Gambar UC01-TC01. | Pass |
+| UC01-TC02 | KF04 | Alternatif 1: Kredensial tidak valid | 1. Buka halaman Daftar.<br>2. Isi email yang sudah terdaftar.<br>3. Centang T&C lalu tekan "Daftar". | Email: pelajar@ngaksara.test (sudah ada)<br>Username: sari_baru<br>Sandi: Rahasia123 | Pendaftaran ditolak, tetap di halaman Daftar, pesan "Email sudah terdaftar" tampil dan isian lain dipertahankan. | Tetap di halaman daftar, pesan: "Email sudah terdaftar. Gunakan email lain atau masuk dengan akun yang ada.". Bukti: Gambar UC01-TC02. | Pass |
 
 ### 4.4.7 Use Case Menyiapkan Pembelajaran Kelas
 
