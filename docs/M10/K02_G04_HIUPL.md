@@ -383,7 +383,7 @@ Tabel 4.2.13b. Ringkasan Cakupan Kelas C23
 | Daftar operasi public pada DPPL | `validasiKode()`, `gabungkanPelajar()`, `gantiKodeBergabung()`, `finalisasiTugas()`, `periksaPemilik()`, `ambilDaftarTugas()`, `bukaTugas()`, `simpan()`, `buatKodeBergabung()`, `daftarKelasPengajar()`, `aturScoreboard()` |
 | Operasi yang diuji | `aturScoreboard()`, `buatKodeBergabung()`, `daftarKelasPengajar()`, `gantiKodeBergabung()`, `periksaPemilik()`, `simpan()`<br>Catatan: validasiKode, gabungkanPelajar, ambilDaftarTugas, bukaTugas, dan finalisasiTugas pada DPPL diwujudkan oleh KeanggotaanKelas (C24-UT01 s.d. C24-UT03), KelasPelajarController (C20-UT03, C20-UT04, C20-UT19, C20-UT20), dan PengumpulanTugas (C26-UT04 s.d. C26-UT06). |
 | ID Algoritma yang tercakup | Algo-087, Algo-088, Algo-089, Algo-090, Algo-091, Algo-092, Algo-093, Algo-094, Algo-095, Algo-096, Algo-097 |
-| Coverage (wajib ≥ 70%) | `KelasBelajar`: baris 81.4% (48/59), cabang 71.4% (35/49); seluruh suite (PCOV): baris 81.4%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C23 coverage). |
+| Coverage (wajib ≥ 70%) | `KelasBelajar`: baris 81.4% (48/59), method 57.1% (4/7)<br>Alat: Xdebug 3.5.3 (`xdebug.mode=coverage`), PHP 8.3.36, PHPUnit 12.5.43, Windows. Bukti: Tabel 4.6 (C23 coverage). |
 
 ### 4.2.15 Kelas TugasKelas
 
@@ -416,7 +416,7 @@ Tabel 4.2.15b. Ringkasan Cakupan Kelas C25
 | Daftar operasi public pada DPPL | `ambilTugasAktif()`, `terbitkan()`, `verifikasiDanSimpan()`, `ambilStatus()`, `ambilDetail()`, `simpan()` |
 | Operasi yang diuji | `ambilDetail()`, `ambilTugasAktif()`, `simpan()`, `terbitkan()`<br>Catatan: verifikasiDanSimpan dan periksaKomponenWajib diwujudkan oleh PengumpulanTugas (C26-UT04 s.d. C26-UT06); ambilStatus diwujudkan oleh PenyelesaianTugas (C26-UT07 s.d. C26-UT10). |
 | ID Algoritma yang tercakup | Algo-113, Algo-114, Algo-115, Algo-116, Algo-117 |
-| Coverage (wajib ≥ 70%) | `TugasKelas`: baris 93.0% (106/114), cabang 84.6% (11/13); seluruh suite (PCOV): baris 98.2%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C25 coverage). |
+| Coverage (wajib ≥ 70%) | `TugasKelas`: baris 86.0% (98/114), method 71.4% (5/7)<br>Alat: Xdebug 3.5.3 (`xdebug.mode=coverage`), PHP 8.3.36, PHPUnit 12.5.43, Windows. Bukti: Tabel 4.6 (C25 coverage). |
 
 ## 4.3 Pengujian Integrasi
 
