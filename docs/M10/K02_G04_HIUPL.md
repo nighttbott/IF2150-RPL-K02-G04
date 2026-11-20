@@ -1070,9 +1070,6 @@ Tabel 4.5. Hasil Pengujian KNF
 | KNF04-TC01 | KNF04 | Response time | Jeda dari event `pointermove` sampai segmen goresan digambar di kanvas ≤ 50 ms | Chromium (Playwright) pada I-07: skrip pengukur membandingkan `event.timeStamp` dengan `performance.now()` saat `stroke()` dipanggil; 209 segmen dari UC03-TC01 dan UC05-TC01 | Median 12.5 ms, p95 13.6 ms, maks 13.9 ms | Pass |
 | KNF05-TC01 | KNF05 | Reliability | Feedback valid tersimpan dan konfirmasi tampil | PHPUnit `KnfTest::test_knf05_tc01_terkirim` + UC09-TC01 di browser | Pesan "Feedback terkirim. Matur nuwun!" tampil; 1 baris tersimpan di `data_feedback` | Pass |
 | KNF05-TC02 | KNF05 | Reliability | Saat penyimpanan gagal, pesan galat tampil dan isi pesan tidak hilang | PHPUnit `KnfTest::test_knf05_tc02_gagal` (tabel dihapus) + UC09-TC02 di browser (tabel diganti nama sementara) | Pesan "Feedback gagal terkirim. Periksa koneksi lalu coba lagi. Isi pesanmu tidak hilang." tampil, isian tetap | Pass |
-| *KNF01-TC01* | *KNF01* | *Reliability* | *Tidak ada data hilang/ganda saat jaringan putus di tengah transaksi* | *Simulasi putus koneksi saat bayar, lalu cek status di DB* | *[Hasil aktual]* | *Pass/Fail* |
-| *KNF02-TC01* | *KNF02* | *Security* | *Password tersimpan sebagai hash, bukan plain-text* | *Inspeksi tabel pengguna di DB* | *[...]* | *Pass/Fail* |
-| *KNFXX-TC01* | *KNFXX* | *Response time* | *Halaman tampil ≤ 4 detik* | *Chrome DevTools, 5 kali ukur, ambil rata-rata* | *[Rata-rata ... detik, maks ... detik]* | *Pass/Fail* |
 | *...* | *...* | *...* | *...* | *...* | *...* | *...* |
 
 <br>
