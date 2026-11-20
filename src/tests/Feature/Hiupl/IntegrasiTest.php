@@ -15,16 +15,10 @@ use Tests\Support\AlurLatihan;
 use Tests\TestCase;
 use Tests\Unit\Hiupl\BantuanMateri;
 
-/**
- * HIUPL 4.3: pengujian integrasi antarkomponen. Semua komponen yang terlibat adalah komponen nyata
- * (route + middleware + controller + model + basis data + penyimpanan berkas + log), tanpa mock.
- * Format anotasi: @uji ID | Jenis | antarmuka yang diuji | prosedur | hasil yang diharapkan
- */
 class IntegrasiTest extends TestCase
 {
     use AlurLatihan, BantuanData, BantuanMateri, RefreshDatabase;
 
-    /** @uji INT-TC01 | Normal | HalamanPendaftaran → OtentikasiController → AkunPengguna → Basis Data (akun_pengguna, motivasi_belajar) | POST /daftar data Pelajar valid, lalu POST /masuk dengan kredensial yang sama | Akun dan baris motivasi tersimpan; sandi ter-hash; login berhasil dan diarahkan ke beranda */
     #[TestDox('INT-TC01 Normal: daftar lalu masuk melalui seluruh lapisan')]
     public function test_tc01_daftar_lalu_masuk(): void
     {
@@ -39,7 +33,6 @@ class IntegrasiTest extends TestCase
         $this->assertAuthenticatedAs($akun);
     }
 
-    /** @uji INT-TC02 | Negatif | HalamanLogin → OtentikasiController → AkunPengguna → Basis Data | POST /masuk dengan sandi salah | Kembali ke formulir dengan galat; pengguna tetap tamu (UC01 Alternatif 1) */
     #[TestDox('INT-TC02 Negatif: masuk dengan sandi salah ditolak')]
     public function test_tc02_masuk_salah(): void
     {
@@ -49,7 +42,6 @@ class IntegrasiTest extends TestCase
         $this->assertGuest();
     }
 
-    /** @uji INT-TC03 | Normal | HalamanMateri → MateriController → MateriAksara + RiwayatLatihan → Basis Data | Pelajar (data MateriSeeder) membuka GET /materi?jenis=jawa&tingkat=1 lalu GET /materi/{id} | Daftar menampilkan materi terbit; detail menampilkan isi materi */
     #[TestDox('INT-TC03 Normal: daftar dan detail materi dari basis data')]
     public function test_tc03_materi(): void
     {
@@ -62,7 +54,6 @@ class IntegrasiTest extends TestCase
         $this->get(route('materi.show', $id))->assertOk()->assertSee($nama);
     }
 
-    /** @uji INT-TC04 | Normal | HalamanKelolaMateri → MateriController → MateriAksara + KontenMateri → Basis Data + PenyimpananBerkas | Tim Materi POST /kelola/materi dengan berkas mp3, terbitkan, lalu Pelajar GET /materi/{id}/audio | Materi, konten, dan berkas tersimpan; audio dapat diputar (200) */
     #[TestDox('INT-TC04 Normal: unggah materi dengan audio sampai diputar Pelajar')]
     public function test_tc04_unggah_audio(): void
     {
@@ -78,7 +69,6 @@ class IntegrasiTest extends TestCase
         $this->actingAs($this->buatPelajar())->get(route('materi.audio', $id))->assertOk();
     }
 
-    /** @uji INT-TC05 | Negatif | HalamanKelolaMateri → MateriController → PenyimpananBerkas | POST /kelola/materi dengan berkas .exe | Galat "Jenis berkas tidak didukung"; tidak ada materi dan berkas tersimpan (UC06 Alternatif 1) */
     #[TestDox('INT-TC05 Negatif: berkas tidak didukung tidak tersimpan')]
     public function test_tc05_unggah_ditolak(): void
     {
@@ -91,7 +81,6 @@ class IntegrasiTest extends TestCase
         $this->assertSame([], Storage::disk('local')->allFiles());
     }
 
-    /** @uji INT-TC06 | Normal | HalamanLatihan → LatihanController → AkurasiGoresan → RiwayatLatihan + MotivasiBelajar → Basis Data | Buka soal menulis, kirim goresan benar, POST /latihan/selesai, buka /latihan/hasil dan /progres | Riwayat berhasil tersimpan; poin 10, streak 1; halaman hasil dan progres menampilkan data yang sama */
     #[TestDox('INT-TC06 Normal: alur latihan menulis sampai progres')]
     public function test_tc06_latihan_sampai_progres(): void
     {
@@ -106,7 +95,6 @@ class IntegrasiTest extends TestCase
         $this->assertSame(10, MotivasiBelajar::milikPelajar($p->id_akun)->poin);
     }
 
-    /** @uji INT-TC07 | Normal | HalamanLatihan (non-kanvas) → LatihanNonKanvasController → PenilaiJawaban → RiwayatLatihan → Basis Data | Mulai latihan bunyi, jawab semua soal dengan kunci yang benar | Halaman hasil tampil; riwayat mode bunyi tersimpan */
     #[TestDox('INT-TC07 Normal: latihan bunyi tersimpan')]
     public function test_tc07_latihan_bunyi(): void
     {
@@ -125,7 +113,6 @@ class IntegrasiTest extends TestCase
         $this->get(route('latihan.soal.hasil'))->assertOk();
     }
 
-    /** @uji INT-TC08 | Normal | HalamanFeedback → FeedbackController → DataFeedback → Basis Data | POST /feedback kategori fitur | Redirect dengan pesan "Feedback terkirim"; baris data_feedback status baru */
     #[TestDox('INT-TC08 Normal: feedback tersimpan lewat HTTP')]
     public function test_tc08_feedback(): void
     {
@@ -136,7 +123,6 @@ class IntegrasiTest extends TestCase
         $this->assertDatabaseHas('data_feedback', ['id_akun' => $p->id_akun, 'status' => 'baru']);
     }
 
-    /** @uji INT-TC09 | Negatif | FeedbackController → DataFeedback → Basis Data → LogAplikasi | Tabel data_feedback tidak tersedia saat POST /feedback | Isian dipertahankan dengan pesan gagal; galat tertulis di berkas log aplikasi (UC09 Alternatif 1, KNF01) */
     #[TestDox('INT-TC09 Negatif: kegagalan simpan feedback tercatat di berkas log')]
     public function test_tc09_feedback_gagal_tercatat(): void
     {
@@ -153,7 +139,6 @@ class IntegrasiTest extends TestCase
         @unlink($log);
     }
 
-    /** @uji INT-TC10 | Normal | HalamanKelasPelajar → KelasPelajarController → KeanggotaanKelas + TugasKelas + PengumpulanTugas + PenyelesaianTugas → Basis Data | Pengajar membuat kelas dan menerbitkan tugas (komponen materi), Pelajar bergabung dengan kode, menyelesaikan komponen, lalu mengumpulkan | Keanggotaan aktif; penyelesaian_tugas berstatus tepat_waktu */
     #[TestDox('INT-TC10 Normal: alur kelas dari buat kelas sampai pengumpulan')]
     public function test_tc10_alur_kelas(): void
     {
@@ -174,7 +159,6 @@ class IntegrasiTest extends TestCase
         $this->assertDatabaseHas('penyelesaian_tugas', ['id_tugas' => $tugas->id_tugas, 'id_pelajar' => $p->id_akun, 'status' => 'tepat_waktu']);
     }
 
-    /** @uji INT-TC11 | Negatif | HalamanKelasPelajar → KelasPelajarController → PengumpulanTugas → Basis Data | Pelajar mengumpulkan tugas sebelum komponen wajib selesai | Galat pengumpulan; tidak ada baris penyelesaian_tugas */
     #[TestDox('INT-TC11 Negatif: pengumpulan sebelum komponen selesai ditolak')]
     public function test_tc11_kumpul_belum_lengkap(): void
     {
@@ -190,7 +174,6 @@ class IntegrasiTest extends TestCase
         $this->assertSame(0, DB::table('penyelesaian_tugas')->count());
     }
 
-    /** @uji INT-TC12 | Normal | HalamanKelolaKelas → PemantauanKelasController → ProgresController → RiwayatLatihan → Basis Data | Pengajar membuka GET /pemantauan/{idKelas}?pelajar={id} untuk anggota yang punya riwayat | 200; nama anggota dan ringkasan progres tampil */
     #[TestDox('INT-TC12 Normal: pemantauan progres anggota')]
     public function test_tc12_pemantauan(): void
     {
@@ -203,7 +186,6 @@ class IntegrasiTest extends TestCase
         $this->actingAs($g)->get(route('pemantauan.index', ['idKelas' => $idKelas, 'pelajar' => $p->id_akun]))->assertOk()->assertSee('Sari Wulan');
     }
 
-    /** @uji INT-TC13 | Negatif | Middleware CekPeran → Controller (hak akses lintas peran) | Pelajar membuka /kelola/materi dan /pengajar/kelas; Pengajar membuka /pemantauan kelas milik Pengajar lain; tamu membuka /progres | 403, 403, 403, dialihkan ke /masuk */
     #[TestDox('INT-TC13 Negatif: rute dilindungi sesuai peran')]
     public function test_tc13_hak_akses(): void
     {
@@ -216,7 +198,6 @@ class IntegrasiTest extends TestCase
         $this->actingAs($this->buatPengajar('Pak Lain'))->get(route('pemantauan.index', $idKelas))->assertForbidden();
     }
 
-    /** @uji INT-TC14 | Normal | HalamanProgres → ProgresController → MotivasiBelajar (scoreboard) → Basis Data | Dua anggota kelas dengan poin 30 dan 10, scoreboard aktif; anggota membuka GET /progres?kelas={id} | Papan peringkat tampil dengan urutan poin; email tidak tampil */
     #[TestDox('INT-TC14 Normal: papan peringkat kelas di halaman progres')]
     public function test_tc14_scoreboard(): void
     {
