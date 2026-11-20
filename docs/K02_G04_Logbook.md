@@ -198,7 +198,7 @@
 
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 19-11-2026 | Natan | Membuat pembagian tugas dan persiapan awal | 2 | Done | Perintah `npm` diblokir execution policy PowerShell (dipakai `npm.cmd`); konflik `stash` pada AI-Usage |
+| 19-11-2026 | Natan | Membuat pembagian tugas dan persiapan awal | 2 | Done | - |
 | 20-11-2026 | Naufal | Menyiapkan lingkungan uji (PHP 8.4, PCOV, Playwright), menjalankan dan memeriksa unit test C16 (18 test) beserta coverage kelas latihan, menyiapkan skrip pengujian use case UC03 dan KNF04, serta bukti `unit-C16.png` dan `coverage-C16.png` | 2 | Done | Perintah `npm` diblokir execution policy PowerShell (dipakai `npm.cmd`); konflik `stash` pada AI-Usage |
 | 20-11-2026 | Ryuza | Menyiapkan test script unit test kelas C01, C04, C15, C18, pengujian use case UC01 dan UC09, serta pengujian KNF01, KNF02, KNF05, lalu menjalankan dan memeriksa hasilnya | 2 | Done | - |
 | 20-11-2026 | Diandra | Menyiapkan test script unit test kelas C02, C17, C21, pengujian use case UC02 dan UC06, pengujian KNF03, serta Tabel 3.3 (antarmuka), lalu menjalankan dan memeriksa hasilnya | 2 | Done | - |
