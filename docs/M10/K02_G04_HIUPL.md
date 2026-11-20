@@ -294,26 +294,44 @@ Tabel 4.2.1b. Ringkasan Cakupan Kelas [C02]
 
 ## 4.3 Pengujian Integrasi
 
-Pengujian integrasi memeriksa interaksi antarkomponen yang melewati batas, yaitu *Controller* ke *Model*, aplikasi ke basis data, dan aplikasi ke sistem eksternal. Daftar antarmuka mengacu pada dokumen DPPL, dengan minimal satu test case untuk setiap antarmuka. Pengujian memakai komponen nyata, bukan *mock*. Apabila ada antarmuka tambahan yang belum didaftarkan pada dokumen DPPL, cantumkan juga.
+Pengujian integrasi memeriksa interaksi antarkomponen yang melewati batas, yaitu View ke Controller lewat HTTP, Controller ke Model, aplikasi ke basis data, aplikasi ke penyimpanan berkas, dan aplikasi ke log. Daftar antarmuka mengacu pada relasi komponen Subbab 2.4 DPPL. Semua test memakai komponen nyata: rute dan middleware Laravel, controller, model Eloquent, basis data SQLite, disk penyimpanan Laravel (disk `local` palsu untuk berkas unggahan), dan berkas log sungguhan. Ngaksara tidak memakai sistem eksternal, sehingga tidak ada batas aplikasi–sistem eksternal.
+
+Cara menjalankan: `php artisan test tests/Feature/Hiupl/IntegrasiTest.php`. Lokasi: `src/tests/Feature/Hiupl/IntegrasiTest.php`.
 
 Tabel 4.3.1. Daftar Antarmuka Antarkomponen
 
 | ID Antarmuka | Komponen Asal | Komponen Tujuan | Jenis Batas | Test Case |
 | :--- | :--- | :--- | :--- | :--- |
-| *I-01* | *KeranjangController* | *Keranjang (Model)* | *Controller - Model* | *INT-TC01, INT-TC02* |
-| *I-02* | *Pesanan (Model)* | *Database* | *Aplikasi - Basis data* | *INT-TC03* |
-| *I-03* | *PaymentGatewayAdapter* | *Payment Gateway (dummy)* | *Aplikasi - Sistem eksternal* | *INT-TC04, INT-TC05* |
-| *[I-XX]* | *[Komponen asal]* | *[Komponen tujuan]* | *[Jenis batas]* | *[ID test case]* |
-| *...* | *...* | *...* | *...* | *...* |
+| AK-01 | View I-01/I-02 (HalamanPendaftaran, HalamanLogin) | OtentikasiController | View - Controller (HTTP) | INT-TC01, INT-TC02 |
+| AK-02 | OtentikasiController | AkunPengguna, MotivasiBelajar | Controller - Model | INT-TC01, INT-TC02 |
+| AK-03 | Model (Eloquent) | Basis data (tabel akun_pengguna, materi_aksara, riwayat_latihan, kelas_belajar, dll.) | Aplikasi - Basis data | INT-TC01, INT-TC02, INT-TC03, INT-TC04, INT-TC06, INT-TC07, INT-TC08, INT-TC10, INT-TC11, INT-TC12, INT-TC14 |
+| AK-04 | MateriController | MateriAksara, KontenMateri, RiwayatLatihan | Controller - Model | INT-TC03, INT-TC04, INT-TC05 |
+| AK-05 | MateriController / KontenMateri | PenyimpananBerkas (Laravel Filesystem, disk local) | Aplikasi - Penyimpanan berkas | INT-TC04, INT-TC05 |
+| AK-06 | LatihanController / LatihanNonKanvasController | AkurasiGoresan, PenilaiJawaban, RiwayatLatihan, MotivasiBelajar | Controller - Model | INT-TC06, INT-TC07 |
+| AK-07 | FeedbackController | DataFeedback | Controller - Model | INT-TC08, INT-TC09 |
+| AK-08 | Controller | LogAplikasi (Laravel Log, storage/logs) | Aplikasi - Log | INT-TC09 |
+| AK-09 | KelasPengajarController / KelasPelajarController | KelasBelajar, KeanggotaanKelas, TugasKelas, PengumpulanTugas, PenyelesaianTugas | Controller - Model | INT-TC10, INT-TC11 |
+| AK-10 | PemantauanKelasController / ProgresController | RiwayatLatihan, MotivasiBelajar, KeanggotaanKelas | Controller - Controller - Model | INT-TC06, INT-TC12, INT-TC14 |
+| AK-11 | Middleware CekPeran (rute) | Seluruh Controller | Rute - Controller (hak akses) | INT-TC13 |
 
 Tabel 4.3.2. Hasil Pengujian Integrasi
 
 | ID Pengujian | ID Antarmuka | Skenario | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *INT-TC01* | *I-01* | *Normal: tambah item ke keranjang* | *Panggil `tambahItem()` melalui KeranjangController dengan produk valid* | *Item tersimpan pada Keranjang dan tampil pada daftar item* | *[Hasil aktual]* | *Pass/Fail* |
-| *INT-TC03* | *I-02* | *Normal: simpan pesanan* | *Buat pesanan, lalu baca ulang langsung dari basis data* | *Baris pesanan ada dengan nilai total dan status yang sama* | *[...]* | *Pass/Fail* |
-| *INT-TC05* | *I-03* | *Gagal: gateway mengembalikan status gagal* | *Kirim otorisasi dengan saldo dummy tidak cukup* | *Status pesanan tidak berubah menjadi "Lunas", pesan gagal diteruskan ke pengguna* | *[...]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
+| INT-TC01 | AK-01, AK-02, AK-03 | Normal: HalamanPendaftaran → OtentikasiController → AkunPengguna → Basis Data (akun_pengguna, motivasi_belajar) | POST /daftar data Pelajar valid, lalu POST /masuk dengan kredensial yang sama | Akun dan baris motivasi tersimpan; sandi ter-hash; login berhasil dan diarahkan ke beranda | Sesuai harapan (8 asersi lulus, 472 ms) | Pass |
+| INT-TC02 | AK-01, AK-02, AK-03 | Negatif: HalamanLogin → OtentikasiController → AkunPengguna → Basis Data | POST /masuk dengan sandi salah | Kembali ke formulir dengan galat; pengguna tetap tamu (UC01 Alternatif 1) | Sesuai harapan (4 asersi lulus, 20 ms) | Pass |
+| INT-TC03 | AK-04, AK-03 | Normal: HalamanMateri → MateriController → MateriAksara + RiwayatLatihan → Basis Data | Pelajar (data MateriSeeder) membuka GET /materi?jenis=jawa&tingkat=1 lalu GET /materi/{id} | Daftar menampilkan materi terbit; detail menampilkan isi materi | Sesuai harapan (4 asersi lulus, 46 ms) | Pass |
+| INT-TC04 | AK-04, AK-05, AK-03 | Normal: HalamanKelolaMateri → MateriController → MateriAksara + KontenMateri → Basis Data + PenyimpananBerkas | Tim Materi POST /kelola/materi dengan berkas mp3, terbitkan, lalu Pelajar GET /materi/{id}/audio | Materi, konten, dan berkas tersimpan; audio dapat diputar (200) | Sesuai harapan (4 asersi lulus, 37 ms) | Pass |
+| INT-TC05 | AK-04, AK-05 | Negatif: HalamanKelolaMateri → MateriController → PenyimpananBerkas | POST /kelola/materi dengan berkas .exe | Galat "Jenis berkas tidak didukung"; tidak ada materi dan berkas tersimpan (UC06 Alternatif 1) | Sesuai harapan (4 asersi lulus, 20 ms) | Pass |
+| INT-TC06 | AK-06, AK-03, AK-10 | Normal: HalamanLatihan → LatihanController → AkurasiGoresan → RiwayatLatihan + MotivasiBelajar → Basis Data | Buka soal menulis, kirim goresan benar, POST /latihan/selesai, buka /latihan/hasil dan /progres | Riwayat berhasil tersimpan; poin 10, streak 1; halaman hasil dan progres menampilkan data yang sama | Sesuai harapan (10 asersi lulus, 124 ms) | Pass |
+| INT-TC07 | AK-06, AK-03 | Normal: HalamanLatihan (non-kanvas) → LatihanNonKanvasController → PenilaiJawaban → RiwayatLatihan → Basis Data | Mulai latihan bunyi, jawab semua soal dengan kunci yang benar | Halaman hasil tampil; riwayat mode bunyi tersimpan | Sesuai harapan (4 asersi lulus, 54 ms) | Pass |
+| INT-TC08 | AK-07, AK-03 | Normal: HalamanFeedback → FeedbackController → DataFeedback → Basis Data | POST /feedback kategori fitur | Redirect dengan pesan "Feedback terkirim"; baris data_feedback status baru | Sesuai harapan (4 asersi lulus, 19 ms) | Pass |
+| INT-TC09 | AK-07, AK-08 | Negatif: FeedbackController → DataFeedback → Basis Data → LogAplikasi | Tabel data_feedback tidak tersedia saat POST /feedback | Isian dipertahankan dengan pesan gagal; galat tertulis di berkas log aplikasi (UC09 Alternatif 1, KNF01) | Sesuai harapan (4 asersi lulus, 29 ms) | Pass |
+| INT-TC10 | AK-09, AK-03 | Normal: HalamanKelasPelajar → KelasPelajarController → KeanggotaanKelas + TugasKelas + PengumpulanTugas + PenyelesaianTugas → Basis Data | Pengajar membuat kelas dan menerbitkan tugas (komponen materi), Pelajar bergabung dengan kode, menyelesaikan komponen, lalu mengumpulkan | Keanggotaan aktif; penyelesaian_tugas berstatus tepat_waktu | Sesuai harapan (6 asersi lulus, 60 ms) | Pass |
+| INT-TC11 | AK-09, AK-03 | Negatif: HalamanKelasPelajar → KelasPelajarController → PengumpulanTugas → Basis Data | Pelajar mengumpulkan tugas sebelum komponen wajib selesai | Galat pengumpulan; tidak ada baris penyelesaian_tugas | Sesuai harapan (3 asersi lulus, 23 ms) | Pass |
+| INT-TC12 | AK-10, AK-03 | Normal: HalamanKelolaKelas → PemantauanKelasController → ProgresController → RiwayatLatihan → Basis Data | Pengajar membuka GET /pemantauan/{idKelas}?pelajar={id} untuk anggota yang punya riwayat | 200; nama anggota dan ringkasan progres tampil | Sesuai harapan (2 asersi lulus, 28 ms) | Pass |
+| INT-TC13 | AK-11 | Negatif: Middleware CekPeran → Controller (hak akses lintas peran) | Pelajar membuka /kelola/materi dan /pengajar/kelas; Pengajar membuka /pemantauan kelas milik Pengajar lain; tamu membuka /progres | 403, 403, 403, dialihkan ke /masuk | Sesuai harapan (5 asersi lulus, 27 ms) | Pass |
+| INT-TC14 | AK-10, AK-03 | Normal: HalamanProgres → ProgresController → MotivasiBelajar (scoreboard) → Basis Data | Dua anggota kelas dengan poin 30 dan 10, scoreboard aktif; anggota membuka GET /progres?kelas={id} | Papan peringkat tampil dengan urutan poin; email tidak tampil | Sesuai harapan (3 asersi lulus, 30 ms) | Pass |
 
 <br>
 
@@ -357,42 +375,120 @@ Tabel 4.5. Hasil Pengujian KNF
 
 ## 4.6 Tangkapan Layar dan Bukti Hasil Pengujian
 
-Bukti pengujian dilampirkan sesuai ID Pengujian pada Subbab 4.2 sampai 4.5, berupa tangkapan layar aplikasi, keluaran *test runner*, laporan *coverage* untuk setiap kelas Mendalam, atau hasil alat ukur.
-
 Tabel 4.6. Bukti Hasil Pengujian
 
 | ID Pengujian | Bukti Hasil Pengujian |
 | :--- | :--- |
-| *C02-UT01 – C02-UT08* | *[Sisipkan hasil keluaran unit test]* |
-| *C02 (coverage)* | *[Sisipkan laporan coverage kelas C02]* |
-| *INT-TC01* | *[Sisipkan bukti pengujian integrasi]* |
-| *UC01-TC01* | *[Sisipkan tangkapan layar UC01-TC01 sesuai prosedur pengujian]* |
-| *UC01-TC02* | *[Sisipkan tangkapan layar UC01-TC02 sesuai prosedur pengujian]* |
-| *KNF01-TC01* | *[Sisipkan bukti pengukuran parameter KNF01-TC01]* |
-| *...* | *...* |
+| C01-UT01 – C01-UT19 | <img src="./assets/bukti/unit-C01.png" alt="Keluaran PHPUnit C01" width="600"> |
+| C01 (coverage) | <img src="./assets/bukti/coverage-C01.png" alt="Coverage C01" width="600"> |
+| C02-UT01 – C02-UT18 | <img src="./assets/bukti/unit-C02.png" alt="Keluaran PHPUnit C02" width="600"> |
+| C02 (coverage) | <img src="./assets/bukti/coverage-C02.png" alt="Coverage C02" width="600"> |
+| C03-UT01 – C03-UT27 | <img src="./assets/bukti/unit-C03.png" alt="Keluaran PHPUnit C03" width="600"> |
+| C03 (coverage) | <img src="./assets/bukti/coverage-C03.png" alt="Coverage C03" width="600"> |
+| C04-UT01 – C04-UT04 | <img src="./assets/bukti/unit-C04.png" alt="Keluaran PHPUnit C04" width="600"> |
+| C04 (coverage) | <img src="./assets/bukti/coverage-C04.png" alt="Coverage C04" width="600"> |
+| C15-UT01 – C15-UT09 | <img src="./assets/bukti/unit-C15.png" alt="Keluaran PHPUnit C15" width="600"> |
+| C15 (coverage) | <img src="./assets/bukti/coverage-C15.png" alt="Coverage C15" width="600"> |
+| C16-UT01 – C16-UT18 | <img src="./assets/bukti/unit-C16.png" alt="Keluaran PHPUnit C16" width="600"> |
+| C16 (coverage) | <img src="./assets/bukti/coverage-C16.png" alt="Coverage C16" width="600"> |
+| C17-UT01 – C17-UT24 | <img src="./assets/bukti/unit-C17.png" alt="Keluaran PHPUnit C17" width="600"> |
+| C17 (coverage) | <img src="./assets/bukti/coverage-C17.png" alt="Coverage C17" width="600"> |
+| C18-UT01 – C18-UT09 | <img src="./assets/bukti/unit-C18.png" alt="Keluaran PHPUnit C18" width="600"> |
+| C18 (coverage) | <img src="./assets/bukti/coverage-C18.png" alt="Coverage C18" width="600"> |
+| C19-UT01 – C19-UT18 | <img src="./assets/bukti/unit-C19.png" alt="Keluaran PHPUnit C19" width="600"> |
+| C19 (coverage) | <img src="./assets/bukti/coverage-C19.png" alt="Coverage C19" width="600"> |
+| C20-UT01 – C20-UT22 | <img src="./assets/bukti/unit-C20.png" alt="Keluaran PHPUnit C20" width="600"> |
+| C20 (coverage) | <img src="./assets/bukti/coverage-C20.png" alt="Coverage C20" width="600"> |
+| C21-UT01 – C21-UT15 | <img src="./assets/bukti/unit-C21.png" alt="Keluaran PHPUnit C21" width="600"> |
+| C21 (coverage) | <img src="./assets/bukti/coverage-C21.png" alt="Coverage C21" width="600"> |
+| C22-UT01 – C22-UT18 | <img src="./assets/bukti/unit-C22.png" alt="Keluaran PHPUnit C22" width="600"> |
+| C22 (coverage) | <img src="./assets/bukti/coverage-C22.png" alt="Coverage C22" width="600"> |
+| C23-UT01 – C23-UT17 | <img src="./assets/bukti/unit-C23.png" alt="Keluaran PHPUnit C23" width="600"> |
+| C23 (coverage) | <img src="./assets/bukti/coverage-C23.png" alt="Coverage C23" width="600"> |
+| C24-UT01 – C24-UT15 | <img src="./assets/bukti/unit-C24.png" alt="Keluaran PHPUnit C24" width="600"> |
+| C24 (coverage) | <img src="./assets/bukti/coverage-C24.png" alt="Coverage C24" width="600"> |
+| C25-UT01 – C25-UT12 | <img src="./assets/bukti/unit-C25.png" alt="Keluaran PHPUnit C25" width="600"> |
+| C25 (coverage) | <img src="./assets/bukti/coverage-C25.png" alt="Coverage C25" width="600"> |
+| C26-UT01 – C26-UT10 | <img src="./assets/bukti/unit-C26.png" alt="Keluaran PHPUnit C26" width="600"> |
+| C26 (coverage) | <img src="./assets/bukti/coverage-C26.png" alt="Coverage C26" width="600"> |
+| INT-TC01 – INT-TC14 | <img src="./assets/bukti/integrasi.png" alt="Keluaran PHPUnit integrasi" width="600"> |
+| UC01-TC01 | <img src="./assets/uc/UC01-TC01.png" alt="Gambar UC01-TC01" width="600"> |
+| UC01-TC02 | <img src="./assets/uc/UC01-TC02.png" alt="Gambar UC01-TC02" width="600"> |
+| UC02-TC01 | <img src="./assets/uc/UC02-TC01.png" alt="Gambar UC02-TC01" width="600"> |
+| UC02-TC02 | <img src="./assets/uc/UC02-TC02.png" alt="Gambar UC02-TC02" width="600"> |
+| UC02-TC03 | <img src="./assets/uc/UC02-TC03.png" alt="Gambar UC02-TC03" width="600"> |
+| UC03-TC01 | <img src="./assets/uc/UC03-TC01.png" alt="Gambar UC03-TC01" width="600"><br><img src="./assets/uc/UC03-TC01-a.png" alt="UC03-TC01-a" width="600"> |
+| UC03-TC02 | <img src="./assets/uc/UC03-TC02.png" alt="Gambar UC03-TC02" width="600"><br><img src="./assets/uc/UC03-TC02-a.png" alt="UC03-TC02-a" width="600"> |
+| UC03-TC03 | <img src="./assets/uc/UC03-TC03.png" alt="Gambar UC03-TC03" width="600"><br><img src="./assets/uc/UC03-TC03-a.png" alt="UC03-TC03-a" width="600"> |
+| UC03-TC04 | <img src="./assets/uc/UC03-TC04.png" alt="Gambar UC03-TC04" width="600"><br><img src="./assets/uc/UC03-TC04-a.png" alt="UC03-TC04-a" width="600"> |
+| UC04-TC01 | <img src="./assets/uc/UC04-TC01.png" alt="Gambar UC04-TC01" width="600"> |
+| UC04-TC02 | <img src="./assets/uc/UC04-TC02.png" alt="Gambar UC04-TC02" width="600"> |
+| UC04-TC03 | <img src="./assets/uc/UC04-TC03.png" alt="Gambar UC04-TC03" width="600"> |
+| UC05-TC01 | <img src="./assets/uc/UC05-TC01.png" alt="Gambar UC05-TC01" width="600"> |
+| UC05-TC02 | <img src="./assets/uc/UC05-TC02.png" alt="Gambar UC05-TC02" width="600"> |
+| UC05-TC03 | <img src="./assets/uc/UC05-TC03.png" alt="Gambar UC05-TC03" width="600"> |
+| UC05-TC04 | <img src="./assets/uc/UC05-TC04.png" alt="Gambar UC05-TC04" width="600"> |
+| UC06-TC01 | <img src="./assets/uc/UC06-TC01.png" alt="Gambar UC06-TC01" width="600"> |
+| UC06-TC02 | <img src="./assets/uc/UC06-TC02.png" alt="Gambar UC06-TC02" width="600"> |
+| UC07-TC01 | <img src="./assets/uc/UC07-TC01.png" alt="Gambar UC07-TC01" width="600"><br><img src="./assets/uc/UC07-TC01-a.png" alt="UC07-TC01-a" width="600"> |
+| UC07-TC02 | <img src="./assets/uc/UC07-TC02.png" alt="Gambar UC07-TC02" width="600"> |
+| UC07-TC03 | <img src="./assets/uc/UC07-TC03.png" alt="Gambar UC07-TC03" width="600"><br><img src="./assets/uc/UC07-TC03-a.png" alt="UC07-TC03-a" width="600"> |
+| UC07-TC04 | <img src="./assets/uc/UC07-TC04.png" alt="Gambar UC07-TC04" width="600"> |
+| UC08-TC01 | <img src="./assets/uc/UC08-TC01.png" alt="Gambar UC08-TC01" width="600"> |
+| UC08-TC02 | <img src="./assets/uc/UC08-TC02.png" alt="Gambar UC08-TC02" width="600"> |
+| UC08-TC03 | <img src="./assets/uc/UC08-TC03.png" alt="Gambar UC08-TC03" width="600"> |
+| UC09-TC01 | <img src="./assets/uc/UC09-TC01.png" alt="Gambar UC09-TC01" width="600"> |
+| UC09-TC02 | <img src="./assets/uc/UC09-TC02.png" alt="Gambar UC09-TC02" width="600"> |
+| KNF01-TC01, KNF01-TC02, KNF02-TC01, KNF02-TC02, KNF03-TC01, KNF05-TC01, KNF05-TC02 | <img src="./assets/bukti/knf.png" alt="Keluaran PHPUnit KNF" width="600"> |
+| KNF03-TC02, KNF04-TC01 | <img src="./assets/bukti/knf-browser.png" alt="Hasil ukur browser" width="600"> |
+| Seluruh suite | <img src="./assets/bukti/suite.png" alt="Ringkasan seluruh test" width="600"> |
 
 <br>
 
 ---
 
-# BAB 5: Traceability
 
-Petakan setiap KF ke KNF, use case, kelas perancangan, file implementasi, dan test case. Tabel traceability berikut akan menjadi sarana verifikasi KF. Setiap KF memiliki minimal satu test case dan dinyatakan terpenuhi apabila **seluruh** test case terkaitnya berkesimpulan `Pass`. KF yang tidak diimplementasikan tetap dicantumkan beserta alasannya.
+# BAB 5: Traceability
 
 Tabel 5.1. Matriks Kerunutan KF terhadap Implementasi dan Pengujian
 
 | KF ID | KNF Terkait | Use Case ID | Kelas Terkait | Implementasi File Terkait | Test Case (UC) | Test Case (Unit/Integrasi/KNF) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *KF05* | *KNF01* | *UC03* | *C02 - Pesanan* | *`src/...`* | *UC03-TC01* | *C02-UT05, INT-TC04, KNF01-TC01* |
-| *KF01* | *-* | *UC01<br>UC02* | *[C01 - Nama kelas]<br>[C02 - Nama kelas]* | *[path/ke/file1]<br>[path/ke/file2]* | *UC01-TC01, UC01-TC02<br>UC02-TC01* | *-* |
-| *KF02* | *[KNFXX atau -]* | *[UCXX]* | *[CXX - Nama kelas]* | *[path/ke/file]* | *[UCXX-TCYY]* | *[CXX-UTYY, INT-TCYY, KNFXX-TCYY atau -]* |
-| *KFXX* | *-* | *[UCXX atau -]* | *[CXX - Nama kelas atau -]* | *Tidak diimplementasikan: [alasan]* | *-* | *-* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
+| KF01 | - | UC01 | C05 - HalamanPendaftaran<br>C15 - OtentikasiController | `src/resources/views/auth/daftar.blade.php`<br>`src/app/Http/Controllers/OtentikasiController.php` | UC01-TC01 | C15-UT01 s.d. C15-UT03, INT-TC01 |
+| KF02 | - | UC01–UC09 | C01, C15–C20 | `src/app/Models/AkunPengguna.php`<br>`src/app/Support/HakAkses.php`<br>`src/app/Http/Middleware/CekPeran.php` | UC07-TC03, UC08-TC03 | C01-UT11 s.d. C01-UT13, C16-UT03, C17-UT12, C18-UT03, C20-UT02, C20-UT18, INT-TC13 |
+| KF03 | - | UC01–UC09 | C06 - HalamanLogin<br>C15 - OtentikasiController | `src/resources/views/auth/masuk.blade.php`<br>`src/app/Http/Controllers/OtentikasiController.php` | UC02-TC01 s.d. UC09-TC02 (langkah masuk lewat I-02) | C15-UT07 s.d. C15-UT09, INT-TC01, INT-TC02 |
+| KF04 | - | UC01 | C01 - AkunPengguna<br>C15 - OtentikasiController | `src/app/Http/Controllers/OtentikasiController.php`<br>`src/app/Http/Requests/DaftarRequest.php` | UC01-TC01, UC01-TC02 | C15-UT01 s.d. C15-UT09, C01-UT05 s.d. C01-UT10, INT-TC02 |
+| KF05 | KNF02 | UC01 | C01 - AkunPengguna<br>C15 - OtentikasiController | `src/app/Http/Controllers/OtentikasiController.php`<br>`src/app/Models/AkunPengguna.php` | UC01-TC01 | C15-UT04, C01-UT08 s.d. C01-UT10, KNF02-TC01, KNF02-TC02 |
+| KF06 | - | UC01 | C05 - HalamanPendaftaran | `src/resources/views/auth/daftar.blade.php` | UC01-TC01 | - |
+| KF07 | - | UC01 | C05 - HalamanPendaftaran<br>C15 - OtentikasiController | `src/app/Http/Requests/DaftarRequest.php` | UC01-TC01 | C15-UT03 |
+| KF08 | - | UC02, UC03 | C13 - HalamanMateri<br>C17 - MateriController<br>C21 - KontenMateri | `src/app/Http/Controllers/MateriController.php`<br>`src/app/Models/KontenMateri.php`<br>`src/resources/views/materi/show.blade.php` | UC02-TC01, UC02-TC03 | C17-UT04 s.d. C17-UT09, C21-UT01 s.d. C21-UT06, INT-TC03 |
+| KF09 | KNF03 | UC02 | C02 - MateriAksara<br>C13 - HalamanMateri<br>C17 - MateriController | `src/app/Models/MateriAksara.php`<br>`src/resources/views/materi/index.blade.php` | UC02-TC01, UC02-TC02 | C02-UT04 s.d. C02-UT06, C17-UT01 s.d. C17-UT03, INT-TC03, KNF03-TC01, KNF03-TC02 |
+| KF10 | - | UC03 | C08 - HalamanLatihan<br>C16 - LatihanController | `src/resources/views/latihan/menulis.blade.php`<br>`src/resources/js/latihan/kanvas-menulis.js` | UC03-TC01 | C16-UT01 s.d. C16-UT03 |
+| KF11 | KNF04 | UC03 | C08 - HalamanLatihan | `src/resources/js/latihan/kanvas-menulis.js` | UC03-TC01, UC03-TC04 | KNF04-TC01 |
+| KF12 | - | UC03 | C16 - LatihanController | `src/app/Latihan/AkurasiGoresan.php`<br>`src/app/Http/Controllers/LatihanController.php` | UC03-TC01, UC03-TC04 | C16-UT04 s.d. C16-UT09 |
+| KF13 | - | UC08 | C12 - HalamanKelolaKelas<br>C19 - ProgresController<br>C20 - KelasController | `src/app/Http/Controllers/PemantauanKelasController.php`<br>`src/app/Http/Controllers/ProgresController.php` | UC08-TC01 s.d. UC08-TC03 | C19-UT10 s.d. C19-UT12, C20-UT13, C20-UT14, INT-TC12 |
+| KF14 | - | UC03–UC05, UC08 | C03 - RiwayatLatihan<br>C16 - LatihanController | `src/app/Models/RiwayatLatihan.php`<br>`src/app/Services/Latihan/SelesaikanLatihan.php` | UC03-TC01, UC05-TC01, UC08-TC01 | C03-UT01 s.d. C03-UT06, C16-UT13 s.d. C16-UT15, INT-TC06 |
+| KF15 | - | UC06 | C09 - HalamanKelolaMateri<br>C17 - MateriController<br>C21 - KontenMateri | `src/app/Http/Controllers/MateriController.php`<br>`src/app/Models/KontenMateri.php` | UC06-TC01, UC06-TC02 | C17-UT10 s.d. C17-UT15, C21-UT10 s.d. C21-UT12, INT-TC04, INT-TC05 |
+| KF16 | - | UC06 | C02 - MateriAksara<br>C17 - MateriController<br>C21 - KontenMateri | `src/app/Http/Controllers/MateriController.php`<br>`src/app/Models/MateriAksara.php` | UC06-TC01 | C17-UT16 s.d. C17-UT20, C17-UT24, C02-UT13 s.d. C02-UT15, C21-UT07 s.d. C21-UT09, C21-UT13 s.d. C21-UT15 |
+| KF17 | KNF01 | UC01–UC09 | C15–C20 | `src/config/logging.php`<br>`src/storage/logs/laravel.log` | UC09-TC02 | C18-UT06, INT-TC09, KNF01-TC01, KNF01-TC02 |
+| KF18 | KNF05 | UC09 | C10 - HalamanFeedback<br>C18 - FeedbackController | `src/resources/views/feedback/index.blade.php`<br>`src/app/Http/Controllers/FeedbackController.php` | UC09-TC01, UC09-TC02 | C18-UT01 s.d. C18-UT03, INT-TC08 |
+| KF19 | KNF05 | UC09 | C04 - DataFeedback<br>C18 - FeedbackController | `src/app/Http/Controllers/FeedbackController.php`<br>`src/app/Models/DataFeedback.php` | UC09-TC01 | C18-UT04 s.d. C18-UT06, C04-UT01 s.d. C04-UT04, INT-TC08 |
+| KF20 | KNF05 | UC09 | C04 - DataFeedback<br>C10 - HalamanFeedback<br>C18 - FeedbackController | `src/app/Http/Controllers/FeedbackController.php` | UC09-TC01 | C18-UT07 s.d. C18-UT09, KNF05-TC01, KNF05-TC02 |
+| KF21 | - | UC03 | C16 - LatihanController | `src/app/Http/Controllers/LatihanNonKanvasController.php`<br>`src/app/Services/Latihan/PenilaiJawaban.php` | UC03-TC02 | C16-UT10 s.d. C16-UT12, INT-TC07 |
+| KF22 | - | UC03 | C16 - LatihanController | `src/app/Services/Latihan/PenilaiJawaban.php` | UC03-TC03 | C16-UT10 s.d. C16-UT12 |
+| KF23 | - | UC03 | C16 - LatihanController | `src/app/Services/Latihan/PenilaiJawaban.php`<br>`src/resources/views/latihan/transliterasi.blade.php` | - | C16-UT10 s.d. C16-UT12 |
+| KF24 | - | UC04, UC07 | C14 - HalamanProgres<br>C19 - ProgresController<br>C22 - MotivasiBelajar | `src/app/Http/Controllers/ProgresController.php`<br>`src/app/Models/MotivasiBelajar.php`<br>`src/resources/views/progres/index.blade.php` | UC04-TC01 s.d. UC04-TC03, UC07-TC04 | C19-UT01 s.d. C19-UT09, C19-UT13 s.d. C19-UT18, C22-UT01 s.d. C22-UT18, INT-TC14 |
+| KF25 | - | UC07 | C12 - HalamanKelolaKelas<br>C20 - KelasController<br>C23 - KelasBelajar | `src/app/Http/Controllers/KelasPengajarController.php`<br>`src/app/Models/KelasBelajar.php` | UC07-TC01 s.d. UC07-TC04 | C23-UT01 s.d. C23-UT17, C20-UT01, C20-UT02, C20-UT05 s.d. C20-UT10, C20-UT17, C20-UT18, INT-TC10 |
+| KF26 | - | UC05 | C11 - HalamanKelasPelajar<br>C20 - KelasController<br>C24 - KeanggotaanKelas | `src/app/Http/Controllers/KelasPelajarController.php`<br>`src/app/Models/KeanggotaanKelas.php` | UC05-TC01, UC05-TC02, UC05-TC04 | C24-UT01 s.d. C24-UT15, C20-UT03, C20-UT04, INT-TC10 |
+| KF27 | - | UC07 | C12 - HalamanKelolaKelas<br>C20 - KelasController<br>C25 - TugasKelas | `src/app/Http/Controllers/KelasPengajarController.php`<br>`src/app/Models/TugasKelas.php` | UC07-TC01 | C25-UT01 s.d. C25-UT12, C20-UT11, C20-UT12, INT-TC10 |
+| KF28 | - | UC05 | C11 - HalamanKelasPelajar<br>C20 - KelasController<br>C26 - PenyelesaianTugas | `src/app/Http/Controllers/KelasPelajarController.php`<br>`src/app/Services/PengumpulanTugas.php`<br>`src/app/Models/PenyelesaianTugas.php` | UC05-TC01, UC05-TC03 | C26-UT01 s.d. C26-UT10, C20-UT19 s.d. C20-UT22, INT-TC10, INT-TC11 |
 
 Tabel 5.2. Matriks Kerunutan KNF terhadap Pengujian
 
 | ID KNF | Parameter | KF/UC Terkait | Test Case |
 | :--- | :--- | :--- | :--- |
-| *KNF01* | *Reliability* | *KF05 / UC03* | *KNF01-TC01* |
-| *KNFXX* | *[Parameter]* | *[KFXX / UCXX atau -]* | *[KNFXX-TCYY]* |
-| *...* | *...* | *...* | *...* |
+| KNF01 | Maintainability | KF17 / UC01–UC09 | KNF01-TC01, KNF01-TC02, INT-TC09 |
+| KNF02 | Security | KF05 / UC01 | KNF02-TC01, KNF02-TC02, C15-UT04 |
+| KNF03 | Response time | KF09 / UC02 | KNF03-TC01, KNF03-TC02 |
+| KNF04 | Response time | KF11 / UC03 | KNF04-TC01 |
+| KNF05 | Reliability | KF18–KF20 / UC09 | KNF05-TC01, KNF05-TC02, UC09-TC01, UC09-TC02 |
