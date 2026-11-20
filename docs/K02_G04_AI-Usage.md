@@ -105,6 +105,12 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Claude Code | Menyesuaikan kode latihan dengan perubahan `develop` (templat `template_aksara.json` dari modul materi, fondasi DB, enum `ModeLatihan`, `AkunPengguna`, `RiwayatLatihan`, `MotivasiBelajar`) dan mengkalibrasi `D_MAKS` terhadap 38 templat aksara | "Periksa kode dan sesuaikan dengan template_aksara.json ini. Cek juga kesesuaian kode dengan kondisi repo saat ini (branch develop)." | Tabel kalibrasi dicek ulang; keputusan yang menyimpang dari DPPL (kode badge, middleware peran) dicatat di B.1; seluruh test modul lain tetap lulus sebelum PR dibuka |
 | Claude Code | Menyusun deskripsi PR, judul dan isi issue modul latihan, serta baris laporan M9 (B.1, B.2) untuk modul latihan | "Berikan seluruh deskripsi untuk PR dan orang yang perlu saya refer"; "Cek kondisi repo saat ini, rumuskan laporan yang perlu saya buat." | Isi PR dan issue disunting sebelum dikirim; setiap baris B.1 dicocokkan dengan kode di `main` |
 
+### Milestone 10
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| Claude | Membuat unit test untuk kelas Mendalam dan Sedang (C01–C04, C15–C26) dengan skema ID CXX-UTYY (kasus normal, batas, dan negatif), beserta test integrasinya | buatlah unit test, integrasi, use case | Test dijalankan ulang di laptop dengan `php artisan test` dan dicocokkan dengan jumlah di dokumen (657 test); test yang gagal atau merah diperbaiki |
+
+
 
 ---
 ### Pernyataan Integritas dan Persetujuan
