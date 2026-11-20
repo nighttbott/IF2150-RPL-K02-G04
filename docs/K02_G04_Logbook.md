@@ -205,6 +205,7 @@
 | 20-11-2026 | Nathaniel | Menyiapkan test script unit test kelas C20, C23, C25, pengujian use case UC07, serta pengujian integrasi INT-TC10 dan INT-TC13, lalu menjalankan dan memeriksa hasilnya | 2 jam | Done | - |
 | 20-11-2026 | Abduh | Menyiapkan test script unit test kelas C24 dan C26, pengujian use case UC05, serta pengujian integrasi INT-TC11, lalu menjalankan dan memeriksa hasilnya | 2 jam | Done | - |
 | 20-11-2026 | Natan | Menyiapkan test script unit test kelas C03, C19, C22, pengujian use case UC04 dan UC08, serta `IntegrasiTest.php`, lalu menjalankan dan memeriksa hasilnya | 2 jam | Done | - |
+
 **Catatan/Evaluasi Milestone 10:**
 * Pembagian berkas unit test dan skrip pengujian perlu disepakati di awal agar tidak ada dua versi test untuk kelas yang sama.
 
