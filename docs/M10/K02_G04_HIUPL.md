@@ -351,7 +351,7 @@ Tabel 4.2.1b. Ringkasan Cakupan Kelas C01
 | Daftar operasi public pada DPPL | `buatAkunBaru()`, `getProfil()`, `verifikasiHakAkses()`, `getDetailAkun()`, `cariBerdasarkanEmail()`, `cocokkanPassword()` |
 | Operasi yang diuji | `buatAkunBaru()`, `cariBerdasarkanEmail()`, `cocokkanPassword()`, `getDetailAkun()`, `getProfil()`, `verifikasiHakAkses()` |
 | ID Algoritma yang tercakup | Algo-001, Algo-002 |
-| Coverage (wajib ≥ 70%) | `AkunPengguna`: baris 95.1% (78/82), cabang 84.0% (21/25); seluruh suite (PCOV): baris 96.3%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C01 coverage). |
+| Coverage (wajib ≥ 70%) | `AkunPengguna`: baris 96.3% (79/82), cabang 81.1% (30/37)<br>Alat: Xdebug 3.5.3 (`--path-coverage`), PHP 8.5.12, PHPUnit 12.5.43, Windows; diukur dari unit test kelas ini ditambah test fitur yang memakai kelas ini. Bukti: Tabel 4.6 (C01 coverage). |
 
 ### 4.2.4 Kelas DataFeedback
 
@@ -397,7 +397,7 @@ Tabel 4.2.5b. Ringkasan Cakupan Kelas C15
 | Daftar operasi public pada DPPL | `verifikasiFormatData()`, `simpanAkun()`, `validasiLogin()` |
 | Operasi yang diuji | `simpanAkun()`, `validasiLogin()`, `verifikasiFormatData()`<br>Catatan: hashPassword() bersifat privat dan diuji lewat simpanAkun (C15-UT04). |
 | ID Algoritma yang tercakup | Algo-009, Algo-010, Algo-011, Algo-012 |
-| Coverage (wajib ≥ 70%) | `OtentikasiController`: baris 100.0% (75/75), cabang 96.9% (31/32); seluruh suite (PCOV): baris 100.0%<br>`DaftarRequest`: baris 100.0% (24/24), cabang 100.0% (19/19); seluruh suite (PCOV): baris 100.0%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C15 coverage). |
+| Coverage (wajib ≥ 70%) | `OtentikasiController`: baris 100.0% (75/75), cabang 94.3% (33/35)<br>`DaftarRequest`: baris 100.0% (24/24), cabang 92.0% (23/25)<br>Alat: Xdebug 3.5.3 (`--path-coverage`), PHP 8.5.12, PHPUnit 12.5.43, Windows; diukur dari unit test kelas ini ditambah test fitur yang memakai kelas ini. Bukti: Tabel 4.6 (C15 coverage). |
 
 ### 4.2.8 Kelas FeedbackController
 
@@ -427,7 +427,7 @@ Tabel 4.2.8b. Ringkasan Cakupan Kelas C18
 | Daftar operasi public pada DPPL | `validasiFeedback()`, `simpanFeedback()`, `kirimKonfirmasi()` |
 | Operasi yang diuji | `kirimKonfirmasi()`, `simpanFeedback()`, `validasiFeedback()` |
 | ID Algoritma yang tercakup | Algo-013, Algo-014 |
-| Coverage (wajib ≥ 70%) | `FeedbackController`: baris 100.0% (36/36), cabang 100.0% (27/27); seluruh suite (PCOV): baris 100.0%<br>Alat: Xdebug 3.4.1 (`--path-coverage`) untuk baris dan cabang, PCOV untuk baris seluruh suite. Bukti: Tabel 4.6 (C18 coverage). |
+| Coverage (wajib ≥ 70%) | `FeedbackController`: baris 100.0% (36/36), cabang 93.9% (31/33)<br>Alat: Xdebug 3.5.3 (`--path-coverage`), PHP 8.5.12, PHPUnit 12.5.43, Windows; diukur dari unit test kelas ini ditambah test fitur yang memakai kelas ini. Bukti: Tabel 4.6 (C18 coverage). |
 
 ### 4.2.10 Kelas KelasController
 
